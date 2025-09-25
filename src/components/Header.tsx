@@ -17,7 +17,7 @@ export default function Header() {
           
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center">
-            <h1 className="text-3xl font-bold text-black mb-0.5">
+            <h1 className="text-3xl font-bold text-black mb-0">
               {t('header.title')}
             </h1>
             <p className="text-sm text-gray-600">
