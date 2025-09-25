@@ -12,7 +12,7 @@ export default function AboutPage() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-36 px-4">
+      <main className="pt-32 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
             {t('about.title')} {t('header.title')}

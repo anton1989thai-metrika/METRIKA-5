@@ -291,7 +291,7 @@ export default function ObjectsPage() {
       <Header />
       <BurgerMenu />
       
-          <main className="pt-36 px-4">
+          <main className="pt-32 px-4">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
             {t('objects.title')}
