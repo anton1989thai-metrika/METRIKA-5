@@ -2,6 +2,7 @@
 
 import LanguageSelector from "./LanguageSelector"
 import { useLanguage } from "@/contexts/LanguageContext"
+import Image from "next/image"
 
 export default function Header() {
   const { t } = useLanguage()
@@ -17,12 +18,13 @@ export default function Header() {
           
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-black -mb-2">
-              {t('header.title')}
-            </h1>
-            <p className="text-gray-600" style={{ fontSize: '15px' }}>
-              {t('header.subtitle')}
-            </p>
+            <Image
+              src="/images/logo.svg"
+              alt="МЕТРИКА Агентство недвижимости"
+              width={300}
+              height={80}
+              className="mx-auto"
+            />
           </div>
           
           {/* Правая часть - выбор языка */}
