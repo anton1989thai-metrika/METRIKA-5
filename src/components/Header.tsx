@@ -17,14 +17,10 @@ export default function Header() {
           
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center">
-            <h1 className="font-bold text-black -mb-5" style={{ fontSize: '47px' }}>
+            <h1 className="text-4xl font-bold text-black -mb-2">
               {t('header.title')}
             </h1>
-            {/* Золотая черта */}
-            <div className="mx-auto mb-2" style={{ width: 'fit-content' }}>
-              <div className="h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-600" style={{ width: '280px' }}></div>
-            </div>
-            <p className="text-gray-600" style={{ fontSize: '20px' }}>
+            <p className="text-gray-600" style={{ fontSize: '15px' }}>
               {t('header.subtitle')}
             </p>
           </div>
