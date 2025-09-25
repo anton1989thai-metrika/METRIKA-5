@@ -3,6 +3,8 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 // Данные объектов (статичные данные для демонстрации)
 const objectsData = [
@@ -277,6 +279,15 @@ const objectsData = [
 
 export default function ObjectsPage() {
   const { t } = useLanguage()
+  const searchParams = useSearchParams()
+  const [activeFilter, setActiveFilter] = useState<string | null>(null)
+
+  useEffect(() => {
+    const filter = searchParams.get('filter')
+    if (filter) {
+      setActiveFilter(filter)
+    }
+  }, [searchParams])
 
   // Получаем переведенные объекты
   const objects = objectsData.map(obj => ({
@@ -296,6 +307,14 @@ export default function ObjectsPage() {
           <h1 className="text-3xl font-bold text-black mb-8">
             {t('objects.title')}
           </h1>
+          
+          {activeFilter === 'rent' && (
+            <div className="bg-purple-100 border border-purple-300 rounded-lg p-4 mb-6">
+              <p className="text-purple-800 font-medium">
+                🔍 {t('objects.rentFilterActive')}
+              </p>
+            </div>
+          )}
           
           <div className="flex gap-8">
             {/* Фильтры слева */}
@@ -396,7 +415,12 @@ export default function ObjectsPage() {
                       <span className="text-gray-700">{t('objects.sale')}</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={activeFilter === 'rent'}
+                        readOnly
+                      />
                       <span className="text-gray-700">{t('objects.rent')}</span>
                     </label>
                   </div>

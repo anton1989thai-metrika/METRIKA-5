@@ -29,7 +29,10 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Изучайте объекты на карте города",
       knowledgeBase: "База знаний",
       knowledgeBaseDesc: "Получайте доступ к экспертной информации",
-      useMenu: "Используйте меню слева для навигации по порталу"
+      useMenu: "Используйте меню слева для навигации по порталу",
+      purchaseDesc: "Подайте заявку на покупку недвижимости",
+      saleDesc: "Просмотрите все доступные объекты для продажи",
+      rentDesc: "Найдите объекты для аренды"
     },
     menu: {
       home: "Главная",
@@ -88,7 +91,30 @@ const translations: Record<string, Translations> = {
       country: "Страна",
       russia: "Россия",
       china: "Китай",
-      thailand: "Таиланд"
+      thailand: "Таиланд",
+      rentFilterActive: "Показаны объекты для аренды"
+    },
+    purchaseApplication: {
+      title: "Заявка на покупку недвижимости",
+      description: "Подайте заявку на покупку недвижимости",
+      instructions: "Заполните форму ниже, и наш специалист свяжется с вами в течение 24 часов для обсуждения ваших потребностей.",
+      fullName: "ФИО",
+      fullNamePlaceholder: "Введите ваше полное имя",
+      phone: "Телефон",
+      phonePlaceholder: "+7 (___) ___-__-__",
+      email: "Email",
+      emailPlaceholder: "example@email.com",
+      propertyType: "Тип недвижимости",
+      selectPropertyType: "Выберите тип недвижимости",
+      budget: "Бюджет",
+      budgetPlaceholder: "Укажите ваш бюджет",
+      preferredLocation: "Предпочтительное расположение",
+      preferredLocationPlaceholder: "Район, метро, адрес",
+      additionalInfo: "Дополнительная информация",
+      additionalInfoPlaceholder: "Расскажите о ваших требованиях к недвижимости",
+      submit: "Отправить заявку",
+      cancel: "Отмена",
+      contactInfo: "Нужна помощь? Свяжитесь с нами:"
     },
     map: {
       title: "Интерактивная карта",
@@ -325,7 +351,10 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Explore objects on the city map",
       knowledgeBase: "Knowledge Base",
       knowledgeBaseDesc: "Get access to expert information",
-      useMenu: "Use the menu on the left to navigate the portal"
+      useMenu: "Use the menu on the left to navigate the portal",
+      purchaseDesc: "Submit an application for real estate purchase",
+      saleDesc: "Browse all available properties for sale",
+      rentDesc: "Find properties for rent"
     },
     menu: {
       home: "Home",
@@ -384,7 +413,30 @@ const translations: Record<string, Translations> = {
       country: "Country",
       russia: "Russia",
       china: "China",
-      thailand: "Thailand"
+      thailand: "Thailand",
+      rentFilterActive: "Showing properties for rent"
+    },
+    purchaseApplication: {
+      title: "Real Estate Purchase Application",
+      description: "Submit an application for real estate purchase",
+      instructions: "Fill out the form below and our specialist will contact you within 24 hours to discuss your needs.",
+      fullName: "Full Name",
+      fullNamePlaceholder: "Enter your full name",
+      phone: "Phone",
+      phonePlaceholder: "+7 (___) ___-__-__",
+      email: "Email",
+      emailPlaceholder: "example@email.com",
+      propertyType: "Property Type",
+      selectPropertyType: "Select property type",
+      budget: "Budget",
+      budgetPlaceholder: "Specify your budget",
+      preferredLocation: "Preferred Location",
+      preferredLocationPlaceholder: "District, metro, address",
+      additionalInfo: "Additional Information",
+      additionalInfoPlaceholder: "Tell us about your property requirements",
+      submit: "Submit Application",
+      cancel: "Cancel",
+      contactInfo: "Need help? Contact us:"
     },
     map: {
       title: "Interactive Map",

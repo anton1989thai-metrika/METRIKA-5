@@ -2,10 +2,25 @@
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { useLanguage } from "@/contexts/LanguageContext"
+import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const { t } = useLanguage()
+  const router = useRouter()
+
+  const handlePurchaseClick = () => {
+    router.push('/purchase-application')
+  }
+
+  const handleSaleClick = () => {
+    router.push('/objects')
+  }
+
+  const handleRentClick = () => {
+    router.push('/objects?filter=rent')
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -23,33 +38,42 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-black mb-2">
-                {t('home.realEstateObjects')}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <button 
+              onClick={handlePurchaseClick}
+              className="bg-blue-600 hover:bg-blue-700 text-white p-8 rounded-lg transition-colors text-center"
+            >
+              <h3 className="text-xl font-semibold mb-3">
+                {t('objects.purchase')}
               </h3>
-              <p className="text-gray-600">
-                {t('home.realEstateObjectsDesc')}
+              <p className="text-blue-100">
+                {t('home.purchaseDesc')}
               </p>
-            </div>
+            </button>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-black mb-2">
-                {t('home.interactiveMap')}
+            <button 
+              onClick={handleSaleClick}
+              className="bg-green-600 hover:bg-green-700 text-white p-8 rounded-lg transition-colors text-center"
+            >
+              <h3 className="text-xl font-semibold mb-3">
+                {t('objects.sale')}
               </h3>
-              <p className="text-gray-600">
-                {t('home.interactiveMapDesc')}
+              <p className="text-green-100">
+                {t('home.saleDesc')}
               </p>
-            </div>
+            </button>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-black mb-2">
-                {t('home.knowledgeBase')}
+            <button 
+              onClick={handleRentClick}
+              className="bg-purple-600 hover:bg-purple-700 text-white p-8 rounded-lg transition-colors text-center"
+            >
+              <h3 className="text-xl font-semibold mb-3">
+                {t('objects.rent')}
               </h3>
-              <p className="text-gray-600">
-                {t('home.knowledgeBaseDesc')}
+              <p className="text-purple-100">
+                {t('home.rentDesc')}
               </p>
-            </div>
+            </button>
           </div>
 
           <div className="text-center">
