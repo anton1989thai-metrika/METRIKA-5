@@ -21,8 +21,8 @@ export default function Header() {
             <Image
               src="/images/logo"
               alt="МЕТРИКА Агентство недвижимости"
-              width={180}
-              height={48}
+              width={162}
+              height={43}
               className="mx-auto"
             />
           </div>
