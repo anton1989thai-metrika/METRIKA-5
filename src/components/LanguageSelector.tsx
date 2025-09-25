@@ -41,7 +41,7 @@ export default function LanguageSelector() {
       {/* Кнопка выбора языка */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-2 p-2 bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-50 transition-colors"
       >
         <span className="text-lg">{selectedLanguage.flag}</span>
         <span className="text-sm font-medium text-black">{selectedLanguage.code.toUpperCase()}</span>
