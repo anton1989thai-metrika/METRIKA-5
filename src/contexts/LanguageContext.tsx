@@ -80,7 +80,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "По площади",
       photo: "Фото",
       previous: "Назад",
-      next: "Далее"
+      next: "Далее",
+      operationType: "Тип операции",
+      purchase: "Покупка недвижимости",
+      sale: "Продажа недвижимости",
+      rent: "Аренда недвижимости",
+      country: "Страна",
+      russia: "Россия",
+      china: "Китай",
+      thailand: "Таиланд"
     },
     map: {
       title: "Интерактивная карта",
@@ -368,7 +376,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "By Area",
       photo: "Photo",
       previous: "Previous",
-      next: "Next"
+      next: "Next",
+      operationType: "Operation Type",
+      purchase: "Real Estate Purchase",
+      sale: "Real Estate Sale",
+      rent: "Real Estate Rent",
+      country: "Country",
+      russia: "Russia",
+      china: "China",
+      thailand: "Thailand"
     },
     map: {
       title: "Interactive Map",
@@ -656,7 +672,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "ตามพื้นที่",
       photo: "รูปภาพ",
       previous: "ก่อนหน้า",
-      next: "ถัดไป"
+      next: "ถัดไป",
+      operationType: "ประเภทการดำเนินงาน",
+      purchase: "การซื้ออสังหาริมทรัพย์",
+      sale: "การขายอสังหาริมทรัพย์",
+      rent: "การเช่าอสังหาริมทรัพย์",
+      country: "ประเทศ",
+      russia: "รัสเซีย",
+      china: "จีน",
+      thailand: "ไทย"
     },
     map: {
       title: "แผนที่แบบโต้ตอบ",

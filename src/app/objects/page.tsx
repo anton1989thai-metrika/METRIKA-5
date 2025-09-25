@@ -383,6 +383,44 @@ export default function ObjectsPage() {
                   </select>
                 </div>
                 
+                {/* Тип операции */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-black mb-3">{t('objects.operationType')}</h3>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-gray-700">{t('objects.purchase')}</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-gray-700">{t('objects.sale')}</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-gray-700">{t('objects.rent')}</span>
+                    </label>
+                  </div>
+                </div>
+                
+                {/* Страна */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-black mb-3">{t('objects.country')}</h3>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-gray-700">{t('objects.russia')}</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-gray-700">{t('objects.china')}</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-gray-700">{t('objects.thailand')}</span>
+                    </label>
+                  </div>
+                </div>
+                
                 <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                   {t('objects.applyFilters')}
                 </button>
