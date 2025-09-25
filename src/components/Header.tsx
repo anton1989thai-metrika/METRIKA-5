@@ -3,6 +3,7 @@
 import LanguageSelector from "./LanguageSelector"
 import { useLanguage } from "@/contexts/LanguageContext"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Header() {
   const { t } = useLanguage()
@@ -18,13 +19,15 @@ export default function Header() {
           
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center flex flex-col justify-center">
-            <Image
-              src="/images/logo"
-              alt="МЕТРИКА Агентство недвижимости"
-              width={162}
-              height={43}
-              className="mx-auto"
-            />
+            <Link href="/" className="inline-block">
+              <Image
+                src="/images/logo"
+                alt="МЕТРИКА Агентство недвижимости"
+                width={162}
+                height={43}
+                className="mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </Link>
           </div>
           
           {/* Правая часть - выбор языка */}
