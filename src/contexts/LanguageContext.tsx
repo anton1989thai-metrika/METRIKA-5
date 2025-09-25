@@ -17,10 +17,10 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 // Простые переводы
 const translations: Record<string, Translations> = {
   ru: {
-    header: {
-      title: "МЕТРИКА",
-      subtitle: "Агентство недвижимости"
-    },
+        header: {
+          title: "МЕТРИКА",
+          subtitle: "агентство недвижимости"
+        },
     home: {
       welcome: "Добро пожаловать в портал агентства недвижимости МЕТРИКА. Здесь вы найдете все необходимое для работы с недвижимостью.",
       realEstateObjects: "Объекты недвижимости",
