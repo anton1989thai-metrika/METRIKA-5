@@ -117,7 +117,7 @@ export default function BurgerMenu() {
       {/* Оверлей */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-gray-600 bg-opacity-40 z-40 transition-opacity duration-300"
+          className="fixed inset-0 bg-gray-400 bg-opacity-20 z-40 transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
