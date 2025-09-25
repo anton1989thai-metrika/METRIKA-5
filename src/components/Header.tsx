@@ -32,8 +32,8 @@ export default function Header() {
         </div>
       </div>
       
-      {/* Градиентная тень */}
-      <div className="h-2 bg-gradient-to-b from-black to-bg-white"></div>
+      {/* Черная линия */}
+      <div className="h-1 bg-black"></div>
     </header>
   )
 }
