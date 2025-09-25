@@ -8,15 +8,15 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex items-center">
+      <div className="max-w-7xl mx-auto px-4 py-2">
+        <div className="flex items-center justify-between h-16">
           {/* Левая часть - бургер-меню (невидимый элемент для баланса) */}
-          <div className="w-12 h-10 flex-shrink-0">
+          <div className="w-12 h-10 flex-shrink-0 flex items-center">
             {/* Невидимый элемент, который занимает место бургер-меню */}
           </div>
           
           {/* Центральная часть - логотип */}
-          <div className="flex-1 text-center">
+          <div className="flex-1 text-center flex flex-col justify-center">
             <h1 className="text-4xl font-bold text-black -mb-2">
               {t('header.title')}
             </h1>
