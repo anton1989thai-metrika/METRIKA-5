@@ -309,8 +309,8 @@ export default function ObjectsPage() {
           </h1>
           
           {activeFilter === 'rent' && (
-            <div className="bg-purple-100 border border-purple-300 rounded-lg p-4 mb-6">
-              <p className="text-purple-800 font-medium">
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6">
+              <p className="text-gray-800 font-medium">
                 🔍 {t('objects.rentFilterActive')}
               </p>
             </div>
