@@ -816,6 +816,181 @@ const translations: Record<string, Translations> = {
       officeAddress: "Մոսկվա, Տվերսկայա փողոց, 15",
       support: "Տեխնիկական աջակցություն",
       supportEmail: "support@metrika.ru"
+    },
+    realEstateObjects: {
+      "1": {
+        title: "2-սենյակ բնակարան",
+        address: "Տվերսկայա փողոց, 15, բն. 42",
+        material: "Աղյուս"
+      },
+      "2": {
+        title: "Մասնավոր տուն",
+        address: "Podmoskovnaya գյուղ, Sadovaya փողոց, 7",
+        material: "6 հեկտար հողամաս"
+      },
+      "3": {
+        title: "Գրասենյակային տարածք",
+        address: "BC \"Center\", գրասենյակ 301",
+        material: "Բետոն"
+      },
+      "4": {
+        title: "1-սենյակ բնակարան",
+        address: "Լենինի փողոց, 25, բն. 15",
+        material: "Պանել"
+      },
+      "5": {
+        title: "Հողամաս",
+        address: "SNT \"Sunny\", հողամաս 12",
+        material: "Էլեկտրականություն"
+      },
+      "6": {
+        title: "3-սենյակ բնակարան",
+        address: "Խաղաղության պողոտա, 8, բն. 67",
+        material: "Մոնոլիտ"
+      },
+      "7": {
+        title: "Ստուդիա",
+        address: "Արբատ փողոց, 12, բն. 3",
+        material: "Աղյուս"
+      },
+      "8": {
+        title: "Կոթեջ",
+        address: "Rublevo բնակավայր, Lesnaya փողոց, 45",
+        material: "10 հեկտար հողամաս"
+      },
+      "9": {
+        title: "Առևտրային տարածք",
+        address: "TC \"Mega\", տաղավար 15",
+        material: "Առևտրական կենտրոն"
+      },
+      "10": {
+        title: "4-սենյակ բնակարան",
+        address: "Կարմիր հրապարակ փողոց, 1, բն. 100",
+        material: "Մոնոլիտ"
+      },
+      "11": {
+        title: "Ավտոտնակ",
+        address: "Արդյունաբերական փողոց, 5, տուփ 12",
+        material: "Բետոն"
+      },
+      "12": {
+        title: "2-սենյակ բնակարան",
+        address: "Sadovaya փողոց, 30, բն. 25",
+        material: "Պանել"
+      },
+      "13": {
+        title: "Պահեստային տարածք",
+        address: "Արդյունաբերական փողոց, 15, պահեստ 3",
+        material: "Մետաղական կառուցվածք"
+      },
+      "14": {
+        title: "1-սենյակ բնակարան",
+        address: "Novaya փողոց, 7, բն. 8",
+        material: "Աղյուս"
+      },
+      "15": {
+        title: "Թաունհաուս",
+        address: "Zarechny բնակավայր, Կենտրոնական փողոց, 12",
+        material: "4 հեկտար հողամաս"
+      },
+      "16": {
+        title: "Գրասենյակ",
+        address: "BC \"Modern\", գրասենյակ 505",
+        material: "Ապակի/բետոն"
+      },
+      "17": {
+        title: "3-սենյակ բնակարան",
+        address: "Moskovskaya փողոց, 22, բն. 45",
+        material: "Մոնոլիտ"
+      },
+      "18": {
+        title: "Հողամաս",
+        address: "SNT \"Daisy\", հողամաս 8",
+        material: "Գազ, էլեկտրականություն"
+      },
+      "19": {
+        title: "Ստուդիա",
+        address: "Molodezhnaya փողոց, 18, բն. 2",
+        material: "Պանել"
+      },
+      "20": {
+        title: "Մասնավոր տուն",
+        address: "Zelenoe գյուղ, Dachnaya փողոց, 3",
+        material: "8 հեկտար հողամաս"
+      },
+      "21": {
+        title: "2-սենյակ բնակարան",
+        address: "Parkovaya փողոց, 14, բն. 33",
+        material: "Աղյուս"
+      },
+      "22": {
+        title: "Արդյունաբերական տարածք",
+        address: "Zavodskaya փողոց, 25, արտադրամաս 2",
+        material: "Մետաղական կառուցվածք"
+      },
+      "23": {
+        title: "1-սենյակ բնակարան",
+        address: "Shkolnaya փողոց, 9, բն. 12",
+        material: "Պանել"
+      },
+      "24": {
+        title: "Կոթեջ",
+        address: "Lesnoy բնակավայր, Sosnovaya փողոց, 7",
+        material: "12 հեկտար հողամաս"
+      },
+      "25": {
+        title: "Գրասենյակային տարածք",
+        address: "BC \"Business\", գրասենյակ 201",
+        material: "Բետոն"
+      },
+      "26": {
+        title: "3-սենյակ բնակարան",
+        address: "Vesennyaya փողոց, 11, բն. 56",
+        material: "Մոնոլիտ"
+      },
+      "27": {
+        title: "Ավտոտնակ",
+        address: "Avtomobilnaya փողոց, 3, տուփ 7",
+        material: "Աղյուս"
+      },
+      "28": {
+        title: "Ստուդիա",
+        address: "Studencheskaya փողոց, 5, բն. 1",
+        material: "Աղյուս"
+      },
+      "29": {
+        title: "Հողամաս",
+        address: "SNT \"Harvest\", հողամաս 25",
+        material: "Բոլոր կոմունալ ծառայություններ"
+      },
+      "30": {
+        title: "Թաունհաուս",
+        address: "Solnechny բնակավայր, Yasnaya փողոց, 9",
+        material: "5 հեկտար հողամաս"
+      }
+    },
+    blog: {
+      title: "Բլոգ",
+      loadMore: "Բեռնել ավելի շատ հոդվածներ",
+      readMore: "Կարդալ ավելին →",
+      published: "Հրապարակված:",
+      articles: {
+        "1": {
+          title: "Ինչպես ճիշտ ընտրել բնակարան նոր շենքում",
+          date: "15 հունվարի 2024",
+          excerpt: "Նոր շենքում բնակարան ընտրելիս կարևոր է ուշադրություն դարձնել բազմաթիվ գործոնների՝ սկսած հատակագծից մինչև շինարարի համբավը: Այս հոդվածում մենք կպատմենք հիմնական կետերի մասին, որոնք կօգնեն ճիշտ ընտրություն կատարել..."
+        },
+        "2": {
+          title: "Անշարժ գույքի շուկայի միտումները 2024 թվականին",
+          date: "10 հունվարի 2024",
+          excerpt: "Անշարժ գույքի շուկայի ընթացիկ միտումների վերլուծությունը ցույց է տալիս հետաքրքիր փոփոխություններ գնորդների նախասիրություններում և գնային դինամիկայում: Դիտարկենք նոր տարվա հիմնական միտումները..."
+        },
+        "3": {
+          title: "Հիփոթեք 2024-ում: ի՞նչ է փոխվել:",
+          date: "5 հունվարի 2024",
+          excerpt: "2024 թվականի հիփոթեքային վարկավորման նոր պայմանները բերեցին ինչպես դրական, այնպես էլ բացասական փոփոխություններ պոտենցիալ վարկառուների համար: Վերլուծենք բոլոր նորարարությունները..."
+        }
+      }
     }
   },
   az: {
@@ -929,6 +1104,181 @@ const translations: Record<string, Translations> = {
       officeAddress: "Moskva, Tverskaya küçəsi, 15",
       support: "Texniki dəstək",
       supportEmail: "support@metrika.ru"
+    },
+    realEstateObjects: {
+      "1": {
+        title: "2 otaqlı mənzil",
+        address: "Tverskaya küçəsi, 15, mənzil 42",
+        material: "Kərpic"
+      },
+      "2": {
+        title: "Şəxsi ev",
+        address: "Podmoskovnaya kəndi, Sadovaya küçəsi, 7",
+        material: "6 hektar torpaq sahəsi"
+      },
+      "3": {
+        title: "Ofis sahəsi",
+        address: "BC \"Center\", ofis 301",
+        material: "Beton"
+      },
+      "4": {
+        title: "1 otaqlı mənzil",
+        address: "Lenin küçəsi, 25, mənzil 15",
+        material: "Panel"
+      },
+      "5": {
+        title: "Torpaq sahəsi",
+        address: "SNT \"Sunny\", sahə 12",
+        material: "Elektrik"
+      },
+      "6": {
+        title: "3 otaqlı mənzil",
+        address: "Sülh prospekti, 8, mənzil 67",
+        material: "Monolit"
+      },
+      "7": {
+        title: "Studiya",
+        address: "Arbat küçəsi, 12, mənzil 3",
+        material: "Kərpic"
+      },
+      "8": {
+        title: "Kottec",
+        address: "Rublevo yaşayış məntəqəsi, Lesnaya küçəsi, 45",
+        material: "10 hektar torpaq sahəsi"
+      },
+      "9": {
+        title: "Ticarət sahəsi",
+        address: "TC \"Mega\", pavilyon 15",
+        material: "Ticarət mərkəzi"
+      },
+      "10": {
+        title: "4 otaqlı mənzil",
+        address: "Qırmızı meydan küçəsi, 1, mənzil 100",
+        material: "Monolit"
+      },
+      "11": {
+        title: "Qaraj",
+        address: "Sənaye küçəsi, 5, qutu 12",
+        material: "Beton"
+      },
+      "12": {
+        title: "2 otaqlı mənzil",
+        address: "Sadovaya küçəsi, 30, mənzil 25",
+        material: "Panel"
+      },
+      "13": {
+        title: "Anbar sahəsi",
+        address: "Sənaye küçəsi, 15, anbar 3",
+        material: "Metal konstruksiya"
+      },
+      "14": {
+        title: "1 otaqlı mənzil",
+        address: "Novaya küçəsi, 7, mənzil 8",
+        material: "Kərpic"
+      },
+      "15": {
+        title: "Taunhaus",
+        address: "Zarechny yaşayış məntəqəsi, Mərkəzi küçə, 12",
+        material: "4 hektar torpaq sahəsi"
+      },
+      "16": {
+        title: "Ofis",
+        address: "BC \"Modern\", ofis 505",
+        material: "Şüşə/beton"
+      },
+      "17": {
+        title: "3 otaqlı mənzil",
+        address: "Moskovskaya küçəsi, 22, mənzil 45",
+        material: "Monolit"
+      },
+      "18": {
+        title: "Torpaq sahəsi",
+        address: "SNT \"Daisy\", sahə 8",
+        material: "Qaz, elektrik"
+      },
+      "19": {
+        title: "Studiya",
+        address: "Molodezhnaya küçəsi, 18, mənzil 2",
+        material: "Panel"
+      },
+      "20": {
+        title: "Şəxsi ev",
+        address: "Zelenoe kəndi, Dachnaya küçəsi, 3",
+        material: "8 hektar torpaq sahəsi"
+      },
+      "21": {
+        title: "2 otaqlı mənzil",
+        address: "Parkovaya küçəsi, 14, mənzil 33",
+        material: "Kərpic"
+      },
+      "22": {
+        title: "Sənaye sahəsi",
+        address: "Zavodskaya küçəsi, 25, emalatxana 2",
+        material: "Metal konstruksiya"
+      },
+      "23": {
+        title: "1 otaqlı mənzil",
+        address: "Shkolnaya küçəsi, 9, mənzil 12",
+        material: "Panel"
+      },
+      "24": {
+        title: "Kottec",
+        address: "Lesnoy yaşayış məntəqəsi, Sosnovaya küçəsi, 7",
+        material: "12 hektar torpaq sahəsi"
+      },
+      "25": {
+        title: "Ofis sahəsi",
+        address: "BC \"Business\", ofis 201",
+        material: "Beton"
+      },
+      "26": {
+        title: "3 otaqlı mənzil",
+        address: "Vesennyaya küçəsi, 11, mənzil 56",
+        material: "Monolit"
+      },
+      "27": {
+        title: "Qaraj",
+        address: "Avtomobilnaya küçəsi, 3, qutu 7",
+        material: "Kərpic"
+      },
+      "28": {
+        title: "Studiya",
+        address: "Studencheskaya küçəsi, 5, mənzil 1",
+        material: "Kərpic"
+      },
+      "29": {
+        title: "Torpaq sahəsi",
+        address: "SNT \"Harvest\", sahə 25",
+        material: "Bütün kommunal xidmətlər"
+      },
+      "30": {
+        title: "Taunhaus",
+        address: "Solnechny yaşayış məntəqəsi, Yasnaya küçəsi, 9",
+        material: "5 hektar torpaq sahəsi"
+      }
+    },
+    blog: {
+      title: "Bloq",
+      loadMore: "Daha çox məqalə yüklə",
+      readMore: "Daha çox oxu →",
+      published: "Dərc edilib:",
+      articles: {
+        "1": {
+          title: "Yeni binada mənzil seçməyin düzgün yolu",
+          date: "15 yanvar 2024",
+          excerpt: "Yeni binada mənzil seçərkən çoxlu amillərə diqqət yetirmək vacibdir: planlaşdırmadan tutmuş inkişafçının nüfuzuna qədər. Bu məqalədə biz sizə düzgün seçim etməyə kömək edəcək əsas məqamlar haqqında danışacağıq..."
+        },
+        "2": {
+          title: "2024-cü ildə əmlak bazarının tendensiyaları",
+          date: "10 yanvar 2024",
+          excerpt: "Əmlak bazarının mövcud tendensiyalarının təhlili alıcıların üstünlüklərində və qiymət dinamikasında maraqlı dəyişikliklər göstərir. Yeni ilin əsas tendensiyalarına baxaq..."
+        },
+        "3": {
+          title: "2024-cü ildə ipoteka: nə dəyişdi?",
+          date: "5 yanvar 2024",
+          excerpt: "2024-cü ildə ipoteka kreditləşdirməsinin yeni şərtləri potensial borcalanlar üçün həm müsbət, həm də mənfi dəyişikliklər gətirdi. Bütün yenilikləri təhlil edək..."
+        }
+      }
     }
   },
   zh: {
@@ -1042,6 +1392,181 @@ const translations: Record<string, Translations> = {
       officeAddress: "莫斯科，特维尔大街，15号",
       support: "技术支持",
       supportEmail: "support@metrika.ru"
+    },
+    realEstateObjects: {
+      "1": {
+        title: "2室公寓",
+        address: "特维尔大街15号，42室",
+        material: "砖"
+      },
+      "2": {
+        title: "私人住宅",
+        address: "Podmoskovnaya村，Sadovaya街7号",
+        material: "6英亩地块"
+      },
+      "3": {
+        title: "办公空间",
+        address: "BC \"Center\"，301办公室",
+        material: "混凝土"
+      },
+      "4": {
+        title: "1室公寓",
+        address: "列宁街25号，15室",
+        material: "面板"
+      },
+      "5": {
+        title: "土地",
+        address: "SNT \"Sunny\"，12号地块",
+        material: "电力"
+      },
+      "6": {
+        title: "3室公寓",
+        address: "和平大道8号，67室",
+        material: "单体"
+      },
+      "7": {
+        title: "工作室",
+        address: "Arbat街12号，3室",
+        material: "砖"
+      },
+      "8": {
+        title: "别墅",
+        address: "Rublevo定居点，Lesnaya街45号",
+        material: "10英亩地块"
+      },
+      "9": {
+        title: "零售空间",
+        address: "TC \"Mega\"，15号展馆",
+        material: "购物中心"
+      },
+      "10": {
+        title: "4室公寓",
+        address: "红场街1号，100室",
+        material: "单体"
+      },
+      "11": {
+        title: "车库",
+        address: "工业街5号，12号车位",
+        material: "混凝土"
+      },
+      "12": {
+        title: "2室公寓",
+        address: "Sadovaya街30号，25室",
+        material: "面板"
+      },
+      "13": {
+        title: "仓库空间",
+        address: "工业街15号，3号仓库",
+        material: "金属结构"
+      },
+      "14": {
+        title: "1室公寓",
+        address: "Novaya街7号，8室",
+        material: "砖"
+      },
+      "15": {
+        title: "联排别墅",
+        address: "Zarechny定居点，中央街12号",
+        material: "4英亩地块"
+      },
+      "16": {
+        title: "办公室",
+        address: "BC \"Modern\"，505办公室",
+        material: "玻璃/混凝土"
+      },
+      "17": {
+        title: "3室公寓",
+        address: "Moskovskaya街22号，45室",
+        material: "单体"
+      },
+      "18": {
+        title: "土地",
+        address: "SNT \"Daisy\"，8号地块",
+        material: "天然气，电力"
+      },
+      "19": {
+        title: "工作室",
+        address: "Molodezhnaya街18号，2室",
+        material: "面板"
+      },
+      "20": {
+        title: "私人住宅",
+        address: "Zelenoe村，Dachnaya街3号",
+        material: "8英亩地块"
+      },
+      "21": {
+        title: "2室公寓",
+        address: "Parkovaya街14号，33室",
+        material: "砖"
+      },
+      "22": {
+        title: "工业空间",
+        address: "Zavodskaya街25号，2号车间",
+        material: "金属结构"
+      },
+      "23": {
+        title: "1室公寓",
+        address: "Shkolnaya街9号，12室",
+        material: "面板"
+      },
+      "24": {
+        title: "别墅",
+        address: "Lesnoy定居点，Sosnovaya街7号",
+        material: "12英亩地块"
+      },
+      "25": {
+        title: "办公空间",
+        address: "BC \"Business\"，201办公室",
+        material: "混凝土"
+      },
+      "26": {
+        title: "3室公寓",
+        address: "Vesennyaya街11号，56室",
+        material: "单体"
+      },
+      "27": {
+        title: "车库",
+        address: "Avtomobilnaya街3号，7号车位",
+        material: "砖"
+      },
+      "28": {
+        title: "工作室",
+        address: "Studencheskaya街5号，1室",
+        material: "砖"
+      },
+      "29": {
+        title: "土地",
+        address: "SNT \"Harvest\"，25号地块",
+        material: "所有公用设施"
+      },
+      "30": {
+        title: "联排别墅",
+        address: "Solnechny定居点，Yasnaya街9号",
+        material: "5英亩地块"
+      }
+    },
+    blog: {
+      title: "博客",
+      loadMore: "加载更多文章",
+      readMore: "阅读更多 →",
+      published: "发布时间：",
+      articles: {
+        "1": {
+          title: "如何正确选择新房公寓",
+          date: "2024年1月15日",
+          excerpt: "选择新房公寓时，重要的是要注意许多因素：从布局到开发商的声誉。在这篇文章中，我们将告诉您关键要点，这些要点将帮助您做出正确的选择..."
+        },
+        "2": {
+          title: "2024年房地产市场趋势",
+          date: "2024年1月10日",
+          excerpt: "对当前房地产市场趋势的分析显示了买家偏好和价格动态的有趣变化。让我们看看新年的主要趋势..."
+        },
+        "3": {
+          title: "2024年抵押贷款：发生了什么变化？",
+          date: "2024年1月5日",
+          excerpt: "2024年抵押贷款的新条件为潜在借款人带来了积极和消极的变化。让我们分析所有创新..."
+        }
+      }
     }
   },
   ko: {
@@ -1155,7 +1680,9 @@ const translations: Record<string, Translations> = {
       officeAddress: "모스크바, 트베르스카야 거리, 15번",
       support: "기술 지원",
       supportEmail: "support@metrika.ru"
-    }
+    },
+    realEstateObjects: undefined,
+    blog: undefined
   },
   ja: {
     header: {
