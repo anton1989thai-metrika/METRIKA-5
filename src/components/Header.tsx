@@ -1,10 +1,10 @@
 "use client"
 
 import LanguageSelector from "./LanguageSelector"
-import { useTranslations } from 'next-intl'
+import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function Header() {
-  const t = useTranslations('header')
+  const { t } = useLanguage()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
@@ -13,10 +13,10 @@ export default function Header() {
           {/* Левая часть - логотип */}
           <div className="text-center flex-1">
             <h1 className="text-2xl font-bold text-black">
-              {t('title')}
+              {t('header.title')}
             </h1>
             <p className="text-sm text-gray-600">
-              {t('subtitle')}
+              {t('header.subtitle')}
             </p>
           </div>
           

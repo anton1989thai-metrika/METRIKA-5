@@ -1,9 +1,9 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { useTranslations } from 'next-intl'
+import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function HomePage() {
-  const t = useTranslations()
+  const { t } = useLanguage()
 
   return (
     <div className="min-h-screen bg-white">
