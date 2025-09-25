@@ -1,16 +1,15 @@
 import BurgerMenu from "@/components/BurgerMenu";
+import Header from "@/components/Header";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
+      <Header />
       <BurgerMenu />
       
-      <main className="pt-20 px-4">
+      <main className="pt-32 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-black mb-4">
-              МЕТРИКА
-            </h1>
             <p className="text-xl text-gray-600 mb-8">
               Агентство недвижимости
             </p>

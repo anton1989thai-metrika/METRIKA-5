@@ -108,7 +108,7 @@ export default function BurgerMenu() {
       {/* Кнопка бургер-меню */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-50 p-2 bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-50 transition-colors"
+        className="fixed top-6 left-4 z-50 p-2 bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-50 transition-colors"
         aria-label="Открыть меню"
       >
         <Menu className="w-6 h-6 text-black" />

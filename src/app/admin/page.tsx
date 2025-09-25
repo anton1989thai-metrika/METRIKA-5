@@ -1,6 +1,7 @@
 "use client"
 
 import BurgerMenu from "@/components/BurgerMenu";
+import Header from "@/components/Header";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
@@ -21,9 +22,10 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Header />
       <BurgerMenu />
       
-      <main className="pt-20 px-4">
+      <main className="pt-32 px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
             Админ панель
