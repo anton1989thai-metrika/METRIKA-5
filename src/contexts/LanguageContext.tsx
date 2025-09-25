@@ -63,6 +63,38 @@ const translations: Record<string, Translations> = {
       knowledgeBaseDesc: "เข้าถึงข้อมูลผู้เชี่ยวชาญ",
       useMenu: "ใช้เมนูทางซ้ายเพื่อนำทางในพอร์ทัล"
     }
+  },
+  hy: {
+    header: {
+      title: "ՄԵՏՐԻԿԱ",
+      subtitle: "Անշարժ գույքի գործակալություն"
+    },
+    home: {
+      welcome: "Բարի գալուստ ՄԵՏՐԻԿԱ անշարժ գույքի գործակալության պորտալ: Այստեղ դուք կգտնեք անշարժ գույքի հետ աշխատելու համար անհրաժեշտ ամեն ինչ:",
+      realEstateObjects: "Անշարժ գույքի օբյեկտներ",
+      realEstateObjectsDesc: "Դիտեք և կառավարեք անշարժ գույքի օբյեկտները",
+      interactiveMap: "Ինտերակտիվ քարտեզ",
+      interactiveMapDesc: "Ուսումնասիրեք օբյեկտները քաղաքի քարտեզի վրա",
+      knowledgeBase: "Գիտելիքների բազա",
+      knowledgeBaseDesc: "Մուտք ստացեք փորձագիտական տեղեկատվությանը",
+      useMenu: "Օգտագործեք ձախ մենյուն պորտալում նավարկելու համար"
+    }
+  },
+  az: {
+    header: {
+      title: "METRİKA",
+      subtitle: "Əmlak Agentliyi"
+    },
+    home: {
+      welcome: "METRİKA əmlak agentliyinin portalına xoş gəlmisiniz. Burada əmlakla işləmək üçün lazım olan hər şeyi tapacaqsınız.",
+      realEstateObjects: "Əmlak obyektləri",
+      realEstateObjectsDesc: "Əmlak obyektlərini görün və idarə edin",
+      interactiveMap: "İnteraktiv xəritə",
+      interactiveMapDesc: "Şəhər xəritəsində obyektləri araşdırın",
+      knowledgeBase: "Bilik bazası",
+      knowledgeBaseDesc: "Ekspert məlumatlarına çıxış əldə edin",
+      useMenu: "Portalda naviqasiya üçün sol menyudan istifadə edin"
+    }
   }
 }
 

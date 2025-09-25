@@ -20,7 +20,9 @@ const languages: Language[] = [
   { code: "uz", name: "O'zbek", flag: "🇺🇿" },
   { code: "tg", name: "Тоҷикӣ", flag: "🇹🇯" },
   { code: "kk", name: "Қазақша", flag: "🇰🇿" },
-  { code: "hi", name: "हिन्दी", flag: "🇮🇳" }
+  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+  { code: "hy", name: "Հայերեն", flag: "🇦🇲" },
+  { code: "az", name: "Azərbaycan", flag: "🇦🇿" }
 ]
 
 export default function LanguageSelector() {
