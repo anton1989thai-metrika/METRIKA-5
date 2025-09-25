@@ -12,7 +12,7 @@ export default function HomePage() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-32 px-4">
+      <main className="pt-36 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xl text-gray-600 mb-8">
