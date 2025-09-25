@@ -3,13 +3,13 @@
 import React, { createContext, useContext, useState } from 'react'
 
 interface Translations {
-  [key: string]: string | Translations
+  [key: string]: string | Translations | any
 }
 
 interface LanguageContextType {
   locale: string
   setLocale: (locale: string) => void
-  t: (key: string) => string
+  t: (key: string) => string | any
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -587,9 +587,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState('ru')
 
   // Получаем перевод по ключу
-  const t = (key: string): string => {
+  const t = (key: string): string | any => {
     const keys = key.split('.')
-    let value: string | Translations = translations[locale]
+    let value: string | Translations | any = translations[locale]
     
     for (const k of keys) {
       if (value && typeof value === 'object') {
@@ -599,7 +599,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       }
     }
     
-    return typeof value === 'string' ? value : key
+    return value
   }
 
   return (
