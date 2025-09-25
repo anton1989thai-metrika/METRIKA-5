@@ -20,7 +20,7 @@ export default function Header() {
             <h1 className="text-4xl font-bold text-black -mb-2">
               {t('header.title')}
             </h1>
-            <p className="text-base text-gray-600">
+            <p className="text-gray-600" style={{ fontSize: '15px' }}>
               {t('header.subtitle')}
             </p>
           </div>
