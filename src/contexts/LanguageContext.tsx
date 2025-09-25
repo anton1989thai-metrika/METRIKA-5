@@ -3122,6 +3122,7 @@ const translations: Record<string, Translations> = {
       }
     }
   }
+}
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState('ru')
