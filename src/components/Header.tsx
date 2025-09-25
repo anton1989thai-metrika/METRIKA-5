@@ -17,7 +17,7 @@ export default function Header() {
           
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center">
-            <h1 className="font-bold text-black -mb-3" style={{ fontSize: '47px' }}>
+            <h1 className="font-bold text-black -mb-4" style={{ fontSize: '47px' }}>
               {t('header.title')}
             </h1>
             <p className="text-gray-600" style={{ fontSize: '20px' }}>
