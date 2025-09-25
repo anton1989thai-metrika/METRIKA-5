@@ -276,7 +276,7 @@ const objectsData = [
 ];
 
 export default function ObjectsPage() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
 
   // Получаем переведенные объекты
   const objects = objectsData.map(obj => ({
@@ -285,6 +285,11 @@ export default function ObjectsPage() {
     address: t(`realEstateObjects.${obj.id}.address`),
     material: t(`realEstateObjects.${obj.id}.material`)
   }))
+
+  // Отладочная информация
+  console.log('Current locale:', locale)
+  console.log('Sample translation:', t('realEstateObjects.1.title'))
+  console.log('Objects:', objects.slice(0, 2))
 
   return (
     <div className="min-h-screen bg-white">

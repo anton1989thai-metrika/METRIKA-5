@@ -3132,10 +3132,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const keys = key.split('.')
     let value: string | Translations | any = translations[locale]
     
+    // Отладочная информация
+    if (key.includes('realEstateObjects')) {
+      console.log('Translation key:', key, 'Locale:', locale, 'Available translations:', Object.keys(translations))
+    }
+    
     for (const k of keys) {
       if (value && typeof value === 'object') {
         value = value[k]
       } else {
+        console.log('Translation not found for key:', key, 'at step:', k, 'value:', value)
         return key // Возвращаем ключ если перевод не найден
       }
     }
