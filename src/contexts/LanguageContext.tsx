@@ -240,6 +240,181 @@ const translations: Record<string, Translations> = {
       officeAddress: "Moscow, Tverskaya St., 15",
       support: "Technical Support",
       supportEmail: "support@metrika.ru"
+    },
+    realEstateObjects: {
+      "1": {
+        title: "2-room apartment",
+        address: "Tverskaya St., 15, apt. 42",
+        material: "Brick"
+      },
+      "2": {
+        title: "Private house",
+        address: "Podmoskovnaya village, Sadovaya St., 7",
+        material: "6 acres plot"
+      },
+      "3": {
+        title: "Office space",
+        address: "BC \"Center\", office 301",
+        material: "Concrete"
+      },
+      "4": {
+        title: "1-room apartment",
+        address: "Lenin St., 25, apt. 15",
+        material: "Panel"
+      },
+      "5": {
+        title: "Land plot",
+        address: "SNT \"Sunny\", plot 12",
+        material: "Electricity"
+      },
+      "6": {
+        title: "3-room apartment",
+        address: "Peace Ave., 8, apt. 67",
+        material: "Monolith"
+      },
+      "7": {
+        title: "Studio",
+        address: "Arbat St., 12, apt. 3",
+        material: "Brick"
+      },
+      "8": {
+        title: "Cottage",
+        address: "Rublevo settlement, Lesnaya St., 45",
+        material: "10 acres plot"
+      },
+      "9": {
+        title: "Retail space",
+        address: "TC \"Mega\", pavilion 15",
+        material: "Shopping center"
+      },
+      "10": {
+        title: "4-room apartment",
+        address: "Red Square St., 1, apt. 100",
+        material: "Monolith"
+      },
+      "11": {
+        title: "Garage",
+        address: "Industrial St., 5, box 12",
+        material: "Concrete"
+      },
+      "12": {
+        title: "2-room apartment",
+        address: "Sadovaya St., 30, apt. 25",
+        material: "Panel"
+      },
+      "13": {
+        title: "Warehouse",
+        address: "Industrial St., 15, warehouse 3",
+        material: "Metal structure"
+      },
+      "14": {
+        title: "1-room apartment",
+        address: "Novaya St., 7, apt. 8",
+        material: "Brick"
+      },
+      "15": {
+        title: "Townhouse",
+        address: "Zarechny settlement, Central St., 12",
+        material: "4 acres plot"
+      },
+      "16": {
+        title: "Office",
+        address: "BC \"Modern\", office 505",
+        material: "Glass/concrete"
+      },
+      "17": {
+        title: "3-room apartment",
+        address: "Moskovskaya St., 22, apt. 45",
+        material: "Monolith"
+      },
+      "18": {
+        title: "Land plot",
+        address: "SNT \"Daisy\", plot 8",
+        material: "Gas, electricity"
+      },
+      "19": {
+        title: "Studio",
+        address: "Molodezhnaya St., 18, apt. 2",
+        material: "Panel"
+      },
+      "20": {
+        title: "Private house",
+        address: "Zelenoe village, Dachnaya St., 3",
+        material: "8 acres plot"
+      },
+      "21": {
+        title: "2-room apartment",
+        address: "Parkovaya St., 14, apt. 33",
+        material: "Brick"
+      },
+      "22": {
+        title: "Industrial space",
+        address: "Zavodskaya St., 25, workshop 2",
+        material: "Metal structure"
+      },
+      "23": {
+        title: "1-room apartment",
+        address: "Shkolnaya St., 9, apt. 12",
+        material: "Panel"
+      },
+      "24": {
+        title: "Cottage",
+        address: "Lesnoy settlement, Sosnovaya St., 7",
+        material: "12 acres plot"
+      },
+      "25": {
+        title: "Office space",
+        address: "BC \"Business\", office 201",
+        material: "Concrete"
+      },
+      "26": {
+        title: "3-room apartment",
+        address: "Vesennyaya St., 11, apt. 56",
+        material: "Monolith"
+      },
+      "27": {
+        title: "Garage",
+        address: "Avtomobilnaya St., 3, box 7",
+        material: "Brick"
+      },
+      "28": {
+        title: "Studio",
+        address: "Studencheskaya St., 5, apt. 1",
+        material: "Brick"
+      },
+      "29": {
+        title: "Land plot",
+        address: "SNT \"Harvest\", plot 25",
+        material: "All utilities"
+      },
+      "30": {
+        title: "Townhouse",
+        address: "Solnechny settlement, Yasnaya St., 9",
+        material: "5 acres plot"
+      }
+    },
+    blog: {
+      title: "Blog",
+      loadMore: "Load more articles",
+      readMore: "Read more →",
+      published: "Published:",
+      articles: {
+        "1": {
+          title: "How to choose the right apartment in a new building",
+          date: "January 15, 2024",
+          excerpt: "When choosing an apartment in a new building, it's important to pay attention to many factors: from layout to developer reputation. In this article, we'll tell you about the key points that will help you make the right choice..."
+        },
+        "2": {
+          title: "Real estate market trends in 2024",
+          date: "January 10, 2024",
+          excerpt: "Analysis of current real estate market trends shows interesting changes in buyer preferences and price dynamics. Let's look at the main trends of the new year..."
+        },
+        "3": {
+          title: "Mortgage in 2024: what has changed?",
+          date: "January 5, 2024",
+          excerpt: "New mortgage lending conditions in 2024 brought both positive and negative changes for potential borrowers. Let's analyze all the innovations..."
+        }
+      }
     }
   },
   th: {
@@ -353,6 +528,181 @@ const translations: Record<string, Translations> = {
       officeAddress: "กรุงมอสโก ถนน Tverskaya 15",
       support: "ฝ่ายสนับสนุนเทคนิค",
       supportEmail: "support@metrika.ru"
+    },
+    realEstateObjects: {
+      "1": {
+        title: "ห้องชุด 2 ห้อง",
+        address: "ถนน Tverskaya 15 ห้อง 42",
+        material: "อิฐ"
+      },
+      "2": {
+        title: "บ้านส่วนตัว",
+        address: "หมู่บ้าน Podmoskovnaya ถนน Sadovaya 7",
+        material: "ที่ดิน 6 ไร่"
+      },
+      "3": {
+        title: "พื้นที่สำนักงาน",
+        address: "BC \"Center\" สำนักงาน 301",
+        material: "คอนกรีต"
+      },
+      "4": {
+        title: "ห้องชุด 1 ห้อง",
+        address: "ถนน Lenin 25 ห้อง 15",
+        material: "แผง"
+      },
+      "5": {
+        title: "ที่ดิน",
+        address: "SNT \"Sunny\" แปลง 12",
+        material: "ไฟฟ้า"
+      },
+      "6": {
+        title: "ห้องชุด 3 ห้อง",
+        address: "ถนน Peace 8 ห้อง 67",
+        material: "โมโนลิธ"
+      },
+      "7": {
+        title: "สตูดิโอ",
+        address: "ถนน Arbat 12 ห้อง 3",
+        material: "อิฐ"
+      },
+      "8": {
+        title: "คอทเทจ",
+        address: "หมู่บ้าน Rublevo ถนน Lesnaya 45",
+        material: "ที่ดิน 10 ไร่"
+      },
+      "9": {
+        title: "พื้นที่ค้าปลีก",
+        address: "TC \"Mega\" พาวิลเลียน 15",
+        material: "ศูนย์การค้า"
+      },
+      "10": {
+        title: "ห้องชุด 4 ห้อง",
+        address: "ถนน Red Square 1 ห้อง 100",
+        material: "โมโนลิธ"
+      },
+      "11": {
+        title: "โรงจอดรถ",
+        address: "ถนน Industrial 5 กล่อง 12",
+        material: "คอนกรีต"
+      },
+      "12": {
+        title: "ห้องชุด 2 ห้อง",
+        address: "ถนน Sadovaya 30 ห้อง 25",
+        material: "แผง"
+      },
+      "13": {
+        title: "คลังสินค้า",
+        address: "ถนน Industrial 15 คลัง 3",
+        material: "โครงสร้างโลหะ"
+      },
+      "14": {
+        title: "ห้องชุด 1 ห้อง",
+        address: "ถนน Novaya 7 ห้อง 8",
+        material: "อิฐ"
+      },
+      "15": {
+        title: "ทาวน์เฮาส์",
+        address: "หมู่บ้าน Zarechny ถนน Central 12",
+        material: "ที่ดิน 4 ไร่"
+      },
+      "16": {
+        title: "สำนักงาน",
+        address: "BC \"Modern\" สำนักงาน 505",
+        material: "กระจก/คอนกรีต"
+      },
+      "17": {
+        title: "ห้องชุด 3 ห้อง",
+        address: "ถนน Moskovskaya 22 ห้อง 45",
+        material: "โมโนลิธ"
+      },
+      "18": {
+        title: "ที่ดิน",
+        address: "SNT \"Daisy\" แปลง 8",
+        material: "แก๊ส ไฟฟ้า"
+      },
+      "19": {
+        title: "สตูดิโอ",
+        address: "ถนน Molodezhnaya 18 ห้อง 2",
+        material: "แผง"
+      },
+      "20": {
+        title: "บ้านส่วนตัว",
+        address: "หมู่บ้าน Zelenoe ถนน Dachnaya 3",
+        material: "ที่ดิน 8 ไร่"
+      },
+      "21": {
+        title: "ห้องชุด 2 ห้อง",
+        address: "ถนน Parkovaya 14 ห้อง 33",
+        material: "อิฐ"
+      },
+      "22": {
+        title: "พื้นที่อุตสาหกรรม",
+        address: "ถนน Zavodskaya 25 โรงงาน 2",
+        material: "โครงสร้างโลหะ"
+      },
+      "23": {
+        title: "ห้องชุด 1 ห้อง",
+        address: "ถนน Shkolnaya 9 ห้อง 12",
+        material: "แผง"
+      },
+      "24": {
+        title: "คอทเทจ",
+        address: "หมู่บ้าน Lesnoy ถนน Sosnovaya 7",
+        material: "ที่ดิน 12 ไร่"
+      },
+      "25": {
+        title: "พื้นที่สำนักงาน",
+        address: "BC \"Business\" สำนักงาน 201",
+        material: "คอนกรีต"
+      },
+      "26": {
+        title: "ห้องชุด 3 ห้อง",
+        address: "ถนน Vesennyaya 11 ห้อง 56",
+        material: "โมโนลิธ"
+      },
+      "27": {
+        title: "โรงจอดรถ",
+        address: "ถนน Avtomobilnaya 3 กล่อง 7",
+        material: "อิฐ"
+      },
+      "28": {
+        title: "สตูดิโอ",
+        address: "ถนน Studencheskaya 5 ห้อง 1",
+        material: "อิฐ"
+      },
+      "29": {
+        title: "ที่ดิน",
+        address: "SNT \"Harvest\" แปลง 25",
+        material: "สาธารณูปโภคทั้งหมด"
+      },
+      "30": {
+        title: "ทาวน์เฮาส์",
+        address: "หมู่บ้าน Solnechny ถนน Yasnaya 9",
+        material: "ที่ดิน 5 ไร่"
+      }
+    },
+    blog: {
+      title: "บล็อก",
+      loadMore: "โหลดบทความเพิ่มเติม",
+      readMore: "อ่านต่อ →",
+      published: "เผยแพร่:",
+      articles: {
+        "1": {
+          title: "วิธีเลือกอพาร์ตเมนต์ในอาคารใหม่ให้ถูกต้อง",
+          date: "15 มกราคม 2024",
+          excerpt: "เมื่อเลือกอพาร์ตเมนต์ในอาคารใหม่ สิ่งสำคัญคือต้องใส่ใจกับหลายปัจจัย: ตั้งแต่การจัดวางไปจนถึงชื่อเสียงของนักพัฒนา ในบทความนี้เราจะบอกคุณเกี่ยวกับประเด็นสำคัญที่จะช่วยให้คุณเลือกได้อย่างถูกต้อง..."
+        },
+        "2": {
+          title: "แนวโน้มตลาดอสังหาริมทรัพย์ในปี 2024",
+          date: "10 มกราคม 2024",
+          excerpt: "การวิเคราะห์แนวโน้มปัจจุบันของตลาดอสังหาริมทรัพย์แสดงให้เห็นการเปลี่ยนแปลงที่น่าสนใจในความชอบของผู้ซื้อและพลวัตของราคา มาดูแนวโน้มหลักของปีใหม่..."
+        },
+        "3": {
+          title: "สินเชื่อบ้านในปี 2024: อะไรที่เปลี่ยนไป?",
+          date: "5 มกราคม 2024",
+          excerpt: "เงื่อนไขการให้สินเชื่อบ้านใหม่ในปี 2024 นำมาซึ่งการเปลี่ยนแปลงทั้งในเชิงบวกและเชิงลบสำหรับผู้กู้ที่อาจเกิดขึ้น มาวิเคราะห์นวัตกรรมทั้งหมด..."
+        }
+      }
     }
   },
   hy: {
@@ -1369,10 +1719,185 @@ const translations: Record<string, Translations> = {
       office: "कार्यालय",
       officeAddress: "मॉस्को, टवरस्काया स्ट्रीट, 15",
       support: "तकनीकी सहायता",
-      supportEmail: "support@metrika.ru"
+        supportEmail: "support@metrika.ru"
+      },
+      realEstateObjects: {
+        "1": {
+          title: "2-комнатная квартира",
+          address: "ул. Тверская, д. 15, кв. 42",
+          material: "Кирпич"
+        },
+        "2": {
+          title: "Частный дом",
+          address: "д. Подмосковная, ул. Садовая, д. 7",
+          material: "Участок 6 соток"
+        },
+        "3": {
+          title: "Офисное помещение",
+          address: "БЦ \"Центр\", офис 301",
+          material: "Бетон"
+        },
+        "4": {
+          title: "1-комнатная квартира",
+          address: "ул. Ленина, д. 25, кв. 15",
+          material: "Панель"
+        },
+        "5": {
+          title: "Земельный участок",
+          address: "СНТ \"Солнечное\", участок 12",
+          material: "Электричество"
+        },
+        "6": {
+          title: "3-комнатная квартира",
+          address: "пр. Мира, д. 8, кв. 67",
+          material: "Монолит"
+        },
+        "7": {
+          title: "Студия",
+          address: "ул. Арбат, д. 12, кв. 3",
+          material: "Кирпич"
+        },
+        "8": {
+          title: "Коттедж",
+          address: "пос. Рублево, ул. Лесная, д. 45",
+          material: "Участок 10 соток"
+        },
+        "9": {
+          title: "Торговое помещение",
+          address: "ТЦ \"Мега\", павильон 15",
+          material: "Торговый центр"
+        },
+        "10": {
+          title: "4-комнатная квартира",
+          address: "ул. Красная Площадь, д. 1, кв. 100",
+          material: "Монолит"
+        },
+        "11": {
+          title: "Гараж",
+          address: "ул. Промышленная, д. 5, бокс 12",
+          material: "Бетон"
+        },
+        "12": {
+          title: "2-комнатная квартира",
+          address: "ул. Садовая, д. 30, кв. 25",
+          material: "Панель"
+        },
+        "13": {
+          title: "Складское помещение",
+          address: "ул. Промышленная, д. 15, склад 3",
+          material: "Металлоконструкция"
+        },
+        "14": {
+          title: "1-комнатная квартира",
+          address: "ул. Новая, д. 7, кв. 8",
+          material: "Кирпич"
+        },
+        "15": {
+          title: "Таунхаус",
+          address: "пос. Заречный, ул. Центральная, д. 12",
+          material: "Участок 4 сотки"
+        },
+        "16": {
+          title: "Офис",
+          address: "БЦ \"Современный\", офис 505",
+          material: "Стекло/бетон"
+        },
+        "17": {
+          title: "3-комнатная квартира",
+          address: "ул. Московская, д. 22, кв. 45",
+          material: "Монолит"
+        },
+        "18": {
+          title: "Земельный участок",
+          address: "СНТ \"Ромашка\", участок 8",
+          material: "Газ, электричество"
+        },
+        "19": {
+          title: "Студия",
+          address: "ул. Молодежная, д. 18, кв. 2",
+          material: "Панель"
+        },
+        "20": {
+          title: "Частный дом",
+          address: "д. Зеленое, ул. Дачная, д. 3",
+          material: "Участок 8 соток"
+        },
+        "21": {
+          title: "2-комнатная квартира",
+          address: "ул. Парковая, д. 14, кв. 33",
+          material: "Кирпич"
+        },
+        "22": {
+          title: "Производственное помещение",
+          address: "ул. Заводская, д. 25, цех 2",
+          material: "Металлоконструкция"
+        },
+        "23": {
+          title: "1-комнатная квартира",
+          address: "ул. Школьная, д. 9, кв. 12",
+          material: "Панель"
+        },
+        "24": {
+          title: "Коттедж",
+          address: "пос. Лесной, ул. Сосновая, д. 7",
+          material: "Участок 12 соток"
+        },
+        "25": {
+          title: "Офисное помещение",
+          address: "БЦ \"Деловой\", офис 201",
+          material: "Бетон"
+        },
+        "26": {
+          title: "3-комнатная квартира",
+          address: "ул. Весенняя, д. 11, кв. 56",
+          material: "Монолит"
+        },
+        "27": {
+          title: "Гараж",
+          address: "ул. Автомобильная, д. 3, бокс 7",
+          material: "Кирпич"
+        },
+        "28": {
+          title: "Студия",
+          address: "ул. Студенческая, д. 5, кв. 1",
+          material: "Кирпич"
+        },
+        "29": {
+          title: "Земельный участок",
+          address: "СНТ \"Урожай\", участок 25",
+          material: "Все коммуникации"
+        },
+        "30": {
+          title: "Таунхаус",
+          address: "пос. Солнечный, ул. Ясная, д. 9",
+          material: "Участок 5 соток"
+        }
+      },
+      blog: {
+        title: "Блог",
+        loadMore: "Загрузить еще статьи",
+        readMore: "Читать далее →",
+        published: "Опубликовано:",
+        articles: {
+          "1": {
+            title: "Как правильно выбрать квартиру в новостройке",
+            date: "15 января 2024",
+            excerpt: "При выборе квартиры в новостройке важно обратить внимание на множество факторов: от планировки до репутации застройщика. В этой статье мы расскажем о ключевых моментах, которые помогут сделать правильный выбор..."
+          },
+          "2": {
+            title: "Тренды рынка недвижимости в 2024 году",
+            date: "10 января 2024",
+            excerpt: "Анализ текущих тенденций рынка недвижимости показывает интересные изменения в предпочтениях покупателей и ценовой динамике. Рассмотрим основные тренды нового года..."
+          },
+          "3": {
+            title: "Ипотека в 2024: что изменилось?",
+            date: "5 января 2024",
+            excerpt: "Новые условия ипотечного кредитования в 2024 году принесли как положительные, так и отрицательные изменения для потенциальных заемщиков. Разбираем все нововведения..."
+          }
+        }
+      }
     }
   }
-}
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState('ru')

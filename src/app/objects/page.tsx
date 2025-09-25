@@ -4,15 +4,12 @@ import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Данные объектов
-const objects = [
+// Данные объектов (статичные данные для демонстрации)
+const objectsData = [
   {
     id: 1,
-    title: "2-комнатная квартира",
-    address: "ул. Тверская, д. 15, кв. 42",
     area: "65 м²",
     floor: "5/9 этаж",
-    material: "Кирпич",
     price: "8 500 000 ₽"
   },
   {
@@ -280,6 +277,14 @@ const objects = [
 
 export default function ObjectsPage() {
   const { t } = useLanguage()
+
+  // Получаем переведенные объекты
+  const objects = objectsData.map(obj => ({
+    ...obj,
+    title: t(`realEstateObjects.${obj.id}.title`),
+    address: t(`realEstateObjects.${obj.id}.address`),
+    material: t(`realEstateObjects.${obj.id}.material`)
+  }))
 
   return (
     <div className="min-h-screen bg-white">
