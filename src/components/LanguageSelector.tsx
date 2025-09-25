@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { ChevronDown } from "lucide-react"
+import { useRouter, usePathname } from "next/navigation"
+import { locales } from "../../i18n"
 
 interface Language {
   code: string
@@ -24,13 +26,22 @@ const languages: Language[] = [
 
 export default function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]) // Русский по умолчанию
+  const router = useRouter()
+  const pathname = usePathname()
+  
+  // Получаем текущий язык из URL
+  const currentLocale = pathname.split('/')[1] as string
+  const selectedLanguage = languages.find(lang => lang.code === currentLocale) || languages[0]
 
   const handleLanguageSelect = (language: Language) => {
-    setSelectedLanguage(language)
     setIsOpen(false)
-    // Здесь можно добавить логику смены языка
-    console.log(`Selected language: ${language.name} (${language.code})`)
+    
+    // Заменяем текущий язык в URL на новый
+    const segments = pathname.split('/')
+    segments[1] = language.code
+    const newPath = segments.join('/')
+    
+    router.push(newPath)
   }
 
   return (

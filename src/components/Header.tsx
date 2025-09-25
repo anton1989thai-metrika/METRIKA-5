@@ -1,8 +1,11 @@
 "use client"
 
 import LanguageSelector from "./LanguageSelector"
+import { useTranslations } from 'next-intl'
 
 export default function Header() {
+  const t = useTranslations('header')
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-4">
@@ -10,10 +13,10 @@ export default function Header() {
           {/* Левая часть - логотип */}
           <div className="text-center flex-1">
             <h1 className="text-2xl font-bold text-black">
-              МЕТРИКА
+              {t('title')}
             </h1>
             <p className="text-sm text-gray-600">
-              Агентство недвижимости
+              {t('subtitle')}
             </p>
           </div>
           
