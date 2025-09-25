@@ -41,36 +41,36 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <button 
               onClick={handlePurchaseClick}
-              className="button-dark-bg hover:opacity-90 text-white p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
+              className="bg-white hover:bg-gray-50 text-black p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
             >
-              <h3 className="text-xl font-semibold mb-3 relative z-10">
+              <h3 className="text-xl font-semibold mb-3">
                 {t('objects.purchase')}
               </h3>
-              <p className="text-gray-200 relative z-10">
+              <p className="text-gray-600">
                 {t('home.purchaseDesc')}
               </p>
             </button>
             
             <button 
               onClick={handleSaleClick}
-              className="button-dark-bg hover:opacity-90 text-white p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
+              className="bg-white hover:bg-gray-50 text-black p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
             >
-              <h3 className="text-xl font-semibold mb-3 relative z-10">
+              <h3 className="text-xl font-semibold mb-3">
                 {t('objects.sale')}
               </h3>
-              <p className="text-gray-200 relative z-10">
+              <p className="text-gray-600">
                 {t('home.saleDesc')}
               </p>
             </button>
             
             <button 
               onClick={handleRentClick}
-              className="button-dark-bg hover:opacity-90 text-white p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
+              className="bg-white hover:bg-gray-50 text-black p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
             >
-              <h3 className="text-xl font-semibold mb-3 relative z-10">
+              <h3 className="text-xl font-semibold mb-3">
                 {t('objects.rent')}
               </h3>
-              <p className="text-gray-200 relative z-10">
+              <p className="text-gray-600">
                 {t('home.rentDesc')}
               </p>
             </button>
