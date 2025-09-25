@@ -19,7 +19,7 @@ export default function Header() {
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center flex flex-col justify-center">
             <Image
-              src="/images/logo.svg"
+              src="/images/logo"
               alt="МЕТРИКА Агентство недвижимости"
               width={300}
               height={80}
