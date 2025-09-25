@@ -24,3 +24,32 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Стили для кнопок с темным фоном и геометрическим паттерном */
+.button-dark-bg {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  background-image: 
+    radial-gradient(circle at 20% 20%, #333333 2px, transparent 2px),
+    radial-gradient(circle at 80% 80%, #333333 1px, transparent 1px),
+    radial-gradient(circle at 40% 60%, #333333 1px, transparent 1px),
+    radial-gradient(circle at 60% 40%, #333333 1px, transparent 1px);
+  background-size: 30px 30px, 20px 20px, 25px 25px, 35px 35px;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-dark-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

@@ -41,36 +41,36 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <button 
               onClick={handlePurchaseClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-8 rounded-lg transition-colors text-center"
+              className="button-dark-bg hover:opacity-90 text-white p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
             >
-              <h3 className="text-xl font-semibold mb-3">
+              <h3 className="text-xl font-semibold mb-3 relative z-10">
                 {t('objects.purchase')}
               </h3>
-              <p className="text-blue-100">
+              <p className="text-gray-200 relative z-10">
                 {t('home.purchaseDesc')}
               </p>
             </button>
             
             <button 
               onClick={handleSaleClick}
-              className="bg-green-600 hover:bg-green-700 text-white p-8 rounded-lg transition-colors text-center"
+              className="button-dark-bg hover:opacity-90 text-white p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
             >
-              <h3 className="text-xl font-semibold mb-3">
+              <h3 className="text-xl font-semibold mb-3 relative z-10">
                 {t('objects.sale')}
               </h3>
-              <p className="text-green-100">
+              <p className="text-gray-200 relative z-10">
                 {t('home.saleDesc')}
               </p>
             </button>
             
             <button 
               onClick={handleRentClick}
-              className="bg-purple-600 hover:bg-purple-700 text-white p-8 rounded-lg transition-colors text-center"
+              className="button-dark-bg hover:opacity-90 text-white p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
             >
-              <h3 className="text-xl font-semibold mb-3">
+              <h3 className="text-xl font-semibold mb-3 relative z-10">
                 {t('objects.rent')}
               </h3>
-              <p className="text-purple-100">
+              <p className="text-gray-200 relative z-10">
                 {t('home.rentDesc')}
               </p>
             </button>
