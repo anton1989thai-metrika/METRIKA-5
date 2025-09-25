@@ -78,7 +78,7 @@ export default function HomePage() {
 
           <div className="text-center">
             <p className="text-gray-500">
-              {t('home.useMenu')}
+              {t('home.chooseSection')}
             </p>
           </div>
         </div>

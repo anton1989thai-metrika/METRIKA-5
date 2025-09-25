@@ -30,6 +30,7 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "База знаний",
       knowledgeBaseDesc: "Получайте доступ к экспертной информации",
       useMenu: "Используйте меню слева для навигации по порталу",
+      chooseSection: "Выберите необходимый для вас раздел",
       purchaseDesc: "Подайте заявку на покупку недвижимости",
       saleDesc: "Просмотрите все доступные объекты для продажи",
       rentDesc: "Найдите объекты для аренды"
@@ -352,6 +353,7 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "Knowledge Base",
       knowledgeBaseDesc: "Get access to expert information",
       useMenu: "Use the menu on the left to navigate the portal",
+      chooseSection: "Choose the section you need",
       purchaseDesc: "Submit an application for real estate purchase",
       saleDesc: "Browse all available properties for sale",
       rentDesc: "Find properties for rent"
