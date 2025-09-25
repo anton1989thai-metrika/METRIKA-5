@@ -1,7 +1,12 @@
+"use client"
+
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import { useLanguage } from "@/contexts/LanguageContext"
 
-export default function Home() {
+export default function HomePage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -11,46 +16,45 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-xl text-gray-600 mb-8">
-              Агентство недвижимости
+              {t('home.welcome')}
             </p>
             <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-              Добро пожаловать в портал агентства недвижимости МЕТРИКА. 
-              Здесь вы найдете все необходимое для работы с недвижимостью.
+              {t('home.useMenu')}
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
-                Объекты недвижимости
+                {t('home.realEstateObjects')}
               </h3>
               <p className="text-gray-600">
-                Просматривайте и управляйте объектами недвижимости
+                {t('home.realEstateObjectsDesc')}
               </p>
             </div>
             
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
-                Интерактивная карта
+                {t('home.interactiveMap')}
               </h3>
               <p className="text-gray-600">
-                Изучайте объекты на карте города
+                {t('home.interactiveMapDesc')}
               </p>
             </div>
             
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
-                База знаний
+                {t('home.knowledgeBase')}
               </h3>
               <p className="text-gray-600">
-                Получайте доступ к экспертной информации
+                {t('home.knowledgeBaseDesc')}
               </p>
             </div>
           </div>
 
           <div className="text-center">
             <p className="text-gray-500">
-              Используйте меню слева для навигации по порталу
+              {t('home.useMenu')}
             </p>
           </div>
         </div>
