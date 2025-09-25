@@ -1,5 +1,8 @@
+"use client"
+
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Данные объектов
 const objects = [
@@ -276,6 +279,8 @@ const objects = [
 ];
 
 export default function ObjectsPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -284,7 +289,7 @@ export default function ObjectsPage() {
       <main className="pt-32 px-4">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
-            Объекты недвижимости
+            {t('objects.title')}
           </h1>
           
           <div className="flex gap-8">
@@ -292,52 +297,52 @@ export default function ObjectsPage() {
             <div className="w-80 flex-shrink-0">
               <div className="bg-gray-50 p-6 rounded-lg sticky top-40">
                 <h2 className="text-xl font-semibold text-black mb-6">
-                  Фильтры
+                  {t('objects.filters')}
                 </h2>
                 
                 {/* Тип недвижимости */}
                 <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">Тип недвижимости</h3>
+                  <h3 className="font-semibold text-black mb-3">{t('objects.propertyType')}</h3>
                   <div className="space-y-2">
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">Квартиры</span>
+                      <span className="text-gray-700">{t('objects.apartments')}</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">Дома с участками</span>
+                      <span className="text-gray-700">{t('objects.houses')}</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">Коммерческая</span>
+                      <span className="text-gray-700">{t('objects.commercial')}</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">Земельные участки</span>
+                      <span className="text-gray-700">{t('objects.land')}</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">Некапитальные</span>
+                      <span className="text-gray-700">{t('objects.nonCapital')}</span>
                     </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">Доли</span>
+                      <span className="text-gray-700">{t('objects.shares')}</span>
                     </label>
                   </div>
                 </div>
                 
                 {/* Цена */}
                 <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">Цена</h3>
+                  <h3 className="font-semibold text-black mb-3">{t('objects.price')}</h3>
                   <div className="space-y-2">
                     <input 
                       type="number" 
-                      placeholder="От" 
+                      placeholder={t('objects.priceFrom')} 
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                     <input 
                       type="number" 
-                      placeholder="До" 
+                      placeholder={t('objects.priceTo')} 
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                   </div>
@@ -345,16 +350,16 @@ export default function ObjectsPage() {
                 
                 {/* Площадь */}
                 <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">Площадь (м²)</h3>
+                  <h3 className="font-semibold text-black mb-3">{t('objects.area')}</h3>
                   <div className="space-y-2">
                     <input 
                       type="number" 
-                      placeholder="От" 
+                      placeholder={t('objects.areaFrom')} 
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                     <input 
                       type="number" 
-                      placeholder="До" 
+                      placeholder={t('objects.areaTo')} 
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                   </div>
@@ -362,23 +367,23 @@ export default function ObjectsPage() {
                 
                 {/* Район */}
                 <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">Район</h3>
+                  <h3 className="font-semibold text-black mb-3">{t('objects.district')}</h3>
                   <select className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-                    <option>Все районы</option>
-                    <option>Центральный</option>
-                    <option>Северный</option>
-                    <option>Южный</option>
-                    <option>Восточный</option>
-                    <option>Западный</option>
+                    <option>{t('objects.allDistricts')}</option>
+                    <option>{t('objects.central')}</option>
+                    <option>{t('objects.northern')}</option>
+                    <option>{t('objects.southern')}</option>
+                    <option>{t('objects.eastern')}</option>
+                    <option>{t('objects.western')}</option>
                   </select>
                 </div>
                 
                 <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                  Применить фильтры
+                  {t('objects.applyFilters')}
                 </button>
                 
                 <button className="w-full mt-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
-                  Сбросить
+                  {t('objects.reset')}
                 </button>
               </div>
             </div>
@@ -386,12 +391,12 @@ export default function ObjectsPage() {
             {/* Список объектов */}
             <div className="flex-1">
               <div className="mb-4 flex justify-between items-center">
-                <p className="text-gray-600">Найдено: {objects.length} объектов</p>
+                <p className="text-gray-600">{t('objects.found')}: {objects.length} {t('objects.objects')}</p>
                 <select className="px-3 py-1 border border-gray-300 rounded-md text-sm">
-                  <option>По дате добавления</option>
-                  <option>По цене (возрастание)</option>
-                  <option>По цене (убывание)</option>
-                  <option>По площади</option>
+                  <option>{t('objects.sortBy')}</option>
+                  <option>{t('objects.sortByPriceAsc')}</option>
+                  <option>{t('objects.sortByPriceDesc')}</option>
+                  <option>{t('objects.sortByArea')}</option>
                 </select>
               </div>
               
@@ -400,7 +405,7 @@ export default function ObjectsPage() {
                   <div key={object.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                     <div className="flex gap-4">
                       <div className="w-48 h-32 bg-gray-200 rounded-md flex items-center justify-center">
-                        <span className="text-gray-500">Фото</span>
+                        <span className="text-gray-500">{t('objects.photo')}</span>
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-black mb-2">
@@ -427,7 +432,7 @@ export default function ObjectsPage() {
               <div className="mt-8 flex justify-center">
                 <div className="flex gap-2">
                   <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                    Назад
+                    {t('objects.previous')}
                   </button>
                   <button className="px-3 py-2 bg-blue-600 text-white rounded-md">
                     1
@@ -439,7 +444,7 @@ export default function ObjectsPage() {
                     3
                   </button>
                   <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                    Далее
+                    {t('objects.next')}
                   </button>
                 </div>
               </div>
