@@ -97,6 +97,36 @@ const translations: Record<string, Translations> = {
       houses: "Дома",
       commercial: "Коммерческая",
       land: "Земельные участки"
+    },
+    about: {
+      title: "О компании",
+      description: "МЕТРИКА - ведущее агентство недвижимости",
+      mission: "Наша миссия",
+      missionText: "Предоставлять качественные услуги в сфере недвижимости",
+      values: "Наши ценности",
+      valuesList: [
+        "Профессионализм",
+        "Честность",
+        "Надежность",
+        "Индивидуальный подход"
+      ],
+      team: "Наша команда",
+      teamText: "Опытные специалисты с многолетним стажем",
+      experience: "Опыт работы",
+      experienceText: "Более 10 лет на рынке недвижимости"
+    },
+    contacts: {
+      title: "Контакты",
+      description: "Свяжитесь с нами любым удобным способом",
+      phone: "Телефон",
+      email: "Email",
+      address: "Адрес",
+      workingHours: "Режим работы",
+      workingHoursText: "Пн-Пт: 9:00-18:00, Сб-Вс: 10:00-16:00",
+      office: "Офис",
+      officeAddress: "г. Москва, ул. Тверская, д. 15",
+      support: "Техническая поддержка",
+      supportEmail: "support@metrika.ru"
     }
   },
   en: {
@@ -180,6 +210,36 @@ const translations: Record<string, Translations> = {
       houses: "Houses",
       commercial: "Commercial",
       land: "Land Plots"
+    },
+    about: {
+      title: "About Us",
+      description: "METRIKA - leading real estate agency",
+      mission: "Our Mission",
+      missionText: "To provide quality services in real estate",
+      values: "Our Values",
+      valuesList: [
+        "Professionalism",
+        "Honesty",
+        "Reliability",
+        "Individual Approach"
+      ],
+      team: "Our Team",
+      teamText: "Experienced specialists with many years of experience",
+      experience: "Work Experience",
+      experienceText: "More than 10 years in real estate market"
+    },
+    contacts: {
+      title: "Contacts",
+      description: "Contact us in any convenient way",
+      phone: "Phone",
+      email: "Email",
+      address: "Address",
+      workingHours: "Working Hours",
+      workingHoursText: "Mon-Fri: 9:00-18:00, Sat-Sun: 10:00-16:00",
+      office: "Office",
+      officeAddress: "Moscow, Tverskaya St., 15",
+      support: "Technical Support",
+      supportEmail: "support@metrika.ru"
     }
   },
   th: {
@@ -263,6 +323,36 @@ const translations: Record<string, Translations> = {
       houses: "บ้าน",
       commercial: "เชิงพาณิชย์",
       land: "ที่ดิน"
+    },
+    about: {
+      title: "เกี่ยวกับเรา",
+      description: "เมตริกา - บริษัทอสังหาริมทรัพย์ชั้นนำ",
+      mission: "พันธกิจของเรา",
+      missionText: "ให้บริการคุณภาพในด้านอสังหาริมทรัพย์",
+      values: "ค่านิยมของเรา",
+      valuesList: [
+        "ความเป็นมืออาชีพ",
+        "ความซื่อสัตย์",
+        "ความน่าเชื่อถือ",
+        "แนวทางเฉพาะบุคคล"
+      ],
+      team: "ทีมของเรา",
+      teamText: "ผู้เชี่ยวชาญที่มีประสบการณ์หลายปี",
+      experience: "ประสบการณ์การทำงาน",
+      experienceText: "มากกว่า 10 ปีในตลาดอสังหาริมทรัพย์"
+    },
+    contacts: {
+      title: "ติดต่อ",
+      description: "ติดต่อเราด้วยวิธีที่สะดวก",
+      phone: "โทรศัพท์",
+      email: "อีเมล",
+      address: "ที่อยู่",
+      workingHours: "เวลาทำการ",
+      workingHoursText: "จ-ศ: 9:00-18:00, ส-อา: 10:00-16:00",
+      office: "สำนักงาน",
+      officeAddress: "กรุงมอสโก ถนน Tverskaya 15",
+      support: "ฝ่ายสนับสนุนเทคนิค",
+      supportEmail: "support@metrika.ru"
     }
   },
   hy: {
@@ -346,6 +436,36 @@ const translations: Record<string, Translations> = {
       houses: "Տներ",
       commercial: "Առևտրական",
       land: "Հողամասեր"
+    },
+    about: {
+      title: "Մեր մասին",
+      description: "ՄԵՏՐԻԿԱ - առաջատար անշարժ գույքի գործակալություն",
+      mission: "Մեր առաքելությունը",
+      missionText: "Տրամադրել որակյալ ծառայություններ անշարժ գույքի ոլորտում",
+      values: "Մեր արժեքները",
+      valuesList: [
+        "Մասնագիտականություն",
+        "Անկեղծություն",
+        "Հուսալիություն",
+        "Անհատական մոտեցում"
+      ],
+      team: "Մեր թիմը",
+      teamText: "Փորձառու մասնագետներ բազմամյա փորձով",
+      experience: "Աշխատանքային փորձ",
+      experienceText: "Ավելի քան 10 տարի անշարժ գույքի շուկայում"
+    },
+    contacts: {
+      title: "Կապ",
+      description: "Կապվեք մեզ հետ ցանկացած հարմար եղանակով",
+      phone: "Հեռախոս",
+      email: "Էլ. փոստ",
+      address: "Հասցե",
+      workingHours: "Աշխատանքային ժամեր",
+      workingHoursText: "Երկ-Ուրբ: 9:00-18:00, Շաբ-Կիր: 10:00-16:00",
+      office: "Գրասենյակ",
+      officeAddress: "Մոսկվա, Տվերսկայա փողոց, 15",
+      support: "Տեխնիկական աջակցություն",
+      supportEmail: "support@metrika.ru"
     }
   },
   az: {
@@ -429,6 +549,36 @@ const translations: Record<string, Translations> = {
       houses: "Evlər",
       commercial: "Kommersiya",
       land: "Torpaq sahələri"
+    },
+    about: {
+      title: "Haqqımızda",
+      description: "METRİKA - aparıcı əmlak agentliyi",
+      mission: "Missiyamız",
+      missionText: "Əmlak sahəsində keyfiyyətli xidmətlər təqdim etmək",
+      values: "Dəyərlərimiz",
+      valuesList: [
+        "Peşəkarlıq",
+        "Dürüstlük",
+        "Etibarlılıq",
+        "Fərdi yanaşma"
+      ],
+      team: "Komandamız",
+      teamText: "Çoxillik təcrübəsi olan təcrübəli mütəxəssislər",
+      experience: "İş təcrübəsi",
+      experienceText: "Əmlak bazarında 10 ildən çox"
+    },
+    contacts: {
+      title: "Əlaqə",
+      description: "Bizə istənilən rahat üsulla müraciət edin",
+      phone: "Telefon",
+      email: "E-poçt",
+      address: "Ünvan",
+      workingHours: "İş saatları",
+      workingHoursText: "B.E: 9:00-18:00, Ş.B: 10:00-16:00",
+      office: "Ofis",
+      officeAddress: "Moskva, Tverskaya küçəsi, 15",
+      support: "Texniki dəstək",
+      supportEmail: "support@metrika.ru"
     }
   }
 }

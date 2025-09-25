@@ -1,7 +1,12 @@
+"use client"
+
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AboutPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -10,16 +15,16 @@ export default function AboutPage() {
       <main className="pt-32 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
-            О компании МЕТРИКА
+            {t('about.title')} {t('header.title')}
           </h1>
           
           <div className="prose prose-lg max-w-none">
             <div className="bg-gray-50 p-8 rounded-lg mb-8">
               <h2 className="text-2xl font-semibold text-black mb-4">
-                Наша миссия
+                {t('about.mission')}
               </h2>
               <p className="text-gray-700 leading-relaxed">
-                МЕТРИКА — это современное агентство недвижимости, которое помогает 
+                {t('about.description')} — это современное агентство недвижимости, которое помогает 
                 клиентам найти идеальное жилье или коммерческое помещение. Мы 
                 специализируемся на всех типах недвижимости и предоставляем 
                 полный спектр услуг в сфере недвижимости.
@@ -42,41 +47,38 @@ export default function AboutPage() {
               
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-xl font-semibold text-black mb-3">
-                  Наши преимущества
+                  {t('about.values')}
                 </h3>
                 <ul className="text-gray-700 space-y-2">
-                  <li>• Профессиональная команда</li>
-                  <li>• Большая база объектов</li>
-                  <li>• Прозрачные условия работы</li>
-                  <li>• Современные технологии</li>
-                  <li>• Индивидуальный подход</li>
+                  {t('about.valuesList').map((value: string, index: number) => (
+                    <li key={index}>• {value}</li>
+                  ))}
                 </ul>
               </div>
             </div>
             
             <div className="bg-gray-50 p-8 rounded-lg">
               <h2 className="text-2xl font-semibold text-black mb-4">
-                Контактная информация
+                {t('contacts.title')}
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-black mb-2">Телефон:</h4>
+                  <h4 className="font-semibold text-black mb-2">{t('contacts.phone')}:</h4>
                   <p className="text-gray-700">+7 (XXX) XXX-XX-XX</p>
                   
-                  <h4 className="font-semibold text-black mb-2 mt-4">Email:</h4>
+                  <h4 className="font-semibold text-black mb-2 mt-4">{t('contacts.email')}:</h4>
                   <p className="text-gray-700">info@metrika.ru</p>
                 </div>
                 
                 <div>
-                  <h4 className="font-semibold text-black mb-2">Адрес:</h4>
+                  <h4 className="font-semibold text-black mb-2">{t('contacts.address')}:</h4>
                   <p className="text-gray-700">
-                    г. Москва, ул. Примерная, д. 123
+                    {t('contacts.officeAddress')}
                   </p>
                   
-                  <h4 className="font-semibold text-black mb-2 mt-4">Режим работы:</h4>
+                  <h4 className="font-semibold text-black mb-2 mt-4">{t('contacts.workingHours')}:</h4>
                   <p className="text-gray-700">
-                    Пн-Пт: 9:00 - 18:00<br />
-                    Сб: 10:00 - 16:00
+                    {t('contacts.workingHoursText')}
                   </p>
                 </div>
               </div>

@@ -1,7 +1,12 @@
+"use client"
+
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ContactsPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -10,23 +15,23 @@ export default function ContactsPage() {
       <main className="pt-32 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
-            Контакты
+            {t('contacts.title')}
           </h1>
           
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="bg-gray-50 p-6 rounded-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
-                Свяжитесь с нами
+                {t('contacts.description')}
               </h2>
               
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-black mb-1">Телефон:</h3>
+                  <h3 className="font-semibold text-black mb-1">{t('contacts.phone')}:</h3>
                   <p className="text-gray-700">+7 (495) 123-45-67</p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-black mb-1">Email:</h3>
+                  <h3 className="font-semibold text-black mb-1">{t('contacts.email')}:</h3>
                   <p className="text-gray-700">info@metrika.ru</p>
                 </div>
                 
@@ -44,23 +49,22 @@ export default function ContactsPage() {
             
             <div className="bg-gray-50 p-6 rounded-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
-                Офис
+                {t('contacts.office')}
               </h2>
               
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-black mb-1">Адрес:</h3>
+                  <h3 className="font-semibold text-black mb-1">{t('contacts.address')}:</h3>
                   <p className="text-gray-700">
-                    г. Москва, ул. Тверская, д. 15<br />
+                    {t('contacts.officeAddress')}<br />
                     БЦ &quot;Метрика&quot;, офис 201
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-black mb-1">Режим работы:</h3>
+                  <h3 className="font-semibold text-black mb-1">{t('contacts.workingHours')}:</h3>
                   <p className="text-gray-700">
-                    Пн-Пт: 9:00 - 19:00<br />
-                    Сб: 10:00 - 17:00<br />
+                    {t('contacts.workingHoursText')}<br />
                     Вс: выходной
                   </p>
                 </div>
