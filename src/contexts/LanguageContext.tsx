@@ -675,7 +675,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "สำรวจอสังหาริมทรัพย์บนแผนที่เมือง",
       knowledgeBase: "ฐานความรู้",
       knowledgeBaseDesc: "เข้าถึงข้อมูลผู้เชี่ยวชาญ",
-      useMenu: "ใช้เมนูทางซ้ายเพื่อนำทางในพอร์ทัล"
+      useMenu: "ใช้เมนูทางซ้ายเพื่อนำทางในพอร์ทัล",
+      chooseSection: "เลือกส่วนที่คุณต้องการ"
     },
     menu: {
       home: "หน้าแรก",
@@ -994,7 +995,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Ուսումնասիրեք օբյեկտները քաղաքի քարտեզի վրա",
       knowledgeBase: "Գիտելիքների բազա",
       knowledgeBaseDesc: "Մուտք ստացեք փորձագիտական տեղեկատվությանը",
-      useMenu: "Օգտագործեք ձախ մենյուն պորտալում նավարկելու համար"
+      useMenu: "Օգտագործեք ձախ մենյուն պորտալում նավարկելու համար",
+      chooseSection: "Ընտրեք ձեզ անհրաժեշտ բաժինը"
     },
     menu: {
       home: "Գլխավոր",
@@ -1313,7 +1315,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Şəhər xəritəsində obyektləri araşdırın",
       knowledgeBase: "Bilik bazası",
       knowledgeBaseDesc: "Ekspert məlumatlarına çıxış əldə edin",
-      useMenu: "Portalda naviqasiya üçün sol menyudan istifadə edin"
+      useMenu: "Portalda naviqasiya üçün sol menyudan istifadə edin",
+      chooseSection: "Sizə lazım olan bölməni seçin"
     },
     menu: {
       home: "Ana səhifə",
@@ -1632,7 +1635,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "在城市地图上探索对象",
       knowledgeBase: "知识库",
       knowledgeBaseDesc: "获取专家信息访问权限",
-      useMenu: "使用左侧菜单导航门户"
+      useMenu: "使用左侧菜单导航门户",
+      chooseSection: "选择您需要的部分"
     },
     menu: {
       home: "首页",
@@ -1951,7 +1955,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "도시 지도에서 객체 탐색",
       knowledgeBase: "지식 베이스",
       knowledgeBaseDesc: "전문가 정보에 대한 액세스",
-      useMenu: "왼쪽 메뉴를 사용하여 포털 탐색"
+      useMenu: "왼쪽 메뉴를 사용하여 포털 탐색",
+      chooseSection: "필요한 섹션을 선택하세요"
     },
     menu: {
       home: "홈",
@@ -2270,7 +2275,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "都市地図でオブジェクトを探索",
       knowledgeBase: "ナレッジベース",
       knowledgeBaseDesc: "専門家情報へのアクセス",
-      useMenu: "左側のメニューを使用してポータルをナビゲート"
+      useMenu: "左側のメニューを使用してポータルをナビゲート",
+      chooseSection: "必要なセクションを選択してください"
     },
     menu: {
       home: "ホーム",
@@ -2589,7 +2595,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Қала картасында объектілерді зерттеу",
       knowledgeBase: "Білім базасы",
       knowledgeBaseDesc: "Сарапшы ақпаратына қол жеткізу",
-      useMenu: "Порталыда навигация үшін сол мәзірді пайдаланыңыз"
+      useMenu: "Порталыда навигация үшін сол мәзірді пайдаланыңыз",
+      chooseSection: "Сізге қажетті бөлімді таңдаңыз"
     },
     menu: {
       home: "Басты бет",
@@ -2908,7 +2915,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Shahar xaritasida ob'ektlarni o'rganish",
       knowledgeBase: "Bilim bazasi",
       knowledgeBaseDesc: "Ekspert ma'lumotlariga kirish",
-      useMenu: "Portalda navigatsiya uchun chap menyudan foydalaning"
+      useMenu: "Portalda navigatsiya uchun chap menyudan foydalaning",
+      chooseSection: "Sizga kerakli bo'limni tanlang"
     },
     menu: {
       home: "Bosh sahifa",
@@ -3227,7 +3235,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "Омӯхтани объектҳо дар харитаи шаҳр",
       knowledgeBase: "Пойгоҳи дониш",
       knowledgeBaseDesc: "Дастрасӣ ба маълумоти мутахассис",
-      useMenu: "Барои навигатсия дар портал аз менюи чап истифода баред"
+      useMenu: "Барои навигатсия дар портал аз менюи чап истифода баред",
+      chooseSection: "Бахше, ки ба шумо лозим аст, интихоб кунед"
     },
     menu: {
       home: "Саҳифаи асосӣ",
@@ -3546,7 +3555,8 @@ const translations: Record<string, Translations> = {
       interactiveMapDesc: "शहर के नक्शे पर ऑब्जेक्ट्स का अन्वेषण करें",
       knowledgeBase: "ज्ञान आधार",
       knowledgeBaseDesc: "विशेषज्ञ जानकारी तक पहुंच प्राप्त करें",
-      useMenu: "पोर्टल में नेविगेट करने के लिए बाएं मेनू का उपयोग करें"
+      useMenu: "पोर्टल में नेविगेट करने के लिए बाएं मेनू का उपयोग करें",
+      chooseSection: "आपको आवश्यक अनुभाग चुनें"
     },
     menu: {
       home: "होम",
