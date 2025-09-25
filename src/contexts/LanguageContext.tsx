@@ -968,7 +968,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "Տարածքով",
       photo: "Նկար",
       previous: "Նախորդ",
-      next: "Հաջորդ"
+      next: "Հաջորդ",
+      operationType: "Գործողության տեսակ",
+      purchase: "Անշարժ գույքի գնում",
+      sale: "Անշարժ գույքի վաճառք",
+      rent: "Անշարժ գույքի վարձակալություն",
+      country: "Երկիր",
+      russia: "Ռուսաստան",
+      china: "Չինաստան",
+      thailand: "Թաիլանդ"
     },
     map: {
       title: "Ինտերակտիվ քարտեզ",
@@ -1256,7 +1264,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "Sahəyə görə",
       photo: "Şəkil",
       previous: "Əvvəlki",
-      next: "Növbəti"
+      next: "Növbəti",
+      operationType: "Əməliyyat növü",
+      purchase: "Əmlak alışı",
+      sale: "Əmlak satışı",
+      rent: "Əmlak icarəsi",
+      country: "Ölkə",
+      russia: "Rusiya",
+      china: "Çin",
+      thailand: "Tayland"
     },
     map: {
       title: "İnteraktiv xəritə",
@@ -1544,7 +1560,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "按面积",
       photo: "照片",
       previous: "上一页",
-      next: "下一页"
+      next: "下一页",
+      operationType: "操作类型",
+      purchase: "房地产购买",
+      sale: "房地产销售",
+      rent: "房地产租赁",
+      country: "国家",
+      russia: "俄罗斯",
+      china: "中国",
+      thailand: "泰国"
     },
     map: {
       title: "交互式地图",
@@ -1832,7 +1856,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "면적별",
       photo: "사진",
       previous: "이전",
-      next: "다음"
+      next: "다음",
+      operationType: "거래 유형",
+      purchase: "부동산 구매",
+      sale: "부동산 판매",
+      rent: "부동산 임대",
+      country: "국가",
+      russia: "러시아",
+      china: "중국",
+      thailand: "태국"
     },
     map: {
       title: "대화형 지도",
@@ -2120,7 +2152,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "面積順",
       photo: "写真",
       previous: "前へ",
-      next: "次へ"
+      next: "次へ",
+      operationType: "取引タイプ",
+      purchase: "不動産購入",
+      sale: "不動産売却",
+      rent: "不動産賃貸",
+      country: "国",
+      russia: "ロシア",
+      china: "中国",
+      thailand: "タイ"
     },
     map: {
       title: "インタラクティブマップ",
@@ -2408,7 +2448,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "Аудан бойынша",
       photo: "Фото",
       previous: "Алдыңғы",
-      next: "Келесі"
+      next: "Келесі",
+      operationType: "Операция түрі",
+      purchase: "Жылжымайтын мүлік сатып алу",
+      sale: "Жылжымайтын мүлік сату",
+      rent: "Жылжымайтын мүлік жалға беру",
+      country: "Ел",
+      russia: "Ресей",
+      china: "Қытай",
+      thailand: "Тайланд"
     },
     map: {
       title: "Интерактивті карта",
@@ -2696,7 +2744,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "Maydon bo'yicha",
       photo: "Rasm",
       previous: "Oldingi",
-      next: "Keyingi"
+      next: "Keyingi",
+      operationType: "Operatsiya turi",
+      purchase: "Ko'chmas mulk sotib olish",
+      sale: "Ko'chmas mulk sotish",
+      rent: "Ko'chmas mulk ijaraga berish",
+      country: "Mamlakat",
+      russia: "Rossiya",
+      china: "Xitoy",
+      thailand: "Tailand"
     },
     map: {
       title: "Interaktiv xarita",
@@ -2984,7 +3040,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "Тартиби масоҳат",
       photo: "Акс",
       previous: "Қаблӣ",
-      next: "Оянда"
+      next: "Оянда",
+      operationType: "Навъи амалиёт",
+      purchase: "Харидани амлок",
+      sale: "Фурӯши амлок",
+      rent: "Иҷораи амлок",
+      country: "Кишвар",
+      russia: "Русия",
+      china: "Хитой",
+      thailand: "Таиланд"
     },
     map: {
       title: "Харитаи интерактивӣ",
@@ -3272,7 +3336,15 @@ const translations: Record<string, Translations> = {
       sortByArea: "क्षेत्र के अनुसार",
       photo: "फोटो",
       previous: "पिछला",
-      next: "अगला"
+      next: "अगला",
+      operationType: "ऑपरेशन प्रकार",
+      purchase: "रियल एस्टेट खरीद",
+      sale: "रियल एस्टेट बिक्री",
+      rent: "रियल एस्टेट किराया",
+      country: "देश",
+      russia: "रूस",
+      china: "चीन",
+      thailand: "थाईलैंड"
     },
     map: {
       title: "इंटरैक्टिव मैप",
