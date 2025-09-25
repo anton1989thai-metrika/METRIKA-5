@@ -17,10 +17,10 @@ export default function Header() {
           
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center">
-            <h1 className="text-4xl font-bold text-black -mb-2">
+            <h1 className="font-bold text-black -mb-2" style={{ fontSize: '47px' }}>
               {t('header.title')}
             </h1>
-            <p className="text-gray-600" style={{ fontSize: '15px' }}>
+            <p className="text-gray-600" style={{ fontSize: '20px' }}>
               {t('header.subtitle')}
             </p>
           </div>
