@@ -5,6 +5,7 @@ import { useSession, signOut } from "next-auth/react"
 import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, GraduationCap, Book, CheckSquare, Settings } from "lucide-react"
 import Link from "next/link"
 import { UserRole } from "@/types/auth"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface MenuItem {
   href: string
@@ -13,88 +14,90 @@ interface MenuItem {
   roles: UserRole[]
 }
 
-const menuItems: MenuItem[] = [
-  {
-    href: "/",
-    label: "Главная",
-    icon: <Home className="w-5 h-5" />,
-    roles: ["guest", "client", "employee", "admin"]
-  },
-  {
-    href: "/objects",
-    label: "Объекты",
-    icon: <Building className="w-5 h-5" />,
-    roles: ["guest", "client", "employee", "admin"]
-  },
-  {
-    href: "/map",
-    label: "Карта",
-    icon: <Map className="w-5 h-5" />,
-    roles: ["guest", "client", "employee", "admin"]
-  },
-  {
-    href: "/about",
-    label: "О компании",
-    icon: <Info className="w-5 h-5" />,
-    roles: ["guest", "client", "employee", "admin"]
-  },
-  {
-    href: "/contacts",
-    label: "Контакты",
-    icon: <Phone className="w-5 h-5" />,
-    roles: ["guest", "client", "employee", "admin"]
-  },
-  {
-    href: "/blog",
-    label: "Блог",
-    icon: <BookOpen className="w-5 h-5" />,
-    roles: ["guest", "client", "employee", "admin"]
-  },
-  {
-    href: "/profile",
-    label: "Личный кабинет",
-    icon: <User className="w-5 h-5" />,
-    roles: ["client", "employee", "admin"]
-  },
-  {
-    href: "/my-objects",
-    label: "Мои объекты",
-    icon: <Heart className="w-5 h-5" />,
-    roles: ["client", "employee", "admin"]
-  },
-  {
-    href: "/academy",
-    label: "Академия",
-    icon: <GraduationCap className="w-5 h-5" />,
-    roles: ["employee", "admin"]
-  },
-  {
-    href: "/knowledge-base",
-    label: "База знаний",
-    icon: <Book className="w-5 h-5" />,
-    roles: ["employee", "admin"]
-  },
-  {
-    href: "/tasks",
-    label: "Менеджер задач",
-    icon: <CheckSquare className="w-5 h-5" />,
-    roles: ["employee", "admin"]
-  },
-  {
-    href: "/admin",
-    label: "Админ панель",
-    icon: <Settings className="w-5 h-5" />,
-    roles: ["admin"]
-  }
-]
 
 export default function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
   const { data: session } = useSession()
+  const { t } = useLanguage()
   
   const userRole: UserRole = (session?.user?.role as UserRole) || "guest"
   
-  const filteredMenuItems = menuItems.filter(item => 
+  const menuItemsWithTranslations: MenuItem[] = [
+    {
+      href: "/",
+      label: t('menu.home'),
+      icon: <Home className="w-5 h-5" />,
+      roles: ["guest", "client", "employee", "admin"]
+    },
+    {
+      href: "/objects",
+      label: t('menu.objects'),
+      icon: <Building className="w-5 h-5" />,
+      roles: ["guest", "client", "employee", "admin"]
+    },
+    {
+      href: "/map",
+      label: t('menu.map'),
+      icon: <Map className="w-5 h-5" />,
+      roles: ["guest", "client", "employee", "admin"]
+    },
+    {
+      href: "/about",
+      label: t('menu.about'),
+      icon: <Info className="w-5 h-5" />,
+      roles: ["guest", "client", "employee", "admin"]
+    },
+    {
+      href: "/contacts",
+      label: t('menu.contacts'),
+      icon: <Phone className="w-5 h-5" />,
+      roles: ["guest", "client", "employee", "admin"]
+    },
+    {
+      href: "/blog",
+      label: t('menu.blog'),
+      icon: <BookOpen className="w-5 h-5" />,
+      roles: ["guest", "client", "employee", "admin"]
+    },
+    {
+      href: "/profile",
+      label: t('menu.profile'),
+      icon: <User className="w-5 h-5" />,
+      roles: ["client", "employee", "admin"]
+    },
+    {
+      href: "/my-objects",
+      label: t('menu.myObjects'),
+      icon: <Heart className="w-5 h-5" />,
+      roles: ["client", "employee", "admin"]
+    },
+    {
+      href: "/academy",
+      label: t('menu.academy'),
+      icon: <GraduationCap className="w-5 h-5" />,
+      roles: ["employee", "admin"]
+    },
+    {
+      href: "/knowledge-base",
+      label: t('menu.knowledgeBase'),
+      icon: <Book className="w-5 h-5" />,
+      roles: ["employee", "admin"]
+    },
+    {
+      href: "/tasks",
+      label: t('menu.tasks'),
+      icon: <CheckSquare className="w-5 h-5" />,
+      roles: ["employee", "admin"]
+    },
+    {
+      href: "/admin",
+      label: t('menu.admin'),
+      icon: <Settings className="w-5 h-5" />,
+      roles: ["admin"]
+    }
+  ]
+  
+  const filteredMenuItems = menuItemsWithTranslations.filter(item => 
     item.roles.includes(userRole)
   )
 
@@ -130,7 +133,7 @@ export default function BurgerMenu() {
       >
         {/* Заголовок меню */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-black">МЕТРИКА</h2>
+          <h2 className="text-xl font-semibold text-black">{t('header.title')}</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="p-1 hover:bg-gray-100 rounded-md transition-colors"
@@ -172,7 +175,7 @@ export default function BurgerMenu() {
                 onClick={handleSignOut}
                 className="w-full px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors"
               >
-                Выйти
+                {t('menu.logout')}
               </button>
             </div>
           ) : (
@@ -182,7 +185,7 @@ export default function BurgerMenu() {
                 onClick={() => setIsOpen(false)}
                 className="block w-full px-4 py-2 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
               >
-                Войти
+                {t('menu.login')}
               </Link>
             </div>
           )}

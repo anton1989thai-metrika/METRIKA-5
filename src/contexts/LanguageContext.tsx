@@ -30,6 +30,22 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "База знаний",
       knowledgeBaseDesc: "Получайте доступ к экспертной информации",
       useMenu: "Используйте меню слева для навигации по порталу"
+    },
+    menu: {
+      home: "Главная",
+      objects: "Объекты",
+      map: "Карта",
+      about: "О компании",
+      contacts: "Контакты",
+      blog: "Блог",
+      profile: "Личный кабинет",
+      myObjects: "Мои объекты",
+      academy: "Академия",
+      knowledgeBase: "База знаний",
+      tasks: "Менеджер задач",
+      admin: "Админ панель",
+      login: "Войти",
+      logout: "Выйти"
     }
   },
   en: {
@@ -46,6 +62,22 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "Knowledge Base",
       knowledgeBaseDesc: "Get access to expert information",
       useMenu: "Use the menu on the left to navigate the portal"
+    },
+    menu: {
+      home: "Home",
+      objects: "Objects",
+      map: "Map",
+      about: "About Us",
+      contacts: "Contacts",
+      blog: "Blog",
+      profile: "Profile",
+      myObjects: "My Objects",
+      academy: "Academy",
+      knowledgeBase: "Knowledge Base",
+      tasks: "Task Manager",
+      admin: "Admin Panel",
+      login: "Login",
+      logout: "Logout"
     }
   },
   th: {
@@ -62,6 +94,22 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "ฐานความรู้",
       knowledgeBaseDesc: "เข้าถึงข้อมูลผู้เชี่ยวชาญ",
       useMenu: "ใช้เมนูทางซ้ายเพื่อนำทางในพอร์ทัล"
+    },
+    menu: {
+      home: "หน้าแรก",
+      objects: "อสังหาริมทรัพย์",
+      map: "แผนที่",
+      about: "เกี่ยวกับเรา",
+      contacts: "ติดต่อ",
+      blog: "บล็อก",
+      profile: "โปรไฟล์",
+      myObjects: "อสังหาริมทรัพย์ของฉัน",
+      academy: "สถาบัน",
+      knowledgeBase: "ฐานความรู้",
+      tasks: "จัดการงาน",
+      admin: "แผงควบคุมผู้ดูแล",
+      login: "เข้าสู่ระบบ",
+      logout: "ออกจากระบบ"
     }
   },
   hy: {
@@ -78,6 +126,22 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "Գիտելիքների բազա",
       knowledgeBaseDesc: "Մուտք ստացեք փորձագիտական տեղեկատվությանը",
       useMenu: "Օգտագործեք ձախ մենյուն պորտալում նավարկելու համար"
+    },
+    menu: {
+      home: "Գլխավոր",
+      objects: "Օբյեկտներ",
+      map: "Քարտեզ",
+      about: "Մեր մասին",
+      contacts: "Կապ",
+      blog: "Բլոգ",
+      profile: "Պրոֆիլ",
+      myObjects: "Իմ օբյեկտները",
+      academy: "Ակադեմիա",
+      knowledgeBase: "Գիտելիքների բազա",
+      tasks: "Առաջադրանքների կառավարիչ",
+      admin: "Ադմինիստրատորի վահանակ",
+      login: "Մուտք",
+      logout: "Ելք"
     }
   },
   az: {
@@ -94,6 +158,22 @@ const translations: Record<string, Translations> = {
       knowledgeBase: "Bilik bazası",
       knowledgeBaseDesc: "Ekspert məlumatlarına çıxış əldə edin",
       useMenu: "Portalda naviqasiya üçün sol menyudan istifadə edin"
+    },
+    menu: {
+      home: "Ana səhifə",
+      objects: "Obyektlər",
+      map: "Xəritə",
+      about: "Haqqımızda",
+      contacts: "Əlaqə",
+      blog: "Bloq",
+      profile: "Profil",
+      myObjects: "Mənim obyektlərim",
+      academy: "Akademiya",
+      knowledgeBase: "Bilik bazası",
+      tasks: "Tapşırıqlar meneceri",
+      admin: "Admin paneli",
+      login: "Daxil ol",
+      logout: "Çıxış"
     }
   }
 }
