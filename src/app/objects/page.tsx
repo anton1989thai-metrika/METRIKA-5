@@ -2,285 +2,21 @@
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import YandexMap from "@/components/YandexMap";
+import AdditionalFiltersModal from "@/components/AdditionalFiltersModal";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useFilters } from "@/contexts/FiltersContext";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-// Данные объектов (статичные данные для демонстрации)
-const objectsData = [
-  {
-    id: 1,
-    area: "65 м²",
-    floor: "5/9 этаж",
-    price: "8 500 000 ₽"
-  },
-  {
-    id: 2,
-    title: "Частный дом",
-    address: "д. Подмосковная, ул. Садовая, д. 7",
-    area: "120 м²",
-    floor: "2 этажа",
-    material: "Участок 6 соток",
-    price: "15 200 000 ₽"
-  },
-  {
-    id: 3,
-    title: "Офисное помещение",
-    address: "БЦ \"Центр\", офис 301",
-    area: "85 м²",
-    floor: "3/15 этаж",
-    material: "Бетон",
-    price: "25 000 000 ₽"
-  },
-  {
-    id: 4,
-    title: "1-комнатная квартира",
-    address: "ул. Ленина, д. 25, кв. 15",
-    area: "45 м²",
-    floor: "2/5 этаж",
-    material: "Панель",
-    price: "6 800 000 ₽"
-  },
-  {
-    id: 5,
-    title: "Земельный участок",
-    address: "СНТ \"Солнечное\", участок 12",
-    area: "8 соток",
-    floor: "ИЖС",
-    material: "Электричество",
-    price: "2 400 000 ₽"
-  },
-  {
-    id: 6,
-    title: "3-комнатная квартира",
-    address: "пр. Мира, д. 8, кв. 67",
-    area: "85 м²",
-    floor: "7/12 этаж",
-    material: "Монолит",
-    price: "12 300 000 ₽"
-  },
-  {
-    id: 7,
-    title: "Студия",
-    address: "ул. Арбат, д. 12, кв. 3",
-    area: "35 м²",
-    floor: "1/6 этаж",
-    material: "Кирпич",
-    price: "9 500 000 ₽"
-  },
-  {
-    id: 8,
-    title: "Коттедж",
-    address: "пос. Рублево, ул. Лесная, д. 45",
-    area: "200 м²",
-    floor: "3 этажа",
-    material: "Участок 10 соток",
-    price: "35 000 000 ₽"
-  },
-  {
-    id: 9,
-    title: "Торговое помещение",
-    address: "ТЦ \"Мега\", павильон 15",
-    area: "120 м²",
-    floor: "1 этаж",
-    material: "Торговый центр",
-    price: "18 500 000 ₽"
-  },
-  {
-    id: 10,
-    title: "4-комнатная квартира",
-    address: "ул. Красная Площадь, д. 1, кв. 100",
-    area: "140 м²",
-    floor: "10/15 этаж",
-    material: "Монолит",
-    price: "45 000 000 ₽"
-  },
-  {
-    id: 11,
-    title: "Гараж",
-    address: "ул. Промышленная, д. 5, бокс 12",
-    area: "18 м²",
-    floor: "Подземный",
-    material: "Бетон",
-    price: "1 200 000 ₽"
-  },
-  {
-    id: 12,
-    title: "2-комнатная квартира",
-    address: "ул. Садовая, д. 30, кв. 25",
-    area: "58 м²",
-    floor: "4/9 этаж",
-    material: "Панель",
-    price: "7 200 000 ₽"
-  },
-  {
-    id: 13,
-    title: "Складское помещение",
-    address: "ул. Промышленная, д. 15, склад 3",
-    area: "500 м²",
-    floor: "1 этаж",
-    material: "Металлоконструкция",
-    price: "22 000 000 ₽"
-  },
-  {
-    id: 14,
-    title: "1-комнатная квартира",
-    address: "ул. Новая, д. 7, кв. 8",
-    area: "42 м²",
-    floor: "3/5 этаж",
-    material: "Кирпич",
-    price: "5 800 000 ₽"
-  },
-  {
-    id: 15,
-    title: "Таунхаус",
-    address: "пос. Заречный, ул. Центральная, д. 12",
-    area: "150 м²",
-    floor: "2 этажа",
-    material: "Участок 4 сотки",
-    price: "28 500 000 ₽"
-  },
-  {
-    id: 16,
-    title: "Офис",
-    address: "БЦ \"Современный\", офис 505",
-    area: "95 м²",
-    floor: "5/20 этаж",
-    material: "Стекло/бетон",
-    price: "32 000 000 ₽"
-  },
-  {
-    id: 17,
-    title: "3-комнатная квартира",
-    address: "ул. Московская, д. 22, кв. 45",
-    area: "78 м²",
-    floor: "6/10 этаж",
-    material: "Монолит",
-    price: "11 500 000 ₽"
-  },
-  {
-    id: 18,
-    title: "Земельный участок",
-    address: "СНТ \"Ромашка\", участок 8",
-    area: "6 соток",
-    floor: "ИЖС",
-    material: "Газ, электричество",
-    price: "1 800 000 ₽"
-  },
-  {
-    id: 19,
-    title: "Студия",
-    address: "ул. Молодежная, д. 18, кв. 2",
-    area: "38 м²",
-    floor: "2/4 этаж",
-    material: "Панель",
-    price: "4 200 000 ₽"
-  },
-  {
-    id: 20,
-    title: "Частный дом",
-    address: "д. Зеленое, ул. Дачная, д. 3",
-    area: "90 м²",
-    floor: "1 этаж",
-    material: "Участок 8 соток",
-    price: "12 800 000 ₽"
-  },
-  {
-    id: 21,
-    title: "2-комнатная квартира",
-    address: "ул. Парковая, д. 14, кв. 33",
-    area: "62 м²",
-    floor: "8/12 этаж",
-    material: "Кирпич",
-    price: "9 100 000 ₽"
-  },
-  {
-    id: 22,
-    title: "Производственное помещение",
-    address: "ул. Заводская, д. 25, цех 2",
-    area: "800 м²",
-    floor: "1 этаж",
-    material: "Металлоконструкция",
-    price: "35 000 000 ₽"
-  },
-  {
-    id: 23,
-    title: "1-комнатная квартира",
-    address: "ул. Школьная, д. 9, кв. 12",
-    area: "48 м²",
-    floor: "5/9 этаж",
-    material: "Панель",
-    price: "6 500 000 ₽"
-  },
-  {
-    id: 24,
-    title: "Коттедж",
-    address: "пос. Лесной, ул. Сосновая, д. 7",
-    area: "180 м²",
-    floor: "2 этажа",
-    material: "Участок 12 соток",
-    price: "42 000 000 ₽"
-  },
-  {
-    id: 25,
-    title: "Офисное помещение",
-    address: "БЦ \"Деловой\", офис 201",
-    area: "75 м²",
-    floor: "2/8 этаж",
-    material: "Бетон",
-    price: "28 500 000 ₽"
-  },
-  {
-    id: 26,
-    title: "3-комнатная квартира",
-    address: "ул. Весенняя, д. 11, кв. 56",
-    area: "82 м²",
-    floor: "4/7 этаж",
-    material: "Монолит",
-    price: "13 200 000 ₽"
-  },
-  {
-    id: 27,
-    title: "Гараж",
-    address: "ул. Автомобильная, д. 3, бокс 7",
-    area: "20 м²",
-    floor: "Наземный",
-    material: "Кирпич",
-    price: "1 500 000 ₽"
-  },
-  {
-    id: 28,
-    title: "Студия",
-    address: "ул. Студенческая, д. 5, кв. 1",
-    area: "32 м²",
-    floor: "1/3 этаж",
-    material: "Кирпич",
-    price: "3 800 000 ₽"
-  },
-  {
-    id: 29,
-    title: "Земельный участок",
-    address: "СНТ \"Урожай\", участок 25",
-    area: "10 соток",
-    floor: "ИЖС",
-    material: "Все коммуникации",
-    price: "3 200 000 ₽"
-  },
-  {
-    id: 30,
-    title: "Таунхаус",
-    address: "пос. Солнечный, ул. Ясная, д. 9",
-    area: "130 м²",
-    floor: "2 этажа",
-    material: "Участок 5 соток",
-    price: "25 000 000 ₽"
-  }
-];
+import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
 
 export default function ObjectsPage() {
   const { t } = useLanguage()
+  const { filters, updateFilter } = useFilters()
   const searchParams = useSearchParams()
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
+  const [visibleObjects, setVisibleObjects] = useState<RealEstateObject[]>([])
+  const [isAdditionalFiltersOpen, setIsAdditionalFiltersOpen] = useState(false)
 
   useEffect(() => {
     const filter = searchParams.get('filter')
@@ -290,24 +26,51 @@ export default function ObjectsPage() {
   }, [searchParams])
 
   // Получаем переведенные объекты
-  const objects = objectsData.map(obj => ({
+  const objects = realEstateObjects.map(obj => ({
     ...obj,
     title: t(`realEstateObjects.${obj.id}.title`),
     address: t(`realEstateObjects.${obj.id}.address`),
     material: t(`realEstateObjects.${obj.id}.material`)
   }))
 
+  // Функция для фильтрации объектов
+  const getFilteredObjects = () => {
+    return objects.filter(obj => {
+      // Фильтр по стране
+      if (filters.country && obj.country !== filters.country) {
+        return false
+      }
+      
+      // Фильтр по типу недвижимости
+      if (filters.propertyType && obj.type !== filters.propertyType) {
+        return false
+      }
+      
+      // Здесь можно добавить другие фильтры
+      
+      return true
+    })
+  }
+
+  const filteredObjects = getFilteredObjects()
+
+  // Обработчик изменения фильтра по стране
+  const handleCountryChange = (country: string) => {
+    updateFilter('country', filters.country === country ? '' : country)
+  }
+
+  // Обработчик изменения фильтра по типу недвижимости
+  const handlePropertyTypeChange = (propertyType: string) => {
+    updateFilter('propertyType', filters.propertyType === propertyType ? '' : propertyType)
+  }
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="h-screen bg-white overflow-hidden">
       <Header />
       <BurgerMenu />
       
-          <main className="pt-32 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-black mb-8">
-            {t('objects.title')}
-          </h1>
-          
+      <main className="pt-32 h-[calc(100vh-8rem)]">
+        <div className="max-w-7xl mx-auto px-4">
           {activeFilter === 'rent' && (
             <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6">
               <p className="text-gray-800 font-medium">
@@ -315,101 +78,157 @@ export default function ObjectsPage() {
               </p>
             </div>
           )}
-          
-          <div className="flex gap-8">
-            {/* Фильтры слева */}
-            <div className="w-80 flex-shrink-0">
-              <div className="bg-gray-50 p-6 rounded-lg sticky top-40">
+        </div>
+        
+        <div className="flex gap-1 items-start h-full">
+            {/* Фильтры слева - прижаты к левому краю */}
+            <div className="w-80 flex-shrink-0 pl-4">
+              <div className="bg-gray-50 p-4 rounded-lg h-[calc(100vh-12rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
                 <h2 className="text-xl font-semibold text-black mb-6">
                   {t('objects.filters')}
+                  {(filters.country || filters.propertyType || filters.areaUnit !== 'm2') && (
+                    <span className="ml-2 text-sm text-blue-600">
+                      (Активны: {[
+                        filters.country && (filters.country === 'russia' ? 'Россия' : 
+                                           filters.country === 'china' ? 'Китай' : 
+                                           filters.country === 'thailand' ? 'Таиланд' : 
+                                           filters.country === 'south-korea' ? 'Южная Корея' : filters.country),
+                        filters.propertyType && (filters.propertyType === 'apartment' ? 'Квартира' :
+                                                 filters.propertyType === 'house' ? 'Жилой дом' :
+                                                 filters.propertyType === 'land' ? 'Земельный участок' :
+                                                 filters.propertyType === 'commercial' ? 'Коммерческое помещение' :
+                                                 filters.propertyType === 'building' ? 'Здание' :
+                                                 filters.propertyType === 'nonCapital' ? 'Некопитальный объект' :
+                                                 filters.propertyType === 'shares' ? 'Доля в праве' : filters.propertyType),
+                        filters.areaUnit !== 'm2' && (filters.areaUnit === 'hectare' ? 'Гектар' : 
+                                                      filters.areaUnit === 'sotka' ? 'Сотки' : 
+                                                      filters.areaUnit === 'mu' ? '亩' : 
+                                                      filters.areaUnit === 'wah2' ? 'Wah²' : 
+                                                      filters.areaUnit === 'ngan' ? 'Ngan' : 
+                                                      filters.areaUnit === 'rai' ? 'Rai' : 
+                                                      filters.areaUnit === 'pyeong' ? '평' : filters.areaUnit)
+                      ].filter(Boolean).join(', ')})
+                    </span>
+                  )}
                 </h2>
                 
+                {/* Страна */}
+                <div className="mb-4">
+                  <h3 className="font-semibold text-black mb-3">Страна</h3>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.country === 'russia'}
+                        onChange={() => handleCountryChange('russia')}
+                      />
+                      <span className="text-gray-700">Россия</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.country === 'thailand'}
+                        onChange={() => handleCountryChange('thailand')}
+                      />
+                      <span className="text-gray-700">Таиланд</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.country === 'china'}
+                        onChange={() => handleCountryChange('china')}
+                      />
+                      <span className="text-gray-700">Китай</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.country === 'south-korea'}
+                        onChange={() => handleCountryChange('south-korea')}
+                      />
+                      <span className="text-gray-700">Южная Корея</span>
+                    </label>
+                  </div>
+                </div>
+                
                 {/* Тип недвижимости */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">{t('objects.propertyType')}</h3>
+                <div className="mb-4">
+                  <h3 className="font-semibold text-black mb-3">Тип недвижимости</h3>
                   <div className="space-y-2">
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.apartments')}</span>
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'apartment'}
+                        onChange={() => handlePropertyTypeChange('apartment')}
+                      />
+                      <span className="text-gray-700">Квартира</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.houses')}</span>
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'house'}
+                        onChange={() => handlePropertyTypeChange('house')}
+                      />
+                      <span className="text-gray-700">Жилой дом</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.commercial')}</span>
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'land'}
+                        onChange={() => handlePropertyTypeChange('land')}
+                      />
+                      <span className="text-gray-700">Земельный участок</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.land')}</span>
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'commercial'}
+                        onChange={() => handlePropertyTypeChange('commercial')}
+                      />
+                      <span className="text-gray-700">Коммерческое помещение</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.nonCapital')}</span>
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'building'}
+                        onChange={() => handlePropertyTypeChange('building')}
+                      />
+                      <span className="text-gray-700">Здание</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.shares')}</span>
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'nonCapital'}
+                        onChange={() => handlePropertyTypeChange('nonCapital')}
+                      />
+                      <span className="text-gray-700">Некопитальный объект</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        checked={filters.propertyType === 'shares'}
+                        onChange={() => handlePropertyTypeChange('shares')}
+                      />
+                      <span className="text-gray-700">Доля в праве</span>
                     </label>
                   </div>
-                </div>
-                
-                {/* Цена */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">{t('objects.price')}</h3>
-                  <div className="space-y-2">
-                    <input 
-                      type="number" 
-                      placeholder={t('objects.priceFrom')} 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                    <input 
-                      type="number" 
-                      placeholder={t('objects.priceTo')} 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                  </div>
-                </div>
-                
-                {/* Площадь */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">{t('objects.area')}</h3>
-                  <div className="space-y-2">
-                    <input 
-                      type="number" 
-                      placeholder={t('objects.areaFrom')} 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                    <input 
-                      type="number" 
-                      placeholder={t('objects.areaTo')} 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                  </div>
-                </div>
-                
-                {/* Район */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">{t('objects.district')}</h3>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-                    <option>{t('objects.allDistricts')}</option>
-                    <option>{t('objects.central')}</option>
-                    <option>{t('objects.northern')}</option>
-                    <option>{t('objects.southern')}</option>
-                    <option>{t('objects.eastern')}</option>
-                    <option>{t('objects.western')}</option>
-                  </select>
                 </div>
                 
                 {/* Тип операции */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <h3 className="font-semibold text-black mb-3">{t('objects.operationType')}</h3>
                   <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.purchase')}</span>
-                    </label>
                     <label className="flex items-center">
                       <input type="checkbox" className="mr-2" />
                       <span className="text-gray-700">{t('objects.sale')}</span>
@@ -426,26 +245,70 @@ export default function ObjectsPage() {
                   </div>
                 </div>
                 
-                {/* Страна */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-black mb-3">{t('objects.country')}</h3>
+                {/* Цена */}
+                <div className="mb-4">
+                  <h3 className="font-semibold text-black mb-3">{t('objects.price')}</h3>
                   <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.russia')}</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.china')}</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input type="checkbox" className="mr-2" />
-                      <span className="text-gray-700">{t('objects.thailand')}</span>
-                    </label>
+                    <input 
+                      type="number" 
+                      placeholder={t('objects.priceFrom')} 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <input 
+                      type="number" 
+                      placeholder={t('objects.priceTo')} 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
                   </div>
                 </div>
                 
-                <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                {/* Площадь */}
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <h3 className="font-semibold text-black">Площадь</h3>
+                    <select 
+                      className="text-sm border border-gray-300 rounded px-2 py-1 h-[1.2em] leading-none"
+                      value={filters.areaUnit}
+                      onChange={(e) => updateFilter('areaUnit', e.target.value)}
+                    >
+                      <option value="m2">м²</option>
+                      <option value="hectare">Гектар</option>
+                      <option value="sotka">Сотки</option>
+                      <option value="mu">亩</option>
+                      <option value="wah2">Wah²</option>
+                      <option value="ngan">Ngan</option>
+                      <option value="rai">Rai</option>
+                      <option value="pyeong">평</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <input 
+                      type="number" 
+                      placeholder={t('objects.areaFrom')} 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <input 
+                      type="number" 
+                      placeholder={t('objects.areaTo')} 
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </div>
+                </div>
+                
+                {/* Дополнительные фильтры */}
+                <div className="mb-4">
+                  <button 
+                    onClick={() => setIsAdditionalFiltersOpen(true)}
+                    className="w-full px-4 py-2 text-black rounded-md transition-colors"
+                    style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
+                  >
+                    Дополнительные фильтры
+                  </button>
+                </div>
+                
+                <button className="w-full px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
                   {t('objects.applyFilters')}
                 </button>
                 
@@ -456,19 +319,9 @@ export default function ObjectsPage() {
             </div>
             
             {/* Список объектов */}
-            <div className="flex-1">
-              <div className="mb-4 flex justify-between items-center">
-                <p className="text-gray-600">{t('objects.found')}: {objects.length} {t('objects.objects')}</p>
-                <select className="px-3 py-1 border border-gray-300 rounded-md text-sm">
-                  <option>{t('objects.sortBy')}</option>
-                  <option>{t('objects.sortByPriceAsc')}</option>
-                  <option>{t('objects.sortByPriceDesc')}</option>
-                  <option>{t('objects.sortByArea')}</option>
-                </select>
-              </div>
-              
+            <div className="flex-1 max-w-2xl px-4 h-[calc(100vh-12rem)] overflow-y-auto">
               <div className="space-y-4">
-                {objects.map((object) => (
+                {filteredObjects.map((object) => (
                   <div key={object.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                     <div className="flex gap-4">
                       <div className="w-48 h-32 bg-gray-200 rounded-md flex items-center justify-center">
@@ -501,7 +354,7 @@ export default function ObjectsPage() {
                   <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
                     {t('objects.previous')}
                   </button>
-                  <button className="px-3 py-2 bg-blue-600 text-white rounded-md">
+                  <button className="px-3 py-2 text-black rounded-md" style={{ backgroundColor: '#fff60b' }}>
                     1
                   </button>
                   <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
@@ -516,9 +369,24 @@ export default function ObjectsPage() {
                 </div>
               </div>
             </div>
-          </div>
+            
+            {/* Карта справа */}
+            <div className="flex-1 pr-4">
+              <div className="h-[calc(100vh-12rem)]">
+                <YandexMap 
+                  objects={filteredObjects} 
+                  onVisibleObjectsChange={setVisibleObjects}
+                />
+              </div>
+            </div>
         </div>
       </main>
+      
+      {/* Модальное окно дополнительных фильтров */}
+      <AdditionalFiltersModal 
+        isOpen={isAdditionalFiltersOpen}
+        onClose={() => setIsAdditionalFiltersOpen(false)}
+      />
     </div>
   );
 }

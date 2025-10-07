@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react"
 import { LanguageProvider } from "@/contexts/LanguageContext"
+import { FiltersProvider } from "@/contexts/FiltersContext"
 
 export default function Providers({
   children,
@@ -11,7 +12,9 @@ export default function Providers({
   return (
     <SessionProvider>
       <LanguageProvider>
-        {children}
+        <FiltersProvider>
+          {children}
+        </FiltersProvider>
       </LanguageProvider>
     </SessionProvider>
   )

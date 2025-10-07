@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 interface Translations {
   [key: string]: string | Translations | any
@@ -51,6 +51,66 @@ const translations: Record<string, Translations> = {
       login: "Войти",
       logout: "Выйти"
     },
+    tasks: {
+      title: "Название",
+      description: "Описание",
+      assignee: "Исполнитель",
+      creator: "Создатель",
+      priorityLabel: "Приоритет",
+      statusLabel: "Статус",
+      typeLabel: "Тип",
+      dueDate: "Срок выполнения",
+      tags: "Теги",
+      links: "Ссылки",
+      estimatedTime: "Оценочное время",
+      createdAt: "Дата создания",
+      updatedAt: "Дата обновления",
+      total: "Всего",
+      inProgress: "В работе",
+      completed: "Выполнено",
+      overdue: "Просрочено",
+      createTask: "Создать задачу",
+      editTask: "Редактировать задачу",
+      save: "Сохранить",
+      cancel: "Отмена",
+      create: "Создать",
+      today: "Сегодня",
+      more: "еще",
+      filters: "Фильтры",
+      reset: "Сбросить",
+      applyFilters: "Применить фильтры",
+      fillRequiredFields: "Заполните обязательные поля",
+      titlePlaceholder: "Введите название задачи",
+      descriptionPlaceholder: "Введите описание задачи",
+      assigneePlaceholder: "Выберите исполнителя",
+      creatorPlaceholder: "Выберите создателя",
+      tagsPlaceholder: "Введите теги через запятую",
+      linksPlaceholder: "Введите ссылки через запятую",
+      estimatedTimeHelp: "Время в минутах",
+      status: {
+        new: "Новая",
+        in_progress: "В работе",
+        review: "На проверке",
+        completed: "Выполнена",
+        postponed: "Отложена",
+        cancelled: "Отменена",
+        overdue: "Просрочена"
+      },
+      priority: {
+        critical: "Критический",
+        high: "Высокий",
+        medium: "Средний",
+        low: "Низкий",
+        black: "Черный"
+      },
+      type: {
+        simple: "Простая",
+        subtasks: "С подзадачами",
+        project: "Проектная",
+        recurring: "Повторяющаяся",
+        with_files: "С файлами"
+      }
+    },
     objects: {
       title: "Объекты недвижимости",
       filters: "Фильтры",
@@ -85,6 +145,7 @@ const translations: Record<string, Translations> = {
       photo: "Фото",
       previous: "Назад",
       next: "Далее",
+      details: "Подробнее",
       operationType: "Тип операции",
       purchase: "Покупка недвижимости",
       sale: "Продажа недвижимости",
@@ -128,6 +189,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Отдалить",
       fullscreen: "Полный экран",
       legend: "Легенда",
+      visibleObjects: "Видимые объекты",
+      noVisibleObjects: "Нет видимых объектов на карте",
       apartments: "Квартиры",
       houses: "Дома",
       commercial: "Коммерческая",
@@ -163,6 +226,7 @@ const translations: Record<string, Translations> = {
       support: "Техническая поддержка",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "ru_RU",
     realEstateObjects: {
       "1": {
         title: "2-комнатная квартира",
@@ -374,6 +438,66 @@ const translations: Record<string, Translations> = {
       login: "Login",
       logout: "Logout"
     },
+    taskDetails: {
+      title: "Title",
+      description: "Description",
+      assignee: "Assignee",
+      creator: "Creator",
+      priorityLabel: "Priority",
+      statusLabel: "Status",
+      typeLabel: "Type",
+      dueDate: "Due Date",
+      tags: "Tags",
+      links: "Links",
+      estimatedTime: "Estimated Time",
+      createdAt: "Created At",
+      updatedAt: "Updated At",
+      total: "Total",
+      inProgress: "In Progress",
+      completed: "Completed",
+      overdue: "Overdue",
+      createTask: "Create Task",
+      editTask: "Edit Task",
+      save: "Save",
+      cancel: "Cancel",
+      create: "Create",
+      today: "Today",
+      more: "more",
+      filters: "Filters",
+      reset: "Reset",
+      applyFilters: "Apply Filters",
+      fillRequiredFields: "Please fill in required fields",
+      titlePlaceholder: "Enter task title",
+      descriptionPlaceholder: "Enter task description",
+      assigneePlaceholder: "Select assignee",
+      creatorPlaceholder: "Select creator",
+      tagsPlaceholder: "Enter tags separated by commas",
+      linksPlaceholder: "Enter links separated by commas",
+      estimatedTimeHelp: "Time in minutes",
+      status: {
+        new: "New",
+        in_progress: "In Progress",
+        review: "Review",
+        completed: "Completed",
+        postponed: "Postponed",
+        cancelled: "Cancelled",
+        overdue: "Overdue"
+      },
+      priority: {
+        critical: "Critical",
+        high: "High",
+        medium: "Medium",
+        low: "Low",
+        black: "Black"
+      },
+      type: {
+        simple: "Simple",
+        subtasks: "With Subtasks",
+        project: "Project",
+        recurring: "Recurring",
+        with_files: "With Files"
+      }
+    },
     objects: {
       title: "Real Estate Objects",
       filters: "Filters",
@@ -408,6 +532,7 @@ const translations: Record<string, Translations> = {
       photo: "Photo",
       previous: "Previous",
       next: "Next",
+      details: "Details",
       operationType: "Operation Type",
       purchase: "Real Estate Purchase",
       sale: "Real Estate Sale",
@@ -451,6 +576,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Zoom Out",
       fullscreen: "Fullscreen",
       legend: "Legend",
+      visibleObjects: "Visible Objects",
+      noVisibleObjects: "No visible objects on the map",
       apartments: "Apartments",
       houses: "Houses",
       commercial: "Commercial",
@@ -486,6 +613,7 @@ const translations: Record<string, Translations> = {
       support: "Technical Support",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "en_US",
     realEstateObjects: {
       "1": {
         title: "2-room apartment",
@@ -771,6 +899,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "ย่อ",
       fullscreen: "เต็มหน้าจอ",
       legend: "คำอธิบาย",
+      visibleObjects: "อสังหาริมทรัพย์ที่มองเห็น",
+      noVisibleObjects: "ไม่มีอสังหาริมทรัพย์ที่มองเห็นบนแผนที่",
       apartments: "อพาร์ตเมนต์",
       houses: "บ้าน",
       commercial: "เชิงพาณิชย์",
@@ -806,6 +936,7 @@ const translations: Record<string, Translations> = {
       support: "ฝ่ายสนับสนุนเทคนิค",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "th_TH",
     realEstateObjects: {
       "1": {
         title: "ห้องชุด 2 ห้อง",
@@ -1091,6 +1222,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Փոքրացնել",
       fullscreen: "Ամբողջ էկրան",
       legend: "Բացատրություն",
+      visibleObjects: "Տեսանելի օբյեկտներ",
+      noVisibleObjects: "Քարտեզի վրա տեսանելի օբյեկտներ չկան",
       apartments: "Բնակարաններ",
       houses: "Տներ",
       commercial: "Առևտրական",
@@ -1126,6 +1259,7 @@ const translations: Record<string, Translations> = {
       support: "Տեխնիկական աջակցություն",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "hy_AM",
     realEstateObjects: {
       "1": {
         title: "2-սենյակ բնակարան",
@@ -1411,6 +1545,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Kiçilt",
       fullscreen: "Tam ekran",
       legend: "Açıqlama",
+      visibleObjects: "Görünən obyektlər",
+      noVisibleObjects: "Xəritədə görünən obyektlər yoxdur",
       apartments: "Mənzillər",
       houses: "Evlər",
       commercial: "Kommersiya",
@@ -1446,6 +1582,7 @@ const translations: Record<string, Translations> = {
       support: "Texniki dəstək",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "az_AZ",
     realEstateObjects: {
       "1": {
         title: "2 otaqlı mənzil",
@@ -1731,6 +1868,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "缩小",
       fullscreen: "全屏",
       legend: "图例",
+      visibleObjects: "可见对象",
+      noVisibleObjects: "地图上没有可见对象",
       apartments: "公寓",
       houses: "房屋",
       commercial: "商业",
@@ -1766,6 +1905,7 @@ const translations: Record<string, Translations> = {
       support: "技术支持",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "zh_CN",
     realEstateObjects: {
       "1": {
         title: "2室公寓",
@@ -2051,6 +2191,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "축소",
       fullscreen: "전체 화면",
       legend: "범례",
+      visibleObjects: "보이는 객체",
+      noVisibleObjects: "지도에 보이는 객체가 없습니다",
       apartments: "아파트",
       houses: "주택",
       commercial: "상업용",
@@ -2086,6 +2228,7 @@ const translations: Record<string, Translations> = {
       support: "기술 지원",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "ko_KR",
     realEstateObjects: {
       "1": {
         title: "2룸 아파트",
@@ -2371,6 +2514,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "ズームアウト",
       fullscreen: "フルスクリーン",
       legend: "凡例",
+      visibleObjects: "表示されているオブジェクト",
+      noVisibleObjects: "マップに表示されているオブジェクトがありません",
       apartments: "アパート",
       houses: "住宅",
       commercial: "商業用",
@@ -2406,6 +2551,7 @@ const translations: Record<string, Translations> = {
       support: "技術サポート",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "ja_JP",
     realEstateObjects: {
       "1": {
         title: "2LDKマンション",
@@ -2691,6 +2837,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Кішірейту",
       fullscreen: "Толық экран",
       legend: "Анықтама",
+      visibleObjects: "Көрінетін объектілер",
+      noVisibleObjects: "Картада көрінетін объектілер жоқ",
       apartments: "Пәтерлер",
       houses: "Үйлер",
       commercial: "Коммерциялық",
@@ -2726,6 +2874,7 @@ const translations: Record<string, Translations> = {
       support: "Техникалық қолдау",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "kk_KZ",
     realEstateObjects: {
       "1": {
         title: "2 бөлмелі пәтер",
@@ -3011,6 +3160,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Kichiklashtirish",
       fullscreen: "To'liq ekran",
       legend: "Tushuntirish",
+      visibleObjects: "Ko'rinadigan ob'ektlar",
+      noVisibleObjects: "Xaritada ko'rinadigan ob'ektlar yo'q",
       apartments: "Kvartiralar",
       houses: "Uylar",
       commercial: "Savdo",
@@ -3046,6 +3197,7 @@ const translations: Record<string, Translations> = {
       support: "Texnik yordam",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "uz_UZ",
     realEstateObjects: {
       "1": {
         title: "2 xonali kvartira",
@@ -3331,6 +3483,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "Хурд кардан",
       fullscreen: "Экрани пурра",
       legend: "Тавзеҳот",
+      visibleObjects: "Объектҳои намоён",
+      noVisibleObjects: "Дар харита объектҳои намоён нестанд",
       apartments: "Хонаҳо",
       houses: "Хонаҳо",
       commercial: "Тиҷоратӣ",
@@ -3366,6 +3520,7 @@ const translations: Record<string, Translations> = {
       support: "Дастгирии техникӣ",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "tg_TJ",
     realEstateObjects: {
       "1": {
         title: "Хонаи 2 ҳуҷра",
@@ -3651,6 +3806,8 @@ const translations: Record<string, Translations> = {
       zoomOut: "ज़ूम आउट",
       fullscreen: "फुलस्क्रीन",
       legend: "किंवदंती",
+      visibleObjects: "दिखाई देने वाले ऑब्जेक्ट्स",
+      noVisibleObjects: "मैप पर कोई दिखाई देने वाले ऑब्जेक्ट्स नहीं हैं",
       apartments: "अपार्टमेंट",
       houses: "घर",
       commercial: "व्यावसायिक",
@@ -3686,6 +3843,7 @@ const translations: Record<string, Translations> = {
       support: "तकनीकी सहायता",
       supportEmail: "support@metrika.ru"
     },
+    yandexMapLang: "hi_IN",
     realEstateObjects: {
       "1": {
         title: "2 कमरे का अपार्टमेंट",

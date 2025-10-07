@@ -2,85 +2,33 @@
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { useLanguage } from "@/contexts/LanguageContext";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function HomePage() {
-  const { t } = useLanguage()
-  const router = useRouter()
-
-  const handlePurchaseClick = () => {
-    router.push('/purchase-application')
-  }
-
-  const handleSaleClick = () => {
-    router.push('/objects')
-  }
-
-  const handleRentClick = () => {
-    router.push('/objects?filter=rent')
-  }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white relative">
+      {/* Фоновое изображение */}
+      <div 
+        className="fixed inset-0 w-full h-full bg-gray-300"
+        style={{
+          backgroundImage: 'url(http://localhost:3000/images/hero-bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          zIndex: 1
+        }}
+      ></div>
+      
+      {/* Затемняющий слой для лучшей читаемости текста - убираем, чтобы увидеть изображение */}
+      {/* <div className="fixed inset-0 bg-black bg-opacity-40 z-10"></div> */}
+      
       <Header />
       <BurgerMenu />
       
-      <main className="pt-32 px-4">
+      <main className="pt-32 px-4 relative z-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xl text-gray-600 mb-8">
-              {t('home.welcome')}
-            </p>
-            <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-              {t('home.useMenu')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <button 
-              onClick={handlePurchaseClick}
-              className="bg-white hover:bg-gray-50 text-black p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
-            >
-              <h3 className="text-xl font-semibold mb-3">
-                {t('objects.purchase')}
-              </h3>
-              <p className="text-gray-600">
-                {t('home.purchaseDesc')}
-              </p>
-            </button>
-            
-            <button 
-              onClick={handleSaleClick}
-              className="bg-white hover:bg-gray-50 text-black p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
-            >
-              <h3 className="text-xl font-semibold mb-3">
-                {t('objects.sale')}
-              </h3>
-              <p className="text-gray-600">
-                {t('home.saleDesc')}
-              </p>
-            </button>
-            
-            <button 
-              onClick={handleRentClick}
-              className="bg-white hover:bg-gray-50 text-black p-8 rounded-lg transition-all text-center shadow-md border border-gray-300"
-            >
-              <h3 className="text-xl font-semibold mb-3">
-                {t('objects.rent')}
-              </h3>
-              <p className="text-gray-600">
-                {t('home.rentDesc')}
-              </p>
-            </button>
-          </div>
-
-          <div className="text-center">
-            <p className="text-gray-500">
-              {t('home.chooseSection')}
-            </p>
-          </div>
+          {/* Контент главной страницы будет добавлен позже */}
         </div>
       </main>
     </div>

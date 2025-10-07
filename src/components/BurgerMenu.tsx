@@ -183,7 +183,10 @@ export default function BurgerMenu() {
               <Link
                 href="/auth/signin"
                 onClick={() => setIsOpen(false)}
-                className="block w-full px-4 py-2 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                className="block w-full px-4 py-2 text-center text-black rounded-md transition-colors"
+                style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
               >
                 {t('menu.login')}
               </Link>

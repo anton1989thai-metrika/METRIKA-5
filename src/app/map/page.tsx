@@ -2,57 +2,91 @@
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import MapFilters from "@/components/MapFilters";
+import VisibleObjectsList from "@/components/VisibleObjectsList";
+import YandexMap from "@/components/YandexMap";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useFilters } from "@/contexts/FiltersContext";
+import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
+import { useState, useMemo } from "react";
 
 export default function MapPage() {
-  const { t } = useLanguage()
+  const { t } = useLanguage();
+  const { filters } = useFilters();
+  const [visibleObjects, setVisibleObjects] = useState<RealEstateObject[]>([]);
+
+  // Фильтрация объектов
+  const filteredObjects = useMemo(() => {
+    return realEstateObjects.filter(obj => {
+      // Фильтр по стране
+      if (filters.country && obj.country !== filters.country) {
+        return false
+      }
+      
+      // Фильтр по типу недвижимости
+      if (filters.propertyType && obj.type !== filters.propertyType) {
+        return false
+      }
+      
+      // Здесь можно добавить другие фильтры
+      
+      return true
+    });
+  }, [filters]);
+
+  const handleVisibleObjectsChange = (objects: RealEstateObject[]) => {
+    setVisibleObjects(objects);
+  };
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
       <BurgerMenu />
-      
       <main className="pt-32 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-black mb-8">
             {t('map.title')}
           </h1>
           
-          <div className="bg-gray-100 h-96 rounded-lg flex items-center justify-center mb-8">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🗺️</div>
-              <p className="text-lg text-gray-600">
-                {t('map.description')}
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Интеграция с картографическими сервисами
-              </p>
-            </div>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-black mb-2">
-                {t('map.filters')} - {t('objects.propertyType')}
-              </h3>
-              <ul className="text-gray-600 space-y-1">
-                <li>• {t('map.apartments')}</li>
-                <li>• {t('map.houses')}</li>
-                <li>• {t('map.commercial')}</li>
-                <li>• {t('map.land')}</li>
-              </ul>
-            </div>
+          <div className="flex gap-8">
+            {/* Фильтры слева */}
+            <MapFilters />
             
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-black mb-2">
-                {t('map.filters')} - {t('objects.price')}
-              </h3>
-              <ul className="text-gray-600 space-y-1">
-                <li>• До 3 млн руб.</li>
-                <li>• 3-10 млн руб.</li>
-                <li>• 10-30 млн руб.</li>
-                <li>• Свыше 30 млн руб.</li>
-              </ul>
+            {/* Карта и объекты справа */}
+            <div className="flex-1">
+              <div className="mb-4 text-sm text-gray-600">
+                Показано: {filteredObjects.length} из {realEstateObjects.length} объектов
+                {(filters.country || filters.propertyType || filters.areaUnit !== 'm2') && (
+                  <span className="ml-2 text-blue-600">
+                    (фильтр: {[
+                      filters.country && (filters.country === 'russia' ? 'Россия' : 
+                                         filters.country === 'china' ? 'Китай' : 
+                                         filters.country === 'thailand' ? 'Таиланд' : 
+                                         filters.country === 'south-korea' ? 'Южная Корея' : filters.country),
+                      filters.propertyType && (filters.propertyType === 'apartment' ? 'Квартира' :
+                                               filters.propertyType === 'house' ? 'Жилой дом' :
+                                               filters.propertyType === 'land' ? 'Земельный участок' :
+                                               filters.propertyType === 'commercial' ? 'Коммерческое помещение' :
+                                               filters.propertyType === 'building' ? 'Здание' :
+                                               filters.propertyType === 'nonCapital' ? 'Некопитальный объект' :
+                                               filters.propertyType === 'shares' ? 'Доля в праве' : filters.propertyType),
+                      filters.areaUnit !== 'm2' && (filters.areaUnit === 'hectare' ? 'Гектар' : 
+                                                    filters.areaUnit === 'sotka' ? 'Сотки' : 
+                                                    filters.areaUnit === 'mu' ? '亩' : 
+                                                    filters.areaUnit === 'wah2' ? 'Wah²' : 
+                                                    filters.areaUnit === 'ngan' ? 'Ngan' : 
+                                                    filters.areaUnit === 'rai' ? 'Rai' : 
+                                                    filters.areaUnit === 'pyeong' ? '평' : filters.areaUnit)
+                    ].filter(Boolean).join(', ')})
+                  </span>
+                )}
+              </div>
+              <YandexMap 
+                objects={filteredObjects} 
+                onVisibleObjectsChange={handleVisibleObjectsChange}
+              />
+              
+              <VisibleObjectsList objects={visibleObjects} />
             </div>
           </div>
         </div>
