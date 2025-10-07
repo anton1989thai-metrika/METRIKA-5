@@ -65,10 +65,6 @@ export default function TasksPage() {
   const [newComment, setNewComment] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [allTasks, setAllTasks] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [filterPriority, setFilterPriority] = useState('all');
-  const [filterExecutor, setFilterExecutor] = useState('all');
   const [editingTask, setEditingTask] = useState(null);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
@@ -563,33 +559,7 @@ export default function TasksPage() {
   };
 
   const getFilteredTasks = () => {
-    let filtered = allTasks;
-
-    // Поиск по названию
-    if (searchTerm) {
-      filtered = filtered.filter(task => 
-        task.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Фильтр по статусу
-    if (filterStatus !== 'all') {
-      filtered = filtered.filter(task => task.status === filterStatus);
-    }
-
-    // Фильтр по приоритету
-    if (filterPriority !== 'all') {
-      filtered = filtered.filter(task => task.priority === filterPriority);
-    }
-
-    // Фильтр по исполнителю
-    if (filterExecutor !== 'all') {
-      filtered = filtered.filter(task => 
-        task.executors.includes(parseInt(filterExecutor))
-      );
-    }
-
-    return filtered;
+    return allTasks;
   };
 
   // Шаблоны задач
@@ -1005,83 +975,6 @@ export default function TasksPage() {
                   </div>
                 </div>
                 
-          {/* Поиск и фильтры */}
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-6">
-            <h3 className="text-lg font-semibold text-black mb-4">Поиск и фильтры</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Поиск */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Поиск по названию
-                </label>
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Введите название задачи..."
-                />
-              </div>
-
-              {/* Фильтр по статусу */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Статус
-                </label>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="all">Все статусы</option>
-                  <option value="new">Новая</option>
-                  <option value="in_progress">В работе</option>
-                  <option value="on_review">На проверке</option>
-                  <option value="completed">Выполнена</option>
-                  <option value="deferred">Отложена</option>
-                  <option value="canceled">Отменена</option>
-                </select>
-              </div>
-
-              {/* Фильтр по приоритету */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Приоритет
-                </label>
-                <select
-                  value={filterPriority}
-                  onChange={(e) => setFilterPriority(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="all">Все приоритеты</option>
-                  <option value="low">🟢 Обычная</option>
-                  <option value="medium">🟠 Важная</option>
-                  <option value="high">🔴 Срочная</option>
-                  <option value="boss">🟡 Задача от руководителя</option>
-                </select>
-              </div>
-
-              {/* Фильтр по исполнителю */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Исполнитель
-                </label>
-                <select
-                  value={filterExecutor}
-                  onChange={(e) => setFilterExecutor(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="all">Все исполнители</option>
-                  {users.filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role)).map(user => (
-                    <option key={user.id} value={user.id}>
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
           {/* Список отфильтрованных задач */}
           {filteredTasks.length > 0 && (
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-6">
