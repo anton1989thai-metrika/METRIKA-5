@@ -170,6 +170,21 @@ export default function TasksPage() {
     return days;
   };
 
+  // Функции склонения
+  const getTaskWord = (count: number) => {
+    if (count === 0) return 'задач';
+    if (count % 10 === 1 && count % 100 !== 11) return 'задача';
+    if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'задачи';
+    return 'задач';
+  };
+
+  const getMissedWord = (count: number) => {
+    if (count === 0) return 'Пропущено';
+    if (count % 10 === 1 && count % 100 !== 11) return 'Пропущена';
+    if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'Пропущено';
+    return 'Пропущено';
+  };
+
   const getTasksForDate = (date) => {
     return allTasks.filter(task => {
       if (!task.deadline) return false;
@@ -201,6 +216,102 @@ export default function TasksPage() {
       return taskDate < today;
     });
   };
+
+  // Инициализация тестовой задачи
+  useEffect(() => {
+    if (allTasks.length === 0) {
+      const testTask = {
+        id: 1,
+        title: "Разработка нового модуля аналитики",
+        description: "Создать модуль для анализа эффективности маркетинговых кампаний с возможностью экспорта данных в Excel и PDF форматах. Модуль должен включать в себя дашборд с ключевыми метриками, возможность создания пользовательских отчетов и интеграцию с внешними системами аналитики.",
+        priority: "high",
+        status: "in_progress",
+        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        deadlineTime: "15:30",
+        executors: [3, 4], // Мария Козлова, Алексей Волков
+        curators: [2], // Иван Сидоров
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        createdBy: 1, // Анна Петрова
+        images: [
+          {
+            id: 1,
+            name: "mockup_dashboard.png",
+            url: "https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Dashboard+Mockup",
+            size: 245760,
+            type: "image/png"
+          }
+        ],
+        links: [
+          {
+            id: 1,
+            title: "Техническое задание",
+            url: "https://docs.google.com/document/d/example",
+            description: "Подробное описание требований к модулю"
+          }
+        ],
+        checklists: [
+          {
+            id: 1,
+            title: "Основной функционал",
+            items: [
+              { id: 1, text: "Создать дашборд с метриками", completed: true, executor: 3, curator: 2 },
+              { id: 2, text: "Реализовать экспорт в Excel", completed: false, executor: 4, curator: 2 },
+              { id: 3, text: "Добавить экспорт в PDF", completed: false, executor: 3, curator: 2 },
+              { id: 4, text: "Настроить интеграцию с Google Analytics", completed: false, executor: 4, curator: 2 }
+            ]
+          }
+        ],
+        subtasks: [
+          {
+            id: 1,
+            title: "Создание базовой структуры модуля",
+            description: "Настроить основную архитектуру и структуру файлов",
+            priority: "high",
+            status: "completed",
+            deadline: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            executors: [3],
+            curators: [2],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            createdBy: 1
+          },
+          {
+            id: 2,
+            title: "Разработка API для экспорта данных",
+            description: "Создать REST API для экспорта данных в различных форматах",
+            priority: "medium",
+            status: "in_progress",
+            deadline: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString().split('T')[0],
+            executors: [4],
+            curators: [2],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            createdBy: 1
+          }
+        ],
+        comments: [
+          {
+            id: 1,
+            text: "Отличная работа по базовой структуре! Продолжаем в том же духе.",
+            author: 2,
+            createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 2,
+            text: "Нужно добавить поддержку фильтрации по датам в экспорте",
+            author: 1,
+            createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString()
+          }
+        ],
+        tags: ["разработка", "аналитика", "CRM", "приоритет", "экспорт", "дашборд"],
+        estimatedHours: 24,
+        actualHours: 8
+      };
+      
+      setAllTasks([testTask]);
+    }
+  }, [allTasks.length]);
 
   const getOverdueTasks = () => {
     const today = new Date();
@@ -884,12 +995,6 @@ export default function TasksPage() {
     }
   };
 
-  const getTaskWord = (count: number) => {
-    if (count % 10 === 1 && count % 100 !== 11) return 'задача';
-    if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'задачи';
-    return 'задач';
-  };
-
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -901,7 +1006,7 @@ export default function TasksPage() {
           <div className="grid grid-cols-4 gap-6 mb-8">
             {/* Блок 1: Задачи на сегодня */}
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <h3 className="text-lg font-semibold text-black mb-3">
+              <h3 className="text-lg font-semibold text-black mb-3 text-center">
                 На сегодня {todayTasks.length} {getTaskWord(todayTasks.length)}
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
@@ -919,7 +1024,7 @@ export default function TasksPage() {
                 
             {/* Блок 2: Задачи на завтра */}
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <h3 className="text-lg font-semibold text-black mb-3">
+              <h3 className="text-lg font-semibold text-black mb-3 text-center">
                 На завтра {tomorrowTasks.length} {getTaskWord(tomorrowTasks.length)}
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
@@ -937,8 +1042,8 @@ export default function TasksPage() {
                 
             {/* Блок 3: Пропущенные */}
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <h3 className="text-lg font-semibold text-black mb-3">
-                Пропущенные {missedTasks.length} {getTaskWord(missedTasks.length)}
+              <h3 className="text-lg font-semibold text-black mb-3 text-center">
+                {getMissedWord(missedTasks.length)} {missedTasks.length} {getTaskWord(missedTasks.length)}
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {missedTasks.map(task => (
@@ -958,34 +1063,37 @@ export default function TasksPage() {
               <div className="space-y-3">
                 <button 
                   onClick={() => setIsCreateTaskModalOpen(true)}
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded hover:bg-blue-700 transition-colors"
+                  className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
                   Создать задачу
                 </button>
-                <button className="w-full bg-green-600 text-white py-3 px-4 rounded hover:bg-green-700 transition-colors">
+                <button 
+                  onClick={() => window.location.href = '/my-tasks'}
+                  className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
+                >
                   Мои задачи
                 </button>
                 <button 
-                  onClick={() => console.log('Все задачи:', allTasks)}
-                  className="w-full bg-purple-600 text-white py-3 px-4 rounded hover:bg-purple-700 transition-colors"
+                  onClick={() => window.location.href = '/all-tasks'}
+                  className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
-                  Все задачи ({allTasks.length})
+                  Все задачи
                 </button>
                 <button 
                   onClick={() => setShowTemplates(true)}
-                  className="w-full bg-indigo-600 text-white py-3 px-4 rounded hover:bg-indigo-700 transition-colors"
+                  className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
                   Шаблоны
                 </button>
                 <button 
                   onClick={() => setShowStatistics(true)}
-                  className="w-full bg-orange-600 text-white py-3 px-4 rounded hover:bg-orange-700 transition-colors"
+                  className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
                   Статистика
                 </button>
                 <button 
                   onClick={() => checkUpcomingDeadlines()}
-                  className="w-full bg-pink-600 text-white py-3 px-4 rounded hover:bg-pink-700 transition-colors"
+                  className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
                   Проверить уведомления
                 </button>
@@ -1043,8 +1151,9 @@ export default function TasksPage() {
                 >
                   <option value="all">Все приоритеты</option>
                   <option value="low">🟢 Обычная</option>
-                  <option value="medium">🟡 Важная</option>
+                  <option value="medium">🟠 Важная</option>
                   <option value="high">🔴 Срочная</option>
+                  <option value="boss">🟡 Задача от руководителя</option>
                 </select>
               </div>
 

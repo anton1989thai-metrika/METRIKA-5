@@ -198,9 +198,10 @@
     "description": "คำอธิบาย",
     "descriptionPlaceholder": "คำอธิบายงาน",
     "priority": "ความสำคัญ",
-    "low": "ต่ำ",
-    "medium": "ปานกลาง",
-    "high": "สูง",
+    "low": "ปกติ",
+    "medium": "สำคัญ",
+    "high": "ด่วน",
+    "boss": "งานจากหัวหน้า",
     "deadline": "กำหนดส่ง",
     "createTask": "สร้างงาน"
   },

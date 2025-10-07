@@ -194,7 +194,7 @@ export default function TaskCalendar({ tasks, onTaskClick, onDateClick, currentD
                                 className="text-xs p-1 rounded cursor-pointer truncate"
                                 style={{
                                   backgroundColor: PRIORITY_COLORS[task.priority],
-                                  color: task.priority === 'black' ? 'white' : 'black'
+                                  color: 'black'
                                 }}
                                 onClick={(e) => {
                                   e.stopPropagation();

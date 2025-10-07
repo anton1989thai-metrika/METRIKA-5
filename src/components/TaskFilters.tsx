@@ -25,11 +25,9 @@ export default function TaskFilters({ onFiltersChange, initialFilters = {} }: Ta
   });
 
   const [priorityFilters, setPriorityFilters] = useState<Record<TaskPriority, boolean>>({
-    critical: false,
-    high: false,
-    medium: false,
     low: false,
-    black: false,
+    medium: false,
+    high: false,
     boss: false
   });
 
@@ -115,7 +113,7 @@ export default function TaskFilters({ onFiltersChange, initialFilters = {} }: Ta
       postponed: false, cancelled: false, overdue: false
     });
     setPriorityFilters({
-      critical: false, high: false, medium: false, low: false, black: false, boss: false
+      low: false, medium: false, high: false, boss: false
     });
     setTypeFilters({
       simple: false, subtasks: false, project: false, recurring: false, with_files: false
@@ -175,7 +173,13 @@ export default function TaskFilters({ onFiltersChange, initialFilters = {} }: Ta
                   checked={selected}
                   onChange={() => handlePriorityChange(priority as TaskPriority)}
                 />
-                <span className="text-gray-700">{t(`tasks.priority.${priority}`)}</span>
+                <span className="text-gray-700">
+                  {priority === 'low' && '🟢'} 
+                  {priority === 'medium' && '🟠'} 
+                  {priority === 'high' && '🔴'} 
+                  {priority === 'boss' && '🟡'} 
+                  {t(`tasks.priority.${priority}`)}
+                </span>
               </label>
             ))}
           </div>

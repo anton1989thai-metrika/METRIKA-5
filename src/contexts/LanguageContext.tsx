@@ -484,11 +484,10 @@ const translations: Record<string, Translations> = {
         overdue: "Overdue"
       },
       priority: {
-        critical: "Critical",
-        high: "High",
-        medium: "Medium",
-        low: "Low",
-        black: "Black"
+        low: "Обычная",
+        medium: "Важная", 
+        high: "Срочная",
+        boss: "Задача от руководителя"
       },
       type: {
         simple: "Simple",

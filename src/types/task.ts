@@ -1,4 +1,4 @@
-export type TaskPriority = 'low' | 'medium' | 'high' | 'boss' | 'critical' | 'black';
+export type TaskPriority = 'low' | 'medium' | 'high' | 'boss';
 export type TaskStatus = 'new' | 'in_progress' | 'review' | 'completed' | 'postponed' | 'cancelled' | 'overdue';
 export type TaskType = 'simple' | 'subtasks' | 'project' | 'recurring' | 'with_files';
 export type UserRole = 'admin' | 'manager' | 'employee' | 'client' | 'observer' | 'freelancer';
@@ -94,12 +94,10 @@ export interface TaskReport {
 
 // Цвета для приоритетов
 export const PRIORITY_COLORS: Record<TaskPriority, string> = {
-  low: '#10B981', // зеленый
-  medium: '#F97316', // оранжевый
-  high: '#EF4444', // красный
-  boss: '#fff60b', // желтый
-  critical: '#DC2626', // темно-красный
-  black: '#000000' // черный
+  low: '#10B981', // зеленый - Обычная
+  medium: '#F97316', // оранжевый - Важная
+  high: '#EF4444', // красный - Срочная
+  boss: '#fff60b' // желтый - Задача от руководителя
 };
 
 // Цвета для статусов

@@ -171,10 +171,10 @@ export default function TaskModal({ task, isOpen, onClose, onSave, mode }: TaskM
                 value={formData.priority || 'medium'}
                 onChange={(e) => handleInputChange('priority', e.target.value as TaskPriority)}
               >
-                <option value="low">{t('tasks.priority.low')}</option>
-                <option value="medium">{t('tasks.priority.medium')}</option>
-                <option value="high">{t('tasks.priority.high')}</option>
-                <option value="boss">{t('tasks.priority.boss')}</option>
+                <option value="low">🟢 {t('tasks.priority.low')}</option>
+                <option value="medium">🟠 {t('tasks.priority.medium')}</option>
+                <option value="high">🔴 {t('tasks.priority.high')}</option>
+                <option value="boss">🟡 {t('tasks.priority.boss')}</option>
               </select>
             </div>
 

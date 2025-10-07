@@ -198,9 +198,10 @@
     "description": "Description",
     "descriptionPlaceholder": "Task description",
     "priority": "Priority",
-    "low": "Low",
-    "medium": "Medium",
-    "high": "High",
+    "low": "Normal",
+    "medium": "Important",
+    "high": "Urgent",
+    "boss": "Boss Task",
     "deadline": "Deadline",
     "createTask": "Create Task"
   },
