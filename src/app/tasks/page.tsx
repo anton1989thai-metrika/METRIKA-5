@@ -147,10 +147,38 @@ export default function TasksPage() {
   }, [isCreateChecklistModalOpen, showChecklistCuratorDropdown, showChecklistExecutorDropdown]);
 
   // Функции для работы с задачами
-  // Функция для генерации дней календаря
-  const getCalendarDays = () => {
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth();
+  // Функции навигации календаря
+  const goToPreviousMonth = () => {
+    setCurrentMonth(prev => {
+      const newDate = new Date(prev);
+      newDate.setMonth(prev.getMonth() - 1);
+      return newDate;
+    });
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth(prev => {
+      const newDate = new Date(prev);
+      newDate.setMonth(prev.getMonth() + 1);
+      return newDate;
+    });
+  };
+
+  const goToToday = () => {
+    setCurrentMonth(new Date());
+  };
+
+  // Функция для получения названия месяца
+  const getMonthName = (month: number) => {
+    const months = [
+      'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+      'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
+    return months[month];
+  };
+
+  // Функция для генерации дней календаря для одного месяца
+  const getCalendarDays = (year: number, month: number) => {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDate = firstDay.getDay() === 0 ? -5 : 2 - firstDay.getDay();
@@ -1256,16 +1284,43 @@ export default function TasksPage() {
             </div>
           )}
 
-          {/* Календарь на два месяца */}
+          {/* Интерактивный календарь на два месяца */}
           <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            <h3 className="text-xl font-semibold text-black mb-6 text-center">
-              Сентябрь 2024 - Октябрь 2024
-                  </h3>
+            {/* Навигация календаря */}
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={goToPreviousMonth}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                ← Предыдущий
+              </button>
+              
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-black">
+                  {getMonthName(currentMonth.getMonth())} {currentMonth.getFullYear()} - {getMonthName(currentMonth.getMonth() + 1)} {currentMonth.getFullYear()}
+                </h3>
+                <button
+                  onClick={goToToday}
+                  className="text-sm text-black hover:text-gray-600 transition-colors mt-1"
+                >
+                  К сегодняшней дате
+                </button>
+              </div>
+              
+              <button
+                onClick={goToNextMonth}
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                Следующий →
+              </button>
+            </div>
             
             <div className="grid grid-cols-2 gap-8">
-              {/* Сентябрь */}
+              {/* Первый месяц */}
               <div>
-                <h4 className="text-lg font-medium text-black mb-4 text-center">Сентябрь 2024</h4>
+                <h4 className="text-lg font-medium text-black mb-4 text-center">
+                  {getMonthName(currentMonth.getMonth())} {currentMonth.getFullYear()}
+                </h4>
                 <div className="grid grid-cols-7 gap-1 text-xs">
                   <div className="p-2 text-center font-medium text-gray-500">Пн</div>
                   <div className="p-2 text-center font-medium text-gray-500">Вт</div>
@@ -1275,62 +1330,37 @@ export default function TasksPage() {
                   <div className="p-2 text-center font-medium text-gray-500">Сб</div>
                   <div className="p-2 text-center font-medium text-gray-500">Вс</div>
                   
-                  <div className="p-2 text-center text-gray-400">26</div>
-                  <div className="p-2 text-center text-gray-400">27</div>
-                  <div className="p-2 text-center text-gray-400">28</div>
-                  <div className="p-2 text-center text-gray-400">29</div>
-                  <div className="p-2 text-center text-gray-400">30</div>
-                  <div className="p-2 text-center text-gray-400">31</div>
-                  <div className="p-2 text-center">1</div>
-                  
-                  <div className="p-2 text-center">2</div>
-                  <div className="p-2 text-center">3</div>
-                  <div className="p-2 text-center">4</div>
-                  <div className="p-2 text-center">5</div>
-                  <div className="p-2 text-center">6</div>
-                  <div className="p-2 text-center">7</div>
-                  <div className="p-2 text-center">8</div>
-                  
-                  <div className="p-2 text-center">9</div>
-                  <div className="p-2 text-center">10</div>
-                  <div className="p-2 text-center">11</div>
-                  <div className="p-2 text-center">12</div>
-                  <div className="p-2 text-center">13</div>
-                  <div className="p-2 text-center">14</div>
-                  <div className="p-2 text-center">15</div>
-                  
-                  <div className="p-2 text-center">16</div>
-                  <div className="p-2 text-center">17</div>
-                  <div className="p-2 text-center">18</div>
-                  <div className="p-2 text-center">19</div>
-                  <div className="p-2 text-center">20</div>
-                  <div className="p-2 text-center">21</div>
-                  <div className="p-2 text-center">22</div>
-                  
-                  <div className="p-2 text-center">23</div>
-                  <div className="p-2 text-center">24</div>
-                  <div className="p-2 text-center">25</div>
-                  <div className="p-2 text-center bg-blue-100 text-blue-800 rounded relative">
-                    26
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
-                  </div>
-                  <div className="p-2 text-center">27</div>
-                  <div className="p-2 text-center">28</div>
-                  <div className="p-2 text-center">29</div>
-                  
-                  <div className="p-2 text-center">30</div>
-                  <div className="p-2 text-center text-gray-400">1</div>
-                  <div className="p-2 text-center text-gray-400">2</div>
-                  <div className="p-2 text-center text-gray-400">3</div>
-                  <div className="p-2 text-center text-gray-400">4</div>
-                  <div className="p-2 text-center text-gray-400">5</div>
-                  <div className="p-2 text-center text-gray-400">6</div>
+                  {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth()).map((day, index) => {
+                    const currentDate = new Date();
+                    const isToday = day === currentDate.getDate() && 
+                                   currentMonth.getMonth() === currentDate.getMonth() && 
+                                   currentMonth.getFullYear() === currentDate.getFullYear();
+                    
+                    const tasksForDay = day ? getTasksForDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)) : [];
+                    const hasHighPriorityTask = tasksForDay.some(task => task.priority === 'high' || task.priority === 'boss');
+                    
+                    return (
+                      <div 
+                        key={index} 
+                        className={`p-2 text-center ${
+                          day ? (isToday ? 'bg-blue-100 text-blue-800 rounded font-semibold' : 'text-gray-900') : 'text-gray-400'
+                        } ${hasHighPriorityTask ? 'relative' : ''}`}
+                      >
+                        {day}
+                        {hasHighPriorityTask && (
+                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Октябрь */}
+              {/* Второй месяц */}
               <div>
-                <h4 className="text-lg font-medium text-black mb-4 text-center">Октябрь 2024</h4>
+                <h4 className="text-lg font-medium text-black mb-4 text-center">
+                  {getMonthName(currentMonth.getMonth() + 1)} {currentMonth.getFullYear()}
+                </h4>
                 <div className="grid grid-cols-7 gap-1 text-xs">
                   <div className="p-2 text-center font-medium text-gray-500">Пн</div>
                   <div className="p-2 text-center font-medium text-gray-500">Вт</div>
@@ -1340,77 +1370,29 @@ export default function TasksPage() {
                   <div className="p-2 text-center font-medium text-gray-500">Сб</div>
                   <div className="p-2 text-center font-medium text-gray-500">Вс</div>
                   
-                  <div className="p-2 text-center text-gray-400">30</div>
-                  <div className="p-2 text-center text-gray-400">1</div>
-                  <div className="p-2 text-center">2</div>
-                  <div className="p-2 text-center">3</div>
-                  <div className="p-2 text-center">4</div>
-                  <div className="p-2 text-center bg-yellow-100 text-yellow-800 rounded relative">
-                    5
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full"></div>
-            </div>
-                  <div className="p-2 text-center">6</div>
-                  
-                  <div className="p-2 text-center">7</div>
-                  <div className="p-2 text-center">8</div>
-                  <div className="p-2 text-center">9</div>
-                  <div className="p-2 text-center">10</div>
-                  <div className="p-2 text-center">11</div>
-                  <div className="p-2 text-center bg-green-100 text-green-800 rounded relative">
-                    12
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></div>
-          </div>
-                  <div className="p-2 text-center">13</div>
-                  
-                  <div className="p-2 text-center">14</div>
-                  <div className="p-2 text-center">15</div>
-                  <div className="p-2 text-center">16</div>
-                  <div className="p-2 text-center">17</div>
-                  <div className="p-2 text-center bg-purple-100 text-purple-800 rounded relative">
-                    18
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full"></div>
-                  </div>
-                  <div className="p-2 text-center">19</div>
-                  <div className="p-2 text-center">20</div>
-                  
-                  <div className="p-2 text-center">21</div>
-                  <div className="p-2 text-center">22</div>
-                  <div className="p-2 text-center">23</div>
-                  <div className="p-2 text-center">24</div>
-                  <div className="p-2 text-center">25</div>
-                  {(() => {
-                    const days = [];
-                    for (let day = 26; day <= 30; day++) {
-                      const date = new Date(2024, 8, day); // 8 = сентябрь (0-indexed)
-                      const dateString = date.toDateString();
-                      const dayTasks = tasksForCalendar[dateString] || [];
-                      
-                      days.push(
-                        <div key={day} className="p-2 text-center relative">
-                          {day}
-                          {dayTasks.length > 0 && (
-                            <div className="absolute top-1 right-1 flex space-x-1">
-                              {dayTasks.slice(0, 3).map((task, index) => (
-                                <div
-                                  key={index}
-                                  className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}
-                                  title={task.title}
-                                ></div>
-                              ))}
-                              {dayTasks.length > 3 && (
-                                <div className="w-2 h-2 rounded-full bg-gray-400" title={`+${dayTasks.length - 3} задач`}></div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-                    return days;
-                  })()}
-                  <div className="p-2 text-center">31</div>
-                  <div className="p-2 text-center text-gray-400">1</div>
-                  <div className="p-2 text-center text-gray-400">2</div>
-                  <div className="p-2 text-center text-gray-400">3</div>
+                  {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth() + 1).map((day, index) => {
+                    const currentDate = new Date();
+                    const isToday = day === currentDate.getDate() && 
+                                   (currentMonth.getMonth() + 1) === currentDate.getMonth() && 
+                                   currentMonth.getFullYear() === currentDate.getFullYear();
+                    
+                    const tasksForDay = day ? getTasksForDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, day)) : [];
+                    const hasHighPriorityTask = tasksForDay.some(task => task.priority === 'high' || task.priority === 'boss');
+                    
+                    return (
+                      <div 
+                        key={index} 
+                        className={`p-2 text-center ${
+                          day ? (isToday ? 'bg-blue-100 text-blue-800 rounded font-semibold' : 'text-gray-900') : 'text-gray-400'
+                        } ${hasHighPriorityTask ? 'relative' : ''}`}
+                      >
+                        {day}
+                        {hasHighPriorityTask && (
+                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -1592,7 +1574,7 @@ export default function TasksPage() {
                             ))}
                           </div>
                           <div className="grid grid-cols-7 gap-1">
-                            {getCalendarDays().map((day, index) => (
+                            {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth()).map((day, index) => (
                               <button
                                 key={index}
                                 type="button"
@@ -2234,7 +2216,7 @@ export default function TasksPage() {
                                 ))}
                               </div>
                               <div className="grid grid-cols-7 gap-1">
-                                {getCalendarDays().map((day, index) => (
+                                {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth()).map((day, index) => (
                                   <button
                                     key={index}
                                     type="button"
