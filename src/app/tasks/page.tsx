@@ -1296,12 +1296,9 @@ export default function TasksPage() {
               </button>
               
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-black">
-                  {getMonthName(currentMonth.getMonth())} {currentMonth.getFullYear()} - {getMonthName(currentMonth.getMonth() + 1)} {currentMonth.getFullYear()}
-                </h3>
                 <button
                   onClick={goToToday}
-                  className="text-sm text-black hover:text-gray-600 transition-colors mt-1"
+                  className="text-sm text-black hover:text-gray-600 transition-colors"
                 >
                   К сегодняшней дате
                 </button>
