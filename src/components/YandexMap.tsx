@@ -59,7 +59,7 @@ export default function YandexMap({ objects, onVisibleObjectsChange }: YandexMap
             // Дополнительно обновляем карту
             mapInstanceRef.current.setBounds(mapInstanceRef.current.getBounds());
           } catch (error) {
-            console.log('Карта обновляется...');
+            // Карта обновляется...
           }
         }, 50);
       }
@@ -94,7 +94,7 @@ export default function YandexMap({ objects, onVisibleObjectsChange }: YandexMap
           try {
             map.container.fitToViewport();
           } catch (error) {
-            console.log('Карта адаптируется к размеру...');
+            // Карта адаптируется к размеру...
           }
         }, 100);
       });

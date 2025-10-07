@@ -545,7 +545,7 @@ export default function TasksPage() {
     task.curators.forEach(curatorId => {
       const curator = users.find(u => u.id === curatorId);
       if (curator) {
-        console.log(`📧 Уведомление куратору ${curator.name}: ${message}`);
+        // Уведомление куратору отправлено
       }
     });
 
@@ -553,7 +553,7 @@ export default function TasksPage() {
     task.executors.forEach(executorId => {
       const executor = users.find(u => u.id === executorId);
       if (executor) {
-        console.log(`📧 Уведомление исполнителю ${executor.name}: ${message}`);
+        // Уведомление исполнителю отправлено
       }
     });
   };
@@ -617,13 +617,13 @@ export default function TasksPage() {
     
     switch (type) {
       case 'email':
-        console.log(`📧 Email уведомление: ${message}`);
+        // Email уведомление отправлено
         break;
       case 'whatsapp':
-        console.log(`📱 WhatsApp уведомление: ${message}`);
+        // WhatsApp уведомление отправлено
         break;
       case 'telegram':
-        console.log(`📲 Telegram уведомление: ${message}`);
+        // Telegram уведомление отправлено
         break;
     }
   };
@@ -790,7 +790,7 @@ export default function TasksPage() {
       // Закрываем модальное окно
       setIsCreateTaskModalOpen(false);
       
-      console.log('Задача создана:', newTask);
+      // Задача создана
     }
   };
 
@@ -1011,7 +1011,7 @@ export default function TasksPage() {
                         </button>
                         {canReassignExecutor(task) && (
                           <button
-                            onClick={() => console.log('Переназначить исполнителя')}
+                            onClick={() => {/* Переназначить исполнителя */}}
                             className="px-3 py-1 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600 transition-colors"
                           >
                             Переназначить
