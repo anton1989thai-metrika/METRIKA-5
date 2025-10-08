@@ -67,7 +67,7 @@ export default function ObjectsPage() {
           )}
           
           {/* Сетка объектов - адаптивная */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 pb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8 gap-4 pb-8">
             {filteredObjects.map((object) => (
               <div key={object.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                 <div className="w-full h-48 bg-gray-200 rounded-md flex items-center justify-center mb-3">
