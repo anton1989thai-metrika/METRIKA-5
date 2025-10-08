@@ -1,12 +1,15 @@
 "use client"
 
 import LanguageSelector from "./LanguageSelector"
+import HeaderFilters from "./HeaderFilters"
 import { useLanguage } from "@/contexts/LanguageContext"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function Header() {
   const { t } = useLanguage()
+  const pathname = usePathname()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
@@ -34,6 +37,9 @@ export default function Header() {
       
       {/* Черная линия */}
       <div className="h-0.5 bg-black"></div>
+      
+      {/* Фильтры - показываем только на странице объектов */}
+      {pathname === '/objects' && <HeaderFilters />}
     </header>
   )
 }
