@@ -109,8 +109,8 @@ export default function BurgerMenu() {
     
     const menuHeight = menuRef.current.scrollHeight
     const viewportHeight = window.innerHeight
-    const maxScale = 0.6 // Минимальный масштаб (уменьшен для лучшего размещения)
-    const padding = 20 // Отступ сверху и снизу
+    const maxScale = 0.5 // Минимальный масштаб (еще больше уменьшен)
+    const padding = 40 // Увеличенные отступы для гарантии
     
     // Если меню помещается с отступами, используем полный масштаб
     if (menuHeight <= viewportHeight - padding) {
@@ -194,14 +194,7 @@ export default function BurgerMenu() {
       >
         {/* Заголовок меню */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <div>
-            <h2 className="text-xl font-semibold text-black">{t('header.title')}</h2>
-            {scale < 1 && (
-              <div className="text-xs text-gray-500 mt-1">
-                Масштаб: {Math.round(scale * 100)}%
-              </div>
-            )}
-          </div>
+          <h2 className="text-xl font-semibold text-black">{t('header.title')}</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="p-1 hover:bg-gray-100 rounded-md transition-colors"
