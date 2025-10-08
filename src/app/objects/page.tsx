@@ -56,8 +56,8 @@ export default function ObjectsPage() {
       <BurgerMenu />
       
       {/* Основной контент с объектами */}
-      <main className="pt-40">
-        <div className="max-w-7xl mx-auto px-4">
+      <main className="pt-2 sm:pt-4 lg:pt-6">
+        <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
           {activeFilter === 'rent' && (
             <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6">
               <p className="text-gray-800 font-medium">
