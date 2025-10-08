@@ -2,8 +2,15 @@
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
+  const [baseUrl, setBaseUrl] = useState('')
+
+  useEffect(() => {
+    // Получаем текущий URL для динамического определения базового пути
+    setBaseUrl(window.location.origin)
+  }, [])
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -11,7 +18,7 @@ export default function HomePage() {
       <div 
         className="fixed inset-0 w-full h-full bg-gray-300"
         style={{
-          backgroundImage: 'url(http://localhost:3000/images/hero-bg.jpg)',
+          backgroundImage: baseUrl ? `url(${baseUrl}/images/hero-bg.jpg)` : 'none',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
