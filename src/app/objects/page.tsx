@@ -7,6 +7,7 @@ import { useFilters } from "@/contexts/FiltersContext";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
+import Link from "next/link";
 
 export default function ObjectsPage() {
   const { t } = useLanguage()
@@ -69,27 +70,29 @@ export default function ObjectsPage() {
           {/* Сетка объектов - адаптивная */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8 gap-4 pb-8">
             {filteredObjects.map((object) => (
-              <div key={object.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="w-full h-48 bg-gray-200 rounded-md flex items-center justify-center mb-3">
-                  <span className="text-gray-500">{t('objects.photo')}</span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-black mb-2 line-clamp-2">
-                    {object.title}
-                  </h3>
-                  <p className="text-gray-600 mb-2 text-sm line-clamp-2">
-                    {object.address}
-                  </p>
-                  <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-2">
-                    <span>{object.area}</span>
-                    <span>{object.floor}</span>
-                    <span>{object.material}</span>
+              <Link key={object.id} href={`/objects/${object.id}`}>
+                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="w-full h-48 bg-gray-200 rounded-md flex items-center justify-center mb-3">
+                    <span className="text-gray-500">{t('objects.photo')}</span>
                   </div>
-                  <p className="text-lg font-bold text-black">
-                    {object.price}
-                  </p>
+                  <div>
+                    <h3 className="text-lg font-semibold text-black mb-2 line-clamp-2">
+                      {object.title}
+                    </h3>
+                    <p className="text-gray-600 mb-2 text-sm line-clamp-2">
+                      {object.address}
+                    </p>
+                    <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-2">
+                      <span>{object.area}</span>
+                      <span>{object.floor}</span>
+                      <span>{object.material}</span>
+                    </div>
+                    <p className="text-lg font-bold text-black">
+                      {object.price}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           
