@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, GraduationCap, Book, CheckSquare, Settings } from "lucide-react"
 import Link from "next/link"
@@ -17,8 +17,10 @@ interface MenuItem {
 
 export default function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const [scale, setScale] = useState(1)
   const { data: session } = useSession()
   const { t } = useLanguage()
+  const menuRef = useRef<HTMLDivElement>(null)
   
   const userRole: UserRole = (session?.user?.role as UserRole) || "guest"
   
@@ -101,6 +103,47 @@ export default function BurgerMenu() {
     item.roles.includes(userRole)
   )
 
+  // Функция для расчета адаптивного масштаба
+  const calculateScale = () => {
+    if (!menuRef.current) return 1
+    
+    const menuHeight = menuRef.current.scrollHeight
+    const viewportHeight = window.innerHeight
+    const maxScale = 0.7 // Минимальный масштаб
+    
+    // Если меню помещается, используем полный масштаб
+    if (menuHeight <= viewportHeight) {
+      return 1
+    }
+    
+    // Рассчитываем масштаб для помещения в экран
+    const calculatedScale = viewportHeight / menuHeight
+    
+    // Ограничиваем минимальный масштаб
+    return Math.max(calculatedScale, maxScale)
+  }
+
+  // Обновляем масштаб при изменении размера окна или открытии меню
+  useEffect(() => {
+    if (isOpen) {
+      const newScale = calculateScale()
+      setScale(newScale)
+    }
+  }, [isOpen, filteredMenuItems.length])
+
+  // Обновляем масштаб при изменении размера окна
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        const newScale = calculateScale()
+        setScale(newScale)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [isOpen])
+
   const handleSignOut = () => {
     signOut()
     setIsOpen(false)
@@ -127,13 +170,26 @@ export default function BurgerMenu() {
 
       {/* Боковое меню */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-50 transform transition-transform duration-300 ${
+        ref={menuRef}
+        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-50 transform transition-all duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{
+          transform: isOpen ? `translateX(0) scale(${scale})` : 'translateX(-100%)',
+          transformOrigin: 'top left',
+          transition: 'transform 0.3s ease-in-out'
+        }}
       >
         {/* Заголовок меню */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-black">{t('header.title')}</h2>
+          <div>
+            <h2 className="text-xl font-semibold text-black">{t('header.title')}</h2>
+            {scale < 1 && (
+              <div className="text-xs text-gray-500 mt-1">
+                Масштаб: {Math.round(scale * 100)}%
+              </div>
+            )}
+          </div>
           <button
             onClick={() => setIsOpen(false)}
             className="p-1 hover:bg-gray-100 rounded-md transition-colors"
