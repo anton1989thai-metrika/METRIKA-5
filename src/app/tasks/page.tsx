@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 
@@ -59,6 +60,19 @@ export default function TasksPage() {
     autoFrequency: 'daily',
     autoRepetitions: ''
   });
+
+  // Состояние для управления ссылками
+  const [linkInputs, setLinkInputs] = useState<string[]>(['']);
+
+  // Функция для добавления новой ссылки
+  const addLinkInput = () => {
+    setLinkInputs(prev => [...prev, '']);
+  };
+
+  // Функция для обновления ссылки
+  const updateLinkInput = (index: number, value: string) => {
+    setLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
+  };
   const [currentUser, setCurrentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin" }); // Текущий пользователь
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedTaskForComments, setSelectedTaskForComments] = useState<any>(null);
@@ -782,7 +796,7 @@ export default function TasksPage() {
           approvedByCurator: false
         })),
         images: formData.images,
-        links: formData.links,
+        links: linkInputs.filter(link => link.trim() !== ''),
         isAutoTask: formData.isAutoTask,
         autoFrequency: formData.autoFrequency,
         autoRepetitions: formData.autoRepetitions,
@@ -817,6 +831,8 @@ export default function TasksPage() {
       
       // Закрываем модальное окно
       setIsCreateTaskModalOpen(false);
+      setLinkInputs(['']);
+      setFormErrors({});
       
       // Задача создана
     }
@@ -913,13 +929,15 @@ export default function TasksPage() {
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {todayTasks.map(task => (
-                  <div key={task.id} className="bg-white p-3 rounded border border-gray-200">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
-                      <span className="text-xs text-gray-500">{task.deadlineTime || 'Без времени'}</span>
+                  <Link key={task.id} href={`/task/${task.id}`}>
+                    <div className="bg-white p-3 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
+                        <span className="text-xs text-gray-500">{task.deadlineTime || 'Без времени'}</span>
+                      </div>
+                      <div className="text-sm font-medium text-black">{task.title}</div>
                     </div>
-                    <div className="text-sm font-medium text-black">{task.title}</div>
-                  </div>
+                  </Link>
                 ))}
                   </div>
                 </div>
@@ -931,13 +949,15 @@ export default function TasksPage() {
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {tomorrowTasks.map(task => (
-                  <div key={task.id} className="bg-white p-3 rounded border border-gray-200">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
-                      <span className="text-xs text-gray-500">{task.deadlineTime || 'Без времени'}</span>
+                  <Link key={task.id} href={`/task/${task.id}`}>
+                    <div className="bg-white p-3 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
+                        <span className="text-xs text-gray-500">{task.deadlineTime || 'Без времени'}</span>
+                      </div>
+                      <div className="text-sm font-medium text-black">{task.title}</div>
                     </div>
-                    <div className="text-sm font-medium text-black">{task.title}</div>
-                  </div>
+                  </Link>
                 ))}
                   </div>
                 </div>
@@ -949,13 +969,15 @@ export default function TasksPage() {
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {missedTasks.map(task => (
-                  <div key={task.id} className="bg-white p-3 rounded border border-gray-200">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
-                      <span className="text-xs text-gray-500">{new Date(task.deadline).toLocaleDateString('ru-RU')}</span>
-                  </div>
-                    <div className="text-sm font-medium text-black">{task.title}</div>
-                </div>
+                  <Link key={task.id} href={`/task/${task.id}`}>
+                    <div className="bg-white p-3 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
+                        <span className="text-xs text-gray-500">{new Date(task.deadline).toLocaleDateString('ru-RU')}</span>
+                      </div>
+                      <div className="text-sm font-medium text-black">{task.title}</div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -1033,7 +1055,7 @@ export default function TasksPage() {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => setEditingTask(task)}
-                          className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
+                          className="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition-colors"
                         >
                           Редактировать
                         </button>
@@ -1072,7 +1094,7 @@ export default function TasksPage() {
                               setSelectedTaskForComments(task);
                               setShowCommentsModal(true);
                             }}
-                            className="px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 transition-colors"
+                            className="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition-colors"
                           >
                             Замечания
                           </button>
@@ -1106,7 +1128,7 @@ export default function TasksPage() {
           {/* Модальное окно шаблонов */}
           {showTemplates && (
             <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-              <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 p-6 mb-8">
+              <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 p-6 mb-8 border-2 border-black">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-black">Шаблоны задач</h2>
                   <button
@@ -1150,7 +1172,7 @@ export default function TasksPage() {
                             setShowTemplates(false);
                             setIsCreateTaskModalOpen(true);
                           }}
-                          className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
+                          className="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition-colors"
                         >
                           Использовать
                         </button>
@@ -1165,7 +1187,7 @@ export default function TasksPage() {
           {/* Модальное окно статистики */}
           {showStatistics && (
             <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-              <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 p-6 mb-8">
+              <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 p-6 mb-8 border-2 border-black">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-black">Статистика и аналитика</h2>
                   <button
@@ -1182,7 +1204,7 @@ export default function TasksPage() {
                   {/* Общая статистика */}
                   <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                     <h3 className="text-lg font-semibold text-blue-800 mb-2">Всего задач</h3>
-                    <p className="text-3xl font-bold text-blue-600">{statistics.total}</p>
+                    <p className="text-3xl font-bold text-gray-600">{statistics.total}</p>
                   </div>
                   
                   <div className="bg-green-50 rounded-lg p-4 border border-green-200">
@@ -1400,11 +1422,31 @@ export default function TasksPage() {
       {/* Модальное окно создания задачи */}
       {isCreateTaskModalOpen && (
         <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 p-6 mb-8 border-2 border-black">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-black">Создать задачу</h2>
               <button
-                onClick={() => setIsCreateTaskModalOpen(false)}
+                onClick={() => {
+                  setIsCreateTaskModalOpen(false);
+                  setFormData({
+                    title: '',
+                    description: '',
+                    priority: 'low',
+                    deadline: '',
+                    deadlineTime: '12:00',
+                    executors: [],
+                    curators: [],
+                    subtasks: [],
+                    checklists: [],
+                    images: [],
+                    links: [],
+                    isAutoTask: false,
+                    autoFrequency: 'daily',
+                    autoRepetitions: ''
+                  });
+                  setLinkInputs(['']);
+                  setFormErrors({});
+                }}
                 className="text-gray-500 hover:text-gray-700"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1429,7 +1471,7 @@ export default function TasksPage() {
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
                         formErrors.title 
                           ? 'border-red-500 focus:ring-red-500' 
-                          : 'border-gray-300 focus:ring-blue-500'
+                          : 'border-gray-300 focus:ring-gray-500'
                       }`}
                   placeholder="Введите название задачи"
                       required
@@ -1447,7 +1489,7 @@ export default function TasksPage() {
                       rows={4}
                       value={formData.description}
                       onChange={(e) => handleInputChange('description', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                       placeholder="Опишите детали задачи"
                 />
               </div>
@@ -1460,7 +1502,7 @@ export default function TasksPage() {
                       <select 
                         value={formData.priority}
                         onChange={(e) => handleInputChange('priority', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                       >
                         <option value="low">🟢 Обычная</option>
                         <option value="medium">🟠 Важная</option>
@@ -1476,7 +1518,7 @@ export default function TasksPage() {
                   <button
                     type="button"
                     onClick={() => setShowDeadline(!showDeadline)}
-                    className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm mb-4"
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm mb-4"
                   >
                     {showDeadline ? '−' : '+'}
                   </button>
@@ -1492,7 +1534,7 @@ export default function TasksPage() {
                           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
                             formErrors.deadline 
                               ? 'border-red-500 focus:ring-red-500' 
-                              : 'border-gray-300 focus:ring-blue-500'
+                              : 'border-gray-300 focus:ring-gray-500'
                           }`}
                           placeholder="Выберите дату"
                         />
@@ -1511,7 +1553,7 @@ export default function TasksPage() {
                                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
                                   formErrors.deadlineTime 
                                     ? 'border-red-500 focus:ring-red-500' 
-                                    : 'border-gray-300 focus:ring-blue-500'
+                                    : 'border-gray-300 focus:ring-gray-500'
                                 }`}
                               />
                             )}
@@ -1589,7 +1631,7 @@ export default function TasksPage() {
                                   new Date(formData.deadline).getDate() === day &&
                                   new Date(formData.deadline).getMonth() === currentMonth.getMonth() &&
                                   new Date(formData.deadline).getFullYear() === currentMonth.getFullYear()
-                                    ? 'bg-blue-500 text-white' : ''
+                                    ? 'bg-gray-500 text-white' : ''
                                 }`}
                               >
                                 {day}
@@ -1624,7 +1666,7 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowExecutorsDropdown(!showExecutorsDropdown)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left bg-white ${
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white ${
                           formErrors.executors ? 'border-red-500' : 'border-gray-300'
                         }`}
                       >
@@ -1668,7 +1710,7 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowCuratorsDropdown(!showCuratorsDropdown)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left bg-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white"
                       >
                         {formData.curators.length > 0 
                           ? `${formData.curators.length} выбрано` 
@@ -1708,7 +1750,7 @@ export default function TasksPage() {
                   <button
                     type="button"
                     onClick={() => setIsCreateSubtaskModalOpen(true)}
-                    className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm"
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
                   >
                     +
                   </button>
@@ -1756,7 +1798,7 @@ export default function TasksPage() {
                   <button
                     type="button"
                     onClick={() => setIsCreateChecklistModalOpen(true)}
-                    className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors text-sm"
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
                   >
                     +
                   </button>
@@ -1800,7 +1842,7 @@ export default function TasksPage() {
                   <button
                     type="button"
                     onClick={() => setShowAttachments(!showAttachments)}
-                    className="px-3 py-1 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors text-sm"
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
                   >
                     {showAttachments ? '−' : '+'}
                   </button>
@@ -1815,7 +1857,7 @@ export default function TasksPage() {
                         type="file"
                         multiple
                         accept="image/*"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                   />
                 </div>
                     
@@ -1824,13 +1866,23 @@ export default function TasksPage() {
                         Ссылки
                       </label>
                       <div className="space-y-2">
-                        <input
-                          type="url"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="https://example.com"
-                        />
-                        <button className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
-                          Добавить ссылку
+                        {linkInputs.map((link, index) => (
+                          <div key={index} className="flex space-x-2">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => updateLinkInput(index, e.target.value)}
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                              placeholder="https://example.com"
+                            />
+                          </div>
+                        ))}
+                        <button 
+                          type="button"
+                          onClick={addLinkInput}
+                          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                        >
+                          Добавить ещё ссылку
                         </button>
                       </div>
                     </div>
@@ -1845,7 +1897,7 @@ export default function TasksPage() {
                   <button
                     type="button"
                     onClick={() => setShowAutomation(!showAutomation)}
-                    className="px-3 py-1 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors text-sm"
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
                   >
                     {showAutomation ? '−' : '+'}
                   </button>
@@ -1858,7 +1910,7 @@ export default function TasksPage() {
                         id="autoTask"
                         checked={formData.isAutoTask}
                         onChange={(e) => handleInputChange('isAutoTask', e.target.checked)}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500"
                       />
                       <label htmlFor="autoTask" className="text-sm text-gray-700">
                         Автоматическая задача (повторяется по расписанию)
@@ -1873,7 +1925,7 @@ export default function TasksPage() {
                         <select 
                           value={formData.autoFrequency}
                           onChange={(e) => handleInputChange('autoFrequency', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >
                           <option value="daily">Ежедневно</option>
                           <option value="weekly">Еженедельно</option>
@@ -1891,7 +1943,7 @@ export default function TasksPage() {
                           min="1"
                           value={formData.autoRepetitions}
                           onChange={(e) => handleInputChange('autoRepetitions', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                           placeholder="Без ограничений"
                         />
                       </div>
@@ -1904,14 +1956,34 @@ export default function TasksPage() {
               <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                 <button
                   type="button"
-                  onClick={() => setIsCreateTaskModalOpen(false)}
+                  onClick={() => {
+                    setIsCreateTaskModalOpen(false);
+                    setFormData({
+                      title: '',
+                      description: '',
+                      priority: 'low',
+                      deadline: '',
+                      deadlineTime: '12:00',
+                      executors: [],
+                      curators: [],
+                      subtasks: [],
+                      checklists: [],
+                      images: [],
+                      links: [],
+                      isAutoTask: false,
+                      autoFrequency: 'daily',
+                      autoRepetitions: ''
+                    });
+                    setLinkInputs(['']);
+                    setFormErrors({});
+                  }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
                   Отмена
                 </button>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
               >
                 Создать задачу
               </button>
@@ -1924,7 +1996,7 @@ export default function TasksPage() {
       {/* Модальное окно редактирования задачи */}
       {editingTask && (
         <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 p-6 mb-8 border-2 border-black">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-black">Редактировать задачу</h2>
               <button
@@ -1947,7 +2019,7 @@ export default function TasksPage() {
                   type="text"
                   value={editingTask.title}
                   onChange={(e) => setEditingTask({...editingTask, title: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                 />
               </div>
 
@@ -1959,7 +2031,7 @@ export default function TasksPage() {
                 <select
                   value={editingTask.status}
                   onChange={(e) => setEditingTask({...editingTask, status: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   <option value="new">Новая</option>
                   <option value="in_progress">В работе</option>
@@ -1978,7 +2050,7 @@ export default function TasksPage() {
                 <select
                   value={editingTask.priority}
                   onChange={(e) => setEditingTask({...editingTask, priority: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   <option value="low">🟢 Обычная</option>
                   <option value="medium">🟡 Важная</option>
@@ -1995,7 +2067,7 @@ export default function TasksPage() {
                   rows={3}
                   value={editingTask.description}
                   onChange={(e) => setEditingTask({...editingTask, description: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                 />
               </div>
 
@@ -2014,7 +2086,7 @@ export default function TasksPage() {
                     updateTask(editingTask.id, editingTask);
                     setEditingTask(null);
                   }}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
                 >
                   Сохранить
                 </button>
@@ -2027,8 +2099,8 @@ export default function TasksPage() {
 
       {/* Модальное окно создания подзадачи */}
       {isCreateSubtaskModalOpen && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 mb-8">
+        <div className="fixed inset-0 flex items-start justify-center z-[60] overflow-y-auto pt-[130px]">
+          <div className="bg-white rounded-lg shadow-2xl max-w-6xl w-full mx-4 mb-8 border-2 border-black">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-black">Создать подзадачу</h2>
               <button
@@ -2071,7 +2143,7 @@ export default function TasksPage() {
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
                         subtaskFormErrors.title 
                           ? 'border-red-500 focus:ring-red-500' 
-                          : 'border-gray-300 focus:ring-blue-500'
+                          : 'border-gray-300 focus:ring-gray-500'
                       }`}
                       placeholder="Введите название подзадачи"
                       required
@@ -2089,7 +2161,7 @@ export default function TasksPage() {
                       rows={4}
                       value={subtaskFormData.description}
                       onChange={(e) => handleSubtaskInputChange('description', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                       placeholder="Опишите детали подзадачи"
                     />
                   </div>
@@ -2102,7 +2174,7 @@ export default function TasksPage() {
                       <select 
                         value={subtaskFormData.priority}
                         onChange={(e) => handleSubtaskInputChange('priority', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                       >
                         <option value="low">🟢 Обычная</option>
                         <option value="medium">🟠 Важная</option>
@@ -2118,7 +2190,7 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowDeadline(!showDeadline)}
-                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm mb-4"
+                        className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm mb-4"
                       >
                         {showDeadline ? '−' : '+'}
                       </button>
@@ -2134,7 +2206,7 @@ export default function TasksPage() {
                               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
                                 subtaskFormErrors.deadline 
                                   ? 'border-red-500 focus:ring-red-500' 
-                                  : 'border-gray-300 focus:ring-blue-500'
+                                  : 'border-gray-300 focus:ring-gray-500'
                               }`}
                               placeholder="Выберите дату"
                             />
@@ -2153,7 +2225,7 @@ export default function TasksPage() {
                                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
                                       subtaskFormErrors.deadlineTime 
                                         ? 'border-red-500 focus:ring-red-500' 
-                                        : 'border-gray-300 focus:ring-blue-500'
+                                        : 'border-gray-300 focus:ring-gray-500'
                                     }`}
                                   />
                                 )}
@@ -2231,7 +2303,7 @@ export default function TasksPage() {
                                       new Date(subtaskFormData.deadline).getDate() === day &&
                                       new Date(subtaskFormData.deadline).getMonth() === currentMonth.getMonth() &&
                                       new Date(subtaskFormData.deadline).getFullYear() === currentMonth.getFullYear()
-                                        ? 'bg-blue-500 text-white' : ''
+                                        ? 'bg-gray-500 text-white' : ''
                                     }`}
                                   >
                                     {day}
@@ -2266,7 +2338,7 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowExecutorsDropdown(!showExecutorsDropdown)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left bg-white ${
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white ${
                           subtaskFormErrors.executors ? 'border-red-500' : 'border-gray-300'
                         }`}
                       >
@@ -2310,7 +2382,7 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowCuratorsDropdown(!showCuratorsDropdown)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left bg-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white"
                       >
                         {subtaskFormData.curators.length > 0 
                           ? `${subtaskFormData.curators.length} выбрано` 
@@ -2363,14 +2435,14 @@ export default function TasksPage() {
                     });
                     setSubtaskFormErrors({});
                   }}
-                  className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                  className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
                   Отмена
                 </button>
                 <button
                   type="button"
                   onClick={handleSubtaskSubmit}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm"
+                  className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors shadow-sm"
                 >
                   Создать подзадачу
                 </button>
@@ -2382,8 +2454,8 @@ export default function TasksPage() {
 
       {/* Модальное окно создания чек-листа */}
       {isCreateChecklistModalOpen && (
-        <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 p-6 mb-8">
+        <div className="fixed inset-0 flex items-start justify-center z-[60] overflow-y-auto pt-[130px]">
+          <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full mx-4 p-6 mb-8 border-2 border-black">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-black">Создать чек-лист</h2>
               <button
@@ -2454,7 +2526,7 @@ export default function TasksPage() {
                           <div className="col-span-2 flex justify-center relative">
                             {item.curator ? (
                               <div className="flex items-center space-x-1">
-                                <span className="text-xs text-blue-600">{item.curator}</span>
+                                <span className="text-xs text-gray-600">{item.curator}</span>
                                 <button
                                   type="button"
                                   onClick={() => removeChecklistCurator(item.id)}
@@ -2467,7 +2539,7 @@ export default function TasksPage() {
                               <button
                                 type="button"
                                 onClick={() => setShowChecklistCuratorDropdown(item.id)}
-                                className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600"
+                                className="px-2 py-1 bg-gray-500 text-white rounded text-xs hover:bg-gray-600"
                               >
                                 +
                               </button>
@@ -2515,7 +2587,7 @@ export default function TasksPage() {
                               <button
                                 type="button"
                                 onClick={() => setShowChecklistExecutorDropdown(item.id)}
-                                className="px-2 py-1 bg-orange-500 text-white rounded text-xs hover:bg-orange-600"
+                                className="px-2 py-1 bg-gray-500 text-white rounded text-xs hover:bg-gray-600"
                               >
                                 +
                               </button>
@@ -2605,7 +2677,7 @@ export default function TasksPage() {
       {/* Модальное окно замечаний */}
       {showCommentsModal && selectedTaskForComments && (
         <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 p-6 mb-8 border-2 border-black">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-black">Замечания к задаче: {selectedTaskForComments.title}</h2>
               <button
@@ -2651,7 +2723,7 @@ export default function TasksPage() {
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                   placeholder="Введите замечание..."
                 />
               </div>
@@ -2677,7 +2749,7 @@ export default function TasksPage() {
                       setNewComment('');
                     }
                   }}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
                 >
                   Добавить замечание
                 </button>

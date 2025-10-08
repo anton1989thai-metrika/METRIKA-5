@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -288,12 +289,18 @@ export default function MyTasksPage() {
                     </div>
                     
                     <div className="flex flex-col gap-2">
-                      <button className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                      <Link 
+                        href={`/task/${task.id}`}
+                        className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-center"
+                      >
                         Открыть
-                      </button>
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                        Редактировать
-                      </button>
+                      </Link>
+                             <Link
+                               href={`/task/${task.id}/edit`}
+                               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-center"
+                             >
+                               Редактировать
+                             </Link>
                     </div>
                   </div>
                   
