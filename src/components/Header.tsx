@@ -13,13 +13,12 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
-      {/* Кнопка смены языка - позиционирована абсолютно относительно всего header */}
-      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50">
-        <LanguageSelector />
-      </div>
-      
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-center h-20">
+        <div className="flex items-center justify-center h-20 relative">
+          {/* Кнопка смены языка - позиционирована в правом верхнем углу основного хедера */}
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-50">
+            <LanguageSelector />
+          </div>
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center flex flex-col justify-center">
             <Link href="/" className="inline-block">
