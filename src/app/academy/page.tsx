@@ -378,7 +378,7 @@ export default function AcademyPage() {
       <main className="pt-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Заголовок */}
-          <div className="mb-8">
+          <div className="mb-8 mt-8">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Академия МЕТРИКА</h1>
