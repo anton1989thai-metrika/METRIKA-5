@@ -109,15 +109,17 @@ export default function BurgerMenu() {
     
     const menuHeight = menuRef.current.scrollHeight
     const viewportHeight = window.innerHeight
-    const maxScale = 0.7 // Минимальный масштаб
+    const maxScale = 0.6 // Минимальный масштаб (уменьшен для лучшего размещения)
+    const padding = 20 // Отступ сверху и снизу
     
-    // Если меню помещается, используем полный масштаб
-    if (menuHeight <= viewportHeight) {
+    // Если меню помещается с отступами, используем полный масштаб
+    if (menuHeight <= viewportHeight - padding) {
       return 1
     }
     
-    // Рассчитываем масштаб для помещения в экран
-    const calculatedScale = viewportHeight / menuHeight
+    // Рассчитываем масштаб для помещения в экран с отступами
+    const availableHeight = viewportHeight - padding
+    const calculatedScale = availableHeight / menuHeight
     
     // Ограничиваем минимальный масштаб
     return Math.max(calculatedScale, maxScale)
@@ -126,8 +128,13 @@ export default function BurgerMenu() {
   // Обновляем масштаб при изменении размера окна или открытии меню
   useEffect(() => {
     if (isOpen) {
-      const newScale = calculateScale()
-      setScale(newScale)
+      // Небольшая задержка для корректного расчета после рендеринга
+      const timer = setTimeout(() => {
+        const newScale = calculateScale()
+        setScale(newScale)
+      }, 50)
+      
+      return () => clearTimeout(timer)
     }
   }, [isOpen, filteredMenuItems.length])
 
@@ -135,8 +142,13 @@ export default function BurgerMenu() {
   useEffect(() => {
     const handleResize = () => {
       if (isOpen) {
-        const newScale = calculateScale()
-        setScale(newScale)
+        // Небольшая задержка для корректного расчета после изменения размера
+        const timer = setTimeout(() => {
+          const newScale = calculateScale()
+          setScale(newScale)
+        }, 100)
+        
+        return () => clearTimeout(timer)
       }
     }
 
