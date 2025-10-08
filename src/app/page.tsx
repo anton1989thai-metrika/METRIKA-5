@@ -13,7 +13,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-white relative flex flex-col">
       {/* Фоновое изображение */}
       <div 
         className="fixed inset-0 w-full h-full bg-gray-300"
@@ -32,7 +32,7 @@ export default function HomePage() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-32 px-4 relative z-20">
+      <main className="pt-32 px-4 relative z-20 flex-1">
         <div className="max-w-4xl mx-auto">
           {/* Контент главной страницы будет добавлен позже */}
         </div>
