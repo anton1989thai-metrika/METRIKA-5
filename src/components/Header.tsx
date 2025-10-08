@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
       {/* Кнопка смены языка - позиционирована в правом верхнем углу основного хедера */}
-      <div className="absolute right-4 top-2 z-50">
+      <div className="absolute right-4 top-5 z-50">
         <LanguageSelector />
       </div>
       
