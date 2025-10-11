@@ -319,7 +319,7 @@ export default function AcademyPage() {
     setSelectedTest(test)
     setShowTestModal(true)
   }
-
+  
   if (status === "loading") {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -327,7 +327,7 @@ export default function AcademyPage() {
       </div>
     )
   }
-
+  
   if (!session || (session.user?.role !== "employee" && session.user?.role !== "admin")) {
     redirect("/auth/signin")
   }
@@ -386,25 +386,25 @@ export default function AcademyPage() {
               </div>
               <button
                 onClick={() => setShowNotificationModal(true)}
-                className="relative p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="relative p-3 bg-white border-2 border-black rounded-full shadow-lg hover:shadow-xl transition-all"
               >
-                <Bell className="w-6 h-6" />
+                <Bell className="w-6 h-6 text-gray-600" />
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                   3
                 </span>
               </button>
             </div>
-          </div>
+              </div>
 
           {/* Навигация */}
           <div className="mb-8">
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setActiveTab('dashboard')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'dashboard' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <BarChart3 className="w-4 h-4 inline mr-2" />
@@ -412,10 +412,10 @@ export default function AcademyPage() {
               </button>
               <button
                 onClick={() => setActiveTab('courses')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'courses' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <BookOpen className="w-4 h-4 inline mr-2" />
@@ -423,10 +423,10 @@ export default function AcademyPage() {
               </button>
               <button
                 onClick={() => setActiveTab('tests')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'tests' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <TestTube className="w-4 h-4 inline mr-2" />
@@ -434,10 +434,10 @@ export default function AcademyPage() {
               </button>
               <button
                 onClick={() => setActiveTab('achievements')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'achievements' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <Trophy className="w-4 h-4 inline mr-2" />
@@ -445,10 +445,10 @@ export default function AcademyPage() {
               </button>
               <button
                 onClick={() => setActiveTab('materials')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'materials' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <FileText className="w-4 h-4 inline mr-2" />
@@ -462,93 +462,93 @@ export default function AcademyPage() {
             <div className="space-y-8">
               {/* Статистика */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-blue-50 rounded-lg p-6">
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <BookOpen className="w-8 h-8 text-blue-600 mr-3" />
+                    <BookOpen className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-blue-900">{stats.completedCourses}/{stats.totalCourses}</div>
-                      <div className="text-sm text-blue-700">Завершено курсов</div>
+                      <div className="text-2xl font-bold text-black">{stats.completedCourses}/{stats.totalCourses}</div>
+                      <div className="text-sm text-gray-600">Завершено курсов</div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-green-50 rounded-lg p-6">
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <TestTube className="w-8 h-8 text-green-600 mr-3" />
+                    <TestTube className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-green-900">{stats.passedTests}/{stats.totalTests}</div>
-                      <div className="text-sm text-green-700">Пройдено тестов</div>
+                      <div className="text-2xl font-bold text-black">{stats.passedTests}/{stats.totalTests}</div>
+                      <div className="text-sm text-gray-600">Пройдено тестов</div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-purple-50 rounded-lg p-6">
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <Star className="w-8 h-8 text-purple-600 mr-3" />
+                    <Star className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-purple-900">{Math.round(stats.averageScore)}</div>
-                      <div className="text-sm text-purple-700">Средний балл</div>
+                      <div className="text-2xl font-bold text-black">{Math.round(stats.averageScore)}</div>
+                      <div className="text-sm text-gray-600">Средний балл</div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="bg-orange-50 rounded-lg p-6">
+            </div>
+            
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <Clock className="w-8 h-8 text-orange-600 mr-3" />
+                    <Clock className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-orange-900">{stats.studyTime}ч</div>
-                      <div className="text-sm text-orange-700">Время обучения</div>
+                      <div className="text-2xl font-bold text-black">{stats.studyTime}ч</div>
+                      <div className="text-sm text-gray-600">Время обучения</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Уровень и прогресс */}
-              <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white">
+              <div className="bg-black rounded-lg p-6 text-white shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-xl font-semibold">Ваш уровень: {stats.level}</h3>
-                    <p className="text-blue-100">Следующий уровень: {stats.nextLevel}</p>
+                    <p className="text-gray-300">Следующий уровень: {stats.nextLevel}</p>
                   </div>
                   <GraduationCap className="w-12 h-12 text-white" />
                 </div>
-                <div className="w-full bg-white bg-opacity-20 rounded-full h-3">
+                <div className="w-full bg-gray-600 rounded-full h-3">
                   <div 
                     className="bg-white h-3 rounded-full transition-all duration-300" 
                     style={{ width: `${stats.levelProgress}%` }}
                   ></div>
                 </div>
-                <div className="text-sm text-blue-100 mt-2">
+                <div className="text-sm text-gray-300 mt-2">
                   Прогресс: {stats.levelProgress}%
                 </div>
               </div>
 
               {/* Курсы в процессе */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Курсы в процессе</h2>
+                <h2 className="text-xl font-semibold text-black mb-4">Курсы в процессе</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {courses.filter(c => c.status === 'in-progress').map(course => (
-                    <div key={course.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div key={course.id} className="bg-white border-2 border-black rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                       <div className="flex items-start justify-between mb-3">
-                        <h3 className="font-semibold text-gray-900">{course.title}</h3>
+                        <h3 className="font-semibold text-black">{course.title}</h3>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(course.status)}`}>
                           {getStatusText(course.status)}
                         </span>
                       </div>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
+                      <p className="text-black text-sm mb-4 line-clamp-2">{course.description}</p>
                       <div className="mb-4">
-                        <div className="flex justify-between text-sm text-gray-500 mb-1">
+                        <div className="flex justify-between text-sm text-gray-600 mb-1">
                           <span>Прогресс</span>
                           <span>{course.progress}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                            className="bg-black h-2 rounded-full transition-all duration-300" 
                             style={{ width: `${course.progress}%` }}
                           ></div>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                      <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
                         <span className="flex items-center">
                           <Clock className="w-4 h-4 mr-1" />
                           {course.duration} мин
@@ -560,25 +560,25 @@ export default function AcademyPage() {
                       </div>
                       <button 
                         onClick={() => handleCourseClick(course)}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="w-full px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                       >
-                        Продолжить обучение
-                      </button>
+                Продолжить обучение
+              </button>
                     </div>
                   ))}
                 </div>
-              </div>
-
+            </div>
+            
               {/* Последние достижения */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Последние достижения</h2>
+                <h2 className="text-xl font-semibold text-black mb-4">Последние достижения</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {achievements.filter(a => a.earned).map(achievement => (
-                    <div key={achievement.id} className="bg-white border border-gray-200 rounded-lg p-4 text-center">
+                    <div key={achievement.id} className="bg-white border-2 border-black rounded-lg p-4 text-center shadow-lg">
                       <div className="text-3xl mb-2">{achievement.icon}</div>
-                      <h3 className="font-semibold text-gray-900 text-sm">{achievement.title}</h3>
+                      <h3 className="font-semibold text-black text-sm">{achievement.title}</h3>
                       <p className="text-gray-600 text-xs mt-1">{achievement.description}</p>
-                      <div className="text-xs text-gray-500 mt-2">
+                      <div className="text-xs text-gray-600 mt-2">
                         Получено: {achievement.earnedDate}
                       </div>
                     </div>
@@ -592,25 +592,25 @@ export default function AcademyPage() {
           {activeTab === 'courses' && (
             <div className="space-y-6">
               {/* Поиск и фильтры */}
-              <div className="bg-gray-50 rounded-lg p-6">
+              <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                 <div className="flex flex-col lg:flex-row gap-4">
                   <div className="flex-1">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-4 h-4" />
                       <input
                         type="text"
                         placeholder="Поиск курсов..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full pl-10 pr-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                       />
                     </div>
                   </div>
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center px-4 py-2 bg-white border-2 border-black rounded-full shadow-lg hover:shadow-xl transition-all"
                   >
-                    <Filter className="w-4 h-4 mr-2" />
+                    <Filter className="w-4 h-4 mr-2 text-gray-600" />
                     Фильтры
                   </button>
                 </div>
@@ -618,11 +618,11 @@ export default function AcademyPage() {
                 {showFilters && (
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Категория</label>
+                      <label className="block text-sm font-medium text-black mb-2">Категория</label>
                       <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                       >
                         {categories.map(cat => (
                           <option key={cat} value={cat}>
@@ -632,11 +632,11 @@ export default function AcademyPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Уровень</label>
+                      <label className="block text-sm font-medium text-black mb-2">Уровень</label>
                       <select
                         value={selectedLevel}
                         onChange={(e) => setSelectedLevel(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                       >
                         {levels.map(level => (
                           <option key={level} value={level}>
@@ -646,11 +646,11 @@ export default function AcademyPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Статус</label>
+                      <label className="block text-sm font-medium text-black mb-2">Статус</label>
                       <select
                         value={selectedStatus}
                         onChange={(e) => setSelectedStatus(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                       >
                         {statuses.map(status => (
                           <option key={status} value={status}>
@@ -666,11 +666,11 @@ export default function AcademyPage() {
               {/* Список курсов */}
               <div className="space-y-4">
                 {filteredCourses.map(course => (
-                  <div key={course.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                  <div key={course.id} className="bg-white border-2 border-black rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-lg font-semibold text-gray-900">{course.title}</h3>
+                          <h3 className="text-lg font-semibold text-black">{course.title}</h3>
                           {course.isRequired && (
                             <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
                               Обязательный
@@ -680,22 +680,22 @@ export default function AcademyPage() {
                             {getLevelText(course.level)}
                           </span>
                         </div>
-                        <p className="text-gray-600 mb-3">{course.description}</p>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                        <p className="text-black mb-3">{course.description}</p>
+                        <div className="flex items-center gap-4 text-sm text-gray-600">
                           <span className="flex items-center">
-                            <Clock className="w-4 h-4 mr-1" />
+                            <Clock className="w-4 h-4 mr-1 text-gray-600" />
                             {course.duration} мин
                           </span>
                           <span className="flex items-center">
-                            <Users className="w-4 h-4 mr-1" />
+                            <Users className="w-4 h-4 mr-1 text-gray-600" />
                             {course.students} студентов
                           </span>
                           <span className="flex items-center">
-                            <Star className="w-4 h-4 mr-1" />
+                            <Star className="w-4 h-4 mr-1 text-gray-600" />
                             {course.rating}
                           </span>
                           <span className="flex items-center">
-                            <User className="w-4 h-4 mr-1" />
+                            <User className="w-4 h-4 mr-1 text-gray-600" />
                             {course.instructor}
                           </span>
                         </div>
@@ -792,31 +792,37 @@ export default function AcademyPage() {
                       {course.status === 'not-started' ? (
                         <button 
                           onClick={() => handleCourseClick(course)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
                         >
-                          Начать обучение
-                        </button>
+                Начать обучение
+              </button>
                       ) : course.status === 'in-progress' ? (
                         <button 
                           onClick={() => handleCourseClick(course)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
                         >
                           Продолжить обучение
                         </button>
                       ) : (
                         <button 
                           onClick={() => handleCourseClick(course)}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                          className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                         >
                           Повторить курс
                         </button>
                       )}
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                        <Bookmark className="w-4 h-4 mr-2 inline" />
+                      <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                        <Bookmark className="w-4 h-4 mr-2 inline text-gray-600" />
                         В закладки
                       </button>
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                        <Share2 className="w-4 h-4 mr-2 inline" />
+                      <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                        <Share2 className="w-4 h-4 mr-2 inline text-gray-600" />
                         Поделиться
                       </button>
                     </div>
@@ -831,38 +837,38 @@ export default function AcademyPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tests.map(test => (
-                  <div key={test.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                  <div key={test.id} className="bg-white border-2 border-black rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                     <div className="flex items-start justify-between mb-3">
-                      <h3 className="font-semibold text-gray-900">{test.title}</h3>
+                      <h3 className="font-semibold text-black">{test.title}</h3>
                       {test.isRequired && (
                         <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
                           Обязательный
                         </span>
                       )}
                     </div>
-                    <p className="text-gray-600 text-sm mb-4">{test.description}</p>
+                    <p className="text-black text-sm mb-4">{test.description}</p>
                     
                     <div className="space-y-2 mb-4">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Вопросов:</span>
+                        <span className="text-gray-600">Вопросов:</span>
                         <span className="font-medium">{test.questions}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Время:</span>
+                        <span className="text-gray-600">Время:</span>
                         <span className="font-medium">{test.timeLimit} мин</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Попытки:</span>
+                        <span className="text-gray-600">Попытки:</span>
                         <span className="font-medium">{test.attempts}/{test.maxAttempts}</span>
                       </div>
                       {test.bestScore > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Лучший результат:</span>
+                          <span className="text-gray-600">Лучший результат:</span>
                           <span className="font-medium text-green-600">{test.bestScore}/100</span>
                         </div>
                       )}
-                    </div>
-
+          </div>
+          
                     <div className="mb-4">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(test.status)}`}>
                         {getStatusText(test.status)}
@@ -873,27 +879,33 @@ export default function AcademyPage() {
                       {test.status === 'not-taken' ? (
                         <button 
                           onClick={() => handleTestClick(test)}
-                          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          className="flex-1 px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
                         >
                           Начать тест
                         </button>
                       ) : test.status === 'passed' ? (
                         <button 
                           onClick={() => handleTestClick(test)}
-                          className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                          className="flex-1 px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                         >
-                          Пройти повторно
-                        </button>
+                  Пройти повторно
+                </button>
                       ) : (
                         <button 
                           onClick={() => handleTestClick(test)}
-                          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          className="flex-1 px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
                         >
                           Продолжить тест
                         </button>
                       )}
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                        <Eye className="w-4 h-4" />
+                      <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                        <Eye className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
                   </div>
@@ -907,13 +919,13 @@ export default function AcademyPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {achievements.map(achievement => (
-                  <div key={achievement.id} className={`border rounded-lg p-6 text-center transition-all ${
+                  <div key={achievement.id} className={`border-2 rounded-lg p-6 text-center transition-all shadow-lg ${
                     achievement.earned 
-                      ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200' 
-                      : 'bg-white border-gray-200'
+                      ? 'bg-white border-black' 
+                      : 'bg-white border-black'
                   }`}>
                     <div className="text-4xl mb-3">{achievement.icon}</div>
-                    <h3 className="font-semibold text-gray-900 mb-2">{achievement.title}</h3>
+                    <h3 className="font-semibold text-black mb-2">{achievement.title}</h3>
                     <p className="text-gray-600 text-sm mb-3">{achievement.description}</p>
                     
                     {achievement.earned ? (
@@ -924,11 +936,11 @@ export default function AcademyPage() {
                       <div className="space-y-2">
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                            className="bg-black h-2 rounded-full transition-all duration-300" 
                             style={{ width: `${achievement.progress}%` }}
                           ></div>
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-600">
                           {achievement.progress}% - {achievement.requirement}
                         </div>
                       </div>
@@ -944,27 +956,27 @@ export default function AcademyPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Видео */}
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center mb-4">
-                    <Video className="w-6 h-6 text-blue-600 mr-3" />
-                    <h3 className="text-lg font-semibold text-gray-900">Видео-уроки</h3>
+                    <Video className="w-6 h-6 text-gray-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-black">Видео-уроки</h3>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Основы недвижимости</div>
+                        <div className="font-medium text-black">Основы недвижимости</div>
                         <div className="text-sm text-gray-500">8 видео • 2ч 15мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         Смотреть
                       </button>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Работа с клиентами</div>
+                        <div className="font-medium text-black">Работа с клиентами</div>
                         <div className="text-sm text-gray-500">12 видео • 3ч 30мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         Смотреть
                       </button>
                     </div>
@@ -972,60 +984,60 @@ export default function AcademyPage() {
                 </div>
 
                 {/* Документы */}
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center mb-4">
-                    <FileText className="w-6 h-6 text-green-600 mr-3" />
-                    <h3 className="text-lg font-semibold text-gray-900">Документы</h3>
+                    <FileText className="w-6 h-6 text-gray-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-black">Документы</h3>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Шаблоны договоров</div>
+                        <div className="font-medium text-black">Шаблоны договоров</div>
                         <div className="text-sm text-gray-500">15 документов</div>
                       </div>
-                      <button className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700">
-                        <Download className="w-4 h-4" />
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                        <Download className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Методички</div>
+                        <div className="font-medium text-black">Методички</div>
                         <div className="text-sm text-gray-500">8 документов</div>
                       </div>
-                      <button className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700">
-                        <Download className="w-4 h-4" />
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                        <Download className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
                   </div>
-                </div>
-
+              </div>
+              
                 {/* Тесты */}
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
                   <div className="flex items-center mb-4">
-                    <TestTube className="w-6 h-6 text-purple-600 mr-3" />
-                    <h3 className="text-lg font-semibold text-gray-900">Тесты</h3>
+                    <TestTube className="w-6 h-6 text-gray-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-black">Тесты</h3>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Основы недвижимости</div>
+                        <div className="font-medium text-black">Основы недвижимости</div>
                         <div className="text-sm text-gray-500">20 вопросов • 30 мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-purple-600 text-white rounded text-sm hover:bg-purple-700">
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         Пройти
                       </button>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <div className="font-medium text-gray-900">Работа с клиентами</div>
+                        <div className="font-medium text-black">Работа с клиентами</div>
                         <div className="text-sm text-gray-500">25 вопросов • 45 мин</div>
                       </div>
                       <button className="px-3 py-1 bg-purple-600 text-white rounded text-sm hover:bg-purple-700">
                         Пройти
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                </button>
+              </div>
+            </div>
+          </div>
               </div>
             </div>
           )}
