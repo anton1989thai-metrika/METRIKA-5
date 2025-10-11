@@ -27,165 +27,165 @@ export default function HeaderFilters() {
           <div className="flex flex-wrap gap-3 justify-center items-center">
             {/* Страна */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Страна:</span>
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Страна:</span>
               <div className="flex gap-1">
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.country === 'russia'}
                     onChange={() => handleCountryChange('russia')}
                   />
-                  <span className="text-xs text-gray-700">Россия</span>
+                  <span className="text-sm text-gray-700">Россия</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.country === 'thailand'}
                     onChange={() => handleCountryChange('thailand')}
                   />
-                  <span className="text-xs text-gray-700">Таиланд</span>
+                  <span className="text-sm text-gray-700">Таиланд</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.country === 'china'}
                     onChange={() => handleCountryChange('china')}
                   />
-                  <span className="text-xs text-gray-700">Китай</span>
+                  <span className="text-sm text-gray-700">Китай</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.country === 'south-korea'}
                     onChange={() => handleCountryChange('south-korea')}
                   />
-                  <span className="text-xs text-gray-700">Южная Корея</span>
+                  <span className="text-sm text-gray-700">Южная Корея</span>
                 </label>
               </div>
             </div>
 
             {/* Тип недвижимости */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Тип:</span>
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Тип:</span>
               <div className="flex gap-1 flex-wrap">
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'apartment'}
                     onChange={() => handlePropertyTypeChange('apartment')}
                   />
-                  <span className="text-xs text-gray-700">Квартира</span>
+                  <span className="text-sm text-gray-700">Квартира</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'house'}
                     onChange={() => handlePropertyTypeChange('house')}
                   />
-                  <span className="text-xs text-gray-700">Дом</span>
+                  <span className="text-sm text-gray-700">Дом</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'land'}
                     onChange={() => handlePropertyTypeChange('land')}
                   />
-                  <span className="text-xs text-gray-700">Участок</span>
+                  <span className="text-sm text-gray-700">Участок</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'commercial'}
                     onChange={() => handlePropertyTypeChange('commercial')}
                   />
-                  <span className="text-xs text-gray-700">Коммерция</span>
+                  <span className="text-sm text-gray-700">Коммерция</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'building'}
                     onChange={() => handlePropertyTypeChange('building')}
                   />
-                  <span className="text-xs text-gray-700">Здание</span>
+                  <span className="text-sm text-gray-700">Здание</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'nonCapital'}
                     onChange={() => handlePropertyTypeChange('nonCapital')}
                   />
-                  <span className="text-xs text-gray-700">Некопитальный</span>
+                  <span className="text-sm text-gray-700">Некопитальный</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-3 h-3" 
+                    className="mr-1 w-4 h-4" 
                     checked={filters.propertyType === 'shares'}
                     onChange={() => handlePropertyTypeChange('shares')}
                   />
-                  <span className="text-xs text-gray-700">Доля</span>
+                  <span className="text-sm text-gray-700">Доля</span>
                 </label>
               </div>
             </div>
 
             {/* Тип операции */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Операция:</span>
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Операция:</span>
               <div className="flex gap-1">
                 <label className="flex items-center">
                   <input type="checkbox" className="mr-1 w-3 h-3" />
-                  <span className="text-xs text-gray-700">Продажа</span>
+                  <span className="text-sm text-gray-700">Продажа</span>
                 </label>
                 <label className="flex items-center">
                   <input type="checkbox" className="mr-1 w-3 h-3" />
-                  <span className="text-xs text-gray-700">Аренда</span>
+                  <span className="text-sm text-gray-700">Аренда</span>
                 </label>
               </div>
             </div>
 
             {/* Цена */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Цена:</span>
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Цена:</span>
               <div className="flex gap-1">
                 <input 
                   type="number" 
                   placeholder="От" 
-                  className="w-16 px-1 py-1 border border-gray-300 rounded text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <input 
                   type="number" 
                   placeholder="До" 
-                  className="w-16 px-1 py-1 border border-gray-300 rounded text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>
 
             {/* Площадь */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-600 whitespace-nowrap">Площадь:</span>
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Площадь:</span>
               <div className="flex gap-1">
                 <input 
                   type="number" 
                   placeholder="От" 
-                  className="w-12 px-1 py-1 border border-gray-300 rounded text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-16 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <input 
                   type="number" 
                   placeholder="До" 
-                  className="w-12 px-1 py-1 border border-gray-300 rounded text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-16 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <select 
-                  className="text-xs border border-gray-300 rounded px-1 py-1 h-6"
+                  className="text-sm border border-gray-300 rounded px-2 py-1 h-8"
                   value={filters.areaUnit}
                   onChange={(e) => updateFilter('areaUnit', e.target.value)}
                 >
@@ -205,17 +205,17 @@ export default function HeaderFilters() {
             <div className="flex gap-1">
               <button 
                 onClick={() => setIsAdditionalFiltersOpen(true)}
-                className="px-2 py-1 text-black rounded text-xs transition-colors"
+                className="px-3 py-2 text-black rounded text-sm transition-colors"
                 style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
               >
                 Доп. фильтры
               </button>
-              <button className="px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700 transition-colors">
+              <button className="px-3 py-2 bg-gray-600 text-white rounded text-sm hover:bg-gray-700 transition-colors">
                 Применить
               </button>
-              <button className="px-2 py-1 bg-gray-300 text-gray-700 rounded text-xs hover:bg-gray-400 transition-colors">
+              <button className="px-3 py-2 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400 transition-colors">
                 Сбросить
               </button>
             </div>
