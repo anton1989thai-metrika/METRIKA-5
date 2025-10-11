@@ -159,8 +159,8 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
-      <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden border-2 border-black">
-        <div className="flex items-center justify-between p-6 border-b-2 border-black">
+      <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
             <TestTube className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-black">{test.title}</h2>
@@ -177,7 +177,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
           {!isStarted && !showResults && (
             <div className="space-y-6">
               {/* Информация о тесте */}
-              <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+              <div className="bg-white shadow-sm rounded-lg p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-black mb-2">Информация о тесте</h3>
                 <p className="text-gray-600 mb-4">{test.description}</p>
                 
@@ -213,7 +213,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
               </div>
 
               {/* Правила */}
-              <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+              <div className="bg-white shadow-sm rounded-lg p-4 shadow-lg">
                 <h4 className="font-semibold text-black mb-2">Правила прохождения теста</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li>• Время на прохождение теста ограничено</li>
@@ -227,7 +227,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
               <div className="text-center">
                 <button
                   onClick={handleStart}
-                  className="px-8 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium text-lg"
+                  className="px-8 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium text-lg"
                   style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
@@ -261,7 +261,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
               </div>
 
               {/* Вопрос */}
-              <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+              <div className="bg-white shadow-sm rounded-lg p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-black mb-4">
                   {questions[currentQuestion].question}
                 </h3>
@@ -272,8 +272,8 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                       key={index}
                       className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
                         answers[questions[currentQuestion].id] === index
-                          ? 'border-black bg-gray-100'
-                          : 'border-gray-300 hover:border-black'
+                          ? 'border-gray-300 bg-gray-100'
+                          : 'border-gray-300 hover:border-gray-400'
                       }`}
                     >
                       <input
@@ -294,7 +294,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                 <button
                   onClick={handlePrevious}
                   disabled={currentQuestion === 0}
-                  className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  className="px-4 py-2 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
                   Предыдущий
                 </button>
@@ -302,7 +302,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setShowResults(true)}
-                    className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all"
+                    className="px-4 py-2 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all"
                   >
                     <Flag className="w-4 h-4 mr-2 inline text-gray-600" />
                     Завершить досрочно
@@ -311,7 +311,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                   {currentQuestion === questions.length - 1 ? (
                     <button
                       onClick={handleSubmit}
-                      className="px-6 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                      className="px-6 py-2 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                       style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
@@ -320,7 +320,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                   ) : (
                     <button
                       onClick={handleNext}
-                      className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all"
+                      className="px-4 py-2 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all"
                       style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
@@ -336,7 +336,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
             <div className="space-y-6">
               {/* Результаты */}
               <div className={`rounded-lg p-6 text-center shadow-lg border-2 ${
-                score >= 70 ? 'bg-white border-black' : 'bg-white border-black'
+                score >= 70 ? 'bg-white shadow-sm' : 'bg-white shadow-sm'
               }`}>
                 <div className={`text-6xl mb-4 ${
                   score >= 70 ? 'text-gray-600' : 'text-gray-600'
@@ -361,7 +361,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
               </div>
 
               {/* Детали результатов */}
-              <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+              <div className="bg-white shadow-sm rounded-lg p-6 shadow-lg">
                 <h4 className="font-semibold text-black mb-4">Детали результатов</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="text-center">
@@ -390,7 +390,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
               </div>
 
               {/* Правильные ответы */}
-              <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+              <div className="bg-white shadow-sm rounded-lg p-6 shadow-lg">
                 <h4 className="font-semibold text-black mb-4">Правильные ответы</h4>
                 <div className="space-y-4">
                   {questions.map((question, index) => (
@@ -423,7 +423,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                 {score < 70 && test.attempts < test.maxAttempts && (
                   <button
                     onClick={handleRestart}
-                    className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                    className="px-6 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                     style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
@@ -433,7 +433,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                 )}
                 <button
                   onClick={onClose}
-                  className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                  className="px-6 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                 >
                   Закрыть
                 </button>

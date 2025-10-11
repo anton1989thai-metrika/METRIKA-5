@@ -95,8 +95,8 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
-      <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden border-2 border-black">
-        <div className="flex items-center justify-between p-6 border-b-2 border-black">
+      <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
             <BookOpen className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-black">{course.title}</h2>
@@ -167,7 +167,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
 
             {/* Дедлайн */}
             {course.deadline && (
-              <div className="mb-4 p-3 bg-white border-2 border-black rounded-lg">
+              <div className="mb-4 p-3 bg-white shadow-sm rounded-lg">
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 text-gray-600 mr-2" />
                   <span className="text-sm text-black">
@@ -181,7 +181,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             <div className="mb-4">
               <div className="flex flex-wrap gap-2">
                 {course.tags.map(tag => (
-                  <span key={tag} className="px-2 py-1 bg-white border border-black text-black text-xs rounded-full">
+                  <span key={tag} className="px-2 py-1 bg-white shadow-sm text-black text-xs rounded-full">
                     #{tag}
                   </span>
                 ))}
@@ -191,7 +191,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
 
           {/* Навигация по вкладкам */}
           <div className="mb-6">
-            <div className="flex space-x-1 bg-white border-2 border-black rounded-lg p-1">
+            <div className="flex space-x-1 bg-white shadow-sm rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('overview')}
                 className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
@@ -241,7 +241,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'overview' && (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                  <div className="bg-white shadow-sm rounded-lg p-4 shadow-lg">
                     <div className="flex items-center mb-2">
                       <Play className="w-5 h-5 text-gray-600 mr-2" />
                       <span className="font-medium text-black">Видео-уроки</span>
@@ -250,7 +250,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                     <div className="text-sm text-gray-600">уроков</div>
                   </div>
                   
-                  <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                  <div className="bg-white shadow-sm rounded-lg p-4 shadow-lg">
                     <div className="flex items-center mb-2">
                       <FileText className="w-5 h-5 text-gray-600 mr-2" />
                       <span className="font-medium text-black">Документы</span>
@@ -259,7 +259,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                     <div className="text-sm text-gray-600">материалов</div>
                   </div>
                   
-                  <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                  <div className="bg-white shadow-sm rounded-lg p-4 shadow-lg">
                     <div className="flex items-center mb-2">
                       <TestTube className="w-5 h-5 text-gray-600 mr-2" />
                       <span className="font-medium text-black">Тесты</span>
@@ -269,12 +269,12 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                   </div>
                 </div>
 
-                <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                <div className="bg-white shadow-sm rounded-lg p-4 shadow-lg">
                   <h3 className="font-semibold text-black mb-2">Описание курса</h3>
                   <p className="text-gray-600">{course.description}</p>
                 </div>
 
-                <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                <div className="bg-white shadow-sm rounded-lg p-4 shadow-lg">
                   <h3 className="font-semibold text-black mb-2">Что вы изучите</h3>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-center">
@@ -302,9 +302,9 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'videos' && (
               <div className="space-y-4">
                 {videos.map((video, index) => (
-                  <div key={video.id} className="flex items-center justify-between p-4 bg-white border-2 border-black rounded-lg shadow-lg">
+                  <div key={video.id} className="flex items-center justify-between p-4 bg-white shadow-sm rounded-lg shadow-lg">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-white border-2 border-black rounded-lg mr-4 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white shadow-sm rounded-lg mr-4 flex items-center justify-center">
                         <Play className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
@@ -322,7 +322,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                         </div>
                       </div>
                     </div>
-                    <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                    <button className="px-4 py-2 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                       Смотреть
                     </button>
                   </div>
@@ -334,9 +334,9 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'documents' && (
               <div className="space-y-4">
                 {documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-4 bg-white border-2 border-black rounded-lg shadow-lg">
+                  <div key={doc.id} className="flex items-center justify-between p-4 bg-white shadow-sm rounded-lg shadow-lg">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-white border-2 border-black rounded-lg mr-4 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white shadow-sm rounded-lg mr-4 flex items-center justify-center">
                         <FileText className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
@@ -356,10 +356,10 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                      <button className="px-3 py-1 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                         <Eye className="w-4 h-4 text-gray-600" />
                       </button>
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                      <button className="px-3 py-1 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                         <Download className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
@@ -372,9 +372,9 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'tests' && (
               <div className="space-y-4">
                 {tests.map((test) => (
-                  <div key={test.id} className="flex items-center justify-between p-4 bg-white border-2 border-black rounded-lg shadow-lg">
+                  <div key={test.id} className="flex items-center justify-between p-4 bg-white shadow-sm rounded-lg shadow-lg">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-white border-2 border-black rounded-lg mr-4 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white shadow-sm rounded-lg mr-4 flex items-center justify-center">
                         <TestTube className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
@@ -395,8 +395,8 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                     </div>
                     <button className={`px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all font-medium ${
                       test.completed 
-                        ? 'bg-white border-2 border-black text-black' 
-                        : 'bg-white border-2 border-black text-black'
+                        ? 'bg-white shadow-sm text-black' 
+                        : 'bg-white shadow-sm text-black'
                     }`}
                     style={!test.completed ? { backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties : {}}
                     onMouseEnter={!test.completed ? (e) => e.currentTarget.style.backgroundColor = '#e6d90a' : undefined}
@@ -412,29 +412,29 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
           {/* Действия */}
           <div className="mt-6 flex gap-3">
             {course.status === 'not-started' ? (
-              <button className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+              <button className="px-6 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                       style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
                 Начать обучение
               </button>
             ) : course.status === 'in-progress' ? (
-              <button className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+              <button className="px-6 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                       style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
                 Продолжить обучение
               </button>
             ) : (
-              <button className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium">
+              <button className="px-6 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium">
                 Повторить курс
               </button>
             )}
-            <button className="px-4 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+            <button className="px-4 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all">
               <Bookmark className="w-4 h-4 mr-2 inline text-gray-600" />
               В закладки
             </button>
-            <button className="px-4 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+            <button className="px-4 py-3 bg-white shadow-sm text-black rounded-full shadow-lg hover:shadow-xl transition-all">
               <Share2 className="w-4 h-4 mr-2 inline text-gray-600" />
               Поделиться
             </button>

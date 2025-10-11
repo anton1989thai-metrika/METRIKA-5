@@ -334,10 +334,10 @@ export default function AcademyPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-black bg-white border border-black'
-      case 'in-progress': return 'text-black bg-white border border-black'
-      case 'not-started': return 'text-gray-600 bg-white border border-gray-300'
-      default: return 'text-gray-600 bg-white border border-gray-300'
+      case 'completed': return 'text-black bg-white shadow-sm'
+      case 'in-progress': return 'text-black bg-white shadow-sm'
+      case 'not-started': return 'text-gray-600 bg-white shadow-sm'
+      default: return 'text-gray-600 bg-white shadow-sm'
     }
   }
 
@@ -362,11 +362,11 @@ export default function AcademyPage() {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'text-black bg-white border border-black'
-      case 'intermediate': return 'text-black bg-white border border-black'
-      case 'advanced': return 'text-black bg-white border border-black'
-      case 'expert': return 'text-black bg-white border border-black'
-      default: return 'text-black bg-white border border-black'
+      case 'beginner': return 'text-black bg-white shadow-sm'
+      case 'intermediate': return 'text-black bg-white shadow-sm'
+      case 'advanced': return 'text-black bg-white shadow-sm'
+      case 'expert': return 'text-black bg-white shadow-sm'
+      default: return 'text-black bg-white shadow-sm'
     }
   }
 
@@ -386,7 +386,7 @@ export default function AcademyPage() {
               </div>
               <button
                 onClick={() => setShowNotificationModal(true)}
-                className="relative p-3 bg-white border-2 border-black rounded-full shadow-lg hover:shadow-xl transition-all"
+                className="relative p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all"
               >
                 <Bell className="w-6 h-6 text-gray-600" />
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -404,7 +404,7 @@ export default function AcademyPage() {
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'dashboard' 
                     ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
+                    : 'bg-white text-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <BarChart3 className="w-4 h-4 inline mr-2" />
@@ -415,7 +415,7 @@ export default function AcademyPage() {
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'courses' 
                     ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
+                    : 'bg-white text-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <BookOpen className="w-4 h-4 inline mr-2" />
@@ -426,7 +426,7 @@ export default function AcademyPage() {
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'tests' 
                     ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
+                    : 'bg-white text-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <TestTube className="w-4 h-4 inline mr-2" />
@@ -437,7 +437,7 @@ export default function AcademyPage() {
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'achievements' 
                     ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
+                    : 'bg-white text-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <Trophy className="w-4 h-4 inline mr-2" />
@@ -448,7 +448,7 @@ export default function AcademyPage() {
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'materials' 
                     ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border-2 border-black shadow-lg hover:shadow-xl'
+                    : 'bg-white text-black shadow-lg hover:shadow-xl'
                 }`}
               >
                 <FileText className="w-4 h-4 inline mr-2" />
@@ -462,7 +462,7 @@ export default function AcademyPage() {
             <div className="space-y-8">
               {/* Статистика */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <BookOpen className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
@@ -472,7 +472,7 @@ export default function AcademyPage() {
                   </div>
                 </div>
                 
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <TestTube className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
@@ -482,7 +482,7 @@ export default function AcademyPage() {
                   </div>
                 </div>
                 
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Star className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
@@ -492,7 +492,7 @@ export default function AcademyPage() {
                   </div>
             </div>
             
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Clock className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
@@ -528,7 +528,7 @@ export default function AcademyPage() {
                 <h2 className="text-xl font-semibold text-black mb-4">Курсы в процессе</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {courses.filter(c => c.status === 'in-progress').map(course => (
-                    <div key={course.id} className="bg-white border-2 border-black rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
+                    <div key={course.id} className="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="font-semibold text-black">{course.title}</h3>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(course.status)}`}>
@@ -560,7 +560,7 @@ export default function AcademyPage() {
                       </div>
                       <button 
                         onClick={() => handleCourseClick(course)}
-                        className="w-full px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                        className="w-full px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                       >
                 Продолжить обучение
               </button>
@@ -574,7 +574,7 @@ export default function AcademyPage() {
                 <h2 className="text-xl font-semibold text-black mb-4">Последние достижения</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {achievements.filter(a => a.earned).map(achievement => (
-                    <div key={achievement.id} className="bg-white border-2 border-black rounded-lg p-4 text-center shadow-lg">
+                    <div key={achievement.id} className="bg-white rounded-lg p-4 text-center shadow-lg">
                       <div className="mb-2 flex justify-center">{achievement.icon}</div>
                       <h3 className="font-semibold text-black text-sm">{achievement.title}</h3>
                       <p className="text-gray-600 text-xs mt-1">{achievement.description}</p>
@@ -592,7 +592,7 @@ export default function AcademyPage() {
           {activeTab === 'courses' && (
             <div className="space-y-6">
               {/* Поиск и фильтры */}
-              <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+              <div className="bg-white rounded-lg p-6 shadow-lg">
                 <div className="flex flex-col lg:flex-row gap-4">
                   <div className="flex-1">
                     <div className="relative">
@@ -602,13 +602,13 @@ export default function AcademyPage() {
                         placeholder="Поиск курсов..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
+                        className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
                       />
                     </div>
                   </div>
                   <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center px-4 py-2 bg-white border-2 border-black rounded-full shadow-lg hover:shadow-xl transition-all"
+                    className="flex items-center px-4 py-2 bg-white rounded-full shadow-lg hover:shadow-xl transition-all"
                   >
                     <Filter className="w-4 h-4 mr-2 text-gray-600" />
                     Фильтры
@@ -622,7 +622,7 @@ export default function AcademyPage() {
                       <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="w-full px-3 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
+                        className="w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
                       >
                         {categories.map(cat => (
                           <option key={cat} value={cat}>
@@ -636,7 +636,7 @@ export default function AcademyPage() {
                       <select
                         value={selectedLevel}
                         onChange={(e) => setSelectedLevel(e.target.value)}
-                        className="w-full px-3 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
+                        className="w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
                       >
                         {levels.map(level => (
                           <option key={level} value={level}>
@@ -650,7 +650,7 @@ export default function AcademyPage() {
                       <select
                         value={selectedStatus}
                         onChange={(e) => setSelectedStatus(e.target.value)}
-                        className="w-full px-3 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
+                        className="w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
                       >
                         {statuses.map(status => (
                           <option key={status} value={status}>
@@ -666,13 +666,13 @@ export default function AcademyPage() {
               {/* Список курсов */}
               <div className="space-y-4">
                 {filteredCourses.map(course => (
-                  <div key={course.id} className="bg-white border-2 border-black rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
+                  <div key={course.id} className="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-lg font-semibold text-black">{course.title}</h3>
                           {course.isRequired && (
-                            <span className="px-2 py-1 bg-white border border-black text-black text-xs font-medium rounded-full">
+                            <span className="px-2 py-1 bg-white text-black text-xs font-medium rounded-full shadow-sm">
                               Обязательный
                             </span>
                           )}
@@ -723,21 +723,21 @@ export default function AcademyPage() {
                       
                       {expandedCourse === course.id && (
                         <div className="mt-2 grid grid-cols-3 gap-4">
-                          <div className="flex items-center p-3 bg-white border-2 border-black rounded-lg">
+                          <div className="flex items-center p-3 bg-white rounded-lg shadow-sm">
                             <Video className="w-5 h-5 text-gray-600 mr-2" />
                             <div>
                               <div className="font-medium text-black">{course.materials.videos}</div>
                               <div className="text-xs text-gray-600">Видео</div>
                             </div>
                           </div>
-                          <div className="flex items-center p-3 bg-white border-2 border-black rounded-lg">
+                          <div className="flex items-center p-3 bg-white rounded-lg shadow-sm">
                             <FileText className="w-5 h-5 text-gray-600 mr-2" />
                             <div>
                               <div className="font-medium text-black">{course.materials.documents}</div>
                               <div className="text-xs text-gray-600">Документы</div>
                             </div>
                           </div>
-                          <div className="flex items-center p-3 bg-white border-2 border-black rounded-lg">
+                          <div className="flex items-center p-3 bg-white rounded-lg shadow-sm">
                             <TestTube className="w-5 h-5 text-gray-600 mr-2" />
                             <div>
                               <div className="font-medium text-black">{course.materials.tests}</div>
@@ -766,7 +766,7 @@ export default function AcademyPage() {
 
                     {/* Дедлайн */}
                     {course.deadline && (
-                      <div className="mb-4 p-3 bg-white border-2 border-black rounded-lg">
+                      <div className="mb-4 p-3 bg-white rounded-lg shadow-sm">
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 text-gray-600 mr-2" />
                           <span className="text-sm text-black">
@@ -792,7 +792,7 @@ export default function AcademyPage() {
                       {course.status === 'not-started' ? (
                         <button 
                           onClick={() => handleCourseClick(course)}
-                          className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          className="px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                           style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
@@ -802,7 +802,7 @@ export default function AcademyPage() {
                       ) : course.status === 'in-progress' ? (
                         <button 
                           onClick={() => handleCourseClick(course)}
-                          className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          className="px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                           style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
@@ -812,16 +812,16 @@ export default function AcademyPage() {
                       ) : (
                         <button 
                           onClick={() => handleCourseClick(course)}
-                          className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          className="px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                         >
                           Повторить курс
                         </button>
                       )}
-                      <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                      <button className="px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                         <Bookmark className="w-4 h-4 mr-2 inline text-gray-600" />
                         В закладки
                       </button>
-                      <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                      <button className="px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                         <Share2 className="w-4 h-4 mr-2 inline text-gray-600" />
                         Поделиться
                       </button>
@@ -837,11 +837,11 @@ export default function AcademyPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tests.map(test => (
-                  <div key={test.id} className="bg-white border-2 border-black rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
+                  <div key={test.id} className="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="font-semibold text-black">{test.title}</h3>
                       {test.isRequired && (
-                        <span className="px-2 py-1 bg-white border border-black text-black text-xs font-medium rounded-full">
+                        <span className="px-2 py-1 bg-white text-black text-xs font-medium rounded-full shadow-sm">
                           Обязательный
                         </span>
                       )}
@@ -879,7 +879,7 @@ export default function AcademyPage() {
                       {test.status === 'not-taken' ? (
                         <button 
                           onClick={() => handleTestClick(test)}
-                          className="flex-1 px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          className="flex-1 px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                           style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
@@ -889,14 +889,14 @@ export default function AcademyPage() {
                       ) : test.status === 'passed' ? (
                         <button 
                           onClick={() => handleTestClick(test)}
-                          className="flex-1 px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          className="flex-1 px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                         >
                   Пройти повторно
                 </button>
                       ) : (
                         <button 
                           onClick={() => handleTestClick(test)}
-                          className="flex-1 px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                          className="flex-1 px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
                           style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
@@ -904,7 +904,7 @@ export default function AcademyPage() {
                           Продолжить тест
                         </button>
                       )}
-                      <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                      <button className="px-4 py-2 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                         <Eye className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
@@ -919,10 +919,10 @@ export default function AcademyPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {achievements.map(achievement => (
-                  <div key={achievement.id} className={`border-2 rounded-lg p-6 text-center transition-all shadow-lg ${
+                  <div key={achievement.id} className={`rounded-lg p-6 text-center transition-all shadow-lg ${
                     achievement.earned 
-                      ? 'bg-white border-black' 
-                      : 'bg-white border-black'
+                      ? 'bg-white' 
+                      : 'bg-white'
                   }`}>
                     <div className="mb-3 flex justify-center">{achievement.icon}</div>
                     <h3 className="font-semibold text-black mb-2">{achievement.title}</h3>
@@ -957,7 +957,7 @@ export default function AcademyPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Видео */}
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center mb-4">
                     <Video className="w-6 h-6 text-gray-600 mr-3" />
                     <h3 className="text-lg font-semibold text-black">Видео-уроки</h3>
@@ -968,7 +968,7 @@ export default function AcademyPage() {
                         <div className="font-medium text-black">Основы недвижимости</div>
                         <div className="text-sm text-gray-500">8 видео • 2ч 15мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                      <button className="px-3 py-1 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         Смотреть
                       </button>
                     </div>
@@ -977,7 +977,7 @@ export default function AcademyPage() {
                         <div className="font-medium text-black">Работа с клиентами</div>
                         <div className="text-sm text-gray-500">12 видео • 3ч 30мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                      <button className="px-3 py-1 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         Смотреть
                       </button>
                     </div>
@@ -985,7 +985,7 @@ export default function AcademyPage() {
                 </div>
 
                 {/* Документы */}
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center mb-4">
                     <FileText className="w-6 h-6 text-gray-600 mr-3" />
                     <h3 className="text-lg font-semibold text-black">Документы</h3>
@@ -996,7 +996,7 @@ export default function AcademyPage() {
                         <div className="font-medium text-black">Шаблоны договоров</div>
                         <div className="text-sm text-gray-500">15 документов</div>
                       </div>
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                      <button className="px-3 py-1 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         <Download className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
@@ -1005,7 +1005,7 @@ export default function AcademyPage() {
                         <div className="font-medium text-black">Методички</div>
                         <div className="text-sm text-gray-500">8 документов</div>
                       </div>
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                      <button className="px-3 py-1 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
                         <Download className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
@@ -1013,7 +1013,7 @@ export default function AcademyPage() {
               </div>
               
                 {/* Тесты */}
-                <div className="bg-white border-2 border-black rounded-lg p-6 shadow-lg">
+                <div className="bg-white rounded-lg p-6 shadow-lg">
                   <div className="flex items-center mb-4">
                     <TestTube className="w-6 h-6 text-gray-600 mr-3" />
                     <h3 className="text-lg font-semibold text-black">Тесты</h3>
@@ -1025,7 +1025,7 @@ export default function AcademyPage() {
                         <div className="text-sm text-gray-500">20 вопросов • 30 мин</div>
                       </div>
                       <button 
-                        className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm"
+                        className="px-3 py-1 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm"
                         style={{backgroundColor: '#fff60b'}}
                         onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
                         onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
@@ -1039,7 +1039,7 @@ export default function AcademyPage() {
                         <div className="text-sm text-gray-500">25 вопросов • 45 мин</div>
                       </div>
                       <button 
-                        className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm"
+                        className="px-3 py-1 bg-white text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm"
                         style={{backgroundColor: '#fff60b'}}
                         onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
                         onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
