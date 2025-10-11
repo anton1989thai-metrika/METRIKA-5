@@ -85,7 +85,7 @@ interface Achievement {
   id: number
   title: string
   description: string
-  icon: string
+  icon: React.ReactNode
   earned: boolean
   earnedDate?: string
   progress: number
@@ -247,7 +247,7 @@ export default function AcademyPage() {
       id: 1,
       title: "Первые шаги",
       description: "Завершите первый курс",
-      icon: "🎯",
+      icon: <Target className="w-8 h-8 text-gray-600" />,
       earned: true,
       earnedDate: "2024-01-15",
       progress: 100,
@@ -257,7 +257,7 @@ export default function AcademyPage() {
       id: 2,
       title: "Знаток основ",
       description: "Пройдите тест по основам на 90+ баллов",
-      icon: "🏆",
+      icon: <Trophy className="w-8 h-8 text-gray-600" />,
       earned: false,
       progress: 85,
       requirement: "90+ баллов в тесте по основам"
@@ -266,7 +266,7 @@ export default function AcademyPage() {
       id: 3,
       title: "Мастер продаж",
       description: "Завершите все курсы по продажам",
-      icon: "💼",
+      icon: <GraduationCap className="w-8 h-8 text-gray-600" />,
       earned: false,
       progress: 60,
       requirement: "Завершить 3 курса по продажам"
@@ -275,7 +275,7 @@ export default function AcademyPage() {
       id: 4,
       title: "Эксперт",
       description: "Достигните уровня эксперт",
-      icon: "🎓",
+      icon: <Award className="w-8 h-8 text-gray-600" />,
       earned: false,
       progress: 25,
       requirement: "Уровень эксперт"
@@ -334,10 +334,10 @@ export default function AcademyPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100'
-      case 'in-progress': return 'text-blue-600 bg-blue-100'
-      case 'not-started': return 'text-gray-600 bg-gray-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'completed': return 'text-black bg-white border border-black'
+      case 'in-progress': return 'text-black bg-white border border-black'
+      case 'not-started': return 'text-gray-600 bg-white border border-gray-300'
+      default: return 'text-gray-600 bg-white border border-gray-300'
     }
   }
 
@@ -575,7 +575,7 @@ export default function AcademyPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {achievements.filter(a => a.earned).map(achievement => (
                     <div key={achievement.id} className="bg-white border-2 border-black rounded-lg p-4 text-center shadow-lg">
-                      <div className="text-3xl mb-2">{achievement.icon}</div>
+                      <div className="mb-2">{achievement.icon}</div>
                       <h3 className="font-semibold text-black text-sm">{achievement.title}</h3>
                       <p className="text-gray-600 text-xs mt-1">{achievement.description}</p>
                       <div className="text-xs text-gray-600 mt-2">
@@ -924,7 +924,7 @@ export default function AcademyPage() {
                       ? 'bg-white border-black' 
                       : 'bg-white border-black'
                   }`}>
-                    <div className="text-4xl mb-3">{achievement.icon}</div>
+                    <div className="mb-3">{achievement.icon}</div>
                     <h3 className="font-semibold text-black mb-2">{achievement.title}</h3>
                     <p className="text-gray-600 text-sm mb-3">{achievement.description}</p>
                     
