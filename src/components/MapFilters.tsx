@@ -19,7 +19,11 @@ export default function MapFilters() {
   }
 
   const handlePropertyTypeChange = (propertyType: string) => {
-    updateFilter('propertyType', filters.propertyType === propertyType ? '' : propertyType)
+    const currentTypes = filters.propertyType || [];
+    const newTypes = currentTypes.includes(propertyType)
+      ? currentTypes.filter(t => t !== propertyType)
+      : [...currentTypes, propertyType];
+    updateFilter('propertyType', newTypes);
   }
 
   return (
@@ -107,36 +111,40 @@ export default function MapFilters() {
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'apartment'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                checked={filters.propertyType?.includes('apartment') || false}
                 onChange={() => handlePropertyTypeChange('apartment')}
+                style={filters.propertyType?.includes('apartment') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Квартира</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'house'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                checked={filters.propertyType?.includes('house') || false}
                 onChange={() => handlePropertyTypeChange('house')}
+                style={filters.propertyType?.includes('house') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Жилой дом</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'land'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                checked={filters.propertyType?.includes('land') || false}
                 onChange={() => handlePropertyTypeChange('land')}
+                style={filters.propertyType?.includes('land') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Земельный участок</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'commercial'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                checked={filters.propertyType?.includes('commercial') || false}
                 onChange={() => handlePropertyTypeChange('commercial')}
+                style={filters.propertyType?.includes('commercial') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Коммерческое помещение</span>
             </label>

@@ -4,7 +4,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 
 interface FiltersState {
   country: string[]
-  propertyType: string
+  propertyType: string[]
   priceFrom: string
   priceTo: string
   areaFrom: string
@@ -25,7 +25,7 @@ const FiltersContext = createContext<FiltersContextType | undefined>(undefined)
 
 const initialFilters: FiltersState = {
   country: [],
-  propertyType: '',
+  propertyType: [],
   priceFrom: '',
   priceTo: '',
   areaFrom: '',
