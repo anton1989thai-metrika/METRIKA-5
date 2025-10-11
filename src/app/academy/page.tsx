@@ -766,10 +766,10 @@ export default function AcademyPage() {
 
                     {/* Дедлайн */}
                     {course.deadline && (
-                      <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <div className="mb-4 p-3 bg-white border-2 border-black rounded-lg">
                         <div className="flex items-center">
-                          <Calendar className="w-4 h-4 text-yellow-600 mr-2" />
-                          <span className="text-sm text-yellow-800">
+                          <Calendar className="w-4 h-4 text-gray-600 mr-2" />
+                          <span className="text-sm text-black">
                             Дедлайн: {course.deadline}
                           </span>
                         </div>
