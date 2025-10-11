@@ -159,20 +159,9 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('rooms', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.rooms.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
-                    style={filters.rooms.includes(option) ? {backgroundColor: '#fff60b'} : {}}
-                    onMouseEnter={(e) => {
-                      if (filters.rooms.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filters.rooms.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
-                      }
-                    }}
                   >
                     {option}
                   </button>
@@ -188,20 +177,9 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                   onClick={() => handleInputChange('isStudio', (!filters.isStudio).toString())}
                   className={`px-3 py-1 text-sm rounded-full border transition-all ${
                     filters.isStudio
-                      ? 'text-black border border-gray-300 shadow-sm'
+                      ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                       : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
-                    style={filters.isStudio ? {backgroundColor: '#fff60b'} : {}}
-                    onMouseEnter={(e) => {
-                      if (filters.isStudio) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filters.isStudio) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
-                      }
-                    }}
                   >
                     Студия
                   </button>
@@ -255,20 +233,9 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('bathrooms', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.bathrooms.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
-                    style={filters.bathrooms.includes(option) ? {backgroundColor: '#fff60b'} : {}}
-                    onMouseEnter={(e) => {
-                      if (filters.bathrooms.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filters.bathrooms.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
-                      }
-                    }}
                   >
                     {option}
                   </button>
@@ -291,7 +258,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('view', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.view.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.view.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -369,7 +336,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('apartmentType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.apartmentType.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.apartmentType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -400,7 +367,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('houseType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.houseType.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.houseType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -431,7 +398,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('renovationType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.renovationType.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.renovationType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -462,7 +429,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('readiness', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.readiness.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.readiness.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -509,7 +476,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('heating', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.heating.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.heating.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -540,7 +507,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('waterSupply', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.waterSupply.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.waterSupply.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -571,7 +538,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('sewage', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.sewage.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.sewage.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -602,7 +569,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('internet', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.internet.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.internet.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -638,7 +605,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('houseInfrastructure', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.houseInfrastructure.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.houseInfrastructure.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -669,7 +636,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('parking', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.parking.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.parking.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -700,7 +667,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('infrastructure', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.infrastructure.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.infrastructure.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -749,7 +716,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('balcony', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.balcony.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.balcony.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -787,7 +754,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('accessRoads', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.accessRoads.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.accessRoads.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -823,7 +790,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('landUse', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.landUse.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.landUse.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -885,7 +852,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('ownershipType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.ownershipType.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.ownershipType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -916,7 +883,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('bargaining', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.bargaining.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.bargaining.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -952,7 +919,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('rentPeriod', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.rentPeriod.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.rentPeriod.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -983,7 +950,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('petsAllowed', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.petsAllowed.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.petsAllowed.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -1025,7 +992,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('deposit', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.deposit.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.deposit.includes(option) ? {backgroundColor: '#fff60b'} : {}}
@@ -1056,7 +1023,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('commission', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.commission.includes(option)
-                        ? 'text-black border border-gray-300 shadow-sm'
+                        ? 'text-black border border-gray-300 shadow-sm bg-yellow-400'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
                     style={filters.commission.includes(option) ? {backgroundColor: '#fff60b'} : {}}
