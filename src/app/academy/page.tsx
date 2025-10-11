@@ -1024,7 +1024,12 @@ export default function AcademyPage() {
                         <div className="font-medium text-black">Основы недвижимости</div>
                         <div className="text-sm text-gray-500">20 вопросов • 30 мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm">
+                      <button 
+                        className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm"
+                        style={{backgroundColor: '#fff60b'}}
+                        onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                        onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                      >
                         Пройти
                       </button>
                     </div>
@@ -1033,7 +1038,12 @@ export default function AcademyPage() {
                         <div className="font-medium text-black">Работа с клиентами</div>
                         <div className="text-sm text-gray-500">25 вопросов • 45 мин</div>
                       </div>
-                      <button className="px-3 py-1 bg-purple-600 text-white rounded text-sm hover:bg-purple-700">
+                      <button 
+                        className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all text-sm"
+                        style={{backgroundColor: '#fff60b'}}
+                        onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                        onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                      >
                         Пройти
                 </button>
               </div>
