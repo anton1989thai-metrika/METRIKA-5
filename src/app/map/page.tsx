@@ -57,7 +57,7 @@ export default function MapPage() {
               <div className="mb-4 text-sm text-gray-600">
                 Показано: {filteredObjects.length} из {realEstateObjects.length} объектов
                 {(filters.country || filters.propertyType || filters.areaUnit !== 'm2') && (
-                  <span className="ml-2 text-blue-600">
+                  <span className="ml-2 text-gray-600">
                     (фильтр: {[
                       filters.country && (filters.country === 'russia' ? 'Россия' : 
                                          filters.country === 'china' ? 'Китай' : 

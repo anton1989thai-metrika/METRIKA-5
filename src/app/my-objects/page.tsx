@@ -32,7 +32,7 @@ export default function MyObjectsPage() {
           </h1>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <div className="bg-gray-200 h-48 rounded-md mb-4 flex items-center justify-center">
                 <span className="text-gray-500">Фото объекта</span>
               </div>
@@ -50,16 +50,16 @@ export default function MyObjectsPage() {
               </p>
               
               <div className="flex space-x-2">
-                <button className="flex-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                <button className="flex-1 px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                   Редактировать
                 </button>
-                <button className="flex-1 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                <button className="flex-1 px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                   Удалить
                 </button>
               </div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <div className="bg-gray-200 h-48 rounded-md mb-4 flex items-center justify-center">
                 <span className="text-gray-500">Фото объекта</span>
               </div>
@@ -77,16 +77,16 @@ export default function MyObjectsPage() {
               </p>
               
               <div className="flex space-x-2">
-                <button className="flex-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                <button className="flex-1 px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                   Редактировать
                 </button>
-                <button className="flex-1 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                <button className="flex-1 px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                   Удалить
                 </button>
               </div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <div className="bg-gray-200 h-48 rounded-md mb-4 flex items-center justify-center">
                 <span className="text-gray-500">Фото объекта</span>
               </div>
@@ -104,10 +104,10 @@ export default function MyObjectsPage() {
               </p>
               
               <div className="flex space-x-2">
-                <button className="flex-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                <button className="flex-1 px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                   Редактировать
                 </button>
-                <button className="flex-1 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                <button className="flex-1 px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                   Удалить
                 </button>
               </div>
@@ -115,7 +115,12 @@ export default function MyObjectsPage() {
           </div>
           
           <div className="mt-8 text-center">
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            <button 
+              className="px-6 py-3 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+              style={{backgroundColor: '#fff60b'}}
+              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            >
               Добавить новый объект
             </button>
           </div>
