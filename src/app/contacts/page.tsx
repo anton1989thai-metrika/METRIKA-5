@@ -19,7 +19,7 @@ export default function ContactsPage() {
           </h1>
           
           <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
                 {t('contacts.description')}
               </h2>
@@ -47,7 +47,7 @@ export default function ContactsPage() {
               </div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
                 {t('contacts.office')}
               </h2>
@@ -80,7 +80,7 @@ export default function ContactsPage() {
             </div>
           </div>
           
-          <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
+          <div className="bg-white border border-gray-300 h-64 rounded-lg shadow-lg flex items-center justify-center">
             <div className="text-center">
               <div className="text-4xl mb-2">📍</div>
               <p className="text-gray-600">

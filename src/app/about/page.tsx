@@ -19,7 +19,7 @@ export default function AboutPage() {
           </h1>
           
           <div className="prose prose-lg max-w-none">
-            <div className="bg-gray-50 p-8 rounded-lg mb-8">
+            <div className="bg-white border border-gray-300 p-8 rounded-lg shadow-lg mb-8">
               <h2 className="text-2xl font-semibold text-black mb-4">
                 {t('about.mission')}
               </h2>
@@ -32,7 +32,7 @@ export default function AboutPage() {
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
                 <h3 className="text-xl font-semibold text-black mb-3">
                   Наши услуги
                 </h3>
@@ -45,7 +45,7 @@ export default function AboutPage() {
                 </ul>
               </div>
               
-              <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
                 <h3 className="text-xl font-semibold text-black mb-3">
                   {t('about.values')}
                 </h3>
@@ -57,7 +57,7 @@ export default function AboutPage() {
               </div>
             </div>
             
-            <div className="bg-gray-50 p-8 rounded-lg">
+            <div className="bg-white border border-gray-300 p-8 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold text-black mb-4">
                 {t('contacts.title')}
               </h2>

@@ -32,7 +32,7 @@ export default function ProfilePage() {
           </h1>
           
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
                 Информация о пользователе
               </h2>
@@ -61,7 +61,7 @@ export default function ProfilePage() {
               </div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
                 Статистика
               </h2>
@@ -96,15 +96,20 @@ export default function ProfilePage() {
             </h2>
             
             <div className="grid md:grid-cols-3 gap-4">
-              <button className="p-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              <button 
+                className="p-4 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
                 Подать заявку
               </button>
               
-              <button className="p-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+              <button className="p-4 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all">
                 Настроить уведомления
               </button>
               
-              <button className="p-4 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+              <button className="p-4 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all">
                 Изменить данные
               </button>
             </div>

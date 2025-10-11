@@ -32,108 +32,118 @@ export default function AdminPage() {
           </h1>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-gray-50 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">156</div>
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-black mb-2">156</div>
               <div className="text-gray-600">Всего объектов</div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-green-600 mb-2">24</div>
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-black mb-2">24</div>
               <div className="text-gray-600">Активных клиентов</div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-yellow-600 mb-2">8</div>
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-black mb-2">8</div>
               <div className="text-gray-600">Сотрудников</div>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg text-center">
-              <div className="text-3xl font-bold text-purple-600 mb-2">12</div>
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
+              <div className="text-3xl font-bold text-black mb-2">12</div>
               <div className="text-gray-600">Сделок в этом месяце</div>
             </div>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
                 Управление пользователями
               </h2>
               
               <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-white rounded border">
+                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                   <div>
                     <div className="font-medium text-black">Иван Петров</div>
                     <div className="text-sm text-gray-600">ivan@example.com</div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Редактировать
                     </button>
-                    <button className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Удалить
                     </button>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center p-3 bg-white rounded border">
+                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                   <div>
                     <div className="font-medium text-black">Мария Сидорова</div>
                     <div className="text-sm text-gray-600">maria@example.com</div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Редактировать
                     </button>
-                    <button className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Удалить
                     </button>
                   </div>
                 </div>
               </div>
               
-              <button className="w-full mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+              <button 
+                className="w-full mt-4 px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
                 Добавить пользователя
               </button>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold text-black mb-4">
                 Управление объектами
               </h2>
               
               <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-white rounded border">
+                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                   <div>
                     <div className="font-medium text-black">2-комнатная квартира</div>
                     <div className="text-sm text-gray-600">ул. Ленина, д. 15</div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Редактировать
                     </button>
-                    <button className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Удалить
                     </button>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center p-3 bg-white rounded border">
+                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                   <div>
                     <div className="font-medium text-black">Частный дом</div>
                     <div className="text-sm text-gray-600">д. Подмосковная</div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Редактировать
                     </button>
-                    <button className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                       Удалить
                     </button>
                   </div>
                 </div>
               </div>
               
-              <button className="w-full mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+              <button 
+                className="w-full mt-4 px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
                 Добавить объект
               </button>
             </div>
@@ -153,7 +163,7 @@ export default function AdminPage() {
                     <input
                       type="text"
                       defaultValue="МЕТРИКА"
-                      className="px-3 py-1 border border-gray-300 rounded text-sm"
+                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-black"
                     />
                   </div>
                   
@@ -162,7 +172,7 @@ export default function AdminPage() {
                     <input
                       type="email"
                       defaultValue="admin@metrika.ru"
-                      className="px-3 py-1 border border-gray-300 rounded text-sm"
+                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-black"
                     />
                   </div>
                   
@@ -171,7 +181,7 @@ export default function AdminPage() {
                     <input
                       type="tel"
                       defaultValue="+7 (495) 123-45-67"
-                      className="px-3 py-1 border border-gray-300 rounded text-sm"
+                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-black"
                     />
                   </div>
                 </div>
@@ -200,7 +210,7 @@ export default function AdminPage() {
                   
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Двухфакторная аутентификация</span>
-                    <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                    <button className="px-3 py-1 bg-white border border-gray-300 text-black rounded-lg text-sm shadow-sm hover:shadow-md transition-all">
                       Включить
                     </button>
                   </div>
@@ -209,7 +219,12 @@ export default function AdminPage() {
             </div>
             
             <div className="mt-6 text-center">
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              <button 
+                className="px-6 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
                 Сохранить настройки
               </button>
             </div>
