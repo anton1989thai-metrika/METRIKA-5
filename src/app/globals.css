@@ -61,3 +61,24 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Чекбоксы в стиле кнопки бургер-меню */
+input[type="checkbox"] {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input[type="checkbox"]:checked {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M2 8 L6 12 L14 4' stroke='black' stroke-width='2' fill='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: center 65%;
+  background-size: 10px 10px;
+}

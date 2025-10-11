@@ -12,7 +12,7 @@ export interface RealEstateObject {
     lng: number;
   };
   type: 'apartment' | 'house' | 'land' | 'commercial' | 'building' | 'nonCapital' | 'shares';
-  operation: 'purchase' | 'sale' | 'rent';
+  operation: 'sale' | 'rent';
   country: 'russia' | 'china' | 'thailand' | 'south-korea';
 }
 

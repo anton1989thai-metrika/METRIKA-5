@@ -34,12 +34,17 @@ export default function ObjectsPage() {
   const getFilteredObjects = () => {
     return objects.filter(obj => {
       // Фильтр по стране
-      if (filters.country && obj.country !== filters.country) {
+      if (filters.country && filters.country.length > 0 && !filters.country.includes(obj.country)) {
         return false
       }
       
       // Фильтр по типу недвижимости
-      if (filters.propertyType && obj.type !== filters.propertyType) {
+      if (filters.propertyType && filters.propertyType.length > 0 && !filters.propertyType.includes(obj.type)) {
+        return false
+      }
+      
+      // Фильтр по типу операции
+      if (filters.operationType && filters.operationType.length > 0 && !filters.operationType.includes(obj.operation)) {
         return false
       }
       

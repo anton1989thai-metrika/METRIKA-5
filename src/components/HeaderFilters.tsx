@@ -49,40 +49,36 @@ export default function HeaderFilters() {
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.country?.includes('russia') || false}
                     onChange={() => handleCountryChange('russia')}
-                    style={filters.country?.includes('russia') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Россия</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.country?.includes('thailand') || false}
                     onChange={() => handleCountryChange('thailand')}
-                    style={filters.country?.includes('thailand') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Таиланд</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.country?.includes('china') || false}
                     onChange={() => handleCountryChange('china')}
-                    style={filters.country?.includes('china') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Китай</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.country?.includes('south-korea') || false}
                     onChange={() => handleCountryChange('south-korea')}
-                    style={filters.country?.includes('south-korea') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Южная Корея</span>
                 </label>
@@ -96,70 +92,63 @@ export default function HeaderFilters() {
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('apartment') || false}
                     onChange={() => handlePropertyTypeChange('apartment')}
-                    style={filters.propertyType?.includes('apartment') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Квартира</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('house') || false}
                     onChange={() => handlePropertyTypeChange('house')}
-                    style={filters.propertyType?.includes('house') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Дом</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('land') || false}
                     onChange={() => handlePropertyTypeChange('land')}
-                    style={filters.propertyType?.includes('land') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Участок</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('commercial') || false}
                     onChange={() => handlePropertyTypeChange('commercial')}
-                    style={filters.propertyType?.includes('commercial') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Коммерция</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('building') || false}
                     onChange={() => handlePropertyTypeChange('building')}
-                    style={filters.propertyType?.includes('building') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Здание</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('nonCapital') || false}
                     onChange={() => handlePropertyTypeChange('nonCapital')}
-                    style={filters.propertyType?.includes('nonCapital') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Некопитальный</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.propertyType?.includes('shares') || false}
                     onChange={() => handlePropertyTypeChange('shares')}
-                    style={filters.propertyType?.includes('shares') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Доля</span>
                 </label>
@@ -173,20 +162,18 @@ export default function HeaderFilters() {
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.operationType?.includes('sale') || false}
                     onChange={() => handleOperationTypeChange('sale')}
-                    style={filters.operationType?.includes('sale') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Продажа</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                     checked={filters.operationType?.includes('rent') || false}
                     onChange={() => handleOperationTypeChange('rent')}
-                    style={filters.operationType?.includes('rent') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Аренда</span>
                 </label>

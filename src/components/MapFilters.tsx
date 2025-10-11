@@ -34,17 +34,27 @@ export default function MapFilters() {
           {(filters.country || filters.propertyType || filters.areaUnit !== 'm2') && (
             <span className="ml-2 text-sm text-blue-600">
               (Активны: {[
-                filters.country && (filters.country === 'russia' ? 'Россия' : 
-                                   filters.country === 'china' ? 'Китай' : 
-                                   filters.country === 'thailand' ? 'Таиланд' : 
-                                   filters.country === 'south-korea' ? 'Южная Корея' : filters.country),
-                filters.propertyType && (filters.propertyType === 'apartment' ? 'Квартира' :
-                                         filters.propertyType === 'house' ? 'Жилой дом' :
-                                         filters.propertyType === 'land' ? 'Земельный участок' :
-                                         filters.propertyType === 'commercial' ? 'Коммерческое помещение' :
-                                         filters.propertyType === 'building' ? 'Здание' :
-                                         filters.propertyType === 'nonCapital' ? 'Некопитальный объект' :
-                                         filters.propertyType === 'shares' ? 'Доля в праве' : filters.propertyType),
+                filters.country && filters.country.length > 0 && filters.country.map(country => {
+                  switch(country) {
+                    case 'russia': return 'Россия';
+                    case 'china': return 'Китай';
+                    case 'thailand': return 'Таиланд';
+                    case 'south-korea': return 'Южная Корея';
+                    default: return country;
+                  }
+                }).join(', '),
+                filters.propertyType && filters.propertyType.length > 0 && filters.propertyType.map(type => {
+                  switch(type) {
+                    case 'apartment': return 'Квартира';
+                    case 'house': return 'Жилой дом';
+                    case 'land': return 'Земельный участок';
+                    case 'commercial': return 'Коммерческое помещение';
+                    case 'building': return 'Здание';
+                    case 'nonCapital': return 'Некопитальный объект';
+                    case 'shares': return 'Доля в праве';
+                    default: return type;
+                  }
+                }).join(', '),
                 filters.areaUnit !== 'm2' && (filters.areaUnit === 'hectare' ? 'Гектар' : 
                                               filters.areaUnit === 'sotka' ? 'Сотки' : 
                                               filters.areaUnit === 'mu' ? '亩' : 
@@ -64,40 +74,36 @@ export default function MapFilters() {
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.country?.includes('russia') || false}
                 onChange={() => handleCountryChange('russia')}
-                style={filters.country?.includes('russia') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Россия</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.country?.includes('thailand') || false}
                 onChange={() => handleCountryChange('thailand')}
-                style={filters.country?.includes('thailand') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Таиланд</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.country?.includes('china') || false}
                 onChange={() => handleCountryChange('china')}
-                style={filters.country?.includes('china') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Китай</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.country?.includes('south-korea') || false}
                 onChange={() => handleCountryChange('south-korea')}
-                style={filters.country?.includes('south-korea') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Южная Корея</span>
             </label>
@@ -111,48 +117,44 @@ export default function MapFilters() {
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.propertyType?.includes('apartment') || false}
                 onChange={() => handlePropertyTypeChange('apartment')}
-                style={filters.propertyType?.includes('apartment') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Квартира</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.propertyType?.includes('house') || false}
                 onChange={() => handlePropertyTypeChange('house')}
-                style={filters.propertyType?.includes('house') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Жилой дом</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.propertyType?.includes('land') || false}
                 onChange={() => handlePropertyTypeChange('land')}
-                style={filters.propertyType?.includes('land') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Земельный участок</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
                 checked={filters.propertyType?.includes('commercial') || false}
                 onChange={() => handlePropertyTypeChange('commercial')}
-                style={filters.propertyType?.includes('commercial') ? {accentColor: '#fff60b'} : {}}
               />
               <span className="text-gray-700">Коммерческое помещение</span>
             </label>
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'building'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
+                checked={filters.propertyType?.includes('building') || false}
                 onChange={() => handlePropertyTypeChange('building')}
               />
               <span className="text-gray-700">Здание</span>
@@ -160,8 +162,8 @@ export default function MapFilters() {
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'nonCapital'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
+                checked={filters.propertyType?.includes('nonCapital') || false}
                 onChange={() => handlePropertyTypeChange('nonCapital')}
               />
               <span className="text-gray-700">Некопитальный объект</span>
@@ -169,8 +171,8 @@ export default function MapFilters() {
             <label className="flex items-center">
               <input 
                 type="checkbox" 
-                className="mr-2" 
-                checked={filters.propertyType === 'shares'}
+                className="mr-2 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
+                checked={filters.propertyType?.includes('shares') || false}
                 onChange={() => handlePropertyTypeChange('shares')}
               />
               <span className="text-gray-700">Доля в праве</span>
