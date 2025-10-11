@@ -159,9 +159,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('rooms', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.rooms.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.rooms.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.rooms.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.rooms.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -177,12 +188,23 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                   onClick={() => handleInputChange('isStudio', (!filters.isStudio).toString())}
                   className={`px-3 py-1 text-sm rounded-full border transition-all ${
                     filters.isStudio
-                      ? 'bg-black text-white border-black'
+                      ? 'text-black border border-gray-300 shadow-sm'
                       : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
-                  }`}
-                >
-                  Студия
-                </button>
+                    }`}
+                    style={filters.isStudio ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.isStudio) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.isStudio) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
+                  >
+                    Студия
+                  </button>
               </div>
               <div className="flex gap-2">
                 <input 
@@ -233,9 +255,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('bathrooms', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.bathrooms.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.bathrooms.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.bathrooms.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.bathrooms.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -258,9 +291,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('view', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.view.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.view.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.view.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.view.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -325,9 +369,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('apartmentType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.apartmentType.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.apartmentType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.apartmentType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.apartmentType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -345,9 +400,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('houseType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.houseType.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.houseType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.houseType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.houseType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -365,9 +431,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('renovationType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.renovationType.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.renovationType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.renovationType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.renovationType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -385,9 +462,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('readiness', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.readiness.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.readiness.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.readiness.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.readiness.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -421,9 +509,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('heating', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.heating.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.heating.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.heating.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.heating.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -441,9 +540,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('waterSupply', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.waterSupply.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.waterSupply.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.waterSupply.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.waterSupply.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -461,9 +571,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('sewage', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.sewage.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.sewage.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.sewage.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.sewage.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -481,9 +602,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('internet', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.internet.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.internet.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.internet.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.internet.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -506,9 +638,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('houseInfrastructure', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.houseInfrastructure.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.houseInfrastructure.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.houseInfrastructure.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.houseInfrastructure.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -526,9 +669,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('parking', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.parking.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.parking.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.parking.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.parking.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -546,9 +700,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('infrastructure', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.infrastructure.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.infrastructure.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.infrastructure.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.infrastructure.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -584,9 +749,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('balcony', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.balcony.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.balcony.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.balcony.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.balcony.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -611,9 +787,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('accessRoads', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.accessRoads.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.accessRoads.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.accessRoads.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.accessRoads.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -636,9 +823,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('landUse', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.landUse.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.landUse.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.landUse.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.landUse.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -687,9 +885,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('ownershipType', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.ownershipType.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.ownershipType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.ownershipType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.ownershipType.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -707,9 +916,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('bargaining', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.bargaining.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.bargaining.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.bargaining.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.bargaining.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -732,9 +952,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('rentPeriod', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.rentPeriod.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.rentPeriod.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.rentPeriod.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.rentPeriod.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -752,9 +983,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('petsAllowed', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.petsAllowed.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.petsAllowed.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.petsAllowed.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.petsAllowed.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -783,9 +1025,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('deposit', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.deposit.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.deposit.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.deposit.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.deposit.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
@@ -803,9 +1056,20 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                     onClick={() => handleArrayFilterChange('commission', option)}
                     className={`px-3 py-1 text-sm rounded-full border transition-all ${
                       filters.commission.includes(option)
-                        ? 'bg-black text-white border-black'
+                        ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
+                    style={filters.commission.includes(option) ? {backgroundColor: '#fff60b'} : {}}
+                    onMouseEnter={(e) => {
+                      if (filters.commission.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filters.commission.includes(option)) {
+                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                      }
+                    }}
                   >
                     {option}
                   </button>
