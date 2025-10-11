@@ -35,12 +35,12 @@ export default function KnowledgeBasePage() {
             <input
               type="text"
               placeholder="Поиск в базе знаний..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black"
             />
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
                 Продажи
               </h3>
@@ -55,7 +55,7 @@ export default function KnowledgeBasePage() {
               </ul>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
                 Юридические вопросы
               </h3>
@@ -70,7 +70,7 @@ export default function KnowledgeBasePage() {
               </ul>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
                 Оценка недвижимости
               </h3>
@@ -85,7 +85,7 @@ export default function KnowledgeBasePage() {
               </ul>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
                 Маркетинг
               </h3>
@@ -100,7 +100,7 @@ export default function KnowledgeBasePage() {
               </ul>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
                 CRM и процессы
               </h3>
@@ -115,7 +115,7 @@ export default function KnowledgeBasePage() {
               </ul>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-2">
                 Инструменты
               </h3>

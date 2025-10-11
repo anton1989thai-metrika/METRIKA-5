@@ -27,7 +27,7 @@ export default function BlogPage() {
           
           <div className="space-y-8">
             {articles.map((article) => (
-              <article key={article.id} className="bg-gray-50 p-6 rounded-lg">
+              <article key={article.id} className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
                 <h2 className="text-xl font-semibold text-black mb-2">
                   {t(`blog.articles.${article.id}.title`)}
                 </h2>
@@ -37,7 +37,7 @@ export default function BlogPage() {
                 <p className="text-gray-700 mb-4">
                   {t(`blog.articles.${article.id}.excerpt`)}
                 </p>
-                <button className="text-blue-600 hover:text-blue-800 font-medium">
+                <button className="text-gray-600 hover:text-gray-800 font-medium">
                   {t('blog.readMore')}
                 </button>
               </article>
@@ -45,7 +45,12 @@ export default function BlogPage() {
           </div>
           
           <div className="mt-8 text-center">
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            <button 
+              className="px-6 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+              style={{backgroundColor: '#fff60b'}}
+              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            >
               {t('blog.loadMore')}
             </button>
           </div>
