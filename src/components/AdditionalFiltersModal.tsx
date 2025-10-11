@@ -144,10 +144,10 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
         </div>
 
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Основные характеристики */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Основные характеристики</h3>
               
               {/* Количество комнат */}
@@ -241,7 +241,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Расположение и вид */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Расположение и вид</h3>
               
               {/* Вид */}
@@ -306,7 +306,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Тип и состояние */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Тип и состояние</h3>
               
               {/* Вид квартиры */}
@@ -394,7 +394,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Коммуникации */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Коммуникации</h3>
               
               {/* Тип отопления */}
@@ -471,7 +471,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Инфраструктура */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Инфраструктура</h3>
               
               {/* Инфраструктура дома */}
@@ -543,7 +543,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Дополнительные удобства */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Дополнительные удобства</h3>
               
               {/* Балкон */}
@@ -591,7 +591,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Земельный участок */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Земельный участок</h3>
               
               {/* Вид использования земельного участка */}
@@ -614,7 +614,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Строительство */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Строительство</h3>
               
               {/* Год постройки */}
@@ -640,7 +640,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Права и условия */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Права и условия</h3>
               
               {/* Тип права */}
@@ -681,7 +681,7 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
             </div>
 
             {/* Аренда */}
-            <div className="space-y-3">
+            <div className="space-y-4 mb-6">
               <h3 className="text-lg font-semibold text-black border-b border-gray-200 pb-2">Аренда</h3>
               
               {/* Срок аренды */}
