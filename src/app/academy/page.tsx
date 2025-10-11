@@ -362,11 +362,11 @@ export default function AcademyPage() {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'text-green-600 bg-green-100'
-      case 'intermediate': return 'text-blue-600 bg-blue-100'
-      case 'advanced': return 'text-purple-600 bg-purple-100'
-      case 'expert': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'beginner': return 'text-black bg-white border border-black'
+      case 'intermediate': return 'text-black bg-white border border-black'
+      case 'advanced': return 'text-black bg-white border border-black'
+      case 'expert': return 'text-black bg-white border border-black'
+      default: return 'text-black bg-white border border-black'
     }
   }
 
@@ -672,7 +672,7 @@ export default function AcademyPage() {
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-lg font-semibold text-black">{course.title}</h3>
                           {course.isRequired && (
-                            <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
+                            <span className="px-2 py-1 bg-white border border-black text-black text-xs font-medium rounded-full">
                               Обязательный
                             </span>
                           )}
@@ -723,25 +723,25 @@ export default function AcademyPage() {
                       
                       {expandedCourse === course.id && (
                         <div className="mt-2 grid grid-cols-3 gap-4">
-                          <div className="flex items-center p-3 bg-blue-50 rounded-lg">
-                            <Video className="w-5 h-5 text-blue-600 mr-2" />
+                          <div className="flex items-center p-3 bg-white border-2 border-black rounded-lg">
+                            <Video className="w-5 h-5 text-gray-600 mr-2" />
                             <div>
-                              <div className="font-medium text-blue-900">{course.materials.videos}</div>
-                              <div className="text-xs text-blue-700">Видео</div>
+                              <div className="font-medium text-black">{course.materials.videos}</div>
+                              <div className="text-xs text-gray-600">Видео</div>
                             </div>
                           </div>
-                          <div className="flex items-center p-3 bg-green-50 rounded-lg">
-                            <FileText className="w-5 h-5 text-green-600 mr-2" />
+                          <div className="flex items-center p-3 bg-white border-2 border-black rounded-lg">
+                            <FileText className="w-5 h-5 text-gray-600 mr-2" />
                             <div>
-                              <div className="font-medium text-green-900">{course.materials.documents}</div>
-                              <div className="text-xs text-green-700">Документы</div>
+                              <div className="font-medium text-black">{course.materials.documents}</div>
+                              <div className="text-xs text-gray-600">Документы</div>
                             </div>
                           </div>
-                          <div className="flex items-center p-3 bg-purple-50 rounded-lg">
-                            <TestTube className="w-5 h-5 text-purple-600 mr-2" />
+                          <div className="flex items-center p-3 bg-white border-2 border-black rounded-lg">
+                            <TestTube className="w-5 h-5 text-gray-600 mr-2" />
                             <div>
-                              <div className="font-medium text-purple-900">{course.materials.tests}</div>
-                              <div className="text-xs text-purple-700">Тесты</div>
+                              <div className="font-medium text-black">{course.materials.tests}</div>
+                              <div className="text-xs text-gray-600">Тесты</div>
                             </div>
                           </div>
                         </div>
@@ -757,7 +757,7 @@ export default function AcademyPage() {
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                            className="bg-black h-2 rounded-full transition-all duration-300" 
                             style={{ width: `${course.progress}%` }}
                           ></div>
                         </div>
