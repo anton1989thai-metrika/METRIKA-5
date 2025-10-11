@@ -929,8 +929,9 @@ export default function AcademyPage() {
                     <p className="text-gray-600 text-sm mb-3">{achievement.description}</p>
                     
                     {achievement.earned ? (
-                      <div className="text-green-600 text-sm font-medium">
-                        ✅ Получено
+                      <div className="text-gray-600 text-sm font-medium flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        Получено
                       </div>
                     ) : (
                       <div className="space-y-2">
