@@ -98,8 +98,16 @@ export default function SignIn() {
               disabled={isLoading}
               className="w-full flex justify-center py-2 px-4 rounded-lg shadow-lg text-sm font-medium text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               style={{backgroundColor: '#fff60b'}}
-              onMouseEnter={(e) => !isLoading && (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-              onMouseLeave={(e) => !isLoading && (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              onMouseEnter={(e) => {
+                if (!isLoading) {
+                  (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isLoading) {
+                  (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
+                }
+              }}
             >
               {isLoading ? "Вход..." : "Войти"}
             </button>
