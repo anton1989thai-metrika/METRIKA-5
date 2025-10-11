@@ -166,10 +166,10 @@ export default function MyTasksPage() {
   // Функция для получения цвета приоритета
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'low': return 'bg-green-500';
-      case 'medium': return 'bg-orange-500';
-      case 'high': return 'bg-red-500';
-      case 'boss': return 'bg-yellow-500';
+      case 'low': return 'bg-gray-400';
+      case 'medium': return 'bg-gray-500';
+      case 'high': return 'bg-gray-600';
+      case 'boss': return 'bg-gray-700';
       default: return 'bg-gray-500';
     }
   };
@@ -230,7 +230,7 @@ export default function MyTasksPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Header />
       <BurgerMenu />
       
@@ -243,7 +243,7 @@ export default function MyTasksPage() {
           </div>
 
           {/* Табы */}
-          <div className="bg-white rounded-lg border border-gray-200 mb-6">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-lg mb-6">
             <div className="flex border-b border-gray-200">
               {tabs.map(tab => (
                 <button
@@ -271,7 +271,7 @@ export default function MyTasksPage() {
           <div className="space-y-4">
             {filteredTasks.length > 0 ? (
               filteredTasks.map(task => (
-                <div key={task.id} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div key={task.id} className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
@@ -291,13 +291,13 @@ export default function MyTasksPage() {
                     <div className="flex flex-col gap-2">
                       <Link 
                         href={`/task/${task.id}`}
-                        className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-center"
+                        className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all"
                       >
                         Открыть
                       </Link>
                              <Link
                                href={`/task/${task.id}/edit`}
-                               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-center"
+                               className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all text-center"
                              >
                                Редактировать
                              </Link>
@@ -308,7 +308,7 @@ export default function MyTasksPage() {
                   {task.tags && task.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {task.tags.map((tag, index) => (
-                        <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                        <span key={index} className="px-2 py-1 bg-white border border-gray-300 text-gray-600 text-xs rounded-full shadow-sm">
                           {tag}
                         </span>
                       ))}
@@ -317,7 +317,7 @@ export default function MyTasksPage() {
                 </div>
               ))
             ) : (
-              <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+              <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-8 text-center">
                 <div className="text-gray-400 mb-4">
                   <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />

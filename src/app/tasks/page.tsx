@@ -905,10 +905,10 @@ export default function TasksPage() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-500';
-      case 'medium': return 'bg-orange-500';
-      case 'low': return 'bg-green-500';
-      case 'boss': return 'bg-yellow-500';
+      case 'high': return 'bg-gray-600';
+      case 'medium': return 'bg-gray-500';
+      case 'low': return 'bg-gray-400';
+      case 'boss': return 'bg-gray-700';
       default: return 'bg-gray-500';
     }
   };
@@ -923,14 +923,14 @@ export default function TasksPage() {
           {/* 4 блока сверху */}
           <div className="grid grid-cols-4 gap-6 mb-8">
             {/* Блок 1: Задачи на сегодня */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-3 text-center">
                 На сегодня {todayTasks.length} {getTaskWord(todayTasks.length)}
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {todayTasks.map(task => (
                   <Link key={task.id} href={`/task/${task.id}`}>
-                    <div className="bg-white p-3 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <div className="bg-white p-3 rounded-lg border border-gray-300 hover:shadow-md cursor-pointer transition-all shadow-sm">
                       <div className="flex items-center justify-between mb-1">
                         <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
                         <span className="text-xs text-gray-500">{task.deadlineTime || 'Без времени'}</span>
@@ -943,14 +943,14 @@ export default function TasksPage() {
                 </div>
                 
             {/* Блок 2: Задачи на завтра */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-3 text-center">
                 На завтра {tomorrowTasks.length} {getTaskWord(tomorrowTasks.length)}
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {tomorrowTasks.map(task => (
                   <Link key={task.id} href={`/task/${task.id}`}>
-                    <div className="bg-white p-3 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <div className="bg-white p-3 rounded-lg border border-gray-300 hover:shadow-md cursor-pointer transition-all shadow-sm">
                       <div className="flex items-center justify-between mb-1">
                         <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
                         <span className="text-xs text-gray-500">{task.deadlineTime || 'Без времени'}</span>
@@ -963,14 +963,14 @@ export default function TasksPage() {
                 </div>
                 
             {/* Блок 3: Пропущенные */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-3 text-center">
                 {getMissedWord(missedTasks.length)} {missedTasks.length} {getTaskWord(missedTasks.length)}
                   </h3>
               <div className="space-y-2 max-h-[200px] overflow-y-auto">
                 {missedTasks.map(task => (
                   <Link key={task.id} href={`/task/${task.id}`}>
-                    <div className="bg-white p-3 rounded border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <div className="bg-white p-3 rounded-lg border border-gray-300 hover:shadow-md cursor-pointer transition-all shadow-sm">
                       <div className="flex items-center justify-between mb-1">
                         <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`}></div>
                         <span className="text-xs text-gray-500">{new Date(task.deadline).toLocaleDateString('ru-RU')}</span>
@@ -983,7 +983,7 @@ export default function TasksPage() {
             </div>
             
             {/* Блок 4: Кнопки */}
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
               <div className="space-y-3">
                 <button 
                   onClick={() => setIsCreateTaskModalOpen(true)}
@@ -1033,16 +1033,16 @@ export default function TasksPage() {
                   </h3>
               <div className="space-y-3">
                 {filteredTasks.map(task => (
-                  <div key={task.id} className="bg-white p-4 rounded border border-gray-200">
+                  <div key={task.id} className="bg-white p-4 rounded-lg border border-gray-300 shadow-sm">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${getPriorityColor(task.priority)}`}></div>
                         <h4 className="text-lg font-medium text-black">{task.title}</h4>
-                        <span className={`px-2 py-1 text-xs rounded ${
-                          task.status === 'completed' ? 'bg-green-100 text-green-800' :
-                          task.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                          task.status === 'new' ? 'bg-gray-100 text-gray-800' :
-                          'bg-yellow-100 text-yellow-800'
+                        <span className={`px-2 py-1 text-xs rounded-lg border border-gray-300 ${
+                          task.status === 'completed' ? 'bg-white text-black shadow-sm' :
+                          task.status === 'in_progress' ? 'bg-white text-black shadow-sm' :
+                          task.status === 'new' ? 'bg-white text-black shadow-sm' :
+                          'bg-white text-black shadow-sm'
                         }`}>
                           {task.status === 'new' ? 'Новая' :
                            task.status === 'in_progress' ? 'В работе' :
@@ -1225,7 +1225,7 @@ export default function TasksPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Статистика по приоритетам */}
-                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                     <h3 className="text-lg font-semibold text-black mb-4">По приоритетам</h3>
               <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -1260,7 +1260,7 @@ export default function TasksPage() {
                 </div>
                 
                   {/* Статистика по статусам */}
-                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                     <h3 className="text-lg font-semibold text-black mb-4">По статусам</h3>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -1458,7 +1458,7 @@ export default function TasksPage() {
             {/* Форма создания задачи */}
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Блок 1: Основная информация */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="space-y-4">
               <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1655,7 +1655,7 @@ export default function TasksPage() {
               </div>
 
               {/* Блок 2: Исполнители и кураторы */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <h3 className="text-lg font-semibold text-black mb-4">Исполнители и кураторы</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -1744,7 +1744,7 @@ export default function TasksPage() {
               </div>
 
               {/* Блок 3: Подзадачи */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-black">Подзадачи</h3>
                   <button
@@ -1792,7 +1792,7 @@ export default function TasksPage() {
               </div>
 
               {/* Блок 4: Чек-листы */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-black">Чек-листы</h3>
                   <button
@@ -1836,7 +1836,7 @@ export default function TasksPage() {
               </div>
 
               {/* Блок 5: Вложения */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-black">Вложения</h3>
                   <button
@@ -1891,7 +1891,7 @@ export default function TasksPage() {
               </div>
               
               {/* Блок 6: Автоматизация */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-black">Автоматизация</h3>
                   <button
@@ -2130,7 +2130,7 @@ export default function TasksPage() {
 
             <div className="p-6 space-y-6 overflow-y-auto max-h-[600px]">
               {/* Блок 1: Основная информация */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -2327,7 +2327,7 @@ export default function TasksPage() {
               </div>
 
               {/* Блок 2: Исполнители и кураторы */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <h3 className="text-lg font-semibold text-black mb-4">Исполнители и кураторы</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
