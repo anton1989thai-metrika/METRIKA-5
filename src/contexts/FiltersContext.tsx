@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react'
 
 interface FiltersState {
-  country: string
+  country: string[]
   propertyType: string
   priceFrom: string
   priceTo: string
@@ -24,7 +24,7 @@ interface FiltersContextType {
 const FiltersContext = createContext<FiltersContextType | undefined>(undefined)
 
 const initialFilters: FiltersState = {
-  country: '',
+  country: [],
   propertyType: '',
   priceFrom: '',
   priceTo: '',

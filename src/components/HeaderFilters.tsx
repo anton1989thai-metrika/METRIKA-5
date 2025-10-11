@@ -10,9 +10,13 @@ export default function HeaderFilters() {
   const { filters, updateFilter } = useFilters();
   const [isAdditionalFiltersOpen, setIsAdditionalFiltersOpen] = useState(false);
 
-  // Обработчик изменения фильтра по стране
+  // Обработчик изменения фильтра по стране (множественный выбор)
   const handleCountryChange = (country: string) => {
-    updateFilter('country', filters.country === country ? '' : country);
+    const currentCountries = filters.country || [];
+    const newCountries = currentCountries.includes(country)
+      ? currentCountries.filter(c => c !== country)
+      : [...currentCountries, country];
+    updateFilter('country', newCountries);
   };
 
   // Обработчик изменения фильтра по типу недвижимости
@@ -32,36 +36,40 @@ export default function HeaderFilters() {
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4" 
-                    checked={filters.country === 'russia'}
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    checked={filters.country?.includes('russia') || false}
                     onChange={() => handleCountryChange('russia')}
+                    style={filters.country?.includes('russia') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Россия</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4" 
-                    checked={filters.country === 'thailand'}
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    checked={filters.country?.includes('thailand') || false}
                     onChange={() => handleCountryChange('thailand')}
+                    style={filters.country?.includes('thailand') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Таиланд</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4" 
-                    checked={filters.country === 'china'}
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    checked={filters.country?.includes('china') || false}
                     onChange={() => handleCountryChange('china')}
+                    style={filters.country?.includes('china') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Китай</span>
                 </label>
                 <label className="flex items-center">
                   <input 
                     type="checkbox" 
-                    className="mr-1 w-4 h-4" 
-                    checked={filters.country === 'south-korea'}
+                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm" 
+                    checked={filters.country?.includes('south-korea') || false}
                     onChange={() => handleCountryChange('south-korea')}
+                    style={filters.country?.includes('south-korea') ? {accentColor: '#fff60b'} : {}}
                   />
                   <span className="text-sm text-gray-700">Южная Корея</span>
                 </label>
