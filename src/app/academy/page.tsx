@@ -841,7 +841,7 @@ export default function AcademyPage() {
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="font-semibold text-black">{test.title}</h3>
                       {test.isRequired && (
-                        <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
+                        <span className="px-2 py-1 bg-white border border-black text-black text-xs font-medium rounded-full">
                           Обязательный
                         </span>
                       )}
@@ -864,7 +864,7 @@ export default function AcademyPage() {
                       {test.bestScore > 0 && (
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Лучший результат:</span>
-                          <span className="font-medium text-green-600">{test.bestScore}/100</span>
+                          <span className="font-medium text-black">{test.bestScore}/100</span>
                         </div>
                       )}
           </div>
