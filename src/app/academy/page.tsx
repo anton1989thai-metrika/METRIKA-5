@@ -575,7 +575,7 @@ export default function AcademyPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {achievements.filter(a => a.earned).map(achievement => (
                     <div key={achievement.id} className="bg-white border-2 border-black rounded-lg p-4 text-center shadow-lg">
-                      <div className="mb-2">{achievement.icon}</div>
+                      <div className="mb-2 flex justify-center">{achievement.icon}</div>
                       <h3 className="font-semibold text-black text-sm">{achievement.title}</h3>
                       <p className="text-gray-600 text-xs mt-1">{achievement.description}</p>
                       <div className="text-xs text-gray-600 mt-2">
@@ -924,7 +924,7 @@ export default function AcademyPage() {
                       ? 'bg-white border-black' 
                       : 'bg-white border-black'
                   }`}>
-                    <div className="mb-3">{achievement.icon}</div>
+                    <div className="mb-3 flex justify-center">{achievement.icon}</div>
                     <h3 className="font-semibold text-black mb-2">{achievement.title}</h3>
                     <p className="text-gray-600 text-sm mb-3">{achievement.description}</p>
                     
