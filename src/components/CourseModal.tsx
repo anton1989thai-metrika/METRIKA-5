@@ -96,14 +96,14 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
       <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden border-2 border-black">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b-2 border-black">
           <div className="flex items-center">
-            <BookOpen className="w-6 h-6 text-blue-600 mr-3" />
-            <h2 className="text-2xl font-bold text-gray-900">{course.title}</h2>
+            <BookOpen className="w-6 h-6 text-gray-600 mr-3" />
+            <h2 className="text-2xl font-bold text-black">{course.title}</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-600 hover:text-black transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -114,22 +114,22 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
           <div className="mb-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <p className="text-gray-600 mb-4">{course.description}</p>
-                <div className="flex items-center gap-4 text-sm text-gray-500">
+                <p className="text-black mb-4">{course.description}</p>
+                <div className="flex items-center gap-4 text-sm text-gray-600">
                   <span className="flex items-center">
-                    <Clock className="w-4 h-4 mr-1" />
+                    <Clock className="w-4 h-4 mr-1 text-gray-600" />
                     {course.duration} мин
                   </span>
                   <span className="flex items-center">
-                    <Users className="w-4 h-4 mr-1" />
+                    <Users className="w-4 h-4 mr-1 text-gray-600" />
                     {course.students} студентов
                   </span>
                   <span className="flex items-center">
-                    <Star className="w-4 h-4 mr-1" />
+                    <Star className="w-4 h-4 mr-1 text-gray-600" />
                     {course.rating}
                   </span>
                   <span className="flex items-center">
-                    <User className="w-4 h-4 mr-1" />
+                    <User className="w-4 h-4 mr-1 text-gray-600" />
                     {course.instructor}
                   </span>
                 </div>
@@ -152,13 +152,13 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {/* Прогресс */}
             {course.status !== 'not-started' && (
               <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-500 mb-1">
+                <div className="flex justify-between text-sm text-gray-600 mb-1">
                   <span>Прогресс</span>
                   <span>{course.progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div 
-                    className="bg-blue-600 h-3 rounded-full transition-all duration-300" 
+                    className="bg-black h-3 rounded-full transition-all duration-300" 
                     style={{ width: `${course.progress}%` }}
                   ></div>
                 </div>
@@ -167,10 +167,10 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
 
             {/* Дедлайн */}
             {course.deadline && (
-              <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="mb-4 p-3 bg-white border-2 border-black rounded-lg">
                 <div className="flex items-center">
-                  <Calendar className="w-4 h-4 text-yellow-600 mr-2" />
-                  <span className="text-sm text-yellow-800">
+                  <Calendar className="w-4 h-4 text-gray-600 mr-2" />
+                  <span className="text-sm text-black">
                     Дедлайн: {course.deadline}
                   </span>
                 </div>
@@ -181,7 +181,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             <div className="mb-4">
               <div className="flex flex-wrap gap-2">
                 {course.tags.map(tag => (
-                  <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                  <span key={tag} className="px-2 py-1 bg-white border border-black text-black text-xs rounded-full">
                     #{tag}
                   </span>
                 ))}
@@ -191,43 +191,43 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
 
           {/* Навигация по вкладкам */}
           <div className="mb-6">
-            <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+            <div className="flex space-x-1 bg-white border-2 border-black rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   activeTab === 'overview' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'text-black hover:bg-gray-100'
                 }`}
               >
                 Обзор
               </button>
               <button
                 onClick={() => setActiveTab('videos')}
-                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   activeTab === 'videos' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'text-black hover:bg-gray-100'
                 }`}
               >
                 Видео ({course.materials.videos})
               </button>
               <button
                 onClick={() => setActiveTab('documents')}
-                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   activeTab === 'documents' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'text-black hover:bg-gray-100'
                 }`}
               >
                 Документы ({course.materials.documents})
               </button>
               <button
                 onClick={() => setActiveTab('tests')}
-                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   activeTab === 'tests' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'text-black hover:bg-gray-100'
                 }`}
               >
                 Тесты ({course.materials.tests})
@@ -241,56 +241,56 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'overview' && (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
                     <div className="flex items-center mb-2">
-                      <Play className="w-5 h-5 text-blue-600 mr-2" />
-                      <span className="font-medium text-blue-900">Видео-уроки</span>
+                      <Play className="w-5 h-5 text-gray-600 mr-2" />
+                      <span className="font-medium text-black">Видео-уроки</span>
                     </div>
-                    <div className="text-2xl font-bold text-blue-900">{course.materials.videos}</div>
-                    <div className="text-sm text-blue-700">уроков</div>
+                    <div className="text-2xl font-bold text-black">{course.materials.videos}</div>
+                    <div className="text-sm text-gray-600">уроков</div>
                   </div>
                   
-                  <div className="bg-green-50 rounded-lg p-4">
+                  <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
                     <div className="flex items-center mb-2">
-                      <FileText className="w-5 h-5 text-green-600 mr-2" />
-                      <span className="font-medium text-green-900">Документы</span>
+                      <FileText className="w-5 h-5 text-gray-600 mr-2" />
+                      <span className="font-medium text-black">Документы</span>
                     </div>
-                    <div className="text-2xl font-bold text-green-900">{course.materials.documents}</div>
-                    <div className="text-sm text-green-700">материалов</div>
+                    <div className="text-2xl font-bold text-black">{course.materials.documents}</div>
+                    <div className="text-sm text-gray-600">материалов</div>
                   </div>
                   
-                  <div className="bg-purple-50 rounded-lg p-4">
+                  <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
                     <div className="flex items-center mb-2">
-                      <TestTube className="w-5 h-5 text-purple-600 mr-2" />
-                      <span className="font-medium text-purple-900">Тесты</span>
+                      <TestTube className="w-5 h-5 text-gray-600 mr-2" />
+                      <span className="font-medium text-black">Тесты</span>
                     </div>
-                    <div className="text-2xl font-bold text-purple-900">{course.materials.tests}</div>
-                    <div className="text-sm text-purple-700">заданий</div>
+                    <div className="text-2xl font-bold text-black">{course.materials.tests}</div>
+                    <div className="text-sm text-gray-600">заданий</div>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Описание курса</h3>
+                <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                  <h3 className="font-semibold text-black mb-2">Описание курса</h3>
                   <p className="text-gray-600">{course.description}</p>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Что вы изучите</h3>
+                <div className="bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+                  <h3 className="font-semibold text-black mb-2">Что вы изучите</h3>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <CheckCircle className="w-4 h-4 text-gray-600 mr-2" />
                       Основные понятия и терминология
                     </li>
                     <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <CheckCircle className="w-4 h-4 text-gray-600 mr-2" />
                       Практические навыки работы
                     </li>
                     <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <CheckCircle className="w-4 h-4 text-gray-600 mr-2" />
                       Решение типовых задач
                     </li>
                     <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <CheckCircle className="w-4 h-4 text-gray-600 mr-2" />
                       Лучшие практики и рекомендации
                     </li>
                   </ul>
@@ -302,27 +302,27 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'videos' && (
               <div className="space-y-4">
                 {videos.map((video, index) => (
-                  <div key={video.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={video.id} className="flex items-center justify-between p-4 bg-white border-2 border-black rounded-lg shadow-lg">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg mr-4 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white border-2 border-black rounded-lg mr-4 flex items-center justify-center">
                         <Play className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">{video.title}</h4>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Clock className="w-4 h-4 mr-1" />
+                        <h4 className="font-medium text-black">{video.title}</h4>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Clock className="w-4 h-4 mr-1 text-gray-600" />
                           {video.duration}
                           {video.completed && (
                             <>
                               <span className="mx-2">•</span>
-                              <CheckCircle className="w-4 h-4 text-green-500 mr-1" />
-                              <span className="text-green-600">Просмотрено</span>
+                              <CheckCircle className="w-4 h-4 text-gray-600 mr-1" />
+                              <span className="text-gray-600">Просмотрено</span>
                             </>
                           )}
                         </div>
                       </div>
                     </div>
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <button className="px-4 py-2 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
                       Смотреть
                     </button>
                   </div>
@@ -334,33 +334,33 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'documents' && (
               <div className="space-y-4">
                 {documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={doc.id} className="flex items-center justify-between p-4 bg-white border-2 border-black rounded-lg shadow-lg">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg mr-4 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white border-2 border-black rounded-lg mr-4 flex items-center justify-center">
                         <FileText className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">{doc.title}</h4>
-                        <div className="flex items-center text-sm text-gray-500">
+                        <h4 className="font-medium text-black">{doc.title}</h4>
+                        <div className="flex items-center text-sm text-gray-600">
                           <span>{doc.type}</span>
                           <span className="mx-2">•</span>
                           <span>{doc.size}</span>
                           {doc.downloaded && (
                             <>
                               <span className="mx-2">•</span>
-                              <CheckCircle className="w-4 h-4 text-green-500 mr-1" />
-                              <span className="text-green-600">Скачано</span>
+                              <CheckCircle className="w-4 h-4 text-gray-600 mr-1" />
+                              <span className="text-gray-600">Скачано</span>
                             </>
                           )}
                         </div>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
-                        <Eye className="w-4 h-4" />
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                        <Eye className="w-4 h-4 text-gray-600" />
                       </button>
-                      <button className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                        <Download className="w-4 h-4" />
+                      <button className="px-3 py-1 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+                        <Download className="w-4 h-4 text-gray-600" />
                       </button>
                     </div>
                   </div>
@@ -372,32 +372,35 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {activeTab === 'tests' && (
               <div className="space-y-4">
                 {tests.map((test) => (
-                  <div key={test.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={test.id} className="flex items-center justify-between p-4 bg-white border-2 border-black rounded-lg shadow-lg">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-gray-200 rounded-lg mr-4 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white border-2 border-black rounded-lg mr-4 flex items-center justify-center">
                         <TestTube className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">{test.title}</h4>
-                        <div className="flex items-center text-sm text-gray-500">
+                        <h4 className="font-medium text-black">{test.title}</h4>
+                        <div className="flex items-center text-sm text-gray-600">
                           <span>{test.questions} вопросов</span>
                           <span className="mx-2">•</span>
-                          <Clock className="w-4 h-4 mr-1" />
+                          <Clock className="w-4 h-4 mr-1 text-gray-600" />
                           {test.timeLimit} мин
                           {test.completed && (
                             <>
                               <span className="mx-2">•</span>
-                              <span className="text-green-600 font-medium">{test.score}/100</span>
+                              <span className="text-gray-600 font-medium">{test.score}/100</span>
                             </>
                           )}
                         </div>
                       </div>
                     </div>
-                    <button className={`px-4 py-2 rounded-lg transition-colors ${
+                    <button className={`px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all font-medium ${
                       test.completed 
-                        ? 'bg-green-600 text-white hover:bg-green-700' 
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                    }`}>
+                        ? 'bg-white border-2 border-black text-black' 
+                        : 'bg-white border-2 border-black text-black'
+                    }`}
+                    style={!test.completed ? { backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties : {}}
+                    onMouseEnter={!test.completed ? (e) => e.currentTarget.style.backgroundColor = '#e6d90a' : undefined}
+                    onMouseLeave={!test.completed ? (e) => e.currentTarget.style.backgroundColor = '#fff60b' : undefined}>
                       {test.completed ? 'Повторить' : 'Начать тест'}
                     </button>
                   </div>
@@ -409,24 +412,30 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
           {/* Действия */}
           <div className="mt-6 flex gap-3">
             {course.status === 'not-started' ? (
-              <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <button className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                      style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
                 Начать обучение
               </button>
             ) : course.status === 'in-progress' ? (
-              <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <button className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium"
+                      style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}>
                 Продолжить обучение
               </button>
             ) : (
-              <button className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+              <button className="px-6 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all font-medium">
                 Повторить курс
               </button>
             )}
-            <button className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-              <Bookmark className="w-4 h-4 mr-2 inline" />
+            <button className="px-4 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+              <Bookmark className="w-4 h-4 mr-2 inline text-gray-600" />
               В закладки
             </button>
-            <button className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-              <Share2 className="w-4 h-4 mr-2 inline" />
+            <button className="px-4 py-3 bg-white border-2 border-black text-black rounded-full shadow-lg hover:shadow-xl transition-all">
+              <Share2 className="w-4 h-4 mr-2 inline text-gray-600" />
               Поделиться
             </button>
           </div>
