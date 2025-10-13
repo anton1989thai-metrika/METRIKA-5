@@ -335,23 +335,23 @@ export default function HRNotificationsPanel() {
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'salary':
-        return <DollarSign className="w-5 h-5 text-green-600" />
+        return <DollarSign className="w-5 h-5 text-gray-600" />
       case 'vacation':
-        return <Calendar className="w-5 h-5 text-blue-600" />
+        return <Calendar className="w-5 h-5 text-gray-600" />
       case 'penalty':
-        return <AlertTriangle className="w-5 h-5 text-red-600" />
+        return <AlertTriangle className="w-5 h-5 text-gray-600" />
       case 'bonus':
-        return <Award className="w-5 h-5 text-yellow-600" />
+        return <Award className="w-5 h-5 text-gray-600" />
       case 'time':
-        return <Clock className="w-5 h-5 text-purple-600" />
+        return <Clock className="w-5 h-5 text-gray-600" />
       case 'cash':
-        return <Receipt className="w-5 h-5 text-indigo-600" />
+        return <Receipt className="w-5 h-5 text-gray-600" />
       case 'warning':
-        return <AlertCircle className="w-5 h-5 text-orange-600" />
+        return <AlertCircle className="w-5 h-5 text-gray-600" />
       case 'error':
-        return <XCircle className="w-5 h-5 text-red-600" />
+        return <XCircle className="w-5 h-5 text-gray-600" />
       case 'success':
-        return <CheckCircle className="w-5 h-5 text-green-600" />
+        return <CheckCircle className="w-5 h-5 text-gray-600" />
       default:
         return <Info className="w-5 h-5 text-gray-600" />
     }
@@ -360,11 +360,11 @@ export default function HRNotificationsPanel() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'urgent':
-        return 'border-l-red-500 bg-red-50'
+        return 'border-l-gray-500 bg-gray-50'
       case 'high':
-        return 'border-l-orange-500 bg-orange-50'
+        return 'border-l-gray-500 bg-gray-50'
       case 'medium':
-        return 'border-l-yellow-500 bg-yellow-50'
+        return 'border-l-gray-500 bg-gray-50'
       case 'low':
         return 'border-l-gray-300 bg-gray-50'
       default:
@@ -445,7 +445,7 @@ export default function HRNotificationsPanel() {
         <div className="flex items-center space-x-4">
           <h2 className="text-2xl font-bold text-black">Уведомления</h2>
           {unreadCount > 0 && (
-            <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+            <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
               {unreadCount} непрочитанных
             </span>
           )}
@@ -473,7 +473,7 @@ export default function HRNotificationsPanel() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <Bell className="w-8 h-8 text-blue-600 mr-3" />
+            <Bell className="w-8 h-8 text-gray-600 mr-3" />
             <div>
               <div className="text-2xl font-bold text-black">{notifications.length}</div>
               <div className="text-sm text-gray-600">Всего уведомлений</div>
@@ -483,9 +483,9 @@ export default function HRNotificationsPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <BellRing className="w-8 h-8 text-red-600 mr-3" />
+            <BellRing className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-red-600">{unreadCount}</div>
+              <div className="text-2xl font-bold text-black">{unreadCount}</div>
               <div className="text-sm text-gray-600">Непрочитанных</div>
             </div>
           </div>
@@ -617,9 +617,9 @@ export default function HRNotificationsPanel() {
                       {notification.category}
                     </span>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      notification.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                      notification.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                      notification.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                      notification.priority === 'urgent' ? 'bg-gray-100 text-gray-800' :
+                      notification.priority === 'high' ? 'bg-gray-100 text-gray-800' :
+                      notification.priority === 'medium' ? 'bg-gray-100 text-gray-800' :
                       'bg-gray-100 text-gray-800'
                     }`}>
                       {notification.priority === 'urgent' ? 'Срочно' :
@@ -650,8 +650,8 @@ export default function HRNotificationsPanel() {
                           key={action.id}
                           onClick={() => handleNotificationAction(notification.id, action.id)}
                           className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                            action.type === 'primary' ? 'bg-blue-600 text-white hover:bg-blue-700' :
-                            action.type === 'danger' ? 'bg-red-600 text-white hover:bg-red-700' :
+                            action.type === 'primary' ? 'bg-black text-white hover:bg-gray-800' :
+                            action.type === 'danger' ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' :
                             'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }`}
                         >
@@ -678,7 +678,7 @@ export default function HRNotificationsPanel() {
                 
                 <button
                   onClick={() => notification.isRead ? markAsUnread(notification.id) : markAsRead(notification.id)}
-                  className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                  className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
                   title={notification.isRead ? 'Отметить как непрочитанное' : 'Отметить как прочитанное'}
                 >
                   {notification.isRead ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -694,7 +694,7 @@ export default function HRNotificationsPanel() {
                 
                 <button
                   onClick={() => deleteNotification(notification.id)}
-                  className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+                  className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
                   title="Удалить"
                 >
                   <Trash2 className="w-4 h-4" />

@@ -228,9 +228,9 @@ export default function PenaltiesBonusesPanel() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'approved':
-        return <CheckCircle className="w-4 h-4 text-green-600" />
+        return <CheckCircle className="w-4 h-4 text-gray-600" />
       case 'rejected':
-        return <XCircle className="w-4 h-4 text-red-600" />
+        return <XCircle className="w-4 h-4 text-gray-600" />
       case 'pending':
         return <Clock className="w-4 h-4 text-yellow-600" />
       default:
@@ -241,11 +241,11 @@ export default function PenaltiesBonusesPanel() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
-        return 'bg-green-100 text-green-800'
+        return 'bg-gray-100 text-gray-800'
       case 'rejected':
-        return 'bg-red-100 text-red-800'
+        return 'bg-gray-100 text-gray-800'
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800'
+        return 'bg-gray-100 text-gray-800'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -272,9 +272,9 @@ export default function PenaltiesBonusesPanel() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <TrendingUp className="w-8 h-8 text-green-600 mr-3" />
+            <TrendingUp className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-green-600">₽{totalBonuses.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{totalBonuses.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Всего премий</div>
             </div>
           </div>
@@ -282,9 +282,9 @@ export default function PenaltiesBonusesPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <TrendingDown className="w-8 h-8 text-red-600 mr-3" />
+            <TrendingDown className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-red-600">₽{totalPenalties.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{totalPenalties.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Всего штрафов</div>
             </div>
           </div>
@@ -302,9 +302,9 @@ export default function PenaltiesBonusesPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <DollarSign className="w-8 h-8 text-blue-600 mr-3" />
+            <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-blue-600">₽{(totalBonuses - totalPenalties).toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{(totalBonuses - totalPenalties).toLocaleString()}</div>
               <div className="text-sm text-gray-600">Чистый баланс</div>
             </div>
           </div>
@@ -386,9 +386,9 @@ export default function PenaltiesBonusesPanel() {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   {item.type === 'bonus' ? (
-                    <Award className="w-8 h-8 text-green-600" />
+                    <Award className="w-8 h-8 text-gray-600" />
                   ) : (
-                    <AlertTriangle className="w-8 h-8 text-red-600" />
+                    <AlertTriangle className="w-8 h-8 text-gray-600" />
                   )}
                 </div>
                 
@@ -416,7 +416,7 @@ export default function PenaltiesBonusesPanel() {
               <div className="flex items-center space-x-4">
                 <div className="text-right">
                   <div className={`text-xl font-bold ${
-                    item.type === 'bonus' ? 'text-green-600' : 'text-red-600'
+                    item.type === 'bonus' ? 'text-black' : 'text-black'
                   }`}>
                     {item.type === 'bonus' ? '+' : '-'}₽{item.amount.toLocaleString()}
                   </div>
@@ -430,14 +430,14 @@ export default function PenaltiesBonusesPanel() {
                     <>
                       <button
                         onClick={() => handleApproveItem(item.id)}
-                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                        className="p-2 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
                         title="Одобрить"
                       >
                         <CheckCircle className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleRejectItem(item.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
                         title="Отклонить"
                       >
                         <XCircle className="w-4 h-4" />
@@ -453,7 +453,7 @@ export default function PenaltiesBonusesPanel() {
                   </button>
                   <button
                     onClick={() => handleDeleteItem(item.id)}
-                    className="p-2 text-gray-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
                     title="Удалить"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -497,7 +497,7 @@ export default function PenaltiesBonusesPanel() {
                     onClick={() => setNewItem(prev => ({ ...prev, type: 'bonus' }))}
                     className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
                       newItem.type === 'bonus' 
-                        ? 'bg-green-100 text-green-800 border border-green-300' 
+                        ? 'bg-gray-100 text-gray-800 border border-gray-300' 
                         : 'bg-gray-100 text-gray-700 border border-gray-300'
                     }`}
                   >
@@ -508,7 +508,7 @@ export default function PenaltiesBonusesPanel() {
                     onClick={() => setNewItem(prev => ({ ...prev, type: 'penalty' }))}
                     className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
                       newItem.type === 'penalty' 
-                        ? 'bg-red-100 text-red-800 border border-red-300' 
+                        ? 'bg-gray-100 text-gray-800 border border-gray-300' 
                         : 'bg-gray-100 text-gray-700 border border-gray-300'
                     }`}
                   >

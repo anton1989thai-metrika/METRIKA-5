@@ -301,15 +301,15 @@ export default function HRReportingPanel() {
   const getReportIcon = (type: string) => {
     switch (type) {
       case 'salary':
-        return <DollarSign className="w-5 h-5 text-green-600" />
+        return <DollarSign className="w-5 h-5 text-gray-600" />
       case 'time':
-        return <Clock className="w-5 h-5 text-blue-600" />
+        return <Clock className="w-5 h-5 text-gray-600" />
       case 'financial':
-        return <Receipt className="w-5 h-5 text-purple-600" />
+        return <Receipt className="w-5 h-5 text-gray-600" />
       case 'performance':
-        return <Target className="w-5 h-5 text-orange-600" />
+        return <Target className="w-5 h-5 text-gray-600" />
       case 'compliance':
-        return <Shield className="w-5 h-5 text-red-600" />
+        return <Shield className="w-5 h-5 text-gray-600" />
       default:
         return <FileText className="w-5 h-5 text-gray-600" />
     }
@@ -318,11 +318,11 @@ export default function HRReportingPanel() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800'
+        return 'bg-gray-100 text-gray-800'
       case 'inactive':
         return 'bg-gray-100 text-gray-800'
       case 'error':
-        return 'bg-red-100 text-red-800'
+        return 'bg-gray-100 text-gray-800'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -428,7 +428,7 @@ export default function HRReportingPanel() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
               <div className="flex items-center">
-                <Users className="w-8 h-8 text-blue-600 mr-3" />
+                <Users className="w-8 h-8 text-gray-600 mr-3" />
                 <div>
                   <div className="text-2xl font-bold text-black">{dashboardData.totalEmployees}</div>
                   <div className="text-sm text-gray-600">Сотрудников</div>
@@ -438,9 +438,9 @@ export default function HRReportingPanel() {
             
             <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
               <div className="flex items-center">
-                <DollarSign className="w-8 h-8 text-green-600 mr-3" />
+                <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
                 <div>
-                  <div className="text-2xl font-bold text-green-600">₽{dashboardData.totalSalary.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-black">₽{dashboardData.totalSalary.toLocaleString()}</div>
                   <div className="text-sm text-gray-600">Фонд зарплат</div>
                 </div>
               </div>
@@ -448,9 +448,9 @@ export default function HRReportingPanel() {
             
             <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
               <div className="flex items-center">
-                <Clock className="w-8 h-8 text-purple-600 mr-3" />
+                <Clock className="w-8 h-8 text-gray-600 mr-3" />
                 <div>
-                  <div className="text-2xl font-bold text-purple-600">{dashboardData.averageHours}</div>
+                  <div className="text-2xl font-bold text-black">{dashboardData.averageHours}</div>
                   <div className="text-sm text-gray-600">Среднее время</div>
                 </div>
               </div>
@@ -458,9 +458,9 @@ export default function HRReportingPanel() {
             
             <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
               <div className="flex items-center">
-                <TrendingUp className="w-8 h-8 text-orange-600 mr-3" />
+                <TrendingUp className="w-8 h-8 text-gray-600 mr-3" />
                 <div>
-                  <div className="text-2xl font-bold text-orange-600">+{dashboardData.monthlyGrowth}%</div>
+                  <div className="text-2xl font-bold text-black">+{dashboardData.monthlyGrowth}%</div>
                   <div className="text-sm text-gray-600">Рост за месяц</div>
                 </div>
               </div>
@@ -492,21 +492,21 @@ export default function HRReportingPanel() {
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2 border-b border-gray-200">
                 <div className="flex items-center">
-                  <DollarSign className="w-4 h-4 text-green-600 mr-3" />
+                  <DollarSign className="w-4 h-4 text-gray-600 mr-3" />
                   <span className="text-gray-800">Зарплата за январь рассчитана</span>
                 </div>
                 <span className="text-sm text-gray-500">2 часа назад</span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-gray-200">
                 <div className="flex items-center">
-                  <Clock className="w-4 h-4 text-blue-600 mr-3" />
+                  <Clock className="w-4 h-4 text-gray-600 mr-3" />
                   <span className="text-gray-800">Обновлён отчёт по времени</span>
                 </div>
                 <span className="text-sm text-gray-500">5 часов назад</span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center">
-                  <Receipt className="w-4 h-4 text-purple-600 mr-3" />
+                  <Receipt className="w-4 h-4 text-gray-600 mr-3" />
                   <span className="text-gray-800">Создан финансовый отчёт</span>
                 </div>
                 <span className="text-sm text-gray-500">1 день назад</span>
@@ -535,7 +535,7 @@ export default function HRReportingPanel() {
                          report.status === 'inactive' ? 'Неактивен' : 'Ошибка'}
                       </span>
                       {report.isScheduled && (
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">
                           {report.schedule === 'monthly' ? 'Ежемесячно' :
                            report.schedule === 'weekly' ? 'Еженедельно' :
                            report.schedule === 'daily' ? 'Ежедневно' : 'По расписанию'}
@@ -558,7 +558,7 @@ export default function HRReportingPanel() {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => generateReport(report.id)}
-                    className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-sm"
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                   >
                     <RefreshCw className="w-3 h-3 inline mr-1" />
                     Запустить
@@ -634,18 +634,18 @@ export default function HRReportingPanel() {
             <h3 className="text-lg font-semibold text-black mb-4">Тренды и прогнозы</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <TrendingUp className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-green-600">+12.5%</div>
+                <TrendingUp className="w-8 h-8 text-gray-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-black">+12.5%</div>
                 <div className="text-sm text-gray-600">Рост зарплат</div>
               </div>
               <div className="text-center">
-                <TrendingDown className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-red-600">-5.2%</div>
+                <TrendingDown className="w-8 h-8 text-gray-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-black">-5.2%</div>
                 <div className="text-sm text-gray-600">Снижение опозданий</div>
               </div>
               <div className="text-center">
-                <Activity className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-blue-600">+8.7%</div>
+                <Activity className="w-8 h-8 text-gray-600 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-black">+8.7%</div>
                 <div className="text-sm text-gray-600">Рост производительности</div>
               </div>
             </div>
@@ -663,7 +663,7 @@ export default function HRReportingPanel() {
                 <h3 className="text-lg font-semibold text-black">PDF отчёты</h3>
               </div>
               <p className="text-gray-600 mb-4">Экспорт отчётов в PDF формате</p>
-              <button className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              <button className="w-full px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors">
                 <Download className="w-4 h-4 inline mr-2" />
                 Экспорт PDF
               </button>
@@ -675,7 +675,7 @@ export default function HRReportingPanel() {
                 <h3 className="text-lg font-semibold text-black">Excel файлы</h3>
               </div>
               <p className="text-gray-600 mb-4">Экспорт данных в Excel формате</p>
-              <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <button className="w-full px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors">
                 <Download className="w-4 h-4 inline mr-2" />
                 Экспорт Excel
               </button>
@@ -687,7 +687,7 @@ export default function HRReportingPanel() {
                 <h3 className="text-lg font-semibold text-black">CSV данные</h3>
               </div>
               <p className="text-gray-600 mb-4">Экспорт сырых данных в CSV</p>
-              <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="w-full px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors">
                 <Download className="w-4 h-4 inline mr-2" />
                 Экспорт CSV
               </button>
@@ -699,7 +699,7 @@ export default function HRReportingPanel() {
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2 border-b border-gray-200">
                 <div className="flex items-center">
-                  <FileText className="w-4 h-4 text-red-600 mr-3" />
+                  <FileText className="w-4 h-4 text-gray-600 mr-3" />
                   <span className="text-gray-800">Зарплатная ведомость за январь 2024</span>
                 </div>
                 <div className="text-right">
@@ -709,7 +709,7 @@ export default function HRReportingPanel() {
               </div>
               <div className="flex items-center justify-between py-2 border-b border-gray-200">
                 <div className="flex items-center">
-                  <BarChart3 className="w-4 h-4 text-green-600 mr-3" />
+                  <BarChart3 className="w-4 h-4 text-gray-600 mr-3" />
                   <span className="text-gray-800">Отчёт по времени за неделю</span>
                 </div>
                 <div className="text-right">
@@ -719,7 +719,7 @@ export default function HRReportingPanel() {
               </div>
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center">
-                  <PieChart className="w-4 h-4 text-blue-600 mr-3" />
+                  <PieChart className="w-4 h-4 text-gray-600 mr-3" />
                   <span className="text-gray-800">Финансовые данные</span>
                 </div>
                 <div className="text-right">

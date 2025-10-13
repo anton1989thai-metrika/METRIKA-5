@@ -411,9 +411,9 @@ export default function SalaryCalculationPanel() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <DollarSign className="w-8 h-8 text-green-600 mr-3" />
+            <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-green-600">₽{totalGrossSalary.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{totalGrossSalary.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Общий фонд</div>
             </div>
           </div>
@@ -421,9 +421,9 @@ export default function SalaryCalculationPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <Wallet className="w-8 h-8 text-blue-600 mr-3" />
+            <Wallet className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-blue-600">₽{totalNetSalary.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{totalNetSalary.toLocaleString()}</div>
               <div className="text-sm text-gray-600">К выплате</div>
             </div>
           </div>
@@ -431,9 +431,9 @@ export default function SalaryCalculationPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <Percent className="w-8 h-8 text-red-600 mr-3" />
+            <Percent className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-red-600">₽{Math.round(totalTaxes).toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{Math.round(totalTaxes).toLocaleString()}</div>
               <div className="text-sm text-gray-600">Налоги</div>
             </div>
           </div>
@@ -451,9 +451,9 @@ export default function SalaryCalculationPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <AlertTriangle className="w-8 h-8 text-orange-600 mr-3" />
+            <AlertTriangle className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-orange-600">₽{totalPenalties.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{totalPenalties.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Штрафы</div>
             </div>
           </div>
@@ -477,9 +477,9 @@ export default function SalaryCalculationPanel() {
                       {employee.position}
                     </span>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      employee.status === 'active' ? 'bg-green-100 text-green-800' :
-                      employee.status === 'vacation' ? 'bg-yellow-100 text-yellow-800' :
-                      employee.status === 'sick' ? 'bg-red-100 text-red-800' :
+                      employee.status === 'active' ? 'bg-gray-100 text-gray-800' :
+                      employee.status === 'vacation' ? 'bg-gray-100 text-gray-800' :
+                      employee.status === 'sick' ? 'bg-gray-100 text-gray-800' :
                       'bg-gray-100 text-gray-800'
                     }`}>
                       {employee.status === 'active' ? 'Активен' :
@@ -504,9 +504,9 @@ export default function SalaryCalculationPanel() {
                     <div>
                       <span className="text-gray-600">Премии/Штрафы:</span>
                       <div className="font-semibold text-black">
-                        <span className="text-green-600">+₽{employee.bonuses.toLocaleString()}</span>
+                        <span className="text-black">+₽{employee.bonuses.toLocaleString()}</span>
                         {employee.penalties > 0 && (
-                          <span className="text-red-600"> / -₽{employee.penalties.toLocaleString()}</span>
+                          <span className="text-black"> / -₽{employee.penalties.toLocaleString()}</span>
                         )}
                       </div>
                     </div>
@@ -539,7 +539,7 @@ export default function SalaryCalculationPanel() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Премии:</span>
-                      <span className="font-medium text-green-600">₽{employee.bonuses.toLocaleString()}</span>
+                      <span className="font-medium text-black">₽{employee.bonuses.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between border-t pt-2">
                       <span className="font-semibold">Итого начислено:</span>
@@ -551,11 +551,11 @@ export default function SalaryCalculationPanel() {
                     <h4 className="font-semibold text-black">Удержания</h4>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Налог (13%):</span>
-                      <span className="font-medium text-red-600">₽{Math.round(employee.grossSalary * employee.taxRate).toLocaleString()}</span>
+                      <span className="font-medium text-black">₽{Math.round(employee.grossSalary * employee.taxRate).toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Штрафы:</span>
-                      <span className="font-medium text-red-600">₽{employee.penalties.toLocaleString()}</span>
+                      <span className="font-medium text-black">₽{employee.penalties.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Прочие удержания:</span>
@@ -563,7 +563,7 @@ export default function SalaryCalculationPanel() {
                     </div>
                     <div className="flex justify-between border-t pt-2">
                       <span className="font-semibold">Итого удержано:</span>
-                      <span className="font-semibold text-red-600">₽{(Math.round(employee.grossSalary * employee.taxRate) + employee.penalties + employee.deductions).toLocaleString()}</span>
+                      <span className="font-semibold text-black">₽{(Math.round(employee.grossSalary * employee.taxRate) + employee.penalties + employee.deductions).toLocaleString()}</span>
                     </div>
                   </div>
                   
@@ -575,7 +575,7 @@ export default function SalaryCalculationPanel() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Нетто:</span>
-                      <span className="font-semibold text-green-600">₽{employee.netSalary.toLocaleString()}</span>
+                      <span className="font-semibold text-black">₽{employee.netSalary.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Ставка в час:</span>
@@ -623,9 +623,9 @@ export default function SalaryCalculationPanel() {
                       </div>
                     </div>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      calculation.status === 'calculated' ? 'bg-yellow-100 text-yellow-800' :
-                      calculation.status === 'approved' ? 'bg-green-100 text-green-800' :
-                      'bg-blue-100 text-blue-800'
+                      calculation.status === 'calculated' ? 'bg-gray-100 text-gray-800' :
+                      calculation.status === 'approved' ? 'bg-gray-100 text-gray-800' :
+                      'bg-gray-100 text-gray-800'
                     }`}>
                       {calculation.status === 'calculated' ? 'Рассчитано' :
                        calculation.status === 'approved' ? 'Одобрено' : 'Выплачено'}
@@ -641,7 +641,7 @@ export default function SalaryCalculationPanel() {
                     {calculation.status === 'calculated' && (
                       <button
                         onClick={() => approveCalculation(calculation.id)}
-                        className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-sm"
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                       >
                         <CheckCircle className="w-3 h-3 inline mr-1" />
                         Одобрить
@@ -651,7 +651,7 @@ export default function SalaryCalculationPanel() {
                     {calculation.status === 'approved' && (
                       <button
                         onClick={() => markAsPaid(calculation.id)}
-                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-sm"
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                       >
                         <DollarSign className="w-3 h-3 inline mr-1" />
                         Выплачено
