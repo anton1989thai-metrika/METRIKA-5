@@ -132,7 +132,8 @@ import {
   Frown,
   Meh,
   Angry,
-  Laugh
+  Laugh,
+  ArrowLeft
 } from "lucide-react"
 import ContentEditor from "@/components/ContentEditor"
 import MediaManager from "@/components/MediaManager"
@@ -874,7 +875,18 @@ export default function AdminPage() {
 
           {/* Кадры и бухгалтерия */}
           {activeTab === 'hr' && (
-            <div className="space-y-6">
+            <div className="space-y-6 mt-8">
+              {/* Кнопка "Назад" */}
+              <div className="mb-6">
+                <button
+                  onClick={() => setActiveTab('dashboard')}
+                  className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-all text-gray-700 hover:text-black"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Назад в Админ панель
+                </button>
+              </div>
+              
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-black">Кадры и бухгалтерия</h2>
