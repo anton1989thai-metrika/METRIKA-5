@@ -357,20 +357,6 @@ export default function HRNotificationsPanel() {
     }
   }
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'urgent':
-        return 'border-l-gray-500 bg-gray-50'
-      case 'high':
-        return 'border-l-gray-500 bg-gray-50'
-      case 'medium':
-        return 'border-l-gray-500 bg-gray-50'
-      case 'low':
-        return 'border-l-gray-300 bg-gray-50'
-      default:
-        return 'border-l-gray-300 bg-white'
-    }
-  }
 
   const markAsRead = (notificationId: string) => {
     setNotifications(prev => prev.map(notification => 
@@ -595,111 +581,117 @@ export default function HRNotificationsPanel() {
         {filteredNotifications.map(notification => (
           <div
             key={notification.id}
-            className={`bg-white border-l-4 rounded-lg p-6 shadow-lg transition-all ${
-              getPriorityColor(notification.priority)
-            } ${!notification.isRead ? 'ring-2 ring-blue-200' : ''}`}
+            className={`bg-white border border-gray-300 rounded-lg p-6 shadow-lg transition-all ${
+              !notification.isRead ? 'ring-2 ring-gray-200' : ''
+            }`}
           >
-            <div className="flex items-start justify-between">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  {getNotificationIcon(notification.type)}
-                </div>
-                
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
+            <div className="space-y-4">
+              {/* Заголовок и теги */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0">
+                    {getNotificationIcon(notification.type)}
+                  </div>
+                  <div>
                     <h3 className={`text-lg font-semibold ${!notification.isRead ? 'text-black' : 'text-gray-700'}`}>
                       {notification.title}
                     </h3>
-                    {notification.isImportant && (
-                      <Star className="w-4 h-4 text-gray-500 fill-current" />
+                    <div className="flex items-center space-x-2 mt-1">
+                      {notification.isImportant && (
+                        <Star className="w-4 h-4 text-gray-500 fill-current" />
+                      )}
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
+                        {notification.category}
+                      </span>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        notification.priority === 'urgent' ? 'bg-gray-100 text-gray-800' :
+                        notification.priority === 'high' ? 'bg-gray-100 text-gray-800' :
+                        notification.priority === 'medium' ? 'bg-gray-100 text-gray-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {notification.priority === 'urgent' ? 'Срочно' :
+                         notification.priority === 'high' ? 'Высокий' :
+                         notification.priority === 'medium' ? 'Средний' : 'Низкий'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Действия */}
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => toggleImportant(notification.id)}
+                    className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
+                    title={notification.isImportant ? 'Убрать из важных' : 'Отметить как важное'}
+                  >
+                    {notification.isImportant ? (
+                      <Star className="w-4 h-4 fill-current text-gray-500" />
+                    ) : (
+                      <StarOff className="w-4 h-4" />
                     )}
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
-                      {notification.category}
-                    </span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      notification.priority === 'urgent' ? 'bg-gray-100 text-gray-800' :
-                      notification.priority === 'high' ? 'bg-gray-100 text-gray-800' :
-                      notification.priority === 'medium' ? 'bg-gray-100 text-gray-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {notification.priority === 'urgent' ? 'Срочно' :
-                       notification.priority === 'high' ? 'Высокий' :
-                       notification.priority === 'medium' ? 'Средний' : 'Низкий'}
-                    </span>
-                  </div>
+                  </button>
                   
-                  <p className={`text-gray-600 mb-3 ${!notification.isRead ? 'font-medium' : ''}`}>
-                    {notification.message}
-                  </p>
+                  <button
+                    onClick={() => notification.isRead ? markAsUnread(notification.id) : markAsRead(notification.id)}
+                    className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
+                    title={notification.isRead ? 'Отметить как непрочитанное' : 'Отметить как прочитанное'}
+                  >
+                    {notification.isRead ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                   
-                  {notification.relatedEntity && (
-                    <div className="text-sm text-gray-500 mb-3">
-                      <strong>Связано с:</strong> {notification.relatedEntity}
-                    </div>
-                  )}
+                  <button
+                    onClick={() => archiveNotification(notification.id)}
+                    className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
+                    title="Архивировать"
+                  >
+                    <Archive className="w-4 h-4" />
+                  </button>
                   
-                  <div className="text-sm text-gray-500">
-                    {formatTimeAgo(notification.createdAt)}
-                  </div>
-                  
-                  {/* Действия */}
-                  {notification.actions && notification.actions.length > 0 && (
-                    <div className="flex space-x-2 mt-4">
-                      {notification.actions.map(action => (
-                        <button
-                          key={action.id}
-                          onClick={() => handleNotificationAction(notification.id, action.id)}
-                          className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                            action.type === 'primary' ? 'bg-black text-white hover:bg-gray-800' :
-                            action.type === 'danger' ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' :
-                            'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
-                        >
-                          {action.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <button
+                    onClick={() => deleteNotification(notification.id)}
+                    className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
+                    title="Удалить"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => toggleImportant(notification.id)}
-                  className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
-                  title={notification.isImportant ? 'Убрать из важных' : 'Отметить как важное'}
-                >
-                  {notification.isImportant ? (
-                    <Star className="w-4 h-4 fill-current text-gray-500" />
-                  ) : (
-                    <StarOff className="w-4 h-4" />
-                  )}
-                </button>
+              {/* Описание */}
+              <div className="space-y-3">
+                <p className={`text-gray-600 ${!notification.isRead ? 'font-medium' : ''}`}>
+                  {notification.message}
+                </p>
                 
-                <button
-                  onClick={() => notification.isRead ? markAsUnread(notification.id) : markAsRead(notification.id)}
-                  className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
-                  title={notification.isRead ? 'Отметить как непрочитанное' : 'Отметить как прочитанное'}
-                >
-                  {notification.isRead ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                {notification.relatedEntity && (
+                  <div className="text-sm text-gray-500">
+                    <strong>Связано с:</strong> {notification.relatedEntity}
+                  </div>
+                )}
                 
-                <button
-                  onClick={() => archiveNotification(notification.id)}
-                  className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
-                  title="Архивировать"
-                >
-                  <Archive className="w-4 h-4" />
-                </button>
-                
-                <button
-                  onClick={() => deleteNotification(notification.id)}
-                  className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
-                  title="Удалить"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="text-sm text-gray-500">
+                  {formatTimeAgo(notification.createdAt)}
+                </div>
               </div>
+              
+              {/* Кнопки действий */}
+              {notification.actions && notification.actions.length > 0 && (
+                <div className="flex space-x-2 pt-2 border-t border-gray-200">
+                  {notification.actions.map(action => (
+                    <button
+                      key={action.id}
+                      onClick={() => handleNotificationAction(notification.id, action.id)}
+                      className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                        action.type === 'primary' ? 'bg-black text-white hover:bg-gray-800' :
+                        action.type === 'danger' ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' :
+                        'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ))}
