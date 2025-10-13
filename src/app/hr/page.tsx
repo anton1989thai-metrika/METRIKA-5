@@ -131,6 +131,8 @@ import TimeTrackingCalendar from "@/components/TimeTrackingCalendar"
 import PenaltiesBonusesPanel from "@/components/PenaltiesBonusesPanel"
 import CashManagementPanel from "@/components/CashManagementPanel"
 import SalaryCalculationPanel from "@/components/SalaryCalculationPanel"
+import HRNotificationsPanel from "@/components/HRNotificationsPanel"
+import HRReportingPanel from "@/components/HRReportingPanel"
 
 export default function HRPage() {
   const { data: session, status } = useSession()
@@ -305,6 +307,17 @@ export default function HRPage() {
             >
               <Award className="w-4 h-4 inline mr-2" />
               Штрафы и премии
+            </button>
+            <button
+              onClick={() => setActiveTab('notifications')}
+              className={`px-4 py-2 rounded-full font-medium transition-all ${
+                activeTab === 'notifications' 
+                  ? 'bg-black text-white shadow-lg' 
+                  : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+              }`}
+            >
+              <Bell className="w-4 h-4 inline mr-2" />
+              Уведомления
             </button>
             <button
               onClick={() => setActiveTab('reports')}
@@ -526,56 +539,14 @@ export default function HRPage() {
           <PenaltiesBonusesPanel />
         )}
 
+        {/* Уведомления */}
+        {activeTab === 'notifications' && (
+          <HRNotificationsPanel />
+        )}
+
         {/* Отчёты */}
         {activeTab === 'reports' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-black">Отчёты и аналитика</h2>
-              <button className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                <Download className="w-4 h-4 inline mr-2" />
-                Экспорт отчёта
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <div className="flex items-center mb-4">
-                  <PieChart className="w-6 h-6 text-gray-600 mr-3" />
-                  <h3 className="text-lg font-semibold text-black">Зарплатная ведомость</h3>
-                </div>
-                <p className="text-gray-600 mb-4">Детальный отчёт по зарплатам сотрудников</p>
-                <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                  Сформировать
-                </button>
-              </div>
-
-              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <div className="flex items-center mb-4">
-                  <Clock className="w-6 h-6 text-gray-600 mr-3" />
-                  <h3 className="text-lg font-semibold text-black">Отчёт по времени</h3>
-                </div>
-                <p className="text-gray-600 mb-4">Анализ рабочего времени сотрудников</p>
-                <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                  Сформировать
-                </button>
-              </div>
-
-              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <div className="flex items-center mb-4">
-                  <Receipt className="w-6 h-6 text-gray-600 mr-3" />
-                  <h3 className="text-lg font-semibold text-black">Финансовый отчёт</h3>
-                </div>
-                <p className="text-gray-600 mb-4">Отчёт по доходам и расходам</p>
-                <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                  Сформировать
-                </button>
-              </div>
-            </div>
-          </div>
+          <HRReportingPanel />
         )}
       </div>
     </div>
