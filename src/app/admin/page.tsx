@@ -148,7 +148,6 @@ import CashManagementPanel from "@/components/CashManagementPanel"
 import SalaryCalculationPanel from "@/components/SalaryCalculationPanel"
 import HRNotificationsPanel from "@/components/HRNotificationsPanel"
 import HRReportingPanel from "@/components/HRReportingPanel"
-import HRPermissionsPanel from "@/components/HRPermissionsPanel"
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
@@ -985,19 +984,8 @@ export default function AdminPage() {
                     <PieChart className="w-4 h-4 inline mr-2" />
                     Отчёты
                   </button>
-                  <button
-                    onClick={() => setHrActiveTab('permissions')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'permissions' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
-                  >
-                    <Shield className="w-4 h-4 inline mr-2" />
-                    Права доступа
-              </button>
-            </div>
-          </div>
+                </div>
+              </div>
           
               {/* Дашборд */}
               {hrActiveTab === 'dashboard' && (
@@ -1164,11 +1152,6 @@ export default function AdminPage() {
               {/* Отчёты */}
               {hrActiveTab === 'reports' && (
                 <HRReportingPanel />
-              )}
-
-              {/* Права доступа */}
-              {hrActiveTab === 'permissions' && (
-                <HRPermissionsPanel />
               )}
             </div>
           )}

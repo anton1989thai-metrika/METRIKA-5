@@ -106,7 +106,8 @@ import {
   Frown,
   Meh,
   Angry,
-  Laugh
+  Laugh,
+  CheckSquare
 } from "lucide-react"
 
 interface User {
@@ -589,100 +590,330 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         {/* Права доступа */}
         {activeTab === 'permissions' && (
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-black">Управление правами доступа</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {users.map(user => (
-                <div key={user.id} className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-black">{user.name}</div>
-                        <div className="text-sm text-gray-600">{user.email}</div>
-                      </div>
+            {/* Заголовок и действия */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-black">Права доступа</h3>
+                <p className="text-sm text-gray-600">Управление ролями и разрешениями для всех разделов сайта</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  className="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all text-gray-700 hover:text-black"
+                >
+                  <Plus className="w-4 h-4 inline mr-2" />
+                  Создать роль
+                </button>
+                <button
+                  className="px-4 py-2 bg-black text-white rounded-lg shadow-sm hover:bg-gray-800 transition-all"
+                >
+                  <UserPlus className="w-4 h-4 inline mr-2" />
+                  Добавить пользователя
+                </button>
+              </div>
+            </div>
+
+            {/* Вкладки для управления правами */}
+            <div className="flex border-b border-gray-300">
+              {[
+                { id: 'roles', label: 'Роли', icon: Shield },
+                { id: 'users', label: 'Пользователи', icon: Users },
+                { id: 'permissions', label: 'Разрешения', icon: Settings }
+              ].map(({ id, label, icon: IconComponent }) => (
+                <button
+                  key={id}
+                  className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-colors ${
+                    activeTab === id
+                      ? 'border-black text-black'
+                      : 'border-transparent text-gray-600 hover:text-black'
+                  }`}
+                >
+                  <IconComponent className="w-4 h-4" />
+                  <span className="text-sm font-medium">{label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Карточки ролей */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Администратор */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-gray-600" />
                     </div>
-                    <div className="flex items-center space-x-2">
-                      {getRoleIcon(user.role)}
-                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(user.status)}`}>
-                        {user.status === 'active' ? 'Активен' : 'Неактивен'}
-                      </span>
+                    <div>
+                      <h4 className="font-semibold text-black">Администратор</h4>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Системная</span>
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">2 пользователей</span>
+                      </div>
                     </div>
                   </div>
+                  <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-4 h-4" />
+                  </button>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-4">Полный доступ ко всем функциям системы</p>
+                
+                <div className="space-y-2 mb-4">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Полный доступ</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button className="text-sm text-gray-600 hover:text-black transition-colors">Редактировать</button>
+                </div>
+              </div>
 
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-black">Права доступа:</h4>
-                    
-                    <div className="space-y-2">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canManageObjects}
-                          onChange={(e) => updatePermission(user.id, 'canManageObjects', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может управлять объектами</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canManageUsers}
-                          onChange={(e) => updatePermission(user.id, 'canManageUsers', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может управлять пользователями</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canViewAnalytics}
-                          onChange={(e) => updatePermission(user.id, 'canViewAnalytics', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может просматривать аналитику</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canManageTasks}
-                          onChange={(e) => updatePermission(user.id, 'canManageTasks', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может управлять задачами</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canManageMedia}
-                          onChange={(e) => updatePermission(user.id, 'canManageMedia', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может управлять медиа</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canManageContent}
-                          onChange={(e) => updatePermission(user.id, 'canManageContent', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может управлять контентом</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={user.permissions.canManageSettings}
-                          onChange={(e) => updatePermission(user.id, 'canManageSettings', e.target.checked)}
-                          className="mr-2"
-                        />
-                        <span className="text-sm text-gray-700">Может управлять настройками</span>
-                      </label>
+              {/* HR Менеджер */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-gray-600" />
                     </div>
+                    <div>
+                      <h4 className="font-semibold text-black">HR Менеджер</h4>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">3 пользователей</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
-              ))}
+                
+                <p className="text-sm text-gray-600 mb-4">Управление кадрами и зарплатами</p>
+                
+                <div className="space-y-2 mb-4">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Просмотр кадров</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Редактирование кадров</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Просмотр зарплат</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Редактирование зарплат</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Просмотр времени</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 15.01.2024</span>
+                  <div className="flex items-center space-x-2">
+                    <button className="text-sm text-gray-600 hover:text-black transition-colors">Редактировать</button>
+                    <button className="text-sm text-gray-600 hover:text-black transition-colors">Удалить</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Бухгалтер */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black">Бухгалтер</h4>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">2 пользователей</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-4">Финансовый учёт и отчётность</p>
+                
+                <div className="space-y-2 mb-4">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Просмотр финансов</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Редактирование финансов</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs mr-1">Создание отчётов</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Экспорт данных</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 20.01.2024</span>
+                  <div className="flex items-center space-x-2">
+                    <button className="text-sm text-gray-600 hover:text-black transition-colors">Редактировать</button>
+                    <button className="text-sm text-gray-600 hover:text-black transition-colors">Удалить</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Расширенные разрешения для всех разделов */}
+            <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+              <h4 className="text-lg font-semibold text-black mb-4">Разрешения по разделам</h4>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Объекты */}
+                <div className="space-y-3">
+                  <h5 className="font-medium text-black flex items-center">
+                    <Building className="w-4 h-4 mr-2 text-gray-600" />
+                    Объекты
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Просмотр объектов</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Создание объектов</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Редактирование объектов</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Удаление объектов</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Кадры и бухгалтерия */}
+                <div className="space-y-3">
+                  <h5 className="font-medium text-black flex items-center">
+                    <Calculator className="w-4 h-4 mr-2 text-gray-600" />
+                    Кадры и бухгалтерия
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Просмотр сотрудников</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Управление зарплатами</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Учёт рабочего времени</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Финансовые отчёты</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="space-y-3">
+                  <h5 className="font-medium text-black flex items-center">
+                    <Mail className="w-4 h-4 mr-2 text-gray-600" />
+                    Email
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Просмотр почты</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Отправка писем</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Управление ящиками</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Настройки почты</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Контент */}
+                <div className="space-y-3">
+                  <h5 className="font-medium text-black flex items-center">
+                    <FileText className="w-4 h-4 mr-2 text-gray-600" />
+                    Контент
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Просмотр контента</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Создание статей</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Редактирование статей</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Публикация контента</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Задачи */}
+                <div className="space-y-3">
+                  <h5 className="font-medium text-black flex items-center">
+                    <CheckSquare className="w-4 h-4 mr-2 text-gray-600" />
+                    Задачи
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Просмотр задач</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Создание задач</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Назначение исполнителей</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Закрытие задач</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Настройки */}
+                <div className="space-y-3">
+                  <h5 className="font-medium text-black flex items-center">
+                    <Settings className="w-4 h-4 mr-2 text-gray-600" />
+                    Настройки
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Просмотр настроек</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Изменение настроек</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Системные настройки</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="checkbox" className="mr-2" />
+                      <span className="text-sm text-gray-700">Резервное копирование</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
