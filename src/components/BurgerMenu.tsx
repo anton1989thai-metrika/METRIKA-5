@@ -179,7 +179,7 @@ export default function BurgerMenu() {
               </div>
               <button
                 onClick={handleSignOut}
-                className="w-full px-4 py-2 text-white bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
+                className="w-full px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors"
               >
                 {t('menu.logout')}
               </button>
