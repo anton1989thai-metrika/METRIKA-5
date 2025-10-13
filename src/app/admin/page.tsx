@@ -46,7 +46,93 @@ import {
   Video,
   Music,
   File,
-  Folder
+  Folder,
+  Calculator,
+  DollarSign,
+  UserCheck,
+  Calendar as CalendarIcon,
+  Receipt,
+  CreditCard,
+  TrendingDown,
+  PieChart,
+  Target,
+  Award,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Clock3,
+  Timer,
+  CalendarDays,
+  Banknote,
+  Wallet,
+  Coins,
+  HandCoins,
+  PiggyBank,
+  Building,
+  Home,
+  LandPlot,
+  Store,
+  Factory,
+  Share,
+  MessageCircle,
+  Play,
+  QrCode,
+  Info,
+  Cloud,
+  Zap,
+  Tag as TagIcon,
+  Archive as ArchiveIcon,
+  Grid,
+  List,
+  Target as TargetIcon,
+  Layers,
+  MapPin,
+  Video as VideoIcon,
+  Music as MusicIcon,
+  Folder as FolderIcon,
+  Link,
+  Link2,
+  Unlink,
+  Activity,
+  ArrowUp,
+  ArrowDown,
+  RotateCcw,
+  PlayCircle,
+  PauseCircle,
+  StopCircle,
+  SkipForward,
+  SkipBack,
+  Volume2,
+  VolumeX,
+  Mic,
+  MicOff,
+  Camera,
+  CameraOff,
+  Monitor,
+  Smartphone,
+  Tablet,
+  Laptop,
+  Server,
+  HardDrive,
+  Wifi,
+  WifiOff,
+  Signal,
+  SignalZero,
+  Battery,
+  BatteryLow,
+  Power,
+  PowerOff,
+  Sun,
+  Moon,
+  Star,
+  Heart,
+  ThumbsUp,
+  ThumbsDown,
+  Smile,
+  Frown,
+  Meh,
+  Angry,
+  Laugh
 } from "lucide-react"
 import ContentEditor from "@/components/ContentEditor"
 import MediaManager from "@/components/MediaManager"
@@ -360,6 +446,17 @@ export default function AdminPage() {
               >
                 <BarChart3 className="w-4 h-4 inline mr-2" />
                 Дашборд
+              </button>
+              <button
+                onClick={() => setActiveTab('hr')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'hr' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Calculator className="w-4 h-4 inline mr-2" />
+                Кадры и бухгалтерия
               </button>
               <button
                 onClick={() => setActiveTab('email')}
@@ -758,6 +855,132 @@ export default function AdminPage() {
                       </div>
                     </div>
                   </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Кадры и бухгалтерия */}
+          {activeTab === 'hr' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-black">Кадры и бухгалтерия</h2>
+                <div className="flex items-center space-x-4">
+                  <button className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                    style={{backgroundColor: '#fff60b'}}
+                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                  >
+                    <Calculator className="w-4 h-4 inline mr-2" />
+                    Открыть кадры
+                  </button>
+                </div>
+              </div>
+
+              {/* Статистика кадров */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Users className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">12</div>
+                      <div className="text-sm text-gray-600">Сотрудников</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">₽450,000</div>
+                      <div className="text-sm text-gray-600">Фонд зарплат</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Calendar className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">3</div>
+                      <div className="text-sm text-gray-600">В отпуске</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Clock className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">168</div>
+                      <div className="text-sm text-gray-600">Часов в месяц</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Быстрые действия */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center mb-4">
+                    <UserCheck className="w-6 h-6 text-gray-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-black">Учёт рабочего времени</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Отслеживание прихода/ухода сотрудников</p>
+                  <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                    Открыть календарь
+                  </button>
+                </div>
+
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center mb-4">
+                    <Calculator className="w-6 h-6 text-gray-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-black">Расчёт зарплаты</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Автоматический расчёт с возможностью корректировки</p>
+                  <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                    Рассчитать зарплату
+                  </button>
+                </div>
+
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center mb-4">
+                    <Receipt className="w-6 h-6 text-gray-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-black">Касса и платежи</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">Учёт поступлений и расходов</p>
+                  <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                    Управление кассой
+                  </button>
+                </div>
+              </div>
+
+              {/* Последние действия */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold text-black mb-4">Последние действия</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                    <div className="flex items-center">
+                      <UserCheck className="w-4 h-4 text-gray-600 mr-3" />
+                      <span className="text-gray-800">Иван Сидоров пришёл на работу</span>
+                    </div>
+                    <span className="text-sm text-gray-500">09:15</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                    <div className="flex items-center">
+                      <DollarSign className="w-4 h-4 text-gray-600 mr-3" />
+                      <span className="text-gray-800">Начислена зарплата за январь</span>
+                    </div>
+                    <span className="text-sm text-gray-500">Вчера</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2">
+                    <div className="flex items-center">
+                      <Calendar className="w-4 h-4 text-gray-600 mr-3" />
+                      <span className="text-gray-800">Анна Петрова ушла в отпуск</span>
+                    </div>
+                    <span className="text-sm text-gray-500">2 дня назад</span>
+                  </div>
                 </div>
               </div>
             </div>

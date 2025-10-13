@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings } from "lucide-react"
+import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator } from "lucide-react"
 import Link from "next/link"
 import { UserRole } from "@/types/auth"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -70,6 +70,12 @@ export default function BurgerMenu() {
       label: t('menu.myObjects'),
       icon: <Heart className="w-5 h-5" />,
       roles: ["client", "employee", "admin"]
+    },
+    {
+      href: "/hr",
+      label: "Кадры и бухгалтерия",
+      icon: <Calculator className="w-5 h-5" />,
+      roles: ["employee", "admin"]
     },
     {
       href: "/email",
