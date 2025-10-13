@@ -1080,21 +1080,21 @@ export default function AdminPage() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between py-2 border-b border-gray-200">
                         <div className="flex items-center">
-                          <UserCheck className="w-4 h-4 text-green-600 mr-3" />
+                          <UserCheck className="w-4 h-4 text-gray-600 mr-3" />
                           <span className="text-gray-800">Иван Сидоров пришёл на работу</span>
                         </div>
                         <span className="text-sm text-gray-500">09:15</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-b border-gray-200">
                         <div className="flex items-center">
-                          <DollarSign className="w-4 h-4 text-blue-600 mr-3" />
+                          <DollarSign className="w-4 h-4 text-gray-600 mr-3" />
                           <span className="text-gray-800">Начислена зарплата за январь</span>
                         </div>
                         <span className="text-sm text-gray-500">Вчера</span>
                       </div>
                       <div className="flex items-center justify-between py-2">
                         <div className="flex items-center">
-                          <Calendar className="w-4 h-4 text-purple-600 mr-3" />
+                          <Calendar className="w-4 h-4 text-gray-600 mr-3" />
                           <span className="text-gray-800">Анна Петрова ушла в отпуск</span>
                         </div>
                         <span className="text-sm text-gray-500">2 дня назад</span>
