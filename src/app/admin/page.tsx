@@ -425,25 +425,28 @@ export default function AdminPage() {
       
       <main className="pt-20 px-4">
         <div className="max-w-7xl mx-auto">
-          {/* Заголовок */}
-          <div className="mb-8 mt-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-black mb-2">Админ панель МЕТРИКА</h1>
-                <p className="text-gray-600">Управление сайтом и контентом</p>
+          {/* Заголовок - скрыт для раздела "Кадры и бухгалтерия" */}
+          {activeTab !== 'hr' && (
+            <div className="mb-8 mt-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold text-black mb-2">Админ панель МЕТРИКА</h1>
+                  <p className="text-gray-600">Управление сайтом и контентом</p>
+                </div>
+                <button className="relative p-3 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all">
+                  <Bell className="w-6 h-6 text-gray-600" />
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {stats.pendingTasks + stats.newApplications}
+                  </span>
+                </button>
+              </div>
             </div>
-              <button className="relative p-3 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all">
-                <Bell className="w-6 h-6 text-gray-600" />
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {stats.pendingTasks + stats.newApplications}
-                </span>
-              </button>
-            </div>
-            </div>
+          )}
             
-          {/* Навигация */}
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-2">
+          {/* Навигация - скрыта для раздела "Кадры и бухгалтерия" */}
+          {activeTab !== 'hr' && (
+            <div className="mb-8">
+              <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setActiveTab('dashboard')}
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
@@ -555,8 +558,9 @@ export default function AdminPage() {
                 Настройки
               </button>
             </div>
-          </div>
-          
+            </div>
+          )}
+            
           {/* Дашборд */}
           {activeTab === 'dashboard' && (
             <div className="space-y-8">
@@ -570,8 +574,8 @@ export default function AdminPage() {
                       <div className="text-sm text-gray-600">Всего объектов</div>
                     </div>
                   </div>
-                </div>
-                
+            </div>
+            
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Users className="w-8 h-8 text-gray-600 mr-3" />
@@ -580,8 +584,8 @@ export default function AdminPage() {
                       <div className="text-sm text-gray-600">Активных клиентов</div>
                     </div>
                   </div>
-                </div>
-                
+            </div>
+            
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <CheckSquare className="w-8 h-8 text-gray-600 mr-3" />
@@ -589,9 +593,9 @@ export default function AdminPage() {
                       <div className="text-2xl font-bold text-black">{stats.pendingTasks}</div>
                       <div className="text-sm text-gray-600">Ожидающих задач</div>
                     </div>
-                  </div>
-                </div>
-                
+            </div>
+          </div>
+          
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <FileText className="w-8 h-8 text-gray-600 mr-3" />
@@ -625,7 +629,7 @@ export default function AdminPage() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <h2 className="text-xl font-semibold text-black mb-4">Последние активности</h2>
-                  <div className="space-y-3">
+              <div className="space-y-3">
                     {recentActivities.map(activity => (
                       <div key={activity.id} className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                         <div className="flex items-center">
@@ -633,29 +637,29 @@ export default function AdminPage() {
                             activity.status === 'new' ? 'bg-red-500' : 
                             activity.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
                           }`}></div>
-                          <div>
+                  <div>
                             <div className="font-medium text-black text-sm">{activity.message}</div>
                             <div className="text-xs text-gray-600">{activity.time}</div>
-                          </div>
+                  </div>
                         </div>
                         <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                           <Eye className="w-3 h-3" />
-                        </button>
+                    </button>
                       </div>
                     ))}
                   </div>
                 </div>
-
+                
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <h2 className="text-xl font-semibold text-black mb-4">Системные уведомления</h2>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                       <div className="flex items-center">
                         <AlertCircle className="w-4 h-4 text-yellow-500 mr-3" />
-                        <div>
+                  <div>
                           <div className="font-medium text-black text-sm">Требуется обновление</div>
                           <div className="text-xs text-gray-600">Доступна новая версия системы</div>
-                        </div>
+                  </div>
                       </div>
                       <button 
                         className="px-3 py-1 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
@@ -664,7 +668,7 @@ export default function AdminPage() {
                         onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
                       >
                         Обновить
-                      </button>
+                    </button>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
@@ -678,9 +682,9 @@ export default function AdminPage() {
                       <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                         <Download className="w-3 h-3" />
                     </button>
-                    </div>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           )}
@@ -698,10 +702,10 @@ export default function AdminPage() {
               >
                     <Mail className="w-4 h-4 inline mr-2" />
                     Открыть почту
-                  </button>
+              </button>
                 </div>
-              </div>
-
+            </div>
+            
               {/* Статистика почты */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
@@ -717,10 +721,10 @@ export default function AdminPage() {
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Bell className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
+                  <div>
                       <div className="text-2xl font-bold text-black">23</div>
                       <div className="text-sm text-gray-600">Непрочитанных</div>
-                    </div>
+                  </div>
                   </div>
                 </div>
                 
@@ -752,7 +756,7 @@ export default function AdminPage() {
                   <button className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all">
                     <UserPlus className="w-4 h-4 inline mr-2" />
                     Создать ящик
-              </button>
+                    </button>
             </div>
             
                 <div className="overflow-x-auto">
@@ -783,7 +787,7 @@ export default function AdminPage() {
                             </button>
                             <button className="p-1 text-gray-600 hover:text-red-600">
                               <Trash2 className="w-4 h-4" />
-                            </button>
+                    </button>
                           </div>
                         </td>
                       </tr>
@@ -827,9 +831,9 @@ export default function AdminPage() {
                       </tr>
                     </tbody>
                   </table>
+                  </div>
                 </div>
-              </div>
-
+                
               {/* Быстрые действия */}
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-black mb-4">Быстрые действия</h3>
@@ -837,12 +841,12 @@ export default function AdminPage() {
                   <button className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
                     <div className="flex items-center space-x-3">
                       <Mail className="w-6 h-6 text-gray-600" />
-                      <div>
+                  <div>
                         <div className="font-medium text-black">Создать ящик</div>
                         <div className="text-sm text-gray-600">Новый почтовый ящик</div>
-                      </div>
+                  </div>
                     </div>
-                  </button>
+                    </button>
                   
                   <button className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
                     <div className="flex items-center space-x-3">
@@ -852,7 +856,7 @@ export default function AdminPage() {
                         <div className="text-sm text-gray-600">Создать бэкап почты</div>
                       </div>
                     </div>
-                  </button>
+                    </button>
                   
                   <button className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
                     <div className="flex items-center space-x-3">
@@ -860,10 +864,10 @@ export default function AdminPage() {
                       <div>
                         <div className="font-medium text-black">Настройки</div>
                         <div className="text-sm text-gray-600">Конфигурация почты</div>
-                      </div>
-                    </div>
-                  </button>
+                  </div>
                 </div>
+                  </button>
+              </div>
               </div>
             </div>
           )}
@@ -881,7 +885,7 @@ export default function AdminPage() {
               {/* Навигация */}
               <div className="mb-8">
                 <div className="flex flex-wrap gap-2">
-                  <button
+              <button 
                     onClick={() => setHrActiveTab('dashboard')}
                     className={`px-4 py-2 rounded-full font-medium transition-all ${
                       hrActiveTab === 'dashboard' 
@@ -979,10 +983,10 @@ export default function AdminPage() {
                   >
                     <Shield className="w-4 h-4 inline mr-2" />
                     Права доступа
-                  </button>
-                </div>
-              </div>
-
+              </button>
+            </div>
+          </div>
+          
               {/* Дашборд */}
               {hrActiveTab === 'dashboard' && (
                 <div className="space-y-6">
@@ -1001,7 +1005,7 @@ export default function AdminPage() {
                     <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                       <div className="flex items-center">
                         <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
-                        <div>
+              <div>
                           <div className="text-2xl font-bold text-black">₽450,000</div>
                           <div className="text-sm text-gray-600">Фонд зарплат</div>
                         </div>
@@ -1077,12 +1081,12 @@ export default function AdminPage() {
                   {/* Последние действия */}
                   <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                     <h3 className="text-lg font-semibold text-black mb-4">Последние действия</h3>
-                    <div className="space-y-3">
+                <div className="space-y-3">
                       <div className="flex items-center justify-between py-2 border-b border-gray-200">
                         <div className="flex items-center">
                           <UserCheck className="w-4 h-4 text-gray-600 mr-3" />
                           <span className="text-gray-800">Иван Сидоров пришёл на работу</span>
-                        </div>
+                  </div>
                         <span className="text-sm text-gray-500">09:15</span>
                       </div>
                       <div className="flex items-center justify-between py-2 border-b border-gray-200">
@@ -1168,20 +1172,20 @@ export default function AdminPage() {
                   <div>
                       <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'blog').length}</div>
                       <div className="text-sm text-gray-600">Статьи блога</div>
-                    </div>
                   </div>
                 </div>
-                
+              </div>
+              
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Bell className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
+              <div>
                       <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'news').length}</div>
                       <div className="text-sm text-gray-600">Новости</div>
                     </div>
                   </div>
-                </div>
-                
+                  </div>
+                  
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Database className="w-8 h-8 text-gray-600 mr-3" />
@@ -1322,8 +1326,8 @@ export default function AdminPage() {
                           <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
                             <Copy className="w-4 h-4 inline mr-1" />
                             Копировать
-                          </button>
-                        </div>
+                    </button>
+                  </div>
                         
                         <div className="flex items-center gap-2">
                           <button
@@ -1333,9 +1337,9 @@ export default function AdminPage() {
                             <Trash2 className="w-4 h-4 inline mr-1" />
                             Удалить
                           </button>
-                        </div>
-                      </div>
-                    </div>
+                </div>
+              </div>
+            </div>
                   ))}
                   
                   {filteredContent.length === 0 && (
@@ -1412,17 +1416,17 @@ export default function AdminPage() {
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold text-black">Медиа библиотека</h2>
-                  <button 
+              <button 
                     onClick={() => setShowMediaManager(true)}
                     className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                    style={{backgroundColor: '#fff60b'}}
-                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-                  >
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
                     <Upload className="w-4 h-4 inline mr-2" />
                     Управление медиа
-                  </button>
-                </div>
+              </button>
+            </div>
 
                 {/* Общая информация */}
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
@@ -1431,7 +1435,7 @@ export default function AdminPage() {
               <div>
                         <div className="font-semibold text-black">Общий размер</div>
                         <div className="text-sm text-gray-600">{formatFileSize(mediaStats.totalSize)}</div>
-                      </div>
+          </div>
                       <Database className="w-8 h-8 text-gray-400" />
                     </div>
                   </div>
