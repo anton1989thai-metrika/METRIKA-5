@@ -178,7 +178,7 @@ export default function ObjectDetailPage() {
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={handleCall}
-                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Phone className="w-4 h-4 mr-2" />
                   Позвонить
@@ -186,7 +186,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={handleMessage}
-                  className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Написать
@@ -194,10 +194,10 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={handleFavorite}
-                  className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all ${
                     isFavorite 
-                      ? 'bg-red-100 text-red-600 border border-red-200' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-white border border-gray-300 text-black' 
+                      : 'bg-white border border-gray-300 text-black'
                   }`}
                 >
                   <Heart className={`w-4 h-4 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
@@ -206,7 +206,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={handleShare}
-                  className="flex items-center px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Поделиться
@@ -225,7 +225,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={handleExportPDF}
-                  className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                  className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Экспорт в PDF
@@ -233,8 +233,8 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Основные характеристики */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Основные характеристики</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Основные характеристики</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <span className="text-gray-600">Площадь:</span>
@@ -256,8 +256,8 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Дополнительные характеристики */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Дополнительные характеристики</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Дополнительные характеристики</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <span className="text-gray-600">Количество комнат:</span>
@@ -279,27 +279,27 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Инфраструктура */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Инфраструктура</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Инфраструктура</h2>
                 <div className="space-y-2">
                   <div className="flex items-center">
-                    <Zap className="w-4 h-4 text-green-500 mr-2" />
+                    <Zap className="w-4 h-4 text-gray-600 mr-2" />
                     <span>Интернет: Оптоволокно</span>
                   </div>
                   <div className="flex items-center">
-                    <MapPin className="w-4 h-4 text-blue-500 mr-2" />
+                    <MapPin className="w-4 h-4 text-gray-600 mr-2" />
                     <span>Подъездные пути: Асфальт</span>
                   </div>
                   <div className="flex items-center">
-                    <Users className="w-4 h-4 text-purple-500 mr-2" />
+                    <Users className="w-4 h-4 text-gray-600 mr-2" />
                     <span>Консьерж: Круглосуточно</span>
                   </div>
                 </div>
               </div>
 
               {/* Коммуникации */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Коммуникации</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Коммуникации</h2>
                 <div className="space-y-2">
                   <div>
                     <span className="text-gray-600">Отопление:</span>
@@ -317,8 +317,8 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Условия */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Условия</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Условия</h2>
                 <div className="space-y-2">
                   <div>
                     <span className="text-gray-600">Торг:</span>
@@ -333,7 +333,7 @@ export default function ObjectDetailPage() {
 
               {/* Описание */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Описание</h2>
+                <h2 className="text-xl font-semibold text-black mb-4">Описание</h2>
                 <p className="text-gray-700 leading-relaxed">
                   Просторная трехкомнатная квартира в современном жилом комплексе. 
                   Отличное состояние, современный ремонт. Большие окна, много света. 
@@ -345,7 +345,7 @@ export default function ObjectDetailPage() {
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => setShowMortgageCalculator(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Calculator className="w-5 h-5 mr-2" />
                   Калькулятор ипотеки
@@ -353,7 +353,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowVirtualTour(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Play className="w-5 h-5 mr-2" />
                   Виртуальный тур
@@ -361,7 +361,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowDocumentation(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <FileText className="w-5 h-5 mr-2" />
                   Документация
@@ -369,7 +369,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowVideo(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Play className="w-5 h-5 mr-2" />
                   Видео объекта
@@ -377,7 +377,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowPriceChart(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <TrendingUp className="w-5 h-5 mr-2" />
                   График цены
@@ -385,7 +385,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowQRCode(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <QrCode className="w-5 h-5 mr-2" />
                   QR-код
@@ -393,7 +393,10 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowUtilitiesCalculator(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                  style={{ backgroundColor: '#fff60b' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
                 >
                   <Zap className="w-5 h-5 mr-2" />
                   Коммунальные платежи
@@ -401,7 +404,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowDistrictInfo(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Info className="w-5 h-5 mr-2" />
                   Информация о районе
@@ -409,7 +412,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowBooking(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Calendar className="w-5 h-5 mr-2" />
                   Бронирование просмотра
@@ -417,7 +420,7 @@ export default function ObjectDetailPage() {
                 
                 <button
                   onClick={() => setShowWeather(true)}
-                  className="flex items-center justify-center px-4 py-3 bg-cyan-50 text-cyan-600 rounded-lg hover:bg-cyan-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Cloud className="w-5 h-5 mr-2" />
                   Погода на дату просмотра
@@ -425,18 +428,18 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Интеграция с мессенджерами */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Поделиться в мессенджерах</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Поделиться в мессенджерах</h2>
                 <div className="flex space-x-3">
-                  <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
                   </button>
-                  <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Telegram
                   </button>
-                  <button className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Viber
                   </button>
@@ -444,22 +447,22 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Интеграция с социальными сетями */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Поделиться в соцсетях</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Поделиться в соцсетях</h2>
                 <div className="flex space-x-3">
-                  <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <Facebook className="w-4 h-4 mr-2" />
                     Facebook
                   </button>
-                  <button className="flex items-center px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <Instagram className="w-4 h-4 mr-2" />
                     Instagram
                   </button>
-                  <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <Share2 className="w-4 h-4 mr-2" />
                     VK
                   </button>
-                  <button className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+                  <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <Share2 className="w-4 h-4 mr-2" />
                     Одноклассники
                   </button>
@@ -468,15 +471,15 @@ export default function ObjectDetailPage() {
 
               {/* Похожие объекты */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Похожие объекты</h2>
+                <h2 className="text-xl font-semibold text-black mb-4">Похожие объекты</h2>
                 <div className="grid grid-cols-1 gap-4">
                   {realEstateObjects.slice(0, 3).map((similarObject) => (
-                    <div key={similarObject.id} className="flex bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+                    <div key={similarObject.id} className="flex bg-white border border-gray-300 rounded-lg p-4 shadow-sm hover:shadow-md transition-all cursor-pointer">
                       <div className="w-20 h-20 bg-gray-200 rounded-lg mr-4 flex-shrink-0"></div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{similarObject.title}</h3>
+                        <h3 className="font-semibold text-black">{similarObject.title}</h3>
                         <p className="text-sm text-gray-600">{similarObject.address}</p>
-                        <p className="text-lg font-bold text-gray-900">{similarObject.price}</p>
+                        <p className="text-lg font-bold text-black">{similarObject.price}</p>
                       </div>
                     </div>
                   ))}
@@ -485,9 +488,9 @@ export default function ObjectDetailPage() {
 
               {/* Отзывы и рейтинги */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Отзывы и рейтинги</h2>
+                <h2 className="text-xl font-semibold text-black mb-4">Отзывы и рейтинги</h2>
                 <div className="space-y-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center mb-2">
                       <div className="flex text-yellow-400">
                         {[...Array(5)].map((_, i) => (
@@ -498,7 +501,7 @@ export default function ObjectDetailPage() {
                     </div>
                     <p className="text-gray-700">Отличная квартира, все как на фото. Агент очень профессиональный.</p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center mb-2">
                       <div className="flex text-yellow-400">
                         {[...Array(4)].map((_, i) => (
@@ -555,7 +558,7 @@ export default function ObjectDetailPage() {
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden ${
-                      index === currentImageIndex ? 'ring-2 ring-blue-500' : ''
+                      index === currentImageIndex ? 'ring-2 ring-gray-400' : ''
                     }`}
                   >
                     <Image
@@ -570,8 +573,8 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Интерактивная карта */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Расположение</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Расположение</h2>
                 <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
@@ -580,36 +583,44 @@ export default function ObjectDetailPage() {
                   </div>
                 </div>
                 <div className="mt-4 flex space-x-2">
-                  <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                  <button className="px-3 py-1 bg-white border border-gray-300 text-black rounded text-sm shadow-sm hover:shadow-md transition-all">
                     Google Maps
                   </button>
-                  <button className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">
+                  <button className="px-3 py-1 bg-white border border-gray-300 text-black rounded text-sm shadow-sm hover:shadow-md transition-all">
                     Yandex
                   </button>
-                  <button className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700">
+                  <button className="px-3 py-1 text-black rounded text-sm shadow-sm hover:shadow-md transition-all"
+                    style={{ backgroundColor: '#fff60b' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
+                  >
                     2GIS
                   </button>
                 </div>
               </div>
 
               {/* Система сравнения */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Сравнение объектов</h2>
-                <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Сравнение объектов</h2>
+                <button className="w-full px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                   Добавить к сравнению
                 </button>
                 <p className="text-sm text-gray-600 mt-2">В списке сравнения: 0 объектов</p>
               </div>
 
               {/* Уведомления */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Уведомления</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Уведомления</h2>
                 <div className="space-y-3">
-                  <button className="w-full px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 transition-colors">
+                  <button className="w-full px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                    style={{ backgroundColor: '#fff60b' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
+                  >
                     <Bell className="w-4 h-4 inline mr-2" />
                     Уведомлять о похожих объектах
                   </button>
-                  <button className="w-full px-4 py-2 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 transition-colors">
+                  <button className="w-full px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     <Bell className="w-4 h-4 inline mr-2" />
                     Уведомлять о новых объектах в районе
                   </button>
@@ -617,16 +628,16 @@ export default function ObjectDetailPage() {
               </div>
 
               {/* Интеграция с календарем */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Добавить в календарь</h2>
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-black mb-4">Добавить в календарь</h2>
                 <div className="space-y-2">
-                  <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  <button className="w-full px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     Google Calendar
                   </button>
-                  <button className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                  <button className="w-full px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     Apple Calendar
                   </button>
-                  <button className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                  <button className="w-full px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
                     Outlook
                   </button>
                 </div>

@@ -1,23 +1,326 @@
 "use client"
 
-import BurgerMenu from "@/components/BurgerMenu";
-import Header from "@/components/Header";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useState } from "react"
+import BurgerMenu from "@/components/BurgerMenu"
+import Header from "@/components/Header"
+import { useSession } from "next-auth/react"
+import { redirect } from "next/navigation"
+import { 
+  Users, 
+  Building2, 
+  FileText, 
+  Image, 
+  BarChart3, 
+  Settings, 
+  CheckSquare,
+  Bell,
+  Shield,
+  Database,
+  Calendar,
+  Mail,
+  Search,
+  Filter,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  Download,
+  Upload,
+  Save,
+  RefreshCw,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  TrendingUp,
+  UserPlus,
+  FilePlus,
+  ImagePlus,
+  BarChart,
+  Cog,
+  CheckSquare as TaskSquare,
+  Tag,
+  Globe,
+  Archive,
+  Copy,
+  MoreVertical,
+  Video,
+  Music,
+  File,
+  Folder
+} from "lucide-react"
+import ContentEditor from "@/components/ContentEditor"
+import MediaManager from "@/components/MediaManager"
+import AnalyticsDashboard from "@/components/AnalyticsDashboard"
+import SiteSettingsPanel from "@/components/SiteSettingsPanel"
+import ObjectManagementPanel from "@/components/ObjectManagementPanel"
+import TaskManagementPanel from "@/components/TaskManagementPanel"
 
 export default function AdminPage() {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession()
+  const [activeTab, setActiveTab] = useState('dashboard')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
+  const [showContentEditor, setShowContentEditor] = useState(false)
+  const [selectedContent, setSelectedContent] = useState(null)
+  const [contentCategory, setContentCategory] = useState('all')
+  const [contentStatus, setContentStatus] = useState('all')
+  const [showMediaManager, setShowMediaManager] = useState(false)
   
   if (status === "loading") {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-lg text-gray-600">Загрузка...</div>
       </div>
-    );
+    )
   }
   
   if (!session || session.user?.role !== "admin") {
-    redirect("/auth/signin");
+    redirect("/auth/signin")
+  }
+
+  // Mock data
+  const stats = {
+    totalObjects: 156,
+    activeClients: 24,
+    employees: 8,
+    monthlyDeals: 12,
+    pendingTasks: 5,
+    newApplications: 3,
+    publishedArticles: 45,
+    totalUsers: 156
+  }
+
+  const recentActivities = [
+    { id: 1, type: 'application', message: 'Новая заявка на покупку квартиры', time: '2 мин назад', status: 'new' },
+    { id: 2, type: 'task', message: 'Задача "Обновить фото объекта" выполнена', time: '15 мин назад', status: 'completed' },
+    { id: 3, type: 'article', message: 'Статья "Рынок недвижимости 2024" опубликована', time: '1 час назад', status: 'published' },
+    { id: 4, type: 'user', message: 'Новый пользователь зарегистрирован', time: '2 часа назад', status: 'new' }
+  ]
+
+  const quickActions = [
+    { id: 1, title: 'Создать статью', icon: <FileText className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
+    { id: 2, title: 'Добавить объект', icon: <Building2 className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
+    { id: 3, title: 'Загрузить фото', icon: <Image className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
+    { id: 4, title: 'Создать задачу', icon: <CheckSquare className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
+    { id: 5, title: 'Добавить пользователя', icon: <UserPlus className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
+    { id: 6, title: 'Создать отчет', icon: <BarChart className="w-6 h-6" />, color: 'bg-white border border-gray-300' }
+  ]
+
+  // Mock данные для контента
+  const contentItems = [
+    {
+      id: 1,
+      title: "Рынок недвижимости в 2024 году",
+      excerpt: "Анализ текущего состояния рынка недвижимости и прогнозы на будущее",
+      category: "blog",
+      status: "published",
+      views: 1250,
+      createdAt: "2024-01-15",
+      updatedAt: "2024-01-20",
+      author: "Администратор",
+      tags: ["рынок", "анализ", "2024"],
+      language: "ru"
+    },
+    {
+      id: 2,
+      title: "Новые возможности для клиентов",
+      excerpt: "Расширение сервисов и улучшение качества обслуживания",
+      category: "news",
+      status: "published",
+      views: 890,
+      createdAt: "2024-01-18",
+      updatedAt: "2024-01-18",
+      author: "Администратор",
+      tags: ["новости", "сервис"],
+      language: "ru"
+    },
+    {
+      id: 3,
+      title: "Как правильно выбрать квартиру",
+      excerpt: "Подробное руководство по выбору недвижимости для покупки",
+      category: "knowledge",
+      status: "draft",
+      views: 0,
+      createdAt: "2024-01-20",
+      updatedAt: "2024-01-20",
+      author: "Администратор",
+      tags: ["покупка", "руководство"],
+      language: "ru"
+    },
+    {
+      id: 4,
+      title: "Часто задаваемые вопросы",
+      excerpt: "Ответы на самые популярные вопросы клиентов",
+      category: "faq",
+      status: "published",
+      views: 2100,
+      createdAt: "2024-01-10",
+      updatedAt: "2024-01-15",
+      author: "Администратор",
+      tags: ["FAQ", "помощь"],
+      language: "ru"
+    }
+  ]
+
+  const handleCreateContent = () => {
+    setSelectedContent(null)
+    setShowContentEditor(true)
+  }
+
+  const handleEditContent = (content: any) => {
+    setSelectedContent(content)
+    setShowContentEditor(true)
+  }
+
+  const handleSaveContent = async (contentData: any) => {
+    // В реальном приложении здесь будет API вызов
+    console.log('Сохранение контента:', contentData)
+  }
+
+  const handleDeleteContent = (id: number) => {
+    if (confirm('Вы уверены, что хотите удалить этот контент?')) {
+      // В реальном приложении здесь будет API вызов
+      console.log('Удаление контента:', id)
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'published': return 'text-green-600 bg-green-50 border border-green-200'
+      case 'draft': return 'text-yellow-600 bg-yellow-50 border border-yellow-200'
+      case 'scheduled': return 'text-blue-600 bg-blue-50 border border-blue-200'
+      case 'archived': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      default: return 'text-gray-600 bg-gray-50 border border-gray-200'
+    }
+  }
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'published': return 'Опубликовано'
+      case 'draft': return 'Черновик'
+      case 'scheduled': return 'Запланировано'
+      case 'archived': return 'Архив'
+      default: return 'Неизвестно'
+    }
+  }
+
+  const getCategoryText = (category: string) => {
+    switch (category) {
+      case 'blog': return 'Статьи блога'
+      case 'news': return 'Новости'
+      case 'knowledge': return 'База знаний'
+      case 'faq': return 'FAQ'
+      case 'policies': return 'Политики'
+      default: return 'Неизвестно'
+    }
+  }
+
+  const filteredContent = contentItems.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    const matchesCategory = contentCategory === 'all' || item.category === contentCategory
+    const matchesStatus = contentStatus === 'all' || item.status === contentStatus
+    
+    return matchesSearch && matchesCategory && matchesStatus
+  })
+
+  // Mock данные для медиафайлов
+  const mediaFiles = [
+    {
+      id: 1,
+      name: "hero-bg.jpg",
+      type: "image",
+      size: 2048576,
+      url: "/images/hero-bg.jpg",
+      thumbnail: "/images/hero-bg.jpg",
+      uploadedAt: "2024-01-15",
+      folder: "heroes",
+      tags: ["фон", "главная"],
+      description: "Фоновое изображение для главной страницы",
+      alt: "Фон главной страницы",
+      dimensions: { width: 1920, height: 1080 }
+    },
+    {
+      id: 2,
+      name: "logo.png",
+      type: "image",
+      size: 512000,
+      url: "/images/logo.png",
+      thumbnail: "/images/logo.png",
+      uploadedAt: "2024-01-10",
+      folder: "branding",
+      tags: ["логотип", "бренд"],
+      description: "Логотип компании",
+      alt: "Логотип МЕТРИКА",
+      dimensions: { width: 200, height: 200 }
+    },
+    {
+      id: 3,
+      name: "object-1.jpg",
+      type: "image",
+      size: 1536000,
+      url: "/images/object-1.jpg",
+      thumbnail: "/images/object-1.jpg",
+      uploadedAt: "2024-01-20",
+      folder: "objects",
+      tags: ["объект", "недвижимость"],
+      description: "Фотография объекта недвижимости",
+      alt: "Объект недвижимости",
+      dimensions: { width: 800, height: 600 }
+    },
+    {
+      id: 4,
+      name: "presentation.pdf",
+      type: "document",
+      size: 5242880,
+      url: "/documents/presentation.pdf",
+      uploadedAt: "2024-01-18",
+      folder: "documents",
+      tags: ["презентация", "документ"],
+      description: "Презентация компании"
+    },
+    {
+      id: 5,
+      name: "company-video.mp4",
+      type: "video",
+      size: 52428800,
+      url: "/videos/company-video.mp4",
+      thumbnail: "/images/video-thumb-1.jpg",
+      uploadedAt: "2024-01-12",
+      folder: "videos",
+      tags: ["видео", "компания"],
+      description: "Видео о компании"
+    }
+  ]
+
+  const mediaStats = {
+    totalFiles: mediaFiles.length,
+    totalSize: mediaFiles.reduce((acc, file) => acc + file.size, 0),
+    images: mediaFiles.filter(f => f.type === 'image').length,
+    videos: mediaFiles.filter(f => f.type === 'video').length,
+    documents: mediaFiles.filter(f => f.type === 'document').length,
+    audio: mediaFiles.filter(f => f.type === 'audio').length,
+    archives: mediaFiles.filter(f => f.type === 'archive').length
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  }
+
+  const getFileIcon = (type: string) => {
+    switch (type) {
+      case 'image': return <Image className="w-8 h-8 text-blue-500" />
+      case 'video': return <Video className="w-8 h-8 text-red-500" />
+      case 'document': return <FileText className="w-8 h-8 text-green-500" />
+      case 'audio': return <Music className="w-8 h-8 text-purple-500" />
+      case 'archive': return <Archive className="w-8 h-8 text-orange-500" />
+      default: return <File className="w-8 h-8 text-gray-500" />
+    }
   }
 
   return (
@@ -25,212 +328,850 @@ export default function AdminPage() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-32 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold text-black mb-8">
-            Админ панель
-          </h1>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
-              <div className="text-3xl font-bold text-black mb-2">156</div>
-              <div className="text-gray-600">Всего объектов</div>
-            </div>
-            
-            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
-              <div className="text-3xl font-bold text-black mb-2">24</div>
-              <div className="text-gray-600">Активных клиентов</div>
-            </div>
-            
-            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
-              <div className="text-3xl font-bold text-black mb-2">8</div>
-              <div className="text-gray-600">Сотрудников</div>
-            </div>
-            
-            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg text-center">
-              <div className="text-3xl font-bold text-black mb-2">12</div>
-              <div className="text-gray-600">Сделок в этом месяце</div>
+      <main className="pt-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Заголовок */}
+          <div className="mb-8 mt-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-black mb-2">Админ панель МЕТРИКА</h1>
+                <p className="text-gray-600">Управление сайтом и контентом</p>
+              </div>
+              <button className="relative p-3 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all">
+                <Bell className="w-6 h-6 text-gray-600" />
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  {stats.pendingTasks + stats.newApplications}
+                </span>
+              </button>
             </div>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-semibold text-black mb-4">
-                Управление пользователями
-              </h2>
-              
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
-                  <div>
-                    <div className="font-medium text-black">Иван Петров</div>
-                    <div className="text-sm text-gray-600">ivan@example.com</div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Редактировать
-                    </button>
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Удалить
-                    </button>
+
+          {/* Навигация */}
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'dashboard' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <BarChart3 className="w-4 h-4 inline mr-2" />
+                Дашборд
+              </button>
+              <button
+                onClick={() => setActiveTab('email')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'email' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Mail className="w-4 h-4 inline mr-2" />
+                Email
+              </button>
+              <button
+                onClick={() => setActiveTab('content')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'content' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <FileText className="w-4 h-4 inline mr-2" />
+                Контент
+              </button>
+              <button
+                onClick={() => setActiveTab('objects')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'objects' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Building2 className="w-4 h-4 inline mr-2" />
+                Объекты
+              </button>
+              <button
+                onClick={() => setActiveTab('users')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'users' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Users className="w-4 h-4 inline mr-2" />
+                Пользователи
+              </button>
+              <button
+                onClick={() => setActiveTab('tasks')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'tasks' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <TaskSquare className="w-4 h-4 inline mr-2" />
+                Задачи
+              </button>
+              <button
+                onClick={() => setActiveTab('media')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'media' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Image className="w-4 h-4 inline mr-2" />
+                Медиа
+              </button>
+              <button
+                onClick={() => setActiveTab('analytics')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'analytics' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <BarChart3 className="w-4 h-4 inline mr-2" />
+                Аналитика
+              </button>
+              <button
+                onClick={() => setActiveTab('settings')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'settings' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Settings className="w-4 h-4 inline mr-2" />
+                Настройки
+              </button>
+            </div>
+          </div>
+
+          {/* Дашборд */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-8">
+              {/* Статистика */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Building2 className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{stats.totalObjects}</div>
+                      <div className="text-sm text-gray-600">Всего объектов</div>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
-                  <div>
-                    <div className="font-medium text-black">Мария Сидорова</div>
-                    <div className="text-sm text-gray-600">maria@example.com</div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Редактировать
-                    </button>
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Удалить
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <button 
-                className="w-full mt-4 px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                Добавить пользователя
-              </button>
-            </div>
-            
-            <div className="bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-semibold text-black mb-4">
-                Управление объектами
-              </h2>
-              
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
-                  <div>
-                    <div className="font-medium text-black">2-комнатная квартира</div>
-                    <div className="text-sm text-gray-600">ул. Ленина, д. 15</div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Редактировать
-                    </button>
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Удалить
-                    </button>
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Users className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{stats.activeClients}</div>
+                      <div className="text-sm text-gray-600">Активных клиентов</div>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
-                  <div>
-                    <div className="font-medium text-black">Частный дом</div>
-                    <div className="text-sm text-gray-600">д. Подмосковная</div>
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <CheckSquare className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{stats.pendingTasks}</div>
+                      <div className="text-sm text-gray-600">Ожидающих задач</div>
+                    </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Редактировать
-                    </button>
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                      Удалить
-                    </button>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <FileText className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{stats.publishedArticles}</div>
+                      <div className="text-sm text-gray-600">Опубликованных статей</div>
+                    </div>
                   </div>
                 </div>
               </div>
-              
-              <button 
-                className="w-full mt-4 px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                Добавить объект
-              </button>
-            </div>
-          </div>
-          
-          <div className="bg-gray-50 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold text-black mb-4">
-              Системные настройки
-            </h2>
-            
-            <div className="grid md:grid-cols-2 gap-6">
+
+              {/* Быстрые действия */}
               <div>
-                <h3 className="font-semibold text-black mb-3">Общие настройки</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Название компании</span>
-                    <input
-                      type="text"
-                      defaultValue="МЕТРИКА"
-                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-black"
-                    />
+                <h2 className="text-xl font-semibold text-black mb-4">Быстрые действия</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  {quickActions.map(action => (
+                    <button
+                      key={action.id}
+                      className={`${action.color} rounded-lg p-4 text-center shadow-lg hover:shadow-xl transition-all`}
+                    >
+                      <div className="flex justify-center mb-2 text-gray-600">
+                        {action.icon}
+                      </div>
+                      <div className="text-sm font-medium text-black">{action.title}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Последние активности */}
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <h2 className="text-xl font-semibold text-black mb-4">Последние активности</h2>
+                  <div className="space-y-3">
+                    {recentActivities.map(activity => (
+                      <div key={activity.id} className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
+                        <div className="flex items-center">
+                          <div className={`w-2 h-2 rounded-full mr-3 ${
+                            activity.status === 'new' ? 'bg-red-500' : 
+                            activity.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+                          }`}></div>
+                          <div>
+                            <div className="font-medium text-black text-sm">{activity.message}</div>
+                            <div className="text-xs text-gray-600">{activity.time}</div>
+                          </div>
+                        </div>
+                        <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
+                          <Eye className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Email уведомлений</span>
-                    <input
-                      type="email"
-                      defaultValue="admin@metrika.ru"
-                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-black"
-                    />
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Телефон поддержки</span>
-                    <input
-                      type="tel"
-                      defaultValue="+7 (495) 123-45-67"
-                      className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white text-black"
-                    />
+                </div>
+
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <h2 className="text-xl font-semibold text-black mb-4">Системные уведомления</h2>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
+                      <div className="flex items-center">
+                        <AlertCircle className="w-4 h-4 text-yellow-500 mr-3" />
+                        <div>
+                          <div className="font-medium text-black text-sm">Требуется обновление</div>
+                          <div className="text-xs text-gray-600">Доступна новая версия системы</div>
+                        </div>
+                      </div>
+                      <button 
+                        className="px-3 py-1 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
+                        style={{backgroundColor: '#fff60b'}}
+                        onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                        onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                      >
+                        Обновить
+                      </button>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
+                      <div className="flex items-center">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-3" />
+                        <div>
+                          <div className="font-medium text-black text-sm">Резервная копия создана</div>
+                          <div className="text-xs text-gray-600">Автоматическое резервное копирование</div>
+                        </div>
+                      </div>
+                      <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
+                        <Download className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              
-              <div>
-                <h3 className="font-semibold text-black mb-3">Настройки безопасности</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Минимальная длина пароля</span>
-                    <input
-                      type="number"
-                      defaultValue="8"
-                      className="px-3 py-1 border border-gray-300 rounded text-sm w-20"
-                    />
+            </div>
+          )}
+
+          {/* Email */}
+          {activeTab === 'email' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-black">Управление почтой</h2>
+                <div className="flex items-center space-x-4">
+                  <button className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                    style={{backgroundColor: '#fff60b'}}
+                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                  >
+                    <Mail className="w-4 h-4 inline mr-2" />
+                    Открыть почту
+                  </button>
+                </div>
+              </div>
+
+              {/* Статистика почты */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Mail className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">156</div>
+                      <div className="text-sm text-gray-600">Всего писем</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Bell className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">23</div>
+                      <div className="text-sm text-gray-600">Непрочитанных</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Users className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">8</div>
+                      <div className="text-sm text-gray-600">Активных ящиков</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Database className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">2.4GB</div>
+                      <div className="text-sm text-gray-600">Использовано места</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Управление почтовыми ящиками */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-black">Почтовые ящики</h3>
+                  <button className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all">
+                    <UserPlus className="w-4 h-4 inline mr-2" />
+                    Создать ящик
+                  </button>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="text-left py-3 px-4 font-medium text-black">Email</th>
+                        <th className="text-left py-3 px-4 font-medium text-black">Владелец</th>
+                        <th className="text-left py-3 px-4 font-medium text-black">Статус</th>
+                        <th className="text-left py-3 px-4 font-medium text-black">Писем</th>
+                        <th className="text-left py-3 px-4 font-medium text-black">Размер</th>
+                        <th className="text-left py-3 px-4 font-medium text-black">Действия</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-black">admin@metrika.direct</td>
+                        <td className="py-3 px-4 text-gray-600">Администратор</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Активен</span>
+                        </td>
+                        <td className="py-3 px-4 text-gray-600">45</td>
+                        <td className="py-3 px-4 text-gray-600">1.2GB</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <button className="p-1 text-gray-600 hover:text-black">
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button className="p-1 text-gray-600 hover:text-red-600">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-black">lawyer@metrika.direct</td>
+                        <td className="py-3 px-4 text-gray-600">Юрист</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Активен</span>
+                        </td>
+                        <td className="py-3 px-4 text-gray-600">32</td>
+                        <td className="py-3 px-4 text-gray-600">890MB</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <button className="p-1 text-gray-600 hover:text-black">
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button className="p-1 text-gray-600 hover:text-red-600">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-black">manager@metrika.direct</td>
+                        <td className="py-3 px-4 text-gray-600">Менеджер</td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Приостановлен</span>
+                        </td>
+                        <td className="py-3 px-4 text-gray-600">18</td>
+                        <td className="py-3 px-4 text-gray-600">456MB</td>
+                        <td className="py-3 px-4">
+                          <div className="flex items-center space-x-2">
+                            <button className="p-1 text-gray-600 hover:text-black">
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button className="p-1 text-gray-600 hover:text-red-600">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Быстрые действия */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold text-black mb-4">Быстрые действия</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <button className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                    <div className="flex items-center space-x-3">
+                      <Mail className="w-6 h-6 text-gray-600" />
+                      <div>
+                        <div className="font-medium text-black">Создать ящик</div>
+                        <div className="text-sm text-gray-600">Новый почтовый ящик</div>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <button className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                    <div className="flex items-center space-x-3">
+                      <Database className="w-6 h-6 text-gray-600" />
+                      <div>
+                        <div className="font-medium text-black">Резервная копия</div>
+                        <div className="text-sm text-gray-600">Создать бэкап почты</div>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <button className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                    <div className="flex items-center space-x-3">
+                      <Settings className="w-6 h-6 text-gray-600" />
+                      <div>
+                        <div className="font-medium text-black">Настройки</div>
+                        <div className="text-sm text-gray-600">Конфигурация почты</div>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Контент */}
+          {activeTab === 'content' && (
+            <div className="space-y-6">
+              {/* Статистика контента */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <FileText className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'blog').length}</div>
+                      <div className="text-sm text-gray-600">Статьи блога</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Bell className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'news').length}</div>
+                      <div className="text-sm text-gray-600">Новости</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Database className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'knowledge').length}</div>
+                      <div className="text-sm text-gray-600">База знаний</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Shield className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'faq').length}</div>
+                      <div className="text-sm text-gray-600">FAQ</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Панель управления */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-black">Управление контентом</h2>
+                  <button 
+                    onClick={handleCreateContent}
+                    className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                    style={{backgroundColor: '#fff60b'}}
+                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                  >
+                    <Plus className="w-4 h-4 inline mr-2" />
+                    Создать контент
+                  </button>
+                </div>
+
+                {/* Поиск и фильтры */}
+                <div className="flex flex-col lg:flex-row gap-4 mb-6">
+                  <div className="flex-1">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-4 h-4" />
+                      <input
+                        type="text"
+                        placeholder="Поиск контента..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
+                      />
+                    </div>
                   </div>
                   
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Автоблокировка (дней)</span>
-                    <input
-                      type="number"
-                      defaultValue="30"
-                      className="px-3 py-1 border border-gray-300 rounded text-sm w-20"
-                    />
+                  <div className="flex gap-2">
+                    <select
+                      value={contentCategory}
+                      onChange={(e) => setContentCategory(e.target.value)}
+                      className="px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
+                    >
+                      <option value="all">Все категории</option>
+                      <option value="blog">Статьи блога</option>
+                      <option value="news">Новости</option>
+                      <option value="knowledge">База знаний</option>
+                      <option value="faq">FAQ</option>
+                      <option value="policies">Политики</option>
+                    </select>
+                    
+                    <select
+                      value={contentStatus}
+                      onChange={(e) => setContentStatus(e.target.value)}
+                      className="px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
+                    >
+                      <option value="all">Все статусы</option>
+                      <option value="published">Опубликовано</option>
+                      <option value="draft">Черновик</option>
+                      <option value="scheduled">Запланировано</option>
+                      <option value="archived">Архив</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Список контента */}
+                <div className="space-y-4">
+                  {filteredContent.map(item => (
+                    <div key={item.id} className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="text-lg font-semibold text-black">{item.title}</h3>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
+                              {getStatusText(item.status)}
+                            </span>
+                            <span className="px-2 py-1 bg-white border border-gray-300 text-black text-xs font-medium rounded-full shadow-sm">
+                              {getCategoryText(item.category)}
+                            </span>
+                          </div>
+                          <p className="text-gray-600 mb-3">{item.excerpt}</p>
+                          
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                            <span className="flex items-center">
+                              <Eye className="w-4 h-4 mr-1" />
+                              {item.views} просмотров
+                            </span>
+                            <span className="flex items-center">
+                              <Calendar className="w-4 h-4 mr-1" />
+                              {new Date(item.createdAt).toLocaleDateString('ru-RU')}
+                            </span>
+                            <span className="flex items-center">
+                              <Globe className="w-4 h-4 mr-1" />
+                              {item.language.toUpperCase()}
+                            </span>
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-2">
+                            {item.tags.map(tag => (
+                              <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleEditContent(item)}
+                            className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
+                          >
+                            <Edit className="w-4 h-4 inline mr-1" />
+                            Редактировать
+                          </button>
+                          
+                          <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
+                            <Eye className="w-4 h-4 inline mr-1" />
+                            Просмотр
+                          </button>
+                          
+                          <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
+                            <Copy className="w-4 h-4 inline mr-1" />
+                            Копировать
+                          </button>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleDeleteContent(item.id)}
+                            className="px-3 py-1 bg-white border border-red-300 text-red-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
+                          >
+                            <Trash2 className="w-4 h-4 inline mr-1" />
+                            Удалить
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {filteredContent.length === 0 && (
+                    <div className="text-center py-12">
+                      <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-600 mb-2">Контент не найден</h3>
+                      <p className="text-gray-500">Попробуйте изменить параметры поиска или создайте новый контент</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Остальные разделы будут добавлены в следующих итерациях */}
+          {activeTab === 'objects' && (
+            <ObjectManagementPanel />
+          )}
+
+          {activeTab === 'users' && (
+            <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg text-center">
+              <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-black mb-2">Управление пользователями</h2>
+              <p className="text-gray-600">Раздел в разработке</p>
+            </div>
+          )}
+
+          {activeTab === 'tasks' && (
+            <TaskManagementPanel />
+          )}
+
+          {activeTab === 'media' && (
+            <div className="space-y-6">
+              {/* Статистика медиафайлов */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <File className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{mediaStats.totalFiles}</div>
+                      <div className="text-sm text-gray-600">Всего файлов</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Image className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{mediaStats.images}</div>
+                      <div className="text-sm text-gray-600">Изображения</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <Video className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{mediaStats.videos}</div>
+                      <div className="text-sm text-gray-600">Видео</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center">
+                    <FileText className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">{mediaStats.documents}</div>
+                      <div className="text-sm text-gray-600">Документы</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Панель управления медиа */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-black">Медиа библиотека</h2>
+                  <button 
+                    onClick={() => setShowMediaManager(true)}
+                    className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                    style={{backgroundColor: '#fff60b'}}
+                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                  >
+                    <Upload className="w-4 h-4 inline mr-2" />
+                    Управление медиа
+                  </button>
+                </div>
+
+                {/* Общая информация */}
+                <div className="grid md:grid-cols-3 gap-6 mb-6">
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-semibold text-black">Общий размер</div>
+                        <div className="text-sm text-gray-600">{formatFileSize(mediaStats.totalSize)}</div>
+                      </div>
+                      <Database className="w-8 h-8 text-gray-400" />
+                    </div>
                   </div>
                   
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Двухфакторная аутентификация</span>
-                    <button className="px-3 py-1 bg-white border border-gray-300 text-black rounded-lg text-sm shadow-sm hover:shadow-md transition-all">
-                      Включить
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-semibold text-black">Последняя загрузка</div>
+                        <div className="text-sm text-gray-600">
+                          {new Date(Math.max(...mediaFiles.map(f => new Date(f.uploadedAt).getTime()))).toLocaleDateString('ru-RU')}
+                        </div>
+                      </div>
+                      <Calendar className="w-8 h-8 text-gray-400" />
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-semibold text-black">Папки</div>
+                        <div className="text-sm text-gray-600">
+                          {new Set(mediaFiles.map(f => f.folder)).size} папок
+                        </div>
+                      </div>
+                      <Folder className="w-8 h-8 text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Быстрые действия */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-black mb-4">Быстрые действия</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
+                      <Image className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+                      <div className="text-sm font-medium text-black">Загрузить изображения</div>
+                    </button>
+                    
+                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
+                      <Video className="w-6 h-6 text-red-500 mx-auto mb-2" />
+                      <div className="text-sm font-medium text-black">Загрузить видео</div>
+                    </button>
+                    
+                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
+                      <FileText className="w-6 h-6 text-green-500 mx-auto mb-2" />
+                      <div className="text-sm font-medium text-black">Загрузить документы</div>
+                    </button>
+                    
+                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
+                      <Archive className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+                      <div className="text-sm font-medium text-black">Загрузить архивы</div>
                     </button>
                   </div>
                 </div>
+
+                {/* Последние загруженные файлы */}
+                <div>
+                  <h3 className="text-lg font-semibold text-black mb-4">Последние загруженные файлы</h3>
+                  <div className="space-y-3">
+                    {mediaFiles
+                      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
+                      .slice(0, 5)
+                      .map(file => (
+                        <div key={file.id} className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 flex items-center justify-center mr-3">
+                              {file.thumbnail ? (
+                                <img
+                                  src={file.thumbnail}
+                                  alt={file.alt || file.name}
+                                  className="w-full h-full object-cover rounded"
+                                />
+                              ) : (
+                                getFileIcon(file.type)
+                              )}
+                            </div>
+                            <div>
+                              <div className="font-medium text-black">{file.name}</div>
+                              <div className="text-sm text-gray-600">
+                                {formatFileSize(file.size)} • {file.folder} • {new Date(file.uploadedAt).toLocaleDateString('ru-RU')}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-2">
+                            <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
+                              <Eye className="w-3 h-3" />
+                            </button>
+                            <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
+                              <Download className="w-3 h-3" />
+                            </button>
+                            <button className="px-2 py-1 bg-white border border-red-300 text-red-600 text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
               </div>
             </div>
-            
-            <div className="mt-6 text-center">
-              <button 
-                className="px-6 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                Сохранить настройки
-              </button>
-            </div>
-          </div>
+          )}
+
+          {activeTab === 'analytics' && (
+            <AnalyticsDashboard />
+          )}
+
+          {activeTab === 'settings' && (
+            <SiteSettingsPanel />
+          )}
         </div>
       </main>
+
+      {/* Редактор контента */}
+      <ContentEditor
+        isOpen={showContentEditor}
+        onClose={() => {
+          setShowContentEditor(false)
+          setSelectedContent(null)
+        }}
+        content={selectedContent}
+        onSave={handleSaveContent}
+      />
+
+      {/* Медиа менеджер */}
+      <MediaManager
+        isOpen={showMediaManager}
+        onClose={() => setShowMediaManager(false)}
+        multiple={true}
+        acceptedTypes={['image/*', 'video/*', 'application/pdf']}
+      />
     </div>
-  );
+  )
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, GraduationCap, Book, CheckSquare, Settings } from "lucide-react"
+import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings } from "lucide-react"
 import Link from "next/link"
 import { UserRole } from "@/types/auth"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -72,6 +72,12 @@ export default function BurgerMenu() {
       roles: ["client", "employee", "admin"]
     },
     {
+      href: "/email",
+      label: "Email",
+      icon: <Mail className="w-5 h-5" />,
+      roles: ["employee", "admin"]
+    },
+    {
       href: "/academy",
       label: t('menu.academy'),
       icon: <GraduationCap className="w-5 h-5" />,
@@ -111,7 +117,7 @@ export default function BurgerMenu() {
       {/* Кнопка бургер-меню */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-5 left-4 z-50 p-2 bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-50 transition-colors"
+        className="fixed top-3 left-4 z-50 p-2 bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-50 transition-colors"
         aria-label="Открыть меню"
       >
         <Menu className="w-6 h-6 text-black" />
