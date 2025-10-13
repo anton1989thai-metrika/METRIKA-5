@@ -459,17 +459,6 @@ export default function AdminPage() {
                 Дашборд
               </button>
               <button
-                onClick={() => setActiveTab('hr')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'hr' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                <Calculator className="w-4 h-4 inline mr-2" />
-                Кадры и бухгалтерия
-              </button>
-              <button
                 onClick={() => setActiveTab('email')}
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   activeTab === 'email' 
@@ -534,6 +523,17 @@ export default function AdminPage() {
               >
                 <Image className="w-4 h-4 inline mr-2" />
                 Медиа
+              </button>
+              <button
+                onClick={() => setActiveTab('hr')}
+                className={`px-4 py-2 rounded-full font-medium transition-all ${
+                  activeTab === 'hr' 
+                    ? 'bg-black text-white shadow-lg' 
+                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Calculator className="w-4 h-4 inline mr-2" />
+                Кадры и бухгалтерия
               </button>
               <button
                 onClick={() => setActiveTab('analytics')}
