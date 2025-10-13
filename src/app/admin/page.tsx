@@ -281,9 +281,9 @@ export default function AdminPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'text-green-600 bg-green-50 border border-green-200'
-      case 'draft': return 'text-yellow-600 bg-yellow-50 border border-yellow-200'
-      case 'scheduled': return 'text-blue-600 bg-blue-50 border border-blue-200'
+      case 'published': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'draft': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'scheduled': return 'text-gray-600 bg-gray-50 border border-gray-200'
       case 'archived': return 'text-gray-600 bg-gray-50 border border-gray-200'
       default: return 'text-gray-600 bg-gray-50 border border-gray-200'
     }
@@ -409,11 +409,11 @@ export default function AdminPage() {
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case 'image': return <Image className="w-8 h-8 text-blue-500" />
-      case 'video': return <Video className="w-8 h-8 text-red-500" />
-      case 'document': return <FileText className="w-8 h-8 text-green-500" />
-      case 'audio': return <Music className="w-8 h-8 text-purple-500" />
-      case 'archive': return <Archive className="w-8 h-8 text-orange-500" />
+      case 'image': return <Image className="w-8 h-8 text-gray-500" />
+      case 'video': return <Video className="w-8 h-8 text-gray-500" />
+      case 'document': return <FileText className="w-8 h-8 text-gray-500" />
+      case 'audio': return <Music className="w-8 h-8 text-gray-500" />
+      case 'archive': return <Archive className="w-8 h-8 text-gray-500" />
       default: return <File className="w-8 h-8 text-gray-500" />
     }
   }
@@ -435,7 +435,7 @@ export default function AdminPage() {
                 </div>
                 <button className="relative p-3 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all">
                   <Bell className="w-6 h-6 text-gray-600" />
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-gray-500 text-white text-xs rounded-full flex items-center justify-center">
                     {stats.pendingTasks + stats.newApplications}
                   </span>
                 </button>
@@ -634,8 +634,8 @@ export default function AdminPage() {
                       <div key={activity.id} className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                         <div className="flex items-center">
                           <div className={`w-2 h-2 rounded-full mr-3 ${
-                            activity.status === 'new' ? 'bg-red-500' : 
-                            activity.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+                            activity.status === 'new' ? 'bg-gray-500' : 
+                            activity.status === 'completed' ? 'bg-gray-500' : 'bg-gray-500'
                           }`}></div>
                   <div>
                             <div className="font-medium text-black text-sm">{activity.message}</div>
@@ -655,7 +655,7 @@ export default function AdminPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                       <div className="flex items-center">
-                        <AlertCircle className="w-4 h-4 text-yellow-500 mr-3" />
+                        <AlertCircle className="w-4 h-4 text-gray-500 mr-3" />
                   <div>
                           <div className="font-medium text-black text-sm">Требуется обновление</div>
                           <div className="text-xs text-gray-600">Доступна новая версия системы</div>
@@ -673,7 +673,7 @@ export default function AdminPage() {
                     
                     <div className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
                       <div className="flex items-center">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-3" />
+                        <CheckCircle className="w-4 h-4 text-gray-500 mr-3" />
                         <div>
                           <div className="font-medium text-black text-sm">Резервная копия создана</div>
                           <div className="text-xs text-gray-600">Автоматическое резервное копирование</div>
@@ -776,7 +776,7 @@ export default function AdminPage() {
                         <td className="py-3 px-4 text-black">admin@metrika.direct</td>
                         <td className="py-3 px-4 text-gray-600">Администратор</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Активен</span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Активен</span>
                         </td>
                         <td className="py-3 px-4 text-gray-600">45</td>
                         <td className="py-3 px-4 text-gray-600">1.2GB</td>
@@ -785,7 +785,7 @@ export default function AdminPage() {
                             <button className="p-1 text-gray-600 hover:text-black">
                               <Edit className="w-4 h-4" />
                             </button>
-                            <button className="p-1 text-gray-600 hover:text-red-600">
+                            <button className="p-1 text-gray-600 hover:text-gray-800">
                               <Trash2 className="w-4 h-4" />
                     </button>
                           </div>
@@ -795,7 +795,7 @@ export default function AdminPage() {
                         <td className="py-3 px-4 text-black">lawyer@metrika.direct</td>
                         <td className="py-3 px-4 text-gray-600">Юрист</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Активен</span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Активен</span>
                         </td>
                         <td className="py-3 px-4 text-gray-600">32</td>
                         <td className="py-3 px-4 text-gray-600">890MB</td>
@@ -804,7 +804,7 @@ export default function AdminPage() {
                             <button className="p-1 text-gray-600 hover:text-black">
                               <Edit className="w-4 h-4" />
                             </button>
-                            <button className="p-1 text-gray-600 hover:text-red-600">
+                            <button className="p-1 text-gray-600 hover:text-gray-800">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -814,7 +814,7 @@ export default function AdminPage() {
                         <td className="py-3 px-4 text-black">manager@metrika.direct</td>
                         <td className="py-3 px-4 text-gray-600">Менеджер</td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Приостановлен</span>
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Приостановлен</span>
                         </td>
                         <td className="py-3 px-4 text-gray-600">18</td>
                         <td className="py-3 px-4 text-gray-600">456MB</td>
@@ -823,7 +823,7 @@ export default function AdminPage() {
                             <button className="p-1 text-gray-600 hover:text-black">
                               <Edit className="w-4 h-4" />
                             </button>
-                            <button className="p-1 text-gray-600 hover:text-red-600">
+                            <button className="p-1 text-gray-600 hover:text-gray-800">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -871,28 +871,28 @@ export default function AdminPage() {
               </div>
             </div>
           )}
-
+              
           {/* Кадры и бухгалтерия */}
           {activeTab === 'hr' && (
             <div className="space-y-6 mt-8">
               {/* Кнопка "Назад" */}
               <div className="mb-6">
-                <button
+              <button 
                   onClick={() => setActiveTab('dashboard')}
                   className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-all text-gray-700 hover:text-black"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Назад в Админ панель
-                </button>
+              </button>
               </div>
               
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-black">Кадры и бухгалтерия</h2>
                   <p className="text-gray-600">Управление сотрудниками, зарплатами и рабочим временем</p>
-                </div>
-              </div>
-
+            </div>
+          </div>
+          
               {/* Навигация */}
               <div className="mb-8">
                 <div className="flex flex-wrap gap-2">
@@ -995,13 +995,13 @@ export default function AdminPage() {
                     <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                       <div className="flex items-center">
                         <Users className="w-8 h-8 text-gray-600 mr-3" />
-                        <div>
+              <div>
                           <div className="text-2xl font-bold text-black">12</div>
                           <div className="text-sm text-gray-600">Сотрудников</div>
                         </div>
                       </div>
-                    </div>
-                    
+                  </div>
+                  
                     <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                       <div className="flex items-center">
                         <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
@@ -1010,22 +1010,22 @@ export default function AdminPage() {
                           <div className="text-sm text-gray-600">Фонд зарплат</div>
                         </div>
                       </div>
-                    </div>
-                    
+                  </div>
+                  
                     <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                       <div className="flex items-center">
                         <Calendar className="w-8 h-8 text-gray-600 mr-3" />
                         <div>
                           <div className="text-2xl font-bold text-black">3</div>
                           <div className="text-sm text-gray-600">В отпуске</div>
-                        </div>
-                      </div>
-                    </div>
-                    
+                  </div>
+                </div>
+              </div>
+              
                     <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                       <div className="flex items-center">
                         <Clock className="w-8 h-8 text-gray-600 mr-3" />
-                        <div>
+              <div>
                           <div className="text-2xl font-bold text-black">168</div>
                           <div className="text-sm text-gray-600">Часов в месяц</div>
                         </div>
@@ -1327,7 +1327,7 @@ export default function AdminPage() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleDeleteContent(item.id)}
-                            className="px-3 py-1 bg-white border border-red-300 text-red-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
+                            className="px-3 py-1 bg-white border border-gray-300 text-gray-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
                           >
                             <Trash2 className="w-4 h-4 inline mr-1" />
                             Удалить
@@ -1465,22 +1465,22 @@ export default function AdminPage() {
                   <h3 className="text-lg font-semibold text-black mb-4">Быстрые действия</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <Image className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+                      <Image className="w-6 h-6 text-gray-500 mx-auto mb-2" />
                       <div className="text-sm font-medium text-black">Загрузить изображения</div>
                     </button>
                     
                     <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <Video className="w-6 h-6 text-red-500 mx-auto mb-2" />
+                      <Video className="w-6 h-6 text-gray-500 mx-auto mb-2" />
                       <div className="text-sm font-medium text-black">Загрузить видео</div>
                     </button>
                     
                     <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <FileText className="w-6 h-6 text-green-500 mx-auto mb-2" />
+                      <FileText className="w-6 h-6 text-gray-500 mx-auto mb-2" />
                       <div className="text-sm font-medium text-black">Загрузить документы</div>
                     </button>
                     
                     <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <Archive className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+                      <Archive className="w-6 h-6 text-gray-500 mx-auto mb-2" />
                       <div className="text-sm font-medium text-black">Загрузить архивы</div>
                     </button>
                   </div>
@@ -1522,7 +1522,7 @@ export default function AdminPage() {
                             <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                               <Download className="w-3 h-3" />
                             </button>
-                            <button className="px-2 py-1 bg-white border border-red-300 text-red-600 text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
+                            <button className="px-2 py-1 bg-white border border-gray-300 text-gray-600 text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                               <Trash2 className="w-3 h-3" />
               </button>
             </div>
