@@ -303,7 +303,7 @@ export default function EmailPage() {
                   }`}
                 >
                   <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
                     Блоки
                   </div>
                 </button>
@@ -316,7 +316,7 @@ export default function EmailPage() {
                   }`}
                 >
                   <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
                     Список
                   </div>
                 </button>
@@ -329,7 +329,7 @@ export default function EmailPage() {
                   }`}
                 >
                   <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-yellow-500 mr-2"></div>
+                    <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
                     Папки
                   </div>
                 </button>
@@ -416,7 +416,7 @@ export default function EmailPage() {
                           {block.emails.length} писем
                         </span>
                         {block.unreadCount > 0 && (
-                          <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                          <div className="bg-gray-500 text-white text-xs px-2 py-1 rounded-full">
                             {block.unreadCount}
                           </div>
                         )}
@@ -446,7 +446,7 @@ export default function EmailPage() {
                     <div
                       key={email.id}
                       className={`p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer ${
-                        !email.isRead ? 'bg-blue-50' : ''
+                        !email.isRead ? 'bg-gray-50' : ''
                       }`}
                       onClick={() => setSelectedEmail(email)}
                     >
@@ -454,13 +454,13 @@ export default function EmailPage() {
                         <div className="flex items-center space-x-3">
                           <div className="flex items-center space-x-2">
                             {!email.isRead && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
                             )}
                             {email.isStarred && (
-                              <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                              <Star className="w-4 h-4 text-gray-500 fill-current" />
                             )}
                             {email.isImportant && (
-                              <AlertCircle className="w-4 h-4 text-red-500" />
+                              <AlertCircle className="w-4 h-4 text-gray-500" />
                             )}
                           </div>
                           <div>
@@ -488,7 +488,7 @@ export default function EmailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center space-x-3 mb-2">
-                      <Inbox className="w-5 h-5 text-blue-500" />
+                      <Inbox className="w-5 h-5 text-gray-500" />
                       <h3 className="font-medium text-black">Входящие</h3>
                     </div>
                     <p className="text-sm text-gray-600">12 непрочитанных</p>
@@ -496,7 +496,7 @@ export default function EmailPage() {
                   
                   <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center space-x-3 mb-2">
-                      <Send className="w-5 h-5 text-green-500" />
+                      <Send className="w-5 h-5 text-gray-500" />
                       <h3 className="font-medium text-black">Отправленные</h3>
                     </div>
                     <p className="text-sm text-gray-600">45 писем</p>
@@ -504,7 +504,7 @@ export default function EmailPage() {
                   
                   <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center space-x-3 mb-2">
-                      <Star className="w-5 h-5 text-yellow-500" />
+                      <Star className="w-5 h-5 text-gray-500" />
                       <h3 className="font-medium text-black">Избранное</h3>
                     </div>
                     <p className="text-sm text-gray-600">8 писем</p>
@@ -512,7 +512,7 @@ export default function EmailPage() {
                   
                   <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center space-x-3 mb-2">
-                      <Trash2 className="w-5 h-5 text-red-500" />
+                      <Trash2 className="w-5 h-5 text-gray-500" />
                       <h3 className="font-medium text-black">Корзина</h3>
                     </div>
                     <p className="text-sm text-gray-600">23 письма</p>
