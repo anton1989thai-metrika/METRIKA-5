@@ -441,9 +441,9 @@ export default function SalaryCalculationPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <Award className="w-8 h-8 text-yellow-600 mr-3" />
+            <Award className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-yellow-600">₽{totalBonuses.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{totalBonuses.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Премии</div>
             </div>
           </div>
