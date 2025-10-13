@@ -279,7 +279,7 @@ export default function CashManagementPanel() {
       case 'rejected':
         return <XCircle className="w-4 h-4 text-gray-600" />
       case 'pending':
-        return <Clock className="w-4 h-4 text-yellow-600" />
+        return <Clock className="w-4 h-4 text-gray-600" />
       default:
         return <Clock className="w-4 h-4 text-gray-600" />
     }
@@ -359,9 +359,9 @@ export default function CashManagementPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <Clock className="w-8 h-8 text-yellow-600 mr-3" />
+            <Clock className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-yellow-600">₽{Math.abs(pendingAmount).toLocaleString()}</div>
+              <div className="text-2xl font-bold text-black">₽{Math.abs(pendingAmount).toLocaleString()}</div>
               <div className="text-sm text-gray-600">На рассмотрении</div>
             </div>
           </div>
