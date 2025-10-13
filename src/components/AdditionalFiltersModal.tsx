@@ -858,7 +858,10 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                   min="0.5" 
                   max="10" 
                   step="0.5" 
-                  className="w-full mt-1"
+                  className="w-full mt-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  style={{
+                    background: `linear-gradient(to right, #fff60b 0%, #fff60b ${((parseFloat(filters.infrastructureDistance) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb ${((parseFloat(filters.infrastructureDistance) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb 100%)`
+                  }}
                   value={filters.infrastructureDistance}
                   onChange={(e) => handleInputChange('infrastructureDistance', e.target.value)}
                 />
