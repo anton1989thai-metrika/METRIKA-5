@@ -54,6 +54,7 @@ import AnalyticsDashboard from "@/components/AnalyticsDashboard"
 import SiteSettingsPanel from "@/components/SiteSettingsPanel"
 import ObjectManagementPanel from "@/components/ObjectManagementPanel"
 import TaskManagementPanel from "@/components/TaskManagementPanel"
+import UserManagementPanel from "@/components/UserManagementPanel"
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
@@ -336,7 +337,7 @@ export default function AdminPage() {
               <div>
                 <h1 className="text-3xl font-bold text-black mb-2">Админ панель МЕТРИКА</h1>
                 <p className="text-gray-600">Управление сайтом и контентом</p>
-              </div>
+            </div>
               <button className="relative p-3 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all">
                 <Bell className="w-6 h-6 text-gray-600" />
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -344,8 +345,8 @@ export default function AdminPage() {
                 </span>
               </button>
             </div>
-          </div>
-
+            </div>
+            
           {/* Навигация */}
           <div className="mb-8">
             <div className="flex flex-wrap gap-2">
@@ -450,7 +451,7 @@ export default function AdminPage() {
               </button>
             </div>
           </div>
-
+          
           {/* Дашборд */}
           {activeTab === 'dashboard' && (
             <div className="space-y-8">
@@ -469,7 +470,7 @@ export default function AdminPage() {
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Users className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
+                  <div>
                       <div className="text-2xl font-bold text-black">{stats.activeClients}</div>
                       <div className="text-sm text-gray-600">Активных клиентов</div>
                     </div>
@@ -489,7 +490,7 @@ export default function AdminPage() {
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <FileText className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
+                  <div>
                       <div className="text-2xl font-bold text-black">{stats.publishedArticles}</div>
                       <div className="text-sm text-gray-600">Опубликованных статей</div>
                     </div>
@@ -571,7 +572,7 @@ export default function AdminPage() {
                       </div>
                       <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                         <Download className="w-3 h-3" />
-                      </button>
+                    </button>
                     </div>
                   </div>
                 </div>
@@ -586,10 +587,10 @@ export default function AdminPage() {
                 <h2 className="text-2xl font-bold text-black">Управление почтой</h2>
                 <div className="flex items-center space-x-4">
                   <button className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                    style={{backgroundColor: '#fff60b'}}
-                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-                  >
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
                     <Mail className="w-4 h-4 inline mr-2" />
                     Открыть почту
                   </button>
@@ -646,9 +647,9 @@ export default function AdminPage() {
                   <button className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all">
                     <UserPlus className="w-4 h-4 inline mr-2" />
                     Создать ящик
-                  </button>
-                </div>
-                
+              </button>
+            </div>
+            
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -770,7 +771,7 @@ export default function AdminPage() {
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <FileText className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
+                  <div>
                       <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'blog').length}</div>
                       <div className="text-sm text-gray-600">Статьи блога</div>
                     </div>
@@ -790,7 +791,7 @@ export default function AdminPage() {
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
                     <Database className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
+                  <div>
                       <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'knowledge').length}</div>
                       <div className="text-sm text-gray-600">База знаний</div>
                     </div>
@@ -807,7 +808,7 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
-
+              
               {/* Панель управления */}
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                 <div className="flex items-center justify-between mb-6">
@@ -823,14 +824,14 @@ export default function AdminPage() {
                     Создать контент
                   </button>
                 </div>
-
+          
                 {/* Поиск и фильтры */}
                 <div className="flex flex-col lg:flex-row gap-4 mb-6">
                   <div className="flex-1">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-4 h-4" />
-                      <input
-                        type="text"
+                    <input
+                      type="text"
                         placeholder="Поиск контента..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -961,11 +962,7 @@ export default function AdminPage() {
           )}
 
           {activeTab === 'users' && (
-            <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg text-center">
-              <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-black mb-2">Управление пользователями</h2>
-              <p className="text-gray-600">Раздел в разработке</p>
-            </div>
+            <UserManagementPanel />
           )}
 
           {activeTab === 'tasks' && (
@@ -1016,7 +1013,7 @@ export default function AdminPage() {
                   </div>
                 </div>
               </div>
-
+              
               {/* Панель управления медиа */}
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                 <div className="flex items-center justify-between mb-6">
@@ -1037,7 +1034,7 @@ export default function AdminPage() {
                 <div className="grid md:grid-cols-3 gap-6 mb-6">
                   <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <div>
+              <div>
                         <div className="font-semibold text-black">Общий размер</div>
                         <div className="text-sm text-gray-600">{formatFileSize(mediaStats.totalSize)}</div>
                       </div>
@@ -1121,10 +1118,10 @@ export default function AdminPage() {
                               <div className="font-medium text-black">{file.name}</div>
                               <div className="text-sm text-gray-600">
                                 {formatFileSize(file.size)} • {file.folder} • {new Date(file.uploadedAt).toLocaleDateString('ru-RU')}
-                              </div>
-                            </div>
-                          </div>
-                          
+                </div>
+              </div>
+            </div>
+            
                           <div className="flex items-center gap-2">
                             <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                               <Eye className="w-3 h-3" />
@@ -1134,9 +1131,9 @@ export default function AdminPage() {
                             </button>
                             <button className="px-2 py-1 bg-white border border-red-300 text-red-600 text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
                               <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
+              </button>
+            </div>
+          </div>
                       ))}
                   </div>
                 </div>
