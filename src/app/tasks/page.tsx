@@ -73,6 +73,21 @@ export default function TasksPage() {
   const updateLinkInput = (index: number, value: string) => {
     setLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
   };
+  
+  // Состояние для управления ссылками в подзадачах
+  const [subtaskLinkInputs, setSubtaskLinkInputs] = useState<string[]>(['']);
+  const [showSubtaskAttachments, setShowSubtaskAttachments] = useState(false);
+
+  // Функция для добавления новой ссылки в подзадаче
+  const addSubtaskLinkInput = () => {
+    setSubtaskLinkInputs(prev => [...prev, '']);
+  };
+
+  // Функция для обновления ссылки в подзадаче
+  const updateSubtaskLinkInput = (index: number, value: string) => {
+    setSubtaskLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
+  };
+  
   const [currentUser, setCurrentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin" }); // Текущий пользователь
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedTaskForComments, setSelectedTaskForComments] = useState<any>(null);
@@ -430,6 +445,8 @@ export default function TasksPage() {
       attachments: []
     });
     setSubtaskFormErrors({});
+    setSubtaskLinkInputs(['']);
+    setShowSubtaskAttachments(false);
     setIsCreateSubtaskModalOpen(false);
   };
 
@@ -2119,6 +2136,8 @@ export default function TasksPage() {
                     attachments: []
                   });
                   setSubtaskFormErrors({});
+                  setSubtaskLinkInputs(['']);
+                  setShowSubtaskAttachments(false);
                 }}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -2415,6 +2434,61 @@ export default function TasksPage() {
                 </div>
               </div>
 
+              {/* Блок 3: Вложения */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-black">Вложения</h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowSubtaskAttachments(!showSubtaskAttachments)}
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
+                  >
+                    {showSubtaskAttachments ? '−' : '+'}
+                  </button>
+                </div>
+                {showSubtaskAttachments && (
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Изображения
+                      </label>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Ссылки
+                      </label>
+                      <div className="space-y-2">
+                        {subtaskLinkInputs.map((link, index) => (
+                          <div key={index} className="flex space-x-2">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => updateSubtaskLinkInput(index, e.target.value)}
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                              placeholder="https://example.com"
+                            />
+                          </div>
+                        ))}
+                        <button 
+                          type="button"
+                          onClick={addSubtaskLinkInput}
+                          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                        >
+                          Добавить ещё ссылку
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Кнопки действий */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <button
@@ -2434,6 +2508,8 @@ export default function TasksPage() {
                       attachments: []
                     });
                     setSubtaskFormErrors({});
+                    setSubtaskLinkInputs(['']);
+                    setShowSubtaskAttachments(false);
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
