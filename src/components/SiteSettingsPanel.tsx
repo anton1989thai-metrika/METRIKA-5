@@ -560,6 +560,33 @@ interface SiteSettings {
       workingHours: string
     }
   }
+  hr: {
+    workingHours: {
+      defaultStartTime: string
+      defaultEndTime: string
+      workingDays: string[]
+      overtimeRate: number
+      breakDuration: number
+    }
+    salary: {
+      currency: string
+      taxRate: number
+      socialContributions: number
+      autoCalculation: boolean
+      monthlyCalculation: boolean
+    }
+    notifications: {
+      emailNotifications: boolean
+      pushNotifications: boolean
+      smsNotifications: boolean
+      notificationTypes: string[]
+    }
+    permissions: {
+      roleBasedAccess: boolean
+      defaultRole: string
+      allowSelfRegistration: boolean
+    }
+  }
 }
 
 export default function SiteSettingsPanel() {
@@ -1079,6 +1106,33 @@ export default function SiteSettingsPanel() {
         autoGreeting: true,
         workingHours: "Пн-Пт: 9:00-18:00"
       }
+    },
+    hr: {
+      workingHours: {
+        defaultStartTime: "09:00",
+        defaultEndTime: "18:00",
+        workingDays: ["monday", "tuesday", "wednesday", "thursday", "friday"],
+        overtimeRate: 1.5,
+        breakDuration: 60
+      },
+      salary: {
+        currency: "RUB",
+        taxRate: 13,
+        socialContributions: 30,
+        autoCalculation: true,
+        monthlyCalculation: true
+      },
+      notifications: {
+        emailNotifications: true,
+        pushNotifications: true,
+        smsNotifications: false,
+        notificationTypes: ["salary", "vacation", "penalty", "bonus", "time"]
+      },
+      permissions: {
+        roleBasedAccess: true,
+        defaultRole: "employee",
+        allowSelfRegistration: false
+      }
     }
   })
 
@@ -1101,7 +1155,8 @@ export default function SiteSettingsPanel() {
     { id: 'performance', label: 'Производительность', icon: <Server className="w-4 h-4" /> },
     { id: 'analytics', label: 'Аналитика', icon: <BarChart className="w-4 h-4" /> },
     { id: 'email', label: 'Почта', icon: <Mail className="w-4 h-4" /> },
-    { id: 'integrations', label: 'Интеграции', icon: <Link className="w-4 h-4" /> }
+    { id: 'integrations', label: 'Интеграции', icon: <Link className="w-4 h-4" /> },
+    { id: 'hr', label: 'Кадры и бухгалтерия', icon: <Users className="w-4 h-4" /> }
   ]
 
   const handleSave = async () => {
@@ -8352,6 +8407,349 @@ export default function SiteSettingsPanel() {
                       <Download className="w-4 h-4 inline mr-2" />
                       Скачать отчет
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Настройки кадрового учёта */}
+          {activeTab === 'hr' && (
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-black">Настройки кадрового учёта и бухгалтерии</h3>
+              
+              {/* Рабочее время */}
+              <div className="space-y-4">
+                <h4 className="text-md font-semibold text-black">Рабочее время</h4>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Время начала работы
+                      </label>
+                      <input
+                        type="time"
+                        value={settings.hr.workingHours.defaultStartTime}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            workingHours: {
+                              ...prev.hr.workingHours,
+                              defaultStartTime: e.target.value
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Время окончания работы
+                      </label>
+                      <input
+                        type="time"
+                        value={settings.hr.workingHours.defaultEndTime}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            workingHours: {
+                              ...prev.hr.workingHours,
+                              defaultEndTime: e.target.value
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Коэффициент переработки
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={settings.hr.workingHours.overtimeRate}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            workingHours: {
+                              ...prev.hr.workingHours,
+                              overtimeRate: parseFloat(e.target.value)
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Продолжительность перерыва (мин)
+                      </label>
+                      <input
+                        type="number"
+                        value={settings.hr.workingHours.breakDuration}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            workingHours: {
+                              ...prev.hr.workingHours,
+                              breakDuration: parseInt(e.target.value)
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Зарплата */}
+              <div className="space-y-4">
+                <h4 className="text-md font-semibold text-black">Настройки зарплаты</h4>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Валюта
+                      </label>
+                      <select
+                        value={settings.hr.salary.currency}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            salary: {
+                              ...prev.hr.salary,
+                              currency: e.target.value
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="RUB">₽ Рубль</option>
+                        <option value="USD">$ Доллар</option>
+                        <option value="EUR">€ Евро</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Налоговая ставка (%)
+                      </label>
+                      <input
+                        type="number"
+                        value={settings.hr.salary.taxRate}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            salary: {
+                              ...prev.hr.salary,
+                              taxRate: parseInt(e.target.value)
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Социальные взносы (%)
+                      </label>
+                      <input
+                        type="number"
+                        value={settings.hr.salary.socialContributions}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            salary: {
+                              ...prev.hr.salary,
+                              socialContributions: parseInt(e.target.value)
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.salary.autoCalculation}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              salary: {
+                                ...prev.hr.salary,
+                                autoCalculation: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        Автоматический расчёт
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.salary.monthlyCalculation}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              salary: {
+                                ...prev.hr.salary,
+                                monthlyCalculation: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        Ежемесячный расчёт
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Уведомления */}
+              <div className="space-y-4">
+                <h4 className="text-md font-semibold text-black">Уведомления</h4>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.notifications.emailNotifications}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              notifications: {
+                                ...prev.hr.notifications,
+                                emailNotifications: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        Email уведомления
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.notifications.pushNotifications}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              notifications: {
+                                ...prev.hr.notifications,
+                                pushNotifications: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        Push уведомления
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.notifications.smsNotifications}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              notifications: {
+                                ...prev.hr.notifications,
+                                smsNotifications: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        SMS уведомления
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Права доступа */}
+              <div className="space-y-4">
+                <h4 className="text-md font-semibold text-black">Права доступа</h4>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.permissions.roleBasedAccess}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              permissions: {
+                                ...prev.hr.permissions,
+                                roleBasedAccess: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        Ролевая система доступа
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={settings.hr.permissions.allowSelfRegistration}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            hr: {
+                              ...prev.hr,
+                              permissions: {
+                                ...prev.hr.permissions,
+                                allowSelfRegistration: e.target.checked
+                              }
+                            }
+                          }))}
+                          className="mr-2"
+                        />
+                        Самостоятельная регистрация
+                      </label>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Роль по умолчанию
+                      </label>
+                      <select
+                        value={settings.hr.permissions.defaultRole}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          hr: {
+                            ...prev.hr,
+                            permissions: {
+                              ...prev.hr.permissions,
+                              defaultRole: e.target.value
+                            }
+                          }
+                        }))}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="employee">Сотрудник</option>
+                        <option value="manager">Менеджер</option>
+                        <option value="hr">HR менеджер</option>
+                        <option value="admin">Администратор</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -72,12 +72,6 @@ export default function BurgerMenu() {
       roles: ["client", "employee", "admin"]
     },
     {
-      href: "/hr",
-      label: "Кадры и бухгалтерия",
-      icon: <Calculator className="w-5 h-5" />,
-      roles: ["employee", "admin"]
-    },
-    {
       href: "/email",
       label: "Email",
       icon: <Mail className="w-5 h-5" />,
