@@ -1680,7 +1680,7 @@ export default function TasksPage() {
                       
                       {/* Кастомный календарь */}
                       {showDatePicker && (
-                        <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1">
+                        <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1 min-w-80">
                           <div className="flex items-center justify-between mb-4">
                             <button
                               type="button"
@@ -2610,7 +2610,7 @@ export default function TasksPage() {
                           
                           {/* Кастомный календарь */}
                           {showDatePicker && (
-                            <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1">
+                            <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1 min-w-80">
                               <div className="flex items-center justify-between mb-4">
                                 <button
                                   type="button"
@@ -2722,7 +2722,7 @@ export default function TasksPage() {
                           
                           {/* Календарь для начала выполнения в подзадаче */}
                           {showStartDatePicker && (
-                            <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1">
+                            <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1 min-w-80">
                               <div className="flex items-center justify-between mb-4">
                                 <button
                                   type="button"
