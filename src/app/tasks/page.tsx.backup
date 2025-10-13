@@ -27,14 +27,6 @@ interface TaskFormData {
   autoRepetitions: string;
 }
 
-interface FormErrors {
-  [key: string]: string;
-}
-
-interface SubtaskFormErrors {
-  [key: string]: string;
-}
-
 interface User {
   id: number;
   name: string;
@@ -89,6 +81,21 @@ export default function TasksPage() {
   const updateLinkInput = (index: number, value: string) => {
     setLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
   };
+  
+  // Состояние для управления ссылками в подзадачах
+  const [subtaskLinkInputs, setSubtaskLinkInputs] = useState<string[]>(['']);
+  const [showSubtaskAttachments, setShowSubtaskAttachments] = useState(false);
+
+  // Функция для добавления новой ссылки в подзадаче
+  const addSubtaskLinkInput = () => {
+    setSubtaskLinkInputs(prev => [...prev, '']);
+  };
+
+  // Функция для обновления ссылки в подзадаче
+  const updateSubtaskLinkInput = (index: number, value: string) => {
+    setSubtaskLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
+  };
+  
   const [currentUser, setCurrentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin" }); // Текущий пользователь
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedTaskForComments, setSelectedTaskForComments] = useState<any>(null);
@@ -111,13 +118,11 @@ export default function TasksPage() {
   const [showAttachments, setShowAttachments] = useState(false);
   const [showAutomation, setShowAutomation] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showDeadline, setShowDeadline] = useState(false);
   const [showStartDate, setShowStartDate] = useState(false);
   const [showCompletionTime, setShowCompletionTime] = useState(false);
   const [showBlockingTask, setShowBlockingTask] = useState(false);
-  const [isBlockingTask, setIsBlockingTask] = useState(false);
   const [isCreateSubtaskModalOpen, setIsCreateSubtaskModalOpen] = useState(false);
   const [subtaskFormData, setSubtaskFormData] = useState({
     title: '',
@@ -136,6 +141,57 @@ export default function TasksPage() {
     attachments: []
   });
   const [subtaskFormErrors, setSubtaskFormErrors] = useState({});
+  const [showSubtaskDeadline, setShowSubtaskDeadline] = useState(false);
+  const [showSubtaskStartDate, setShowSubtaskStartDate] = useState(false);
+  const [showSubtaskCompletionTime, setShowSubtaskCompletionTime] = useState(false);
+  const [showSubtaskBlockingTask, setShowSubtaskBlockingTask] = useState(false);
+  const [blockedExecutors, setBlockedExecutors] = useState<number[]>([]);
+  const [showBlockingWarning, setShowBlockingWarning] = useState(false);
+  const [pendingExecutor, setPendingExecutor] = useState<number | null>(null);
+
+  // Функция для проверки блокировки исполнителя
+  const checkExecutorBlocking = (executorId: number) => {
+    // Здесь должна быть логика проверки, есть ли у исполнителя незавершенные блокирующие задачи
+    // Пока используем моковые данные
+    const mockBlockedExecutors = [2, 3]; // Иван Сидоров и Мария Козлова заблокированы
+    return mockBlockedExecutors.includes(executorId);
+  };
+
+  // Функция для обработки выбора исполнителя с проверкой блокировки
+  const handleExecutorSelection = (executorId: number, isChecked: boolean, isSubtask: boolean = false) => {
+    if (isChecked && checkExecutorBlocking(executorId)) {
+      // Если исполнитель заблокирован и пользователь не администратор
+      if (currentUser.role !== 'admin') {
+        setShowBlockingWarning(true);
+        setPendingExecutor(executorId);
+        return;
+      } else {
+        // Для администратора показываем предупреждение, но позволяем продолжить
+        const confirmAssign = window.confirm(
+          `Внимание! У исполнителя ${users.find(u => u.id === executorId)?.name} есть незавершенные блокирующие задачи. ` +
+          `Вы уверены, что хотите назначить ему эту задачу?`
+        );
+        if (!confirmAssign) {
+          return;
+        }
+      }
+    }
+
+    // Обычная логика назначения исполнителя
+    if (isSubtask) {
+      if (isChecked) {
+        handleSubtaskInputChange('executors', [...subtaskFormData.executors, executorId]);
+      } else {
+        handleSubtaskInputChange('executors', subtaskFormData.executors.filter(id => id !== executorId));
+      }
+    } else {
+      if (isChecked) {
+        handleInputChange('executors', [...formData.executors, executorId]);
+      } else {
+        handleInputChange('executors', formData.executors.filter(id => id !== executorId));
+      }
+    }
+  };
 
   // Состояние для модального окна создания чек-листа
   const [isCreateChecklistModalOpen, setIsCreateChecklistModalOpen] = useState(false);
@@ -400,39 +456,36 @@ export default function TasksPage() {
       }
     }
     
-    // Валидация времени начала выполнения
+    // Валидация времени начала выполнения для подзадач
     if (subtaskFormData.startDate && subtaskFormData.startTime) {
       const startDateTime = new Date(subtaskFormData.startDate + 'T' + subtaskFormData.startTime);
-      const now = new Date();
+      const today = new Date();
       
-      if (startDateTime <= now) {
-        errors.startDate = 'Время начала выполнения должно быть в будущем';
+      if (startDateTime < today) {
+        errors.startDate = 'Время начала выполнения не может быть в прошлом';
       }
       
-      // Проверка что время начала не позже срока выполнения
+      // Проверка, что время начала не позже срока выполнения
       if (subtaskFormData.deadline && subtaskFormData.deadlineTime) {
         const deadlineDateTime = new Date(subtaskFormData.deadline + 'T' + subtaskFormData.deadlineTime);
         if (startDateTime >= deadlineDateTime) {
-          errors.startDate = 'Время начала исполнения задача позже времени окончания задачи';
+          errors.startDate = 'Время начала исполнения задачи позже времени окончания задачи';
         }
       }
     }
     
-    // Валидация времени на выполнение
-    if (subtaskFormData.completionTime) {
-      // Проверка что время на выполнение не превышает срок выполнения
-      if (subtaskFormData.startDate && subtaskFormData.startTime && subtaskFormData.deadline && subtaskFormData.deadlineTime) {
-        const startDateTime = new Date(subtaskFormData.startDate + 'T' + subtaskFormData.startTime);
-        const deadlineDateTime = new Date(subtaskFormData.deadline + 'T' + subtaskFormData.deadlineTime);
-        const duration = deadlineDateTime.getTime() - startDateTime.getTime();
-        
-        // Парсим время выполнения (например, "2:30" -> 2.5 часа)
-        const [hours, minutes] = subtaskFormData.completionTime.split(':').map(Number);
-        const completionTimeMs = (hours * 60 + minutes) * 60 * 1000;
-        
-        if (completionTimeMs > duration) {
-          errors.completionTime = 'Время на выполнение превышает срок выполнения';
-        }
+    // Валидация времени на выполнение для подзадач
+    if (subtaskFormData.completionTime && subtaskFormData.deadline && subtaskFormData.deadlineTime) {
+      const deadlineDateTime = new Date(subtaskFormData.deadline + 'T' + subtaskFormData.deadlineTime);
+      const startDateTime = subtaskFormData.startDate && subtaskFormData.startTime 
+        ? new Date(subtaskFormData.startDate + 'T' + subtaskFormData.startTime)
+        : new Date();
+      
+      const completionTimeMs = parseInt(subtaskFormData.completionTime) * 60 * 60 * 1000;
+      const calculatedDeadline = new Date(startDateTime.getTime() + completionTimeMs);
+      
+      if (calculatedDeadline > deadlineDateTime) {
+        errors.completionTime = 'Время на выполнение превышает срок выполнения';
       }
     }
     
@@ -486,11 +539,17 @@ export default function TasksPage() {
       priority: 'low',
       deadline: '',
       deadlineTime: '12:00',
+      startDate: '',
+      startTime: '',
+      completionTime: '',
+      isBlocking: false,
       subtasks: [],
       checklists: [],
       attachments: []
     });
     setSubtaskFormErrors({});
+    setSubtaskLinkInputs(['']);
+    setShowSubtaskAttachments(false);
     setIsCreateSubtaskModalOpen(false);
   };
 
@@ -833,36 +892,33 @@ export default function TasksPage() {
     // Валидация времени начала выполнения
     if (formData.startDate && formData.startTime) {
       const startDateTime = new Date(formData.startDate + 'T' + formData.startTime);
-      const now = new Date();
+      const today = new Date();
       
-      if (startDateTime <= now) {
-        errors.startDate = 'Время начала выполнения должно быть в будущем';
+      if (startDateTime < today) {
+        errors.startDate = 'Время начала выполнения не может быть в прошлом';
       }
       
-      // Проверка что время начала не позже срока выполнения
+      // Проверка, что время начала не позже срока выполнения
       if (formData.deadline && formData.deadlineTime) {
         const deadlineDateTime = new Date(formData.deadline + 'T' + formData.deadlineTime);
         if (startDateTime >= deadlineDateTime) {
-          errors.startDate = 'Время начала исполнения задача позже времени окончания задачи';
+          errors.startDate = 'Время начала исполнения задачи позже времени окончания задачи';
         }
       }
     }
     
     // Валидация времени на выполнение
-    if (formData.completionTime) {
-      // Проверка что время на выполнение не превышает срок выполнения
-      if (formData.startDate && formData.startTime && formData.deadline && formData.deadlineTime) {
-        const startDateTime = new Date(formData.startDate + 'T' + formData.startTime);
-        const deadlineDateTime = new Date(formData.deadline + 'T' + formData.deadlineTime);
-        const duration = deadlineDateTime.getTime() - startDateTime.getTime();
-        
-        // Парсим время выполнения (например, "2:30" -> 2.5 часа)
-        const [hours, minutes] = formData.completionTime.split(':').map(Number);
-        const completionTimeMs = (hours * 60 + minutes) * 60 * 1000;
-        
-        if (completionTimeMs > duration) {
-          errors.completionTime = 'Время на выполнение превышает срок выполнения';
-        }
+    if (formData.completionTime && formData.deadline && formData.deadlineTime) {
+      const deadlineDateTime = new Date(formData.deadline + 'T' + formData.deadlineTime);
+      const startDateTime = formData.startDate && formData.startTime 
+        ? new Date(formData.startDate + 'T' + formData.startTime)
+        : new Date();
+      
+      const completionTimeMs = parseInt(formData.completionTime) * 60 * 60 * 1000; // конвертируем часы в миллисекунды
+      const calculatedDeadline = new Date(startDateTime.getTime() + completionTimeMs);
+      
+      if (calculatedDeadline > deadlineDateTime) {
+        errors.completionTime = 'Время на выполнение превышает срок выполнения';
       }
     }
     
@@ -915,6 +971,10 @@ export default function TasksPage() {
         priority: 'low',
         deadline: '',
         deadlineTime: '12:00',
+        startDate: '',
+        startTime: '',
+        completionTime: '',
+        isBlocking: false,
         executors: [],
         curators: [],
         subtasks: [],
@@ -1531,10 +1591,6 @@ export default function TasksPage() {
                     priority: 'low',
                     deadline: '',
                     deadlineTime: '12:00',
-                    startDate: '',
-                    startTime: '',
-                    completionTime: '',
-                    isBlocking: false,
                     executors: [],
                     curators: [],
                     subtasks: [],
@@ -1547,11 +1603,6 @@ export default function TasksPage() {
                   });
                   setLinkInputs(['']);
                   setFormErrors({});
-                  setShowStartDate(false);
-                  setShowCompletionTime(false);
-                  setShowBlockingTask(false);
-                  setIsBlockingTask(false);
-                  setShowStartDatePicker(false);
                 }}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -1566,12 +1617,12 @@ export default function TasksPage() {
               {/* Блок 1: Основная информация */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <div className="space-y-4">
-              <div>
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Название задачи *
-                </label>
-                <input
-                  type="text"
+                    </label>
+                    <input
+                      type="text"
                       value={formData.title}
                       onChange={(e) => handleInputChange('title', e.target.value)}
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
@@ -1579,13 +1630,13 @@ export default function TasksPage() {
                           ? 'border-red-500 focus:ring-red-500' 
                           : 'border-gray-300 focus:ring-gray-500'
                       }`}
-                  placeholder="Введите название задачи"
+                      placeholder="Введите название задачи"
                       required
-                />
+                    />
                     {formErrors.title && (
                       <p className="text-red-500 text-sm mt-1">{formErrors.title}</p>
                     )}
-              </div>
+                  </div>
               
               <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1757,7 +1808,7 @@ export default function TasksPage() {
                   )}
                 </div>
                 
-                {/* Начало выполнения */}
+                {/* Кнопка "Начало выполнения" */}
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Начало выполнения
@@ -1772,97 +1823,64 @@ export default function TasksPage() {
                   
                   {showStartDate && (
                     <div className="mt-4 space-y-2 relative">
-                      <input
-                        type="text"
-                        value={formData.startDate ? new Date(formData.startDate).toLocaleDateString('ru-RU') : ''}
-                        onClick={() => setShowStartDatePicker(!showStartDatePicker)}
-                        readOnly
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer"
-                        placeholder="Выберите дату"
-                      />
-                      <input
-                        type="time"
-                        value={formData.startTime}
-                        onChange={(e) => handleInputChange('startTime', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                      />
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={formData.startDate ? new Date(formData.startDate).toLocaleDateString('ru-RU') : ''}
+                          onClick={() => setShowDatePicker(!showDatePicker)}
+                          readOnly
+                          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
+                            formErrors.startDate 
+                              ? 'border-red-500 focus:ring-red-500' 
+                              : 'border-gray-300 focus:ring-gray-500'
+                          }`}
+                          placeholder="Выберите дату начала"
+                        />
+                        <div className="flex space-x-2">
+                          <div className="flex-1 relative">
+                            {formData.startTime === '' ? (
+                              <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500 cursor-pointer"
+                                   onClick={() => handleInputChange('startTime', '09:00')}>
+                                Весь день
+                              </div>
+                            ) : (
+                                <input
+                                  type="time"
+                                  value={formData.startTime}
+                                  onChange={(e) => handleInputChange('startTime', e.target.value)}
+                                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                    formErrors.startTime 
+                                      ? 'border-red-500 focus:ring-red-500' 
+                                      : 'border-gray-300 focus:ring-gray-500'
+                                  }`}
+                                />
+                              )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleInputChange('startTime', '')}
+                            className={`px-4 py-2 border rounded-md text-sm transition-colors ${
+                              formData.startTime === '' 
+                                ? 'bg-gray-500 text-white border-gray-500' 
+                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                            }`}
+                          >
+                            Весь день
+                          </button>
+                        </div>
+                      </div>
+                      
                       {formErrors.startDate && (
                         <p className="text-red-500 text-sm mt-1">{formErrors.startDate}</p>
                       )}
-                      
-                      {/* Календарь для начала выполнения */}
-                      {showStartDatePicker && (
-                        <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1 min-w-80">
-                          <div className="flex items-center justify-between mb-4">
-                            <button
-                              type="button"
-                              onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                              className="p-2 hover:bg-gray-100 rounded"
-                            >
-                              ←
-                            </button>
-                            <h3 className="text-lg font-semibold">
-                              {currentMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
-                            </h3>
-                            <div className="flex items-center space-x-2">
-                              <button
-                                type="button"
-                                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                                className="p-2 hover:bg-gray-100 rounded"
-                              >
-                                →
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setShowStartDatePicker(false)}
-                                className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-gray-700"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-7 gap-1 mb-2">
-                            {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(day => (
-                              <div key={day} className="text-center text-sm font-medium text-gray-500 p-2">
-                                {day}
-                              </div>
-                            ))}
-                          </div>
-                          <div className="grid grid-cols-7 gap-1">
-                            {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth()).map((day, index) => (
-                              <button
-                                key={index}
-                                type="button"
-                                onClick={() => {
-                                  if (day) {
-                                    const selectedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-                                    handleInputChange('startDate', selectedDate.toISOString().split('T')[0]);
-                                    setShowStartDatePicker(false);
-                                  }
-                                }}
-                                className={`p-2 text-sm rounded hover:bg-gray-100 ${
-                                  day ? 'text-black' : 'text-gray-300'
-                                } ${
-                                  formData.startDate && day && 
-                                  new Date(formData.startDate).getDate() === day &&
-                                  new Date(formData.startDate).getMonth() === currentMonth.getMonth() &&
-                                  new Date(formData.startDate).getFullYear() === currentMonth.getFullYear()
-                                    ? 'bg-gray-500 text-white' : ''
-                                }`}
-                              >
-                                {day}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
+                      {formErrors.startTime && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.startTime}</p>
                       )}
                     </div>
                   )}
                 </div>
                 
-                {/* Время на выполнение */}
+                {/* Кнопка "Время на выполнение" */}
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Время на выполнение
@@ -1877,81 +1895,39 @@ export default function TasksPage() {
                   
                   {showCompletionTime && (
                     <div className="mt-4 space-y-2">
-                      <div className="grid grid-cols-3 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleInputChange('completionTime', '1:00');
-                            // Блокируем поле "Срок выполнения" если выбрано время на выполнение
-                            if (formData.deadline) {
-                              handleInputChange('deadline', '');
-                              handleInputChange('deadlineTime', '12:00');
-                            }
-                          }}
-                          className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                        >
-                          1 час
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleInputChange('completionTime', '2:00');
-                            if (formData.deadline) {
-                              handleInputChange('deadline', '');
-                              handleInputChange('deadlineTime', '12:00');
-                            }
-                          }}
-                          className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                        >
-                          2 часа
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleInputChange('completionTime', '3:00');
-                            if (formData.deadline) {
-                              handleInputChange('deadline', '');
-                              handleInputChange('deadlineTime', '12:00');
-                            }
-                          }}
-                          className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                        >
-                          3 часа
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleInputChange('completionTime', '4:00');
-                            if (formData.deadline) {
-                              handleInputChange('deadline', '');
-                              handleInputChange('deadlineTime', '12:00');
-                            }
-                          }}
-                          className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                        >
-                          4 часа
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleInputChange('completionTime', '5:00');
-                            if (formData.deadline) {
-                              handleInputChange('deadline', '');
-                              handleInputChange('deadlineTime', '12:00');
-                            }
-                          }}
-                          className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                        >
-                          5 часов
-                        </button>
+                      <div className="grid grid-cols-2 gap-2">
+                        {['1', '2', '3', '4', '5'].map(hours => (
+                          <button
+                            key={hours}
+                            type="button"
+                            onClick={() => handleInputChange('completionTime', hours)}
+                            className={`px-3 py-2 border rounded-md text-sm transition-colors ${
+                              formData.completionTime === hours
+                                ? 'bg-gray-500 text-white border-gray-500'
+                                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                            }`}
+                          >
+                            {hours} час{hours === '1' ? '' : hours === '2' || hours === '3' || hours === '4' ? 'а' : 'ов'}
+                          </button>
+                        ))}
                       </div>
-                      <input
-                        type="text"
-                        value={formData.completionTime}
-                        onChange={(e) => handleInputChange('completionTime', e.target.value)}
-                        placeholder="ЧЧ:ММ"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                      />
+                      <div className="flex space-x-2">
+                        <input
+                          type="number"
+                          min="1"
+                          max="24"
+                          value={formData.completionTime}
+                          onChange={(e) => handleInputChange('completionTime', e.target.value)}
+                          className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                            formErrors.completionTime 
+                              ? 'border-red-500 focus:ring-red-500' 
+                              : 'border-gray-300 focus:ring-gray-500'
+                          }`}
+                          placeholder="Часы"
+                        />
+                        <span className="px-3 py-2 text-gray-500">часов</span>
+                      </div>
+                      
                       {formErrors.completionTime && (
                         <p className="text-red-500 text-sm mt-1">{formErrors.completionTime}</p>
                       )}
@@ -1959,7 +1935,7 @@ export default function TasksPage() {
                   )}
                 </div>
                 
-                {/* Блокирующая задача */}
+                {/* Кнопка "Блокирующая задача" */}
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Блокирующая задача
@@ -1974,31 +1950,27 @@ export default function TasksPage() {
                   
                   {showBlockingTask && (
                     <div className="mt-4 space-y-2">
-                      <p className="text-sm text-gray-600">
-                        Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (window.confirm('Вы уверены, что хотите заблокировать этого исполнителя?')) {
-                            setIsBlockingTask(true);
-                            handleInputChange('isBlocking', true);
-                          }
-                        }}
-                        className={`px-4 py-2 rounded-md text-sm transition-colors ${
-                          isBlockingTask 
-                            ? 'bg-gray-500 text-white' 
-                            : 'bg-red-600 text-white hover:bg-red-700'
-                        }`}
-                      >
-                        {isBlockingTask ? 'Заблокировано' : 'Заблокировать'}
-                      </button>
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <input
+                            type="checkbox"
+                            id="isBlocking"
+                            checked={formData.isBlocking}
+                            onChange={(e) => handleInputChange('isBlocking', e.target.checked)}
+                            className="w-4 h-4 text-red-600 border-red-300 rounded focus:ring-red-500"
+                          />
+                          <label htmlFor="isBlocking" className="text-red-800 font-medium">
+                            Заблокировать
+                          </label>
+                        </div>
+                        <p className="text-red-700 text-sm">
+                          Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. 
+                          Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
-                  </div>
-                </div>
-              </div>
 
               {/* Блок 2: Исполнители и кураторы */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
@@ -2032,15 +2004,16 @@ export default function TasksPage() {
                                 type="checkbox"
                                 checked={formData.executors.includes(user.id)}
                                 onChange={(e) => {
-                                  if (e.target.checked) {
-                                    handleInputChange('executors', [...formData.executors, user.id]);
-                                  } else {
-                                    handleInputChange('executors', formData.executors.filter(id => id !== user.id));
-                                  }
+                                  handleExecutorSelection(user.id, e.target.checked, false);
                                 }}
                                 className="mr-2"
                               />
-                              <span className="text-sm">{user.name} ({user.role})</span>
+                              <span className="text-sm">
+                                {user.name} ({user.role})
+                                {checkExecutorBlocking(user.id) && (
+                                  <span className="ml-2 text-red-500 text-xs">🔒 Заблокирован</span>
+                                )}
+                              </span>
                             </label>
                           ))}
                         </div>
@@ -2310,10 +2283,6 @@ export default function TasksPage() {
                       priority: 'low',
                       deadline: '',
                       deadlineTime: '12:00',
-                      startDate: '',
-                      startTime: '',
-                      completionTime: '',
-                      isBlocking: false,
                       executors: [],
                       curators: [],
                       subtasks: [],
@@ -2326,22 +2295,17 @@ export default function TasksPage() {
                     });
                     setLinkInputs(['']);
                     setFormErrors({});
-                    setShowStartDate(false);
-                    setShowStartDatePicker(false);
-                    setShowCompletionTime(false);
-                    setShowBlockingTask(false);
-                    setIsBlockingTask(false);
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
                   Отмена
                 </button>
-              <button
-                type="submit"
-                className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-              >
-                Создать задачу
-              </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+                >
+                  Создать задачу
+                </button>
               </div>
             </form>
           </div>
@@ -2478,11 +2442,8 @@ export default function TasksPage() {
                     attachments: []
                   });
                   setSubtaskFormErrors({});
-                  setShowStartDate(false);
-                  setShowCompletionTime(false);
-                  setShowBlockingTask(false);
-                  setIsBlockingTask(false);
-                  setShowStartDatePicker(false);
+                  setSubtaskLinkInputs(['']);
+                  setShowSubtaskAttachments(false);
                 }}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -2687,200 +2648,126 @@ export default function TasksPage() {
                       )}
                     </div>
                     
-                    {/* Начало выполнения */}
+                    {/* Кнопка "Начало выполнения" для подзадач */}
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Начало выполнения
                       </label>
                       <button
                         type="button"
-                        onClick={() => setShowStartDate(!showStartDate)}
+                        onClick={() => setShowSubtaskStartDate(!showSubtaskStartDate)}
                         className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm mb-4"
                       >
-                        {showStartDate ? '−' : '+'}
+                        {showSubtaskStartDate ? '−' : '+'}
                       </button>
                       
-                      {showStartDate && (
+                      {showSubtaskStartDate && (
                         <div className="mt-4 space-y-2 relative">
-                          <input
-                            type="text"
-                            value={subtaskFormData.startDate ? new Date(subtaskFormData.startDate).toLocaleDateString('ru-RU') : ''}
-                            onClick={() => setShowStartDatePicker(!showStartDatePicker)}
-                            readOnly
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer"
-                            placeholder="Выберите дату"
-                          />
-                          <input
-                            type="time"
-                            value={subtaskFormData.startTime}
-                            onChange={(e) => handleSubtaskInputChange('startTime', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                          />
+                          <div className="space-y-2">
+                            <input
+                              type="text"
+                              value={subtaskFormData.startDate ? new Date(subtaskFormData.startDate).toLocaleDateString('ru-RU') : ''}
+                              onClick={() => setShowDatePicker(!showDatePicker)}
+                              readOnly
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
+                                subtaskFormErrors.startDate 
+                                  ? 'border-red-500 focus:ring-red-500' 
+                                  : 'border-gray-300 focus:ring-gray-500'
+                              }`}
+                              placeholder="Выберите дату начала"
+                            />
+                            <div className="flex space-x-2">
+                              <div className="flex-1 relative">
+                                {subtaskFormData.startTime === '' ? (
+                                  <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500 cursor-pointer"
+                                       onClick={() => handleSubtaskInputChange('startTime', '09:00')}>
+                                    Весь день
+                                  </div>
+                                ) : (
+                                    <input
+                                      type="time"
+                                      value={subtaskFormData.startTime}
+                                      onChange={(e) => handleSubtaskInputChange('startTime', e.target.value)}
+                                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                        subtaskFormErrors.startTime 
+                                          ? 'border-red-500 focus:ring-red-500' 
+                                          : 'border-gray-300 focus:ring-gray-500'
+                                      }`}
+                                    />
+                                  )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleSubtaskInputChange('startTime', '')}
+                                className={`px-4 py-2 border rounded-md text-sm transition-colors ${
+                                  subtaskFormData.startTime === '' 
+                                    ? 'bg-gray-500 text-white border-gray-500' 
+                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                }`}
+                              >
+                                Весь день
+                              </button>
+                            </div>
+                          </div>
+                          
                           {subtaskFormErrors.startDate && (
                             <p className="text-red-500 text-sm mt-1">{subtaskFormErrors.startDate}</p>
                           )}
-                          
-                          {/* Календарь для начала выполнения в подзадаче */}
-                          {showStartDatePicker && (
-                            <div className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 mt-1">
-                              <div className="flex items-center justify-between mb-4">
-                                <button
-                                  type="button"
-                                  onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                                  className="p-2 hover:bg-gray-100 rounded"
-                                >
-                                  ←
-                                </button>
-                                <h3 className="text-lg font-semibold">
-                                  {currentMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
-                                </h3>
-                                <div className="flex items-center space-x-2">
-                                  <button
-                                    type="button"
-                                    onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                                    className="p-2 hover:bg-gray-100 rounded"
-                                  >
-                                    →
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => setShowStartDatePicker(false)}
-                                    className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-gray-700"
-                                  >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-7 gap-1 mb-2">
-                                {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(day => (
-                                  <div key={day} className="text-center text-sm font-medium text-gray-500 p-2">
-                                    {day}
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="grid grid-cols-7 gap-1">
-                                {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth()).map((day, index) => (
-                                  <button
-                                    key={index}
-                                    type="button"
-                                    onClick={() => {
-                                      if (day) {
-                                        const selectedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-                                        handleSubtaskInputChange('startDate', selectedDate.toISOString().split('T')[0]);
-                                        setShowStartDatePicker(false);
-                                      }
-                                    }}
-                                    className={`p-2 text-sm rounded hover:bg-gray-100 ${
-                                      day ? 'text-black' : 'text-gray-300'
-                                    } ${
-                                      subtaskFormData.startDate && day && 
-                                      new Date(subtaskFormData.startDate).getDate() === day &&
-                                      new Date(subtaskFormData.startDate).getMonth() === currentMonth.getMonth() &&
-                                      new Date(subtaskFormData.startDate).getFullYear() === currentMonth.getFullYear()
-                                        ? 'bg-gray-500 text-white' : ''
-                                    }`}
-                                  >
-                                    {day}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
+                          {subtaskFormErrors.startTime && (
+                            <p className="text-red-500 text-sm mt-1">{subtaskFormErrors.startTime}</p>
                           )}
                         </div>
                       )}
                     </div>
                     
-                    {/* Время на выполнение */}
+                    {/* Кнопка "Время на выполнение" для подзадач */}
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Время на выполнение
                       </label>
                       <button
                         type="button"
-                        onClick={() => setShowCompletionTime(!showCompletionTime)}
+                        onClick={() => setShowSubtaskCompletionTime(!showSubtaskCompletionTime)}
                         className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm mb-4"
                       >
-                        {showCompletionTime ? '−' : '+'}
+                        {showSubtaskCompletionTime ? '−' : '+'}
                       </button>
                       
-                      {showCompletionTime && (
+                      {showSubtaskCompletionTime && (
                         <div className="mt-4 space-y-2">
-                          <div className="grid grid-cols-3 gap-2">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                handleSubtaskInputChange('completionTime', '1:00');
-                                if (subtaskFormData.deadline) {
-                                  handleSubtaskInputChange('deadline', '');
-                                  handleSubtaskInputChange('deadlineTime', '12:00');
-                                }
-                              }}
-                              className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                            >
-                              1 час
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                handleSubtaskInputChange('completionTime', '2:00');
-                                if (subtaskFormData.deadline) {
-                                  handleSubtaskInputChange('deadline', '');
-                                  handleSubtaskInputChange('deadlineTime', '12:00');
-                                }
-                              }}
-                              className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                            >
-                              2 часа
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                handleSubtaskInputChange('completionTime', '3:00');
-                                if (subtaskFormData.deadline) {
-                                  handleSubtaskInputChange('deadline', '');
-                                  handleSubtaskInputChange('deadlineTime', '12:00');
-                                }
-                              }}
-                              className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                            >
-                              3 часа
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                handleSubtaskInputChange('completionTime', '4:00');
-                                if (subtaskFormData.deadline) {
-                                  handleSubtaskInputChange('deadline', '');
-                                  handleSubtaskInputChange('deadlineTime', '12:00');
-                                }
-                              }}
-                              className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                            >
-                              4 часа
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                handleSubtaskInputChange('completionTime', '5:00');
-                                if (subtaskFormData.deadline) {
-                                  handleSubtaskInputChange('deadline', '');
-                                  handleSubtaskInputChange('deadlineTime', '12:00');
-                                }
-                              }}
-                              className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
-                            >
-                              5 часов
-                            </button>
+                          <div className="grid grid-cols-2 gap-2">
+                            {['1', '2', '3', '4', '5'].map(hours => (
+                              <button
+                                key={hours}
+                                type="button"
+                                onClick={() => handleSubtaskInputChange('completionTime', hours)}
+                                className={`px-3 py-2 border rounded-md text-sm transition-colors ${
+                                  subtaskFormData.completionTime === hours
+                                    ? 'bg-gray-500 text-white border-gray-500'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                }`}
+                              >
+                                {hours} час{hours === '1' ? '' : hours === '2' || hours === '3' || hours === '4' ? 'а' : 'ов'}
+                              </button>
+                            ))}
                           </div>
-                          <input
-                            type="text"
-                            value={subtaskFormData.completionTime}
-                            onChange={(e) => handleSubtaskInputChange('completionTime', e.target.value)}
-                            placeholder="ЧЧ:ММ"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                          />
+                          <div className="flex space-x-2">
+                            <input
+                              type="number"
+                              min="1"
+                              max="24"
+                              value={subtaskFormData.completionTime}
+                              onChange={(e) => handleSubtaskInputChange('completionTime', e.target.value)}
+                              className={`flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                subtaskFormErrors.completionTime 
+                                  ? 'border-red-500 focus:ring-red-500' 
+                                  : 'border-gray-300 focus:ring-gray-500'
+                              }`}
+                              placeholder="Часы"
+                            />
+                            <span className="px-3 py-2 text-gray-500">часов</span>
+                          </div>
+                          
                           {subtaskFormErrors.completionTime && (
                             <p className="text-red-500 text-sm mt-1">{subtaskFormErrors.completionTime}</p>
                           )}
@@ -2888,46 +2775,42 @@ export default function TasksPage() {
                       )}
                     </div>
                     
-                    {/* Блокирующая задача */}
+                    {/* Кнопка "Блокирующая задача" для подзадач */}
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Блокирующая задача
                       </label>
                       <button
                         type="button"
-                        onClick={() => setShowBlockingTask(!showBlockingTask)}
+                        onClick={() => setShowSubtaskBlockingTask(!showSubtaskBlockingTask)}
                         className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm mb-4"
                       >
-                        {showBlockingTask ? '−' : '+'}
+                        {showSubtaskBlockingTask ? '−' : '+'}
                       </button>
                       
-                      {showBlockingTask && (
+                      {showSubtaskBlockingTask && (
                         <div className="mt-4 space-y-2">
-                          <p className="text-sm text-gray-600">
-                            Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (window.confirm('Вы уверены, что хотите заблокировать этого исполнителя?')) {
-                                setIsBlockingTask(true);
-                                handleSubtaskInputChange('isBlocking', true);
-                              }
-                            }}
-                            className={`px-4 py-2 rounded-md text-sm transition-colors ${
-                              isBlockingTask 
-                                ? 'bg-gray-500 text-white' 
-                                : 'bg-red-600 text-white hover:bg-red-700'
-                            }`}
-                          >
-                            {isBlockingTask ? 'Заблокировано' : 'Заблокировать'}
-                          </button>
+                          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <input
+                                type="checkbox"
+                                id="subtaskIsBlocking"
+                                checked={subtaskFormData.isBlocking}
+                                onChange={(e) => handleSubtaskInputChange('isBlocking', e.target.checked)}
+                                className="w-4 h-4 text-red-600 border-red-300 rounded focus:ring-red-500"
+                              />
+                              <label htmlFor="subtaskIsBlocking" className="text-red-800 font-medium">
+                                Заблокировать
+                              </label>
+                            </div>
+                            <p className="text-red-700 text-sm">
+                              Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. 
+                              Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
+                            </p>
+                          </div>
                         </div>
                       )}
                     </div>
-                  </div>
-                </div>
-              </div>
 
               {/* Блок 2: Исполнители и кураторы */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
@@ -2961,15 +2844,16 @@ export default function TasksPage() {
                                 type="checkbox"
                                 checked={subtaskFormData.executors.includes(user.id)}
                                 onChange={(e) => {
-                                  if (e.target.checked) {
-                                    handleSubtaskInputChange('executors', [...subtaskFormData.executors, user.id]);
-                                  } else {
-                                    handleSubtaskInputChange('executors', subtaskFormData.executors.filter(id => id !== user.id));
-                                  }
+                                  handleExecutorSelection(user.id, e.target.checked, true);
                                 }}
                                 className="mr-2"
                               />
-                              <span className="text-sm">{user.name} ({user.role})</span>
+                              <span className="text-sm">
+                                {user.name} ({user.role})
+                                {checkExecutorBlocking(user.id) && (
+                                  <span className="ml-2 text-red-500 text-xs">🔒 Заблокирован</span>
+                                )}
+                              </span>
                             </label>
                           ))}
                         </div>
@@ -3018,6 +2902,61 @@ export default function TasksPage() {
                 </div>
               </div>
 
+              {/* Блок 3: Вложения */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-black">Вложения</h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowSubtaskAttachments(!showSubtaskAttachments)}
+                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
+                  >
+                    {showSubtaskAttachments ? '−' : '+'}
+                  </button>
+                </div>
+                {showSubtaskAttachments && (
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Изображения
+                      </label>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Ссылки
+                      </label>
+                      <div className="space-y-2">
+                        {subtaskLinkInputs.map((link, index) => (
+                          <div key={index} className="flex space-x-2">
+                            <input
+                              type="url"
+                              value={link}
+                              onChange={(e) => updateSubtaskLinkInput(index, e.target.value)}
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                              placeholder="https://example.com"
+                            />
+                          </div>
+                        ))}
+                        <button 
+                          type="button"
+                          onClick={addSubtaskLinkInput}
+                          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                        >
+                          Добавить ещё ссылку
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Кнопки действий */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <button
@@ -3041,11 +2980,8 @@ export default function TasksPage() {
                       attachments: []
                     });
                     setSubtaskFormErrors({});
-                    setShowStartDate(false);
-                    setShowStartDatePicker(false);
-                    setShowCompletionTime(false);
-                    setShowBlockingTask(false);
-                    setIsBlockingTask(false);
+                    setSubtaskLinkInputs(['']);
+                    setShowSubtaskAttachments(false);
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
@@ -3106,8 +3042,7 @@ export default function TasksPage() {
                 <div className="border border-gray-300 rounded-lg overflow-hidden">
                   <div className="bg-gray-50 px-4 py-2 border-b border-gray-300">
                     <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
-                      <div className="col-span-1 text-center">✓</div>
-                      <div className="col-span-6">Действие</div>
+                      <div className="col-span-7">Действие</div>
                       <div className="col-span-2 text-center">Куратор</div>
                       <div className="col-span-2 text-center">Исполнитель</div>
                       <div className="col-span-1 text-center">✕</div>
@@ -3118,13 +3053,8 @@ export default function TasksPage() {
                     {checklistFormData.items.map((item, index) => (
                       <div key={item.id} className="p-4">
                         <div className="grid grid-cols-12 gap-4 items-center">
-                          {/* Чекбокс */}
-                          <div className="col-span-1 flex justify-center">
-                            <div className="w-5 h-5 border-2 border-gray-300 rounded bg-gray-100"></div>
-                          </div>
-                          
                           {/* Поле ввода действия */}
-                          <div className="col-span-6">
+                          <div className="col-span-7">
                             <input
                               type="text"
                               value={item.text}
@@ -3276,7 +3206,10 @@ export default function TasksPage() {
                 <button
                   type="button"
                   onClick={handleChecklistSubmit}
-                  className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors shadow-sm"
+                  className="px-6 py-2 text-black rounded-md transition-colors shadow-sm"
+                  style={{backgroundColor: '#fff60b'}}
+                  onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                  onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
                 >
                   Создать чек-лист
                 </button>
@@ -3381,6 +3314,39 @@ export default function TasksPage() {
                   Подтвердить выполнение
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно предупреждения о блокировке исполнителя */}
+      {showBlockingWarning && (
+        <div className="fixed inset-0 flex items-center justify-center z-[70] bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 border-2 border-red-500">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-red-800">Исполнитель заблокирован</h3>
+            </div>
+            
+            <p className="text-gray-700 mb-6">
+              У исполнителя <strong>{users.find(u => u.id === pendingExecutor)?.name}</strong> есть незавершенные блокирующие задачи. 
+              Пока эти задачи не будут завершены, ему нельзя назначать новые задачи.
+            </p>
+            
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowBlockingWarning(false);
+                  setPendingExecutor(null);
+                }}
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+              >
+                Понятно
+              </button>
             </div>
           </div>
         </div>
