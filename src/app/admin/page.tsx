@@ -141,12 +141,20 @@ import SiteSettingsPanel from "@/components/SiteSettingsPanel"
 import ObjectManagementPanel from "@/components/ObjectManagementPanel"
 import TaskManagementPanel from "@/components/TaskManagementPanel"
 import UserManagementPanel from "@/components/UserManagementPanel"
+import TimeTrackingCalendar from "@/components/TimeTrackingCalendar"
+import PenaltiesBonusesPanel from "@/components/PenaltiesBonusesPanel"
+import CashManagementPanel from "@/components/CashManagementPanel"
+import SalaryCalculationPanel from "@/components/SalaryCalculationPanel"
+import HRNotificationsPanel from "@/components/HRNotificationsPanel"
+import HRReportingPanel from "@/components/HRReportingPanel"
+import HRPermissionsPanel from "@/components/HRPermissionsPanel"
 
 export default function AdminPage() {
   const { data: session, status } = useSession()
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [hrActiveTab, setHrActiveTab] = useState('dashboard')
   const [showContentEditor, setShowContentEditor] = useState(false)
   const [selectedContent, setSelectedContent] = useState(null)
   const [contentCategory, setContentCategory] = useState('all')
@@ -864,125 +872,288 @@ export default function AdminPage() {
           {activeTab === 'hr' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-black">Кадры и бухгалтерия</h2>
-                <div className="flex items-center space-x-4">
-                  <button className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                    style={{backgroundColor: '#fff60b'}}
-                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                <div>
+                  <h2 className="text-2xl font-bold text-black">Кадры и бухгалтерия</h2>
+                  <p className="text-gray-600">Управление сотрудниками, зарплатами и рабочим временем</p>
+                </div>
+              </div>
+
+              {/* Навигация */}
+              <div className="mb-8">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setHrActiveTab('dashboard')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'dashboard' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
                   >
-                    <Calculator className="w-4 h-4 inline mr-2" />
-                    Открыть кадры
+                    <BarChart3 className="w-4 h-4 inline mr-2" />
+                    Дашборд
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('employees')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'employees' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <Users className="w-4 h-4 inline mr-2" />
+                    Сотрудники
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('time')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'time' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <Clock className="w-4 h-4 inline mr-2" />
+                    Рабочее время
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('salary')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'salary' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <DollarSign className="w-4 h-4 inline mr-2" />
+                    Зарплата
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('cash')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'cash' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <Receipt className="w-4 h-4 inline mr-2" />
+                    Касса
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('penalties')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'penalties' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <Award className="w-4 h-4 inline mr-2" />
+                    Штрафы и премии
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('notifications')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'notifications' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <Bell className="w-4 h-4 inline mr-2" />
+                    Уведомления
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('reports')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'reports' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <PieChart className="w-4 h-4 inline mr-2" />
+                    Отчёты
+                  </button>
+                  <button
+                    onClick={() => setHrActiveTab('permissions')}
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
+                      hrActiveTab === 'permissions' 
+                        ? 'bg-black text-white shadow-lg' 
+                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
+                    }`}
+                  >
+                    <Shield className="w-4 h-4 inline mr-2" />
+                    Права доступа
                   </button>
                 </div>
               </div>
 
-              {/* Статистика кадров */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <Users className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
-                      <div className="text-2xl font-bold text-black">12</div>
-                      <div className="text-sm text-gray-600">Сотрудников</div>
+              {/* Дашборд */}
+              {hrActiveTab === 'dashboard' && (
+                <div className="space-y-6">
+                  {/* Статистика кадров */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center">
+                        <Users className="w-8 h-8 text-gray-600 mr-3" />
+                        <div>
+                          <div className="text-2xl font-bold text-black">12</div>
+                          <div className="text-sm text-gray-600">Сотрудников</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center">
+                        <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
+                        <div>
+                          <div className="text-2xl font-bold text-black">₽450,000</div>
+                          <div className="text-sm text-gray-600">Фонд зарплат</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center">
+                        <Calendar className="w-8 h-8 text-gray-600 mr-3" />
+                        <div>
+                          <div className="text-2xl font-bold text-black">3</div>
+                          <div className="text-sm text-gray-600">В отпуске</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center">
+                        <Clock className="w-8 h-8 text-gray-600 mr-3" />
+                        <div>
+                          <div className="text-2xl font-bold text-black">168</div>
+                          <div className="text-sm text-gray-600">Часов в месяц</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <DollarSign className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
-                      <div className="text-2xl font-bold text-black">₽450,000</div>
-                      <div className="text-sm text-gray-600">Фонд зарплат</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <Calendar className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
-                      <div className="text-2xl font-bold text-black">3</div>
-                      <div className="text-sm text-gray-600">В отпуске</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <Clock className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
-                      <div className="text-2xl font-bold text-black">168</div>
-                      <div className="text-sm text-gray-600">Часов в месяц</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Быстрые действия */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center mb-4">
-                    <UserCheck className="w-6 h-6 text-gray-600 mr-3" />
-                    <h3 className="text-lg font-semibold text-black">Учёт рабочего времени</h3>
-                  </div>
-                  <p className="text-gray-600 mb-4">Отслеживание прихода/ухода сотрудников</p>
-                  <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                    Открыть календарь
-                  </button>
-                </div>
-
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center mb-4">
-                    <Calculator className="w-6 h-6 text-gray-600 mr-3" />
-                    <h3 className="text-lg font-semibold text-black">Расчёт зарплаты</h3>
-                  </div>
-                  <p className="text-gray-600 mb-4">Автоматический расчёт с возможностью корректировки</p>
-                  <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                    Рассчитать зарплату
-                  </button>
-                </div>
-
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center mb-4">
-                    <Receipt className="w-6 h-6 text-gray-600 mr-3" />
-                    <h3 className="text-lg font-semibold text-black">Касса и платежи</h3>
-                  </div>
-                  <p className="text-gray-600 mb-4">Учёт поступлений и расходов</p>
-                  <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
-                    Управление кассой
-                  </button>
-                </div>
-              </div>
-
-              {/* Последние действия */}
-              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <h3 className="text-lg font-semibold text-black mb-4">Последние действия</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                    <div className="flex items-center">
-                      <UserCheck className="w-4 h-4 text-gray-600 mr-3" />
-                      <span className="text-gray-800">Иван Сидоров пришёл на работу</span>
+                  {/* Функциональные блоки */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center mb-4">
+                        <Clock className="w-6 h-6 text-gray-600 mr-3" />
+                        <h3 className="text-lg font-semibold text-black">Учёт рабочего времени</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">Отслеживание прихода/ухода сотрудников</p>
+                      <button 
+                        onClick={() => setHrActiveTab('time')}
+                        className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                      >
+                        Открыть календарь
+                      </button>
                     </div>
-                    <span className="text-sm text-gray-500">09:15</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                    <div className="flex items-center">
-                      <DollarSign className="w-4 h-4 text-gray-600 mr-3" />
-                      <span className="text-gray-800">Начислена зарплата за январь</span>
+
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center mb-4">
+                        <Calculator className="w-6 h-6 text-gray-600 mr-3" />
+                        <h3 className="text-lg font-semibold text-black">Расчёт зарплаты</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">Автоматический расчёт с возможностью корректировки</p>
+                      <button 
+                        onClick={() => setHrActiveTab('salary')}
+                        className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                      >
+                        Рассчитать зарплату
+                      </button>
                     </div>
-                    <span className="text-sm text-gray-500">Вчера</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 text-gray-600 mr-3" />
-                      <span className="text-gray-800">Анна Петрова ушла в отпуск</span>
+
+                    <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                      <div className="flex items-center mb-4">
+                        <Receipt className="w-6 h-6 text-gray-600 mr-3" />
+                        <h3 className="text-lg font-semibold text-black">Касса и платежи</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">Учёт поступлений и расходов</p>
+                      <button 
+                        onClick={() => setHrActiveTab('cash')}
+                        className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                      >
+                        Управление кассой
+                      </button>
                     </div>
-                    <span className="text-sm text-gray-500">2 дня назад</span>
+                  </div>
+
+                  {/* Последние действия */}
+                  <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                    <h3 className="text-lg font-semibold text-black mb-4">Последние действия</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                        <div className="flex items-center">
+                          <UserCheck className="w-4 h-4 text-green-600 mr-3" />
+                          <span className="text-gray-800">Иван Сидоров пришёл на работу</span>
+                        </div>
+                        <span className="text-sm text-gray-500">09:15</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                        <div className="flex items-center">
+                          <DollarSign className="w-4 h-4 text-blue-600 mr-3" />
+                          <span className="text-gray-800">Начислена зарплата за январь</span>
+                        </div>
+                        <span className="text-sm text-gray-500">Вчера</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2">
+                        <div className="flex items-center">
+                          <Calendar className="w-4 h-4 text-purple-600 mr-3" />
+                          <span className="text-gray-800">Анна Петрова ушла в отпуск</span>
+                        </div>
+                        <span className="text-sm text-gray-500">2 дня назад</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {/* Сотрудники */}
+              {hrActiveTab === 'employees' && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-black">Управление сотрудниками</h3>
+                    <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                      <Plus className="w-4 h-4 inline mr-2" />
+                      Добавить сотрудника
+                    </button>
+                  </div>
+                  <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                    <p className="text-gray-600">Здесь будет список сотрудников с возможностью добавления, редактирования и удаления.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Рабочее время */}
+              {hrActiveTab === 'time' && (
+                <TimeTrackingCalendar />
+              )}
+
+              {/* Зарплата */}
+              {hrActiveTab === 'salary' && (
+                <SalaryCalculationPanel />
+              )}
+
+              {/* Касса */}
+              {hrActiveTab === 'cash' && (
+                <CashManagementPanel />
+              )}
+
+              {/* Штрафы и премии */}
+              {hrActiveTab === 'penalties' && (
+                <PenaltiesBonusesPanel />
+              )}
+
+              {/* Уведомления */}
+              {hrActiveTab === 'notifications' && (
+                <HRNotificationsPanel />
+              )}
+
+              {/* Отчёты */}
+              {hrActiveTab === 'reports' && (
+                <HRReportingPanel />
+              )}
+
+              {/* Права доступа */}
+              {hrActiveTab === 'permissions' && (
+                <HRPermissionsPanel />
+              )}
             </div>
           )}
 
