@@ -2494,8 +2494,7 @@ export default function TasksPage() {
                 <div className="border border-gray-300 rounded-lg overflow-hidden">
                   <div className="bg-gray-50 px-4 py-2 border-b border-gray-300">
                     <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
-                      <div className="col-span-1 text-center">✓</div>
-                      <div className="col-span-6">Действие</div>
+                      <div className="col-span-7">Действие</div>
                       <div className="col-span-2 text-center">Куратор</div>
                       <div className="col-span-2 text-center">Исполнитель</div>
                       <div className="col-span-1 text-center">✕</div>
@@ -2506,13 +2505,8 @@ export default function TasksPage() {
                     {checklistFormData.items.map((item, index) => (
                       <div key={item.id} className="p-4">
                         <div className="grid grid-cols-12 gap-4 items-center">
-                          {/* Чекбокс */}
-                          <div className="col-span-1 flex justify-center">
-                            <div className="w-5 h-5 border-2 border-gray-300 rounded bg-gray-100"></div>
-                          </div>
-                          
                           {/* Поле ввода действия */}
-                          <div className="col-span-6">
+                          <div className="col-span-7">
                             <input
                               type="text"
                               value={item.text}
@@ -2664,7 +2658,10 @@ export default function TasksPage() {
                 <button
                   type="button"
                   onClick={handleChecklistSubmit}
-                  className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors shadow-sm"
+                  className="px-6 py-2 text-black rounded-md transition-colors shadow-sm"
+                  style={{backgroundColor: '#fff60b'}}
+                  onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                  onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
                 >
                   Создать чек-лист
                 </button>
