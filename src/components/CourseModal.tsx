@@ -54,8 +54,8 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100'
-      case 'in-progress': return 'text-blue-600 bg-blue-100'
+      case 'completed': return 'text-gray-600 bg-gray-100'
+      case 'in-progress': return 'text-gray-600 bg-gray-100'
       case 'not-started': return 'text-gray-600 bg-gray-100'
       default: return 'text-gray-600 bg-gray-100'
     }
@@ -82,10 +82,10 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'text-green-600 bg-green-100'
-      case 'intermediate': return 'text-blue-600 bg-blue-100'
-      case 'advanced': return 'text-purple-600 bg-purple-100'
-      case 'expert': return 'text-red-600 bg-red-100'
+      case 'beginner': return 'text-gray-600 bg-gray-100'
+      case 'intermediate': return 'text-gray-600 bg-gray-100'
+      case 'advanced': return 'text-gray-600 bg-gray-100'
+      case 'expert': return 'text-gray-600 bg-gray-100'
       default: return 'text-gray-600 bg-gray-100'
     }
   }
@@ -142,7 +142,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
                   {getLevelText(course.level)}
                 </span>
                 {course.isRequired && (
-                  <span className="px-3 py-1 bg-red-100 text-red-600 text-sm font-medium rounded-full">
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">
                     Обязательный
                   </span>
                 )}

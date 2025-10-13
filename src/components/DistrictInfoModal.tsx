@@ -50,15 +50,15 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
 
   const getColorClasses = (color: string) => {
     const colors = {
-      blue: "bg-blue-100 text-blue-600",
-      green: "bg-green-100 text-green-600",
-      red: "bg-red-100 text-red-600",
-      orange: "bg-orange-100 text-orange-600",
-      purple: "bg-purple-100 text-purple-600",
-      pink: "bg-pink-100 text-pink-600",
-      yellow: "bg-yellow-100 text-yellow-600",
+      blue: "bg-gray-100 text-gray-600",
+      green: "bg-gray-100 text-gray-600",
+      red: "bg-gray-100 text-gray-600",
+      orange: "bg-gray-100 text-gray-600",
+      purple: "bg-gray-100 text-gray-600",
+      pink: "bg-gray-100 text-gray-600",
+      yellow: "bg-gray-100 text-gray-600",
       gray: "bg-gray-100 text-gray-600",
-      lightgreen: "bg-green-50 text-green-700"
+      lightgreen: "bg-gray-50 text-gray-700"
     }
     return colors[color as keyof typeof colors] || "bg-gray-100 text-gray-600"
   }
@@ -127,9 +127,9 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
                 </div>
 
                 {/* Дополнительная информация */}
-                <div className="mt-6 bg-blue-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-2">Дополнительная инфраструктура</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-blue-800">
+                <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Дополнительная инфраструктура</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-800">
                     <div className="flex items-center">
                       <Wifi className="w-4 h-4 mr-2" />
                       <span>Wi-Fi зоны</span>
@@ -247,7 +247,7 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
                           <div
                             key={i}
                             className={`w-3 h-3 rounded-full mr-1 ${
-                              i < Math.floor(item.rating / 2) ? 'bg-green-500' : 'bg-gray-200'
+                              i < Math.floor(item.rating / 2) ? 'bg-gray-500' : 'bg-gray-200'
                             }`}
                           ></div>
                         ))}
@@ -257,22 +257,22 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
                 </div>
 
                 {/* Экологический рейтинг */}
-                <div className="mt-6 bg-green-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-green-900 mb-2">Общий экологический рейтинг района</h4>
+                <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Общий экологический рейтинг района</h4>
                   <div className="flex items-center">
-                    <div className="text-3xl font-bold text-green-600 mr-4">7.2/10</div>
+                    <div className="text-3xl font-bold text-gray-600 mr-4">7.2/10</div>
                     <div className="flex">
                       {Array.from({ length: 10 }, (_, i) => (
                         <div
                           key={i}
                           className={`w-4 h-4 rounded-full mr-1 ${
-                            i < 7 ? 'bg-green-500' : 'bg-gray-200'
+                            i < 7 ? 'bg-gray-500' : 'bg-gray-200'
                           }`}
                         ></div>
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm text-green-800 mt-2">
+                  <p className="text-sm text-gray-800 mt-2">
                     Район имеет хорошую экологическую обстановку с развитой зеленой инфраструктурой
                   </p>
                 </div>
@@ -320,7 +320,7 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
                           <div
                             key={i}
                             className={`w-3 h-3 rounded-full mr-1 ${
-                              i < Math.floor(item.rating / 2) ? 'bg-green-500' : 'bg-gray-200'
+                              i < Math.floor(item.rating / 2) ? 'bg-gray-500' : 'bg-gray-200'
                             }`}
                           ></div>
                         ))}
@@ -330,22 +330,22 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
                 </div>
 
                 {/* Общий рейтинг безопасности */}
-                <div className="mt-6 bg-green-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-green-900 mb-2">Общий рейтинг безопасности</h4>
+                <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Общий рейтинг безопасности</h4>
                   <div className="flex items-center">
-                    <div className="text-3xl font-bold text-green-600 mr-4">7.8/10</div>
+                    <div className="text-3xl font-bold text-gray-600 mr-4">7.8/10</div>
                     <div className="flex">
                       {Array.from({ length: 10 }, (_, i) => (
                         <div
                           key={i}
                           className={`w-4 h-4 rounded-full mr-1 ${
-                            i < 8 ? 'bg-green-500' : 'bg-gray-200'
+                            i < 8 ? 'bg-gray-500' : 'bg-gray-200'
                           }`}
                         ></div>
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm text-green-800 mt-2">
+                  <p className="text-sm text-gray-800 mt-2">
                     Район считается безопасным с хорошим освещением и низким уровнем преступности
                   </p>
                 </div>
@@ -356,13 +356,13 @@ export default function DistrictInfoModal({ isOpen, onClose }: DistrictInfoModal
           {/* Дополнительные действия */}
           <div className="mt-8 border-t pt-6">
             <div className="flex flex-wrap gap-3">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                 Открыть на карте
               </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                 Получить подробный отчет
               </button>
-              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+              <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                 Сравнить с другими районами
               </button>
             </div>

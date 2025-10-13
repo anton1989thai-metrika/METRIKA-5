@@ -141,13 +141,13 @@ export default function TimeTrackingCalendar() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'present':
-        return <CheckCircle className="w-4 h-4 text-green-600" />
+        return <CheckCircle className="w-4 h-4 text-gray-600" />
       case 'late':
-        return <AlertCircle className="w-4 h-4 text-yellow-600" />
+        return <AlertCircle className="w-4 h-4 text-gray-600" />
       case 'absent':
-        return <XCircle className="w-4 h-4 text-red-600" />
+        return <XCircle className="w-4 h-4 text-gray-600" />
       case 'vacation':
-        return <Timer className="w-4 h-4 text-blue-600" />
+        return <Timer className="w-4 h-4 text-gray-600" />
       default:
         return <Clock className="w-4 h-4 text-gray-600" />
     }
@@ -292,16 +292,16 @@ export default function TimeTrackingCalendar() {
               <div
                 key={day}
                 className={`h-24 border-r border-b border-gray-200 last:border-r-0 p-2 cursor-pointer hover:bg-gray-50 transition-colors ${
-                  isToday ? 'bg-yellow-50' : ''
-                } ${isSelected ? 'bg-blue-50' : ''}`}
+                  isToday ? 'bg-gray-50' : ''
+                } ${isSelected ? 'bg-gray-50' : ''}`}
                 onClick={() => setSelectedDate(dateKey)}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className={`text-sm font-medium ${isToday ? 'text-yellow-600' : 'text-gray-700'}`}>
+                  <span className={`text-sm font-medium ${isToday ? 'text-gray-600' : 'text-gray-700'}`}>
                     {day}
                   </span>
                   {records.length > 0 && (
-                    <span className="text-xs bg-blue-100 text-blue-800 px-1 rounded">
+                    <span className="text-xs bg-gray-100 text-gray-800 px-1 rounded">
                       {records.length}
                     </span>
                   )}
@@ -361,13 +361,13 @@ export default function TimeTrackingCalendar() {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleEditRecord(record)}
-                    className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+                    className="p-1 text-gray-500 hover:text-gray-600 transition-colors"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDeleteRecord(record.id)}
-                    className="p-1 text-gray-500 hover:text-red-600 transition-colors"
+                    className="p-1 text-gray-500 hover:text-gray-600 transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>

@@ -76,7 +76,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
       <div className="relative bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <Play className="w-6 h-6 text-red-600 mr-3" />
+            <Play className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Видео объекта</h2>
           </div>
           <button
@@ -96,7 +96,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
                 <div className="relative w-full h-64 lg:h-96">
                   <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
                     <div className="text-center text-white">
-                      <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Play className="w-8 h-8 ml-1" />
                       </div>
                       <p className="text-lg font-medium">Обзор квартиры</p>
@@ -115,7 +115,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
                       </button>
                       
                       <div className="flex-1 bg-gray-600 rounded-full h-1">
-                        <div className="bg-red-600 h-1 rounded-full" style={{ width: '30%' }}></div>
+                        <div className="bg-gray-600 h-1 rounded-full" style={{ width: '30%' }}></div>
                       </div>
                       
                       <span className="text-white text-sm">1:15 / 3:45</span>
@@ -180,7 +180,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
               <div className="mt-6 space-y-3">
                 <button
                   onClick={handleDownload}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Скачать видео
@@ -188,7 +188,7 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
                 
                 <button
                   onClick={handleShare}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Поделиться
@@ -201,11 +201,11 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>HD (720p)</span>
-                    <span className="text-green-600">✓</span>
+                    <span className="text-gray-600">✓</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Full HD (1080p)</span>
-                    <span className="text-green-600">✓</span>
+                    <span className="text-gray-600">✓</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>4K (2160p)</span>
@@ -215,9 +215,9 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
               </div>
 
               {/* Техническая информация */}
-              <div className="mt-4 bg-blue-50 rounded-lg p-4">
-                <h4 className="font-semibold text-blue-900 mb-2">Техническая информация</h4>
-                <div className="text-sm text-blue-800 space-y-1">
+              <div className="mt-4 bg-gray-50 rounded-lg p-4">
+                <h4 className="font-semibold text-gray-900 mb-2">Техническая информация</h4>
+                <div className="text-sm text-gray-800 space-y-1">
                   <p>• Формат: MP4</p>
                   <p>• Разрешение: 1920x1080</p>
                   <p>• Битрейт: 5 Mbps</p>
@@ -229,10 +229,10 @@ export default function VideoModal({ isOpen, onClose }: VideoModalProps) {
 
           {/* Дополнительные действия */}
           <div className="mt-6 flex flex-wrap gap-3">
-            <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+            <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Запросить дополнительное видео
             </button>
-            <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+            <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Записаться на видео-консультацию
             </button>
             <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">

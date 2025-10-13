@@ -55,7 +55,7 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
       <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <Zap className="w-6 h-6 text-yellow-600 mr-3" />
+            <Zap className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Калькулятор коммунальных платежей</h2>
           </div>
           <button
@@ -99,20 +99,20 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
           {/* Кнопка расчета */}
           <button
             onClick={calculateUtilities}
-            className="w-full px-4 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
+            className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
           >
             Рассчитать коммунальные платежи
           </button>
 
           {/* Результаты расчета */}
           {(total > 0) && (
-            <div className="bg-yellow-50 rounded-lg p-6 space-y-4">
-              <h3 className="text-lg font-semibold text-yellow-900">Расчет коммунальных платежей</h3>
+            <div className="bg-gray-50 rounded-lg p-6 space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Расчет коммунальных платежей</h3>
               
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <div className="flex items-center">
-                    <Zap className="w-5 h-5 text-yellow-600 mr-2" />
+                    <Zap className="w-5 h-5 text-gray-600 mr-2" />
                     <span className="text-gray-700">Электричество</span>
                   </div>
                   <span className="font-semibold text-gray-900">{electricity.toLocaleString()} ₽</span>
@@ -120,7 +120,7 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
                 
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <div className="flex items-center">
-                    <div className="w-5 h-5 bg-blue-500 rounded mr-2"></div>
+                    <div className="w-5 h-5 bg-gray-500 rounded mr-2"></div>
                     <span className="text-gray-700">Водоснабжение</span>
                   </div>
                   <span className="font-semibold text-gray-900">{water.toLocaleString()} ₽</span>
@@ -128,7 +128,7 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
                 
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <div className="flex items-center">
-                    <div className="w-5 h-5 bg-red-500 rounded mr-2"></div>
+                    <div className="w-5 h-5 bg-gray-500 rounded mr-2"></div>
                     <span className="text-gray-700">Отопление</span>
                   </div>
                   <span className="font-semibold text-gray-900">{heating.toLocaleString()} ₽</span>
@@ -136,7 +136,7 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
                 
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
                   <div className="flex items-center">
-                    <div className="w-5 h-5 bg-orange-500 rounded mr-2"></div>
+                    <div className="w-5 h-5 bg-gray-500 rounded mr-2"></div>
                     <span className="text-gray-700">Газ</span>
                   </div>
                   <span className="font-semibold text-gray-900">{gas.toLocaleString()} ₽</span>
@@ -144,9 +144,9 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
               </div>
 
               <div className="border-t pt-4">
-                <div className="flex justify-between items-center p-4 bg-yellow-100 rounded-lg">
-                  <span className="text-lg font-semibold text-yellow-900">Итого в месяц:</span>
-                  <span className="text-2xl font-bold text-yellow-900">{total.toLocaleString()} ₽</span>
+                <div className="flex justify-between items-center p-4 bg-gray-100 rounded-lg">
+                  <span className="text-lg font-semibold text-gray-900">Итого в месяц:</span>
+                  <span className="text-2xl font-bold text-gray-900">{total.toLocaleString()} ₽</span>
                 </div>
               </div>
 
@@ -194,9 +194,9 @@ export default function UtilitiesCalculator({ isOpen, onClose }: UtilitiesCalcul
           </div>
 
           {/* Советы по экономии */}
-          <div className="bg-green-50 rounded-lg p-4">
-            <h4 className="font-semibold text-green-900 mb-2">Советы по экономии</h4>
-            <div className="text-sm text-green-800 space-y-1">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Советы по экономии</h4>
+            <div className="text-sm text-gray-800 space-y-1">
               <p>• Установите энергосберегающие лампы</p>
               <p>• Используйте программируемые термостаты</p>
               <p>• Установите счетчики воды и газа</p>

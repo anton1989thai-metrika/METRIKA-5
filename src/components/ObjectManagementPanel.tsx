@@ -129,13 +129,13 @@ import ObjectCreateForm from "./ObjectCreateForm"
 
 // Типы объектов недвижимости
 const PROPERTY_TYPES = [
-  { id: 'apartment', name: 'Квартира', icon: HomeIcon, color: 'text-blue-600' },
-  { id: 'house', name: 'Дом', icon: BuildingIcon, color: 'text-green-600' },
-  { id: 'land', name: 'Участок', icon: LandIcon, color: 'text-yellow-600' },
-  { id: 'commercial', name: 'Коммерция', icon: StoreIcon, color: 'text-purple-600' },
-  { id: 'building', name: 'Здание', icon: FactoryIcon, color: 'text-red-600' },
+  { id: 'apartment', name: 'Квартира', icon: HomeIcon, color: 'text-gray-600' },
+  { id: 'house', name: 'Дом', icon: BuildingIcon, color: 'text-gray-600' },
+  { id: 'land', name: 'Участок', icon: LandIcon, color: 'text-gray-600' },
+  { id: 'commercial', name: 'Коммерция', icon: StoreIcon, color: 'text-gray-600' },
+  { id: 'building', name: 'Здание', icon: FactoryIcon, color: 'text-gray-600' },
   { id: 'nonCapital', name: 'Некопитальный', icon: Building2, color: 'text-gray-600' },
-  { id: 'shares', name: 'Доля', icon: ShareIcon, color: 'text-indigo-600' }
+  { id: 'shares', name: 'Доля', icon: ShareIcon, color: 'text-gray-600' }
 ]
 
 // Страны
@@ -534,8 +534,8 @@ export default function ObjectManagementPanel() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-green-100 text-green-800'
-      case 'draft': return 'bg-yellow-100 text-yellow-800'
+      case 'published': return 'bg-gray-100 text-gray-800'
+      case 'draft': return 'bg-gray-100 text-gray-800'
       case 'archived': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
@@ -771,7 +771,7 @@ export default function ObjectManagementPanel() {
                             setObjects(prev => prev.filter(object => object.id !== obj.id))
                           }
                         }}
-                        className="p-1 text-gray-600 hover:text-red-600"
+                        className="p-1 text-gray-600 hover:text-gray-800"
                         title="Удалить"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -875,12 +875,12 @@ export default function ObjectManagementPanel() {
                 </p>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
+                  <AlertTriangle className="w-5 h-5 text-gray-600 mr-2 mt-0.5" />
                   <div>
-                    <h4 className="font-medium text-yellow-800 mb-1">Важно:</h4>
-                    <p className="text-sm text-yellow-700">
+                    <h4 className="font-medium text-gray-800 mb-1">Важно:</h4>
+                    <p className="text-sm text-gray-700">
                       Все объекты будут созданы как черновики. После загрузки вы сможете создать задачи для их проверки и публикации.
                     </p>
                   </div>

@@ -443,7 +443,7 @@ export default function CommentsModal({
                 {comments.length} комментариев
               </div>
               {comments.filter(c => !c.isResolved).length > 0 && (
-                <div className="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">
+                <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                   {comments.filter(c => !c.isResolved).length} не решено
                 </div>
               )}
@@ -538,7 +538,7 @@ export default function CommentsModal({
                 <div
                   key={comment.id}
                   className={`p-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all ${
-                    comment.isPinned ? 'border-yellow-300 bg-yellow-50' : ''
+                    comment.isPinned ? 'border-gray-300 bg-gray-50' : ''
                   } ${comment.isResolved ? 'opacity-60' : ''}`}
                 >
                   {/* Заголовок комментария */}
@@ -556,13 +556,13 @@ export default function CommentsModal({
                       </div>
                     </div>
                     <div className="flex items-center space-x-1">
-                      {comment.isPinned && <Pin className="w-4 h-4 text-yellow-600" />}
+                      {comment.isPinned && <Pin className="w-4 h-4 text-gray-600" />}
                       {comment.isPrivate && <Lock className="w-4 h-4 text-gray-600" />}
-                      {comment.isResolved && <CheckCircle className="w-4 h-4 text-green-600" />}
+                      {comment.isResolved && <CheckCircle className="w-4 h-4 text-gray-600" />}
                       <div className={`px-2 py-1 rounded-full text-xs ${
-                        comment.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                        comment.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                        comment.priority === 'normal' ? 'bg-blue-100 text-blue-800' :
+                        comment.priority === 'urgent' ? 'bg-gray-100 text-gray-800' :
+                        comment.priority === 'high' ? 'bg-gray-100 text-gray-800' :
+                        comment.priority === 'normal' ? 'bg-gray-100 text-gray-800' :
                         'bg-gray-100 text-gray-800'
                       }`}>
                         {comment.priority}
@@ -607,7 +607,7 @@ export default function CommentsModal({
                           onClick={() => addReaction(comment.id, reaction.emoji)}
                           className={`px-2 py-1 rounded-full text-xs border transition-all ${
                             reaction.users.includes(currentUser.id)
-                              ? 'bg-blue-100 border-blue-300 text-blue-800'
+                              ? 'bg-gray-100 border-gray-300 text-gray-800'
                               : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
                           }`}
                         >
@@ -638,21 +638,21 @@ export default function CommentsModal({
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => addReaction(comment.id, '👍')}
-                        className="p-1 text-gray-600 hover:text-blue-600"
+                        className="p-1 text-gray-600 hover:text-gray-800"
                         title="Нравится"
                       >
                         👍
                       </button>
                       <button
                         onClick={() => addReaction(comment.id, '❤️')}
-                        className="p-1 text-gray-600 hover:text-red-600"
+                        className="p-1 text-gray-600 hover:text-gray-800"
                         title="Любовь"
                       >
                         ❤️
                       </button>
                       <button
                         onClick={() => addReaction(comment.id, '😮')}
-                        className="p-1 text-gray-600 hover:text-yellow-600"
+                        className="p-1 text-gray-600 hover:text-gray-800"
                         title="Удивление"
                       >
                         😮
@@ -665,14 +665,14 @@ export default function CommentsModal({
                             <>
                               <button
                                 onClick={saveEdit}
-                                className="p-1 text-green-600 hover:text-green-800"
+                                className="p-1 text-gray-600 hover:text-gray-800"
                                 title="Сохранить"
                               >
                                 <Check className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={cancelEdit}
-                                className="p-1 text-red-600 hover:text-red-800"
+                                className="p-1 text-gray-600 hover:text-gray-800"
                                 title="Отмена"
                               >
                                 <X className="w-4 h-4" />
@@ -681,7 +681,7 @@ export default function CommentsModal({
                           ) : (
                             <button
                               onClick={() => editComment(comment.id)}
-                              className="p-1 text-gray-600 hover:text-blue-600"
+                              className="p-1 text-gray-600 hover:text-gray-800"
                               title="Редактировать"
                             >
                               <Edit className="w-4 h-4" />
@@ -691,14 +691,14 @@ export default function CommentsModal({
                       )}
                       <button
                         onClick={() => togglePin(comment.id)}
-                        className={`p-1 ${comment.isPinned ? 'text-yellow-600' : 'text-gray-600 hover:text-yellow-600'}`}
+                        className={`p-1 ${comment.isPinned ? 'text-gray-600' : 'text-gray-600 hover:text-gray-800'}`}
                         title={comment.isPinned ? 'Открепить' : 'Закрепить'}
                       >
                         <Pin className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => toggleResolve(comment.id)}
-                        className={`p-1 ${comment.isResolved ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}
+                        className={`p-1 ${comment.isResolved ? 'text-gray-600' : 'text-gray-600 hover:text-gray-800'}`}
                         title={comment.isResolved ? 'Отметить как нерешенное' : 'Отметить как решенное'}
                       >
                         <CheckCircle className="w-4 h-4" />
@@ -706,7 +706,7 @@ export default function CommentsModal({
                       {canDelete(comment) && (
                         <button
                           onClick={() => deleteComment(comment.id)}
-                          className="p-1 text-gray-600 hover:text-red-600"
+                          className="p-1 text-gray-600 hover:text-gray-800"
                           title="Удалить"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -791,7 +791,7 @@ export default function CommentsModal({
                     #{tag}
                     <button
                       onClick={() => removeTag(tag)}
-                      className="ml-1 text-gray-600 hover:text-red-600"
+                      className="ml-1 text-gray-600 hover:text-gray-800"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -827,7 +827,7 @@ export default function CommentsModal({
                       <span>{file.name}</span>
                       <button
                         onClick={() => removeAttachment(file.name)}
-                        className="text-red-600 hover:text-red-800"
+                        className="text-gray-600 hover:text-gray-800"
                       >
                         <X className="w-3 h-3" />
                       </button>

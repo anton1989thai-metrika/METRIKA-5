@@ -95,11 +95,11 @@ import PriceUpdatesModal from "./PriceUpdatesModal"
 
 // Типы объектов недвижимости
 const PROPERTY_TYPES = [
-  { id: 'apartment', name: 'Квартира', icon: Home, color: 'text-blue-600' },
-  { id: 'house', name: 'Дом', icon: Building, color: 'text-green-600' },
-  { id: 'land', name: 'Участок', icon: LandPlot, color: 'text-yellow-600' },
-  { id: 'commercial', name: 'Коммерция', icon: Store, color: 'text-purple-600' },
-  { id: 'building', name: 'Здание', icon: Factory, color: 'text-red-600' },
+  { id: 'apartment', name: 'Квартира', icon: Home, color: 'text-gray-600' },
+  { id: 'house', name: 'Дом', icon: Building, color: 'text-gray-600' },
+  { id: 'land', name: 'Участок', icon: LandPlot, color: 'text-gray-600' },
+  { id: 'commercial', name: 'Коммерция', icon: Store, color: 'text-gray-600' },
+  { id: 'building', name: 'Здание', icon: Factory, color: 'text-gray-600' },
   { id: 'nonCapital', name: 'Некопитальный', icon: Building, color: 'text-gray-600' },
   { id: 'shares', name: 'Доля', icon: Share, color: 'text-indigo-600' }
 ]
@@ -770,7 +770,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
               <div
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                   isDragOver 
-                    ? 'border-yellow-400 bg-yellow-50' 
+                    ? 'border-gray-400 bg-gray-50' 
                     : 'border-gray-300 hover:border-gray-400'
                 }`}
                 onDragOver={handleDragOver}
@@ -816,7 +816,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
                         />
                         <button
                           onClick={() => removeFile(file.id)}
-                          className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                          className="absolute top-2 right-2 p-1 bg-gray-500 text-white rounded-full hover:bg-gray-600"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -969,19 +969,19 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center space-x-3">
               {isAutoSaving && (
-                <div className="flex items-center text-blue-600">
+                <div className="flex items-center text-gray-600">
                   <RefreshCw className="w-4 h-4 animate-spin mr-2" />
                   Автосохранение...
                 </div>
               )}
               {lastAutoSave && !isAutoSaving && (
-                <div className="flex items-center text-green-600">
+                <div className="flex items-center text-gray-600">
                   <CheckCircle className="w-4 h-4 mr-2" />
                   Автосохранено {lastAutoSave.toLocaleTimeString()}
                 </div>
               )}
               {hasUnsavedChanges && !isAutoSaving && (
-                <div className="flex items-center text-orange-600">
+                <div className="flex items-center text-gray-600">
                   <AlertCircle className="w-4 h-4 mr-2" />
                   Есть несохраненные изменения
                 </div>
@@ -998,7 +998,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
               </button>
               <button
                 onClick={clearDraft}
-                className="px-3 py-1 text-xs bg-white border border-gray-300 text-red-600 rounded hover:shadow-sm transition-all"
+                className="px-3 py-1 text-xs bg-white border border-gray-300 text-gray-600 rounded hover:shadow-sm transition-all"
               >
                 <Trash2 className="w-3 h-3 inline mr-1" />
                 Очистить черновик

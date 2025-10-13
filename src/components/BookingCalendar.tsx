@@ -74,7 +74,7 @@ export default function BookingCalendar({ isOpen, onClose }: BookingCalendarProp
       <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <Calendar className="w-6 h-6 text-blue-600 mr-3" />
+            <Calendar className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Забронировать просмотр</h2>
           </div>
           <button
@@ -127,11 +127,11 @@ export default function BookingCalendar({ isOpen, onClose }: BookingCalendarProp
                         disabled={!isAvailable || isBooked}
                         className={`p-2 text-sm rounded-lg transition-colors ${
                           isSelected
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-gray-600 text-white'
                             : isBooked
-                            ? 'bg-red-100 text-red-400 cursor-not-allowed'
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                             : isAvailable
-                            ? 'hover:bg-blue-100 text-gray-900'
+                            ? 'hover:bg-gray-100 text-gray-900'
                             : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         }`}
                       >
@@ -144,11 +144,11 @@ export default function BookingCalendar({ isOpen, onClose }: BookingCalendarProp
                 {/* Легенда */}
                 <div className="mt-4 flex items-center justify-center space-x-4 text-xs">
                   <div className="flex items-center">
-                    <div className="w-3 h-3 bg-blue-100 rounded mr-1"></div>
+                    <div className="w-3 h-3 bg-gray-100 rounded mr-1"></div>
                     <span>Доступно</span>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-3 h-3 bg-red-100 rounded mr-1"></div>
+                    <div className="w-3 h-3 bg-gray-100 rounded mr-1"></div>
                     <span>Занято</span>
                   </div>
                   <div className="flex items-center">
@@ -169,8 +169,8 @@ export default function BookingCalendar({ isOpen, onClose }: BookingCalendarProp
                         onClick={() => setSelectedTime(time)}
                         className={`p-2 text-sm rounded-lg border transition-colors ${
                           selectedTime === time
-                            ? 'bg-blue-600 text-white border-blue-600'
-                            : 'bg-white text-gray-900 border-gray-300 hover:border-blue-500'
+                            ? 'bg-gray-600 text-white border-gray-600'
+                            : 'bg-white text-gray-900 border-gray-300 hover:border-gray-500'
                         }`}
                       >
                         {time}
@@ -241,9 +241,9 @@ export default function BookingCalendar({ isOpen, onClose }: BookingCalendarProp
 
               {/* Информация о бронировании */}
               {selectedDate && selectedTime && (
-                <div className="mt-6 bg-blue-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-2">Детали бронирования</h4>
-                  <div className="text-sm text-blue-800 space-y-1">
+                <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Детали бронирования</h4>
+                  <div className="text-sm text-gray-800 space-y-1">
                     <p><strong>Дата:</strong> {selectedDate.toLocaleDateString('ru')}</p>
                     <p><strong>Время:</strong> {selectedTime}</p>
                     <p><strong>Длительность:</strong> 1 час</p>
@@ -257,17 +257,17 @@ export default function BookingCalendar({ isOpen, onClose }: BookingCalendarProp
               <div className="mt-6 space-y-3">
                 <button
                   onClick={handleBooking}
-                  className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
                 >
                   Забронировать просмотр
                 </button>
                 
                 <div className="grid grid-cols-2 gap-3">
-                  <button className="flex items-center justify-center px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
+                  <button className="flex items-center justify-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
                     <Phone className="w-4 h-4 mr-2" />
                     Позвонить агенту
                   </button>
-                  <button className="flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                  <button className="flex items-center justify-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
                     <Mail className="w-4 h-4 mr-2" />
                     Написать агенту
                   </button>

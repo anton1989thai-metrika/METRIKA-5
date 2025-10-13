@@ -175,7 +175,7 @@ export default function QRCodeModal({ isOpen, onClose, objectUrl }: QRCodeModalP
               <div className="space-y-3">
                 <button
                   onClick={handleDownload}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Скачать QR-код
@@ -183,7 +183,7 @@ export default function QRCodeModal({ isOpen, onClose, objectUrl }: QRCodeModalP
                 
                 <button
                   onClick={handleShare}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Поделиться QR-кодом
@@ -202,9 +202,9 @@ export default function QRCodeModal({ isOpen, onClose, objectUrl }: QRCodeModalP
               </div>
 
               {/* Статистика */}
-              <div className="mt-4 bg-blue-50 rounded-lg p-4">
-                <h4 className="font-semibold text-blue-900 mb-2">Статистика использования</h4>
-                <div className="text-sm text-blue-800 space-y-1">
+              <div className="mt-4 bg-gray-50 rounded-lg p-4">
+                <h4 className="font-semibold text-gray-900 mb-2">Статистика использования</h4>
+                <div className="text-sm text-gray-800 space-y-1">
                   <p>• Скачано: 23 раза</p>
                   <p>• Отсканировано: 156 раз</p>
                   <p>• Последнее сканирование: сегодня</p>
@@ -217,11 +217,11 @@ export default function QRCodeModal({ isOpen, onClose, objectUrl }: QRCodeModalP
           <div className="mt-8 border-t pt-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Дополнительные возможности</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <button className="flex items-center justify-center px-4 py-3 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors">
+              <button className="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                 <QrCode className="w-5 h-5 mr-2" />
                 Создать QR-код для визитки
               </button>
-              <button className="flex items-center justify-center px-4 py-3 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors">
+              <button className="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                 <QrCode className="w-5 h-5 mr-2" />
                 QR-код для брошюры
               </button>

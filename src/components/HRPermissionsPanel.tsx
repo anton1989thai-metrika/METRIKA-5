@@ -412,19 +412,19 @@ export default function HRPermissionsPanel() {
   const getPermissionIcon = (module: string) => {
     switch (module) {
       case 'hr':
-        return <Users className="w-4 h-4 text-blue-600" />
+        return <Users className="w-4 h-4 text-gray-600" />
       case 'salary':
-        return <DollarSign className="w-4 h-4 text-green-600" />
+        return <DollarSign className="w-4 h-4 text-gray-600" />
       case 'time':
-        return <Clock className="w-4 h-4 text-purple-600" />
+        return <Clock className="w-4 h-4 text-gray-600" />
       case 'cash':
         return <Receipt className="w-4 h-4 text-indigo-600" />
       case 'reports':
-        return <BarChart3 className="w-4 h-4 text-orange-600" />
+        return <BarChart3 className="w-4 h-4 text-gray-600" />
       case 'profile':
         return <User className="w-4 h-4 text-gray-600" />
       case 'admin':
-        return <Settings className="w-4 h-4 text-red-600" />
+        return <Settings className="w-4 h-4 text-gray-600" />
       case 'system':
         return <Shield className="w-4 h-4 text-yellow-600" />
       default:
@@ -435,11 +435,11 @@ export default function HRPermissionsPanel() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800'
+        return 'bg-gray-100 text-gray-800'
       case 'inactive':
         return 'bg-gray-100 text-gray-800'
       case 'suspended':
-        return 'bg-red-100 text-red-800'
+        return 'bg-gray-100 text-gray-800'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -574,7 +574,7 @@ export default function HRPermissionsPanel() {
                   {!role.isSystem && (
                     <button
                       onClick={() => deleteRole(role.id)}
-                      className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-sm"
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                     >
                       <Trash2 className="w-3 h-3 inline mr-1" />
                       Удалить
@@ -623,7 +623,7 @@ export default function HRPermissionsPanel() {
                         {user.permissions.map(permissionId => {
                           const permission = permissions.find(p => p.id === permissionId)
                           return permission ? (
-                            <span key={permissionId} className="flex items-center px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
+                            <span key={permissionId} className="flex items-center px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">
                               {getPermissionIcon(permission.module)}
                               <span className="ml-1">{permission.name}</span>
                             </span>
@@ -639,8 +639,8 @@ export default function HRPermissionsPanel() {
                     onClick={() => toggleUserStatus(user.id)}
                     className={`px-3 py-1 rounded text-sm transition-colors ${
                       user.status === 'active' 
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200' 
-                        : 'bg-green-100 text-green-700 hover:bg-green-200'
+                        ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     {user.status === 'active' ? (
@@ -664,7 +664,7 @@ export default function HRPermissionsPanel() {
                   </button>
                   <button
                     onClick={() => deleteUser(user.id)}
-                    className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-sm"
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                   >
                     <Trash2 className="w-3 h-3 inline mr-1" />
                     Удалить
@@ -698,7 +698,7 @@ export default function HRPermissionsPanel() {
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">{permission.module}</span>
                       <span className={`px-2 py-1 rounded text-xs ${
-                        permission.isEnabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        permission.isEnabled ? 'bg-gray-100 text-gray-800' : 'bg-gray-100 text-gray-800'
                       }`}>
                         {permission.isEnabled ? 'Включено' : 'Отключено'}
                       </span>

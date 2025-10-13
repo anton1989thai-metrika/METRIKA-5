@@ -358,7 +358,7 @@ export default function ContentEditor({ isOpen, onClose, content, onSave }: Cont
                     />
                     <button
                       onClick={() => setFeaturedImage('')}
-                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                      className="absolute top-2 right-2 p-1 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition-colors"
                     >
                       <X className="w-3 h-3" />
                     </button>

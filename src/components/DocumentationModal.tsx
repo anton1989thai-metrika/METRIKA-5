@@ -93,14 +93,14 @@ export default function DocumentationModal({ isOpen, onClose }: DocumentationMod
   const getFileIcon = (type: string) => {
     switch (type) {
       case "pdf":
-        return <FileText className="w-6 h-6 text-red-500" />
+        return <FileText className="w-6 h-6 text-gray-500" />
       case "jpg":
       case "jpeg":
       case "png":
-        return <Image className="w-6 h-6 text-green-500" />
+        return <Image className="w-6 h-6 text-gray-500" />
       case "xlsx":
       case "xls":
-        return <FileSpreadsheet className="w-6 h-6 text-green-600" />
+        return <FileSpreadsheet className="w-6 h-6 text-gray-600" />
       default:
         return <File className="w-6 h-6 text-gray-500" />
     }
@@ -124,7 +124,7 @@ export default function DocumentationModal({ isOpen, onClose }: DocumentationMod
       <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <FileText className="w-6 h-6 text-purple-600 mr-3" />
+            <FileText className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Документация объекта</h2>
           </div>
           <button
@@ -145,7 +145,7 @@ export default function DocumentationModal({ isOpen, onClose }: DocumentationMod
                   onClick={() => setSelectedCategory(category.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     selectedCategory === category.id
-                      ? 'bg-purple-600 text-white'
+                      ? 'bg-gray-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -177,14 +177,14 @@ export default function DocumentationModal({ isOpen, onClose }: DocumentationMod
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handlePreview(document)}
-                    className="flex items-center px-3 py-1 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors text-sm"
+                    className="flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-sm"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     Просмотр
                   </button>
                   <button
                     onClick={() => handleDownload(document)}
-                    className="flex items-center px-3 py-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors text-sm"
+                    className="flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-sm"
                   >
                     <Download className="w-4 h-4 mr-1" />
                     Скачать
@@ -196,27 +196,27 @@ export default function DocumentationModal({ isOpen, onClose }: DocumentationMod
 
           {/* Статистика */}
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{documents.length}</div>
-              <div className="text-sm text-blue-800">Всего документов</div>
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">{documents.length}</div>
+              <div className="text-sm text-gray-800">Всего документов</div>
             </div>
-            <div className="bg-green-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">
                 {documents.filter(d => d.type === 'pdf').length}
               </div>
-              <div className="text-sm text-green-800">PDF файлов</div>
+              <div className="text-sm text-gray-800">PDF файлов</div>
             </div>
-            <div className="bg-purple-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">
                 {documents.filter(d => d.type === 'jpg').length}
               </div>
-              <div className="text-sm text-purple-800">Изображений</div>
+              <div className="text-sm text-gray-800">Изображений</div>
             </div>
-            <div className="bg-orange-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">
                 {documents.filter(d => d.type === 'xlsx').length}
               </div>
-              <div className="text-sm text-orange-800">Таблиц</div>
+              <div className="text-sm text-gray-800">Таблиц</div>
             </div>
           </div>
 
@@ -233,10 +233,10 @@ export default function DocumentationModal({ isOpen, onClose }: DocumentationMod
 
           {/* Кнопки действий */}
           <div className="mt-6 flex space-x-3">
-            <button className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+            <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Скачать все документы
             </button>
-            <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Запросить дополнительные документы
             </button>
           </div>

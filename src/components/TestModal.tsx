@@ -136,9 +136,9 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'passed': return 'text-green-600 bg-green-100'
-      case 'failed': return 'text-red-600 bg-red-100'
-      case 'in-progress': return 'text-blue-600 bg-blue-100'
+      case 'passed': return 'text-gray-600 bg-gray-100'
+      case 'failed': return 'text-gray-600 bg-gray-100'
+      case 'in-progress': return 'text-gray-600 bg-gray-100'
       case 'not-taken': return 'text-gray-600 bg-gray-100'
       default: return 'text-gray-600 bg-gray-100'
     }
@@ -205,7 +205,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                     {getStatusText(test.status)}
                   </span>
                   {test.isRequired && (
-                    <span className="ml-2 px-3 py-1 bg-red-100 text-red-600 text-sm font-medium rounded-full">
+                    <span className="ml-2 px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">
                       Обязательный
                     </span>
                   )}
@@ -254,7 +254,7 @@ export default function TestModal({ isOpen, onClose, test }: TestModalProps) {
                 </div>
                 <div className="flex items-center text-lg font-medium">
                   <Clock className="w-5 h-5 mr-2 text-gray-600" />
-                  <span className={timeLeft < 300 ? 'text-red-500' : 'text-black'}>
+                  <span className={timeLeft < 300 ? 'text-gray-500' : 'text-black'}>
                     {formatTime(timeLeft)}
                   </span>
                 </div>

@@ -507,10 +507,10 @@ export default function PriceUpdatesModal({
             <DollarSign className="w-6 h-6 text-black" />
             <h3 className="text-xl font-semibold text-black">Автоматическое обновление цен</h3>
             <div className="flex items-center space-x-2">
-              <div className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                 {updates.filter(u => u.status === 'pending').length} ожидают
               </div>
-              <div className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                 {rules.filter(r => r.isActive).length} правил активно
               </div>
               <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
@@ -567,7 +567,7 @@ export default function PriceUpdatesModal({
                       <p className="text-sm text-gray-600">Всего правил</p>
                       <p className="text-2xl font-bold text-black">{rules.length}</p>
                     </div>
-                    <Settings className="w-8 h-8 text-blue-600" />
+                    <Settings className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -579,7 +579,7 @@ export default function PriceUpdatesModal({
                         {updates.filter(u => u.status === 'pending').length}
                       </p>
                     </div>
-                    <Clock className="w-8 h-8 text-yellow-600" />
+                    <Clock className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -591,7 +591,7 @@ export default function PriceUpdatesModal({
                         {updates.filter(u => u.status === 'applied').length}
                       </p>
                     </div>
-                    <Check className="w-8 h-8 text-green-600" />
+                    <Check className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -601,7 +601,7 @@ export default function PriceUpdatesModal({
                       <p className="text-sm text-gray-600">Изменений в истории</p>
                       <p className="text-2xl font-bold text-black">{history.length}</p>
                     </div>
-                    <TrendingUp className="w-8 h-8 text-purple-600" />
+                    <TrendingUp className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
               </div>
@@ -614,9 +614,9 @@ export default function PriceUpdatesModal({
                     <div key={update.id} className="flex items-center justify-between p-4 bg-white border border-gray-300 rounded-lg shadow-sm">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
-                          update.status === 'applied' ? 'bg-green-500' :
-                          update.status === 'pending' ? 'bg-yellow-500' :
-                          update.status === 'rejected' ? 'bg-red-500' :
+                          update.status === 'applied' ? 'bg-gray-500' :
+                          update.status === 'pending' ? 'bg-gray-500' :
+                          update.status === 'rejected' ? 'bg-gray-500' :
                           'bg-gray-500'
                         }`}></div>
                         <div>
@@ -691,17 +691,17 @@ export default function PriceUpdatesModal({
                   <div
                     key={update.id}
                     className={`p-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all ${
-                      update.status === 'applied' ? 'border-green-200 bg-green-50' :
-                      update.status === 'rejected' ? 'border-red-200 bg-red-50' :
-                      'border-yellow-200 bg-yellow-50'
+                      update.status === 'applied' ? 'border-gray-200 bg-gray-50' :
+                      update.status === 'rejected' ? 'border-gray-200 bg-gray-50' :
+                      'border-gray-200 bg-gray-50'
                     }`}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
-                          update.status === 'applied' ? 'bg-green-500' :
-                          update.status === 'pending' ? 'bg-yellow-500' :
-                          'bg-red-500'
+                          update.status === 'applied' ? 'bg-gray-500' :
+                          update.status === 'pending' ? 'bg-gray-500' :
+                          'bg-gray-500'
                         }`}></div>
                         <div>
                           <div className="font-medium text-black">{update.objectTitle}</div>
@@ -710,9 +710,9 @@ export default function PriceUpdatesModal({
                       </div>
                       <div className="flex items-center space-x-2">
                         <div className={`px-2 py-1 rounded-full text-xs ${
-                          update.status === 'applied' ? 'bg-green-100 text-green-800' :
-                          update.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
+                          update.status === 'applied' ? 'bg-gray-100 text-gray-800' :
+                          update.status === 'pending' ? 'bg-gray-100 text-gray-800' :
+                          'bg-gray-100 text-gray-800'
                         }`}>
                           {update.status === 'applied' ? 'Применено' :
                            update.status === 'pending' ? 'Ожидает' : 'Отклонено'}
@@ -734,7 +734,7 @@ export default function PriceUpdatesModal({
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Изменение</p>
-                        <p className={`font-medium ${update.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        <p className={`font-medium ${update.change >= 0 ? 'text-gray-600' : 'text-gray-600'}`}>
                           {update.change >= 0 ? '+' : ''}{update.change.toLocaleString()} ₽ ({update.changePercent.toFixed(1)}%)
                         </p>
                       </div>
@@ -759,8 +759,8 @@ export default function PriceUpdatesModal({
                           <div>
                             <p className="text-gray-600">Тренд</p>
                             <p className={`font-medium ${
-                              update.marketData.trend === 'up' ? 'text-green-600' :
-                              update.marketData.trend === 'down' ? 'text-red-600' :
+                              update.marketData.trend === 'up' ? 'text-gray-600' :
+                              update.marketData.trend === 'down' ? 'text-gray-600' :
                               'text-gray-600'
                             }`}>
                               {update.marketData.trend === 'up' ? '↗ Рост' :
@@ -785,14 +785,14 @@ export default function PriceUpdatesModal({
                             <button
                               onClick={() => applyUpdate(update.id)}
                               disabled={isRunningUpdate}
-                              className="px-3 py-1 bg-green-100 text-green-800 rounded text-sm hover:bg-green-200 transition-all disabled:opacity-50"
+                              className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all disabled:opacity-50"
                             >
                               <Check className="w-4 h-4 inline mr-1" />
                               Применить
                             </button>
                             <button
                               onClick={() => rejectUpdate(update.id)}
-                              className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                              className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                             >
                               <X className="w-4 h-4 inline mr-1" />
                               Отклонить
@@ -924,7 +924,7 @@ export default function PriceUpdatesModal({
                   <div key={rule.id} className="p-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${rule.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                        <div className={`w-3 h-3 rounded-full ${rule.isActive ? 'bg-gray-500' : 'bg-gray-400'}`}></div>
                         <div>
                           <div className="font-medium text-black">{rule.name}</div>
                           <div className="text-sm text-gray-600">{rule.description}</div>
@@ -934,11 +934,11 @@ export default function PriceUpdatesModal({
                         <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">
                           {rule.triggerCount} срабатываний
                         </div>
-                        <div className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                        <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">
                           {rule.successCount} успешно
                         </div>
                         {rule.errorCount > 0 && (
-                          <div className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                          <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">
                             {rule.errorCount} ошибок
                           </div>
                         )}
@@ -959,8 +959,8 @@ export default function PriceUpdatesModal({
                           onClick={() => toggleRule(rule.id)}
                           className={`px-3 py-1 rounded text-sm transition-all ${
                             rule.isActive 
-                              ? 'bg-red-100 text-red-800 hover:bg-red-200' 
-                              : 'bg-green-100 text-green-800 hover:bg-green-200'
+                              ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' 
+                              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                           }`}
                         >
                           {rule.isActive ? 'Отключить' : 'Включить'}
@@ -974,7 +974,7 @@ export default function PriceUpdatesModal({
                         </button>
                         <button
                           onClick={() => deleteRule(rule.id)}
-                          className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                          className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                         >
                           <Trash2 className="w-4 h-4 inline mr-1" />
                           Удалить
@@ -1018,7 +1018,7 @@ export default function PriceUpdatesModal({
                           <div className="font-medium text-black">{item.newPrice.toLocaleString()} ₽</div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className={`font-medium ${item.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <div className={`font-medium ${item.change >= 0 ? 'text-gray-600' : 'text-gray-600'}`}>
                             {item.change >= 0 ? '+' : ''}{item.change.toLocaleString()} ₽ ({item.changePercent.toFixed(1)}%)
                           </div>
                         </td>

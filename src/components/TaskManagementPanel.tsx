@@ -250,14 +250,14 @@ export default function TaskManagementPanel() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'new': return 'text-blue-600 bg-blue-50 border border-blue-200'
-      case 'in-progress': return 'text-yellow-600 bg-yellow-50 border border-yellow-200'
-      case 'pending': return 'text-orange-600 bg-orange-50 border border-orange-200'
-      case 'completed': return 'text-green-600 bg-green-50 border border-green-200'
-      case 'cancelled': return 'text-red-600 bg-red-50 border border-red-200'
-      case 'processing': return 'text-purple-600 bg-purple-50 border border-purple-200'
-      case 'approved': return 'text-green-600 bg-green-50 border border-green-200'
-      case 'rejected': return 'text-red-600 bg-red-50 border border-red-200'
+      case 'new': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'in-progress': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'pending': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'completed': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'cancelled': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'processing': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'approved': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'rejected': return 'text-gray-600 bg-gray-50 border border-gray-200'
       default: return 'text-gray-600 bg-gray-50 border border-gray-200'
     }
   }
@@ -279,9 +279,9 @@ export default function TaskManagementPanel() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'low': return 'text-gray-600 bg-gray-50 border border-gray-200'
-      case 'medium': return 'text-blue-600 bg-blue-50 border border-blue-200'
-      case 'high': return 'text-orange-600 bg-orange-50 border border-orange-200'
-      case 'urgent': return 'text-red-600 bg-red-50 border border-red-200'
+      case 'medium': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'high': return 'text-gray-600 bg-gray-50 border border-gray-200'
+      case 'urgent': return 'text-gray-600 bg-gray-50 border border-gray-200'
       default: return 'text-gray-600 bg-gray-50 border border-gray-200'
     }
   }
@@ -417,7 +417,7 @@ export default function TaskManagementPanel() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
             <div className="flex items-center">
-              <CheckSquare className="w-8 h-8 text-blue-500 mr-3" />
+              <CheckSquare className="w-8 h-8 text-gray-500 mr-3" />
               <div>
                 <div className="text-2xl font-bold text-black">{stats.totalTasks}</div>
                 <div className="text-sm text-gray-600">Всего задач</div>
@@ -427,7 +427,7 @@ export default function TaskManagementPanel() {
           
           <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
             <div className="flex items-center">
-              <Clock className="w-8 h-8 text-yellow-500 mr-3" />
+              <Clock className="w-8 h-8 text-gray-500 mr-3" />
               <div>
                 <div className="text-2xl font-bold text-black">{stats.inProgressTasks}</div>
                 <div className="text-sm text-gray-600">В работе</div>
@@ -437,7 +437,7 @@ export default function TaskManagementPanel() {
           
           <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
             <div className="flex items-center">
-              <AlertCircle className="w-8 h-8 text-red-500 mr-3" />
+              <AlertCircle className="w-8 h-8 text-gray-500 mr-3" />
               <div>
                 <div className="text-2xl font-bold text-black">{stats.urgentTasks}</div>
                 <div className="text-sm text-gray-600">Срочные</div>
@@ -447,7 +447,7 @@ export default function TaskManagementPanel() {
           
           <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
             <div className="flex items-center">
-              <FileText className="w-8 h-8 text-green-500 mr-3" />
+              <FileText className="w-8 h-8 text-gray-500 mr-3" />
               <div>
                 <div className="text-2xl font-bold text-black">{stats.totalApplications}</div>
                 <div className="text-sm text-gray-600">Заявок</div>
@@ -626,7 +626,7 @@ export default function TaskManagementPanel() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleDeleteTask(task.id)}
-                      className="px-3 py-1 bg-white border border-red-300 text-red-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
+                      className="px-3 py-1 bg-white border border-gray-300 text-gray-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
                     >
                       <Trash2 className="w-4 h-4 inline mr-1" />
                       Удалить
@@ -757,7 +757,7 @@ export default function TaskManagementPanel() {
                     </div>
                     
                     {application.notes && (
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
                         <div className="text-sm font-medium text-black mb-1">Заметки</div>
                         <div className="text-sm text-gray-600">{application.notes}</div>
                       </div>
@@ -789,7 +789,7 @@ export default function TaskManagementPanel() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleDeleteApplication(application.id)}
-                      className="px-3 py-1 bg-white border border-red-300 text-red-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
+                      className="px-3 py-1 bg-white border border-gray-300 text-gray-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
                     >
                       <Trash2 className="w-4 h-4 inline mr-1" />
                       Удалить
@@ -819,7 +819,7 @@ export default function TaskManagementPanel() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center">
-                  <TrendingUp className="w-8 h-8 text-green-500 mr-3" />
+                  <TrendingUp className="w-8 h-8 text-gray-500 mr-3" />
                   <div>
                     <div className="text-2xl font-bold text-black">{stats.completedTasks}</div>
                     <div className="text-sm text-gray-600">Завершено задач</div>
@@ -829,7 +829,7 @@ export default function TaskManagementPanel() {
               
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center">
-                  <Clock className="w-8 h-8 text-yellow-500 mr-3" />
+                  <Clock className="w-8 h-8 text-gray-500 mr-3" />
                   <div>
                     <div className="text-2xl font-bold text-black">{stats.inProgressTasks}</div>
                     <div className="text-sm text-gray-600">В работе</div>
@@ -839,7 +839,7 @@ export default function TaskManagementPanel() {
               
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center">
-                  <FileText className="w-8 h-8 text-blue-500 mr-3" />
+                  <FileText className="w-8 h-8 text-gray-500 mr-3" />
                   <div>
                     <div className="text-2xl font-bold text-black">{stats.newApplications}</div>
                     <div className="text-sm text-gray-600">Новых заявок</div>
@@ -849,7 +849,7 @@ export default function TaskManagementPanel() {
               
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center">
-                  <Target className="w-8 h-8 text-purple-500 mr-3" />
+                  <Target className="w-8 h-8 text-gray-500 mr-3" />
                   <div>
                     <div className="text-2xl font-bold text-black">{stats.completedApplications}</div>
                     <div className="text-sm text-gray-600">Завершено заявок</div>

@@ -87,15 +87,15 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
   }
 
   const getIconColor = (type: string, priority: string) => {
-    if (priority === 'high') return 'text-red-500'
-    if (priority === 'medium') return 'text-blue-500'
+    if (priority === 'high') return 'text-gray-500'
+    if (priority === 'medium') return 'text-gray-500'
     return 'text-gray-500'
   }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800'
-      case 'medium': return 'bg-blue-100 text-blue-800'
+      case 'high': return 'bg-gray-100 text-gray-800'
+      case 'medium': return 'bg-gray-100 text-gray-800'
       case 'low': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
@@ -124,10 +124,10 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
       <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <Bell className="w-6 h-6 text-blue-600 mr-3" />
+            <Bell className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Уведомления</h2>
             {unreadCount > 0 && (
-              <span className="ml-2 px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
+              <span className="ml-2 px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
                 {unreadCount}
               </span>
             )}
@@ -195,7 +195,7 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
                 className={`p-4 rounded-lg border transition-colors ${
                   notification.read 
                     ? 'bg-white border-gray-200' 
-                    : 'bg-blue-50 border-blue-200'
+                    : 'bg-gray-50 border-gray-200'
                 }`}
               >
                 <div className="flex items-start">
@@ -219,7 +219,7 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
                           {getPriorityText(notification.priority)}
                         </span>
                         {!notification.read && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
                         )}
                       </div>
                     </div>
@@ -234,7 +234,7 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
                       <span className="text-xs text-gray-500">
                         {notification.time}
                       </span>
-                      <button className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                      <button className="text-xs text-gray-600 hover:text-gray-800 font-medium">
                         {notification.action}
                       </button>
                     </div>
@@ -249,7 +249,7 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
             <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
               Отметить все как прочитанные
             </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Настройки уведомлений
             </button>
           </div>

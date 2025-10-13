@@ -176,11 +176,11 @@ export default function MediaManager({
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case 'image': return <ImageIcon className="w-8 h-8 text-blue-500" />
-      case 'video': return <Video className="w-8 h-8 text-red-500" />
-      case 'document': return <FileText className="w-8 h-8 text-green-500" />
-      case 'audio': return <Music className="w-8 h-8 text-purple-500" />
-      case 'archive': return <Archive className="w-8 h-8 text-orange-500" />
+      case 'image': return <ImageIcon className="w-8 h-8 text-gray-500" />
+      case 'video': return <Video className="w-8 h-8 text-gray-500" />
+      case 'document': return <FileText className="w-8 h-8 text-gray-500" />
+      case 'audio': return <Music className="w-8 h-8 text-gray-500" />
+      case 'archive': return <Archive className="w-8 h-8 text-gray-500" />
       default: return <File className="w-8 h-8 text-gray-500" />
     }
   }
@@ -416,7 +416,7 @@ export default function MediaManager({
                             e.stopPropagation()
                             handleDelete(file.id)
                           }}
-                          className="p-1 bg-white border border-red-300 text-red-600 rounded shadow-sm hover:shadow-md transition-all"
+                          className="p-1 bg-white border border-gray-300 text-gray-600 rounded shadow-sm hover:shadow-md transition-all"
                         >
                           <Trash2 className="w-3 h-3" />
                         </button>
@@ -480,7 +480,7 @@ export default function MediaManager({
                             e.stopPropagation()
                             handleDelete(file.id)
                           }}
-                          className="p-2 bg-white border border-red-300 text-red-600 rounded-lg shadow-sm hover:shadow-md transition-all"
+                          className="p-2 bg-white border border-gray-300 text-gray-600 rounded-lg shadow-sm hover:shadow-md transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -535,7 +535,7 @@ export default function MediaManager({
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
+                      className="bg-gray-400 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
                   </div>

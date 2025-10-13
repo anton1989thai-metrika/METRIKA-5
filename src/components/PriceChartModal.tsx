@@ -72,7 +72,7 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
       <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <TrendingUp className="w-6 h-6 text-orange-600 mr-3" />
+            <TrendingUp className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">График изменения цены</h2>
           </div>
           <button
@@ -86,40 +86,40 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
         <div className="p-6">
           {/* Статистика */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">
                 {currentPrice.toLocaleString()} ₽
               </div>
-              <div className="text-sm text-blue-800">Текущая цена</div>
+              <div className="text-sm text-gray-800">Текущая цена</div>
             </div>
             
             <div className={`rounded-lg p-4 text-center ${
-              totalChange >= 0 ? 'bg-green-50' : 'bg-red-50'
+              totalChange >= 0 ? 'bg-gray-50' : 'bg-gray-50'
             }`}>
               <div className={`text-2xl font-bold ${
-                totalChange >= 0 ? 'text-green-600' : 'text-red-600'
+                totalChange >= 0 ? 'text-gray-600' : 'text-gray-600'
               }`}>
                 {totalChange >= 0 ? '+' : ''}{totalChange.toFixed(1)}%
               </div>
               <div className={`text-sm ${
-                totalChange >= 0 ? 'text-green-800' : 'text-red-800'
+                totalChange >= 0 ? 'text-gray-800' : 'text-gray-800'
               }`}>
                 Изменение за период
               </div>
             </div>
             
-            <div className="bg-purple-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">
                 {maxPrice.toLocaleString()} ₽
               </div>
-              <div className="text-sm text-purple-800">Максимальная цена</div>
+              <div className="text-sm text-gray-800">Максимальная цена</div>
             </div>
             
-            <div className="bg-orange-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-gray-600">
                 {minPrice.toLocaleString()} ₽
               </div>
-              <div className="text-sm text-orange-800">Минимальная цена</div>
+              <div className="text-sm text-gray-800">Минимальная цена</div>
             </div>
           </div>
 
@@ -132,7 +132,7 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
                   onClick={() => setSelectedPeriod(period.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     selectedPeriod === period.id
-                      ? 'bg-orange-600 text-white'
+                      ? 'bg-gray-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -154,10 +154,10 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
                     <div
                       className={`w-full rounded-t transition-all duration-300 ${
                         isCurrent 
-                          ? 'bg-orange-500' 
-                          : point.change >= 0 
-                            ? 'bg-green-400' 
-                            : 'bg-red-400'
+                          ? 'bg-gray-500' 
+                          : point.change >= 0
+                            ? 'bg-gray-400' 
+                            : 'bg-gray-400'
                       }`}
                       style={{ height: `${height}%` }}
                     ></div>
@@ -190,7 +190,7 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
                     <span className="text-gray-600 ml-2">{point.price.toLocaleString()} ₽</span>
                   </div>
                   <div className={`flex items-center ${
-                    point.change >= 0 ? 'text-green-600' : 'text-red-600'
+                    point.change >= 0 ? 'text-gray-600' : 'text-gray-600'
                   }`}>
                     <TrendingUp className={`w-4 h-4 mr-1 ${
                       point.change < 0 ? 'rotate-180' : ''
@@ -205,9 +205,9 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
           </div>
 
           {/* Анализ рынка */}
-          <div className="bg-blue-50 rounded-lg p-4 mb-6">
-            <h4 className="font-semibold text-blue-900 mb-2">Анализ рынка</h4>
-            <div className="text-sm text-blue-800 space-y-1">
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <h4 className="font-semibold text-gray-900 mb-2">Анализ рынка</h4>
+            <div className="text-sm text-gray-800 space-y-1">
               <p>• Средняя цена в районе: 8,200,000 ₽</p>
               <p>• Цена объекта выше среднего на 2.4%</p>
               <p>• Тренд: снижение цены на 1.2% за последние 3 месяца</p>
@@ -221,8 +221,8 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
               onClick={handleSubscribe}
               className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                 isSubscribed
-                  ? 'bg-green-600 text-white hover:bg-green-700'
-                  : 'bg-yellow-600 text-white hover:bg-yellow-700'
+                  ? 'bg-gray-600 text-white hover:bg-gray-700'
+                  : 'bg-gray-600 text-white hover:bg-gray-700'
               }`}
             >
               <Bell className="w-4 h-4 mr-2" />
@@ -231,7 +231,7 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
             
             <button
               onClick={handleDownloadChart}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Скачать график
@@ -239,7 +239,7 @@ export default function PriceChartModal({ isOpen, onClose }: PriceChartModalProp
             
             <button
               onClick={handleShareChart}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Поделиться

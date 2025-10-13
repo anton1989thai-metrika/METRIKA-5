@@ -89,7 +89,7 @@ export default function VirtualTourModal({ isOpen, onClose }: VirtualTourModalPr
       }`}>
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <Play className="w-6 h-6 text-green-600 mr-3" />
+            <Play className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Виртуальный тур</h2>
           </div>
           <button
@@ -217,7 +217,7 @@ export default function VirtualTourModal({ isOpen, onClose }: VirtualTourModalPr
                           onClick={() => handleViewChange(index)}
                           className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                             currentView === index
-                              ? 'bg-green-600 text-white'
+                              ? 'bg-gray-600 text-white'
                               : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                           }`}
                         >
@@ -239,7 +239,7 @@ export default function VirtualTourModal({ isOpen, onClose }: VirtualTourModalPr
                           onClick={() => handleRoomChange(room.id)}
                           className={`rounded-lg text-xs font-medium transition-colors ${
                             currentRoom === room.id
-                              ? 'bg-green-600 text-white'
+                              ? 'bg-gray-600 text-white'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                           }`}
                         >
@@ -263,16 +263,16 @@ export default function VirtualTourModal({ isOpen, onClose }: VirtualTourModalPr
 
               {/* Дополнительные функции */}
               <div className="mt-6 flex flex-wrap gap-3">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                   Сохранить тур
                 </button>
-                <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                   Поделиться туром
                 </button>
-                <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                   Записать видео
                 </button>
-                <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                   Сделать скриншот
                 </button>
               </div>

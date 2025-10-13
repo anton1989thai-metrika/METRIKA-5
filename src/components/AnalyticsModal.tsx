@@ -384,11 +384,11 @@ export default function AnalyticsModal({
             <h3 className="text-xl font-semibold text-black">Аналитика создания объектов</h3>
             <div className="flex items-center space-x-2">
               {isTracking && (
-                <div className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                   Отслеживание активно
                 </div>
               )}
-              <div className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                 {analytics.length} записей
               </div>
               <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
@@ -445,7 +445,7 @@ export default function AnalyticsModal({
                       <p className="text-sm text-gray-600">Всего объектов</p>
                       <p className="text-2xl font-bold text-black">{stats.totalObjects}</p>
                     </div>
-                    <Home className="w-8 h-8 text-blue-600" />
+                    <Home className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -455,7 +455,7 @@ export default function AnalyticsModal({
                       <p className="text-sm text-gray-600">Общее время</p>
                       <p className="text-2xl font-bold text-black">{Math.round(stats.totalTime)} мин</p>
                     </div>
-                    <Clock className="w-8 h-8 text-green-600" />
+                    <Clock className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -465,7 +465,7 @@ export default function AnalyticsModal({
                       <p className="text-sm text-gray-600">Среднее время</p>
                       <p className="text-2xl font-bold text-black">{Math.round(stats.averageTime)} мин</p>
                     </div>
-                    <TrendingUp className="w-8 h-8 text-purple-600" />
+                    <TrendingUp className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -475,7 +475,7 @@ export default function AnalyticsModal({
                       <p className="text-sm text-gray-600">Завершено</p>
                       <p className="text-2xl font-bold text-black">{Math.round(stats.completionRate)}%</p>
                     </div>
-                    <Check className="w-8 h-8 text-green-600" />
+                    <Check className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
               </div>
@@ -515,7 +515,7 @@ export default function AnalyticsModal({
                     </button>
                     <button
                       onClick={() => stopTracking('abandoned')}
-                      className="px-4 py-2 bg-red-100 text-red-800 rounded-lg shadow-sm hover:bg-red-200 transition-all"
+                      className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg shadow-sm hover:bg-gray-200 transition-all"
                     >
                       <X className="w-4 h-4 inline mr-2" />
                       Отменить
@@ -532,9 +532,9 @@ export default function AnalyticsModal({
                     <div key={item.id} className="flex items-center justify-between p-4 bg-white border border-gray-300 rounded-lg shadow-sm">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
-                          item.status === 'completed' ? 'bg-green-500' :
-                          item.status === 'in_progress' ? 'bg-yellow-500' :
-                          'bg-red-500'
+                          item.status === 'completed' ? 'bg-gray-500' :
+                          item.status === 'in_progress' ? 'bg-gray-500' :
+                          'bg-gray-500'
                         }`}></div>
                         <div>
                           <div className="font-medium text-black">{item.objectTitle}</div>
@@ -572,7 +572,7 @@ export default function AnalyticsModal({
                     </button>
                   ) : (
                     <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                      <div className="w-3 h-3 bg-gray-500 rounded-full animate-pulse"></div>
                       <span className="text-sm text-gray-600">Отслеживание активно</span>
                     </div>
                   )}
@@ -604,15 +604,15 @@ export default function AnalyticsModal({
                         <div
                           key={step.name}
                           className={`flex items-center justify-between p-3 rounded-lg border ${
-                            isCompleted ? 'bg-green-50 border-green-200' :
-                            isActive ? 'bg-yellow-50 border-yellow-200' :
+                            isCompleted ? 'bg-gray-50 border-gray-200' :
+                            isActive ? 'bg-gray-50 border-gray-200' :
                             'bg-gray-50 border-gray-200'
                           }`}
                         >
                           <div className="flex items-center space-x-3">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              isCompleted ? 'bg-green-500 text-white' :
-                              isActive ? 'bg-yellow-500 text-white' :
+                              isCompleted ? 'bg-gray-500 text-white' :
+                              isActive ? 'bg-gray-500 text-white' :
                               'bg-gray-300 text-gray-600'
                             }`}>
                               {isCompleted ? <Check className="w-4 h-4" /> : <IconComponent className="w-4 h-4" />}
@@ -638,7 +638,7 @@ export default function AnalyticsModal({
                             {stepData && !stepData.endTime && (
                               <button
                                 onClick={() => completeStep(index)}
-                                className="px-3 py-1 bg-green-100 text-green-800 rounded text-sm hover:bg-green-200 transition-all"
+                                className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                               >
                                 Завершить
                               </button>
@@ -734,9 +734,9 @@ export default function AnalyticsModal({
                         </td>
                         <td className="px-4 py-3">
                           <span className={`px-2 py-1 rounded-full text-xs ${
-                            item.status === 'completed' ? 'bg-green-100 text-green-800' :
-                            item.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
+                            item.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                            item.status === 'in_progress' ? 'bg-gray-100 text-gray-800' :
+                            'bg-gray-100 text-gray-800'
                           }`}>
                             {item.status === 'completed' ? 'Завершено' :
                              item.status === 'in_progress' ? 'В процессе' : 'Отменено'}
@@ -745,7 +745,7 @@ export default function AnalyticsModal({
                         <td className="px-4 py-3">
                           <button
                             onClick={() => deleteAnalytics(item.id)}
-                            className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                            className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                           >
                             <Trash2 className="w-4 h-4 inline mr-1" />
                             Удалить

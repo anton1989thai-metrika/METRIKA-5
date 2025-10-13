@@ -46,15 +46,15 @@ export default function WeatherModal({ isOpen, onClose, selectedDate }: WeatherM
   const getWeatherIcon = (condition: string) => {
     switch (condition) {
       case "sunny":
-        return <Sun className="w-8 h-8 text-yellow-500" />
+        return <Sun className="w-8 h-8 text-gray-500" />
       case "partly-cloudy":
         return <Cloud className="w-8 h-8 text-gray-500" />
       case "cloudy":
         return <Cloud className="w-8 h-8 text-gray-600" />
       case "rainy":
-        return <CloudRain className="w-8 h-8 text-blue-500" />
+        return <CloudRain className="w-8 h-8 text-gray-500" />
       case "snowy":
-        return <CloudSnow className="w-8 h-8 text-blue-300" />
+        return <CloudSnow className="w-8 h-8 text-gray-300" />
       default:
         return <Cloud className="w-8 h-8 text-gray-500" />
     }
@@ -78,10 +78,10 @@ export default function WeatherModal({ isOpen, onClose, selectedDate }: WeatherM
   }
 
   const getPrecipitationColor = (precipitation: number) => {
-    if (precipitation === 0) return "text-green-600"
-    if (precipitation < 30) return "text-yellow-600"
-    if (precipitation < 70) return "text-orange-600"
-    return "text-red-600"
+    if (precipitation === 0) return "text-gray-600"
+    if (precipitation < 30) return "text-gray-600"
+    if (precipitation < 70) return "text-gray-600"
+    return "text-gray-600"
   }
 
   if (!isOpen) return null
@@ -179,9 +179,9 @@ export default function WeatherModal({ isOpen, onClose, selectedDate }: WeatherM
               </div>
 
               {/* Рекомендации для просмотра */}
-              <div className="bg-green-50 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-green-900 mb-2">Рекомендации для просмотра</h4>
-                <div className="text-sm text-green-800 space-y-1">
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-gray-900 mb-2">Рекомендации для просмотра</h4>
+                <div className="text-sm text-gray-800 space-y-1">
                   <p>• Лучшее время для просмотра: утром (9:00-11:00) или вечером (17:00-19:00)</p>
                   <p>• Возьмите зонт на случай дождя</p>
                   <p>• Одевайтесь по погоде - сегодня прохладно</p>
@@ -191,9 +191,9 @@ export default function WeatherModal({ isOpen, onClose, selectedDate }: WeatherM
 
               {/* Дополнительная информация */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-2">Сезонные особенности</h4>
-                  <div className="text-sm text-blue-800 space-y-1">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Сезонные особенности</h4>
+                  <div className="text-sm text-gray-800 space-y-1">
                     <p>• Зимний период: возможны снегопады</p>
                     <p>• Температура может опускаться до -10°C</p>
                     <p>• Дороги могут быть скользкими</p>
@@ -201,9 +201,9 @@ export default function WeatherModal({ isOpen, onClose, selectedDate }: WeatherM
                   </div>
                 </div>
 
-                <div className="bg-orange-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-orange-900 mb-2">Советы по просмотру</h4>
-                  <div className="text-sm text-orange-800 space-y-1">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Советы по просмотру</h4>
+                  <div className="text-sm text-gray-800 space-y-1">
                     <p>• Проверьте работу отопления</p>
                     <p>• Обратите внимание на утепление окон</p>
                     <p>• Уточните расходы на отопление</p>
@@ -217,10 +217,10 @@ export default function WeatherModal({ isOpen, onClose, selectedDate }: WeatherM
                 <button className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors">
                   Обновить прогноз
                 </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                   Получить уведомления о погоде
                 </button>
-                <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                   Поделиться прогнозом
                 </button>
               </div>

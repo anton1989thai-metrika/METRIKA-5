@@ -370,9 +370,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   // Получение иконки роли
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case 'admin': return <Crown className="w-4 h-4 text-purple-600" />
-      case 'manager': return <Star className="w-4 h-4 text-blue-600" />
-      case 'agent': return <User className="w-4 h-4 text-green-600" />
+      case 'admin': return <Crown className="w-4 h-4 text-gray-600" />
+      case 'manager': return <Star className="w-4 h-4 text-gray-600" />
+      case 'agent': return <User className="w-4 h-4 text-gray-600" />
       case 'employee': return <UserCheck className="w-4 h-4 text-gray-600" />
       default: return <User className="w-4 h-4 text-gray-600" />
     }
@@ -381,9 +381,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   // Получение цвета статуса
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800'
-      case 'inactive': return 'bg-red-100 text-red-800'
-      case 'pending': return 'bg-yellow-100 text-yellow-800'
+      case 'active': return 'bg-gray-100 text-gray-800'
+      case 'inactive': return 'bg-gray-100 text-gray-800'
+      case 'pending': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -543,9 +543,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center space-x-1">
-                          {user.permissions.canManageObjects && <div className="w-2 h-2 bg-blue-500 rounded-full" title="Может управлять объектами"></div>}
-                          {user.permissions.canManageUsers && <div className="w-2 h-2 bg-purple-500 rounded-full" title="Может управлять пользователями"></div>}
-                          {user.permissions.canViewAnalytics && <div className="w-2 h-2 bg-orange-500 rounded-full" title="Может просматривать аналитику"></div>}
+                          {user.permissions.canManageObjects && <div className="w-2 h-2 bg-gray-500 rounded-full" title="Может управлять объектами"></div>}
+                          {user.permissions.canManageUsers && <div className="w-2 h-2 bg-gray-500 rounded-full" title="Может управлять пользователями"></div>}
+                          {user.permissions.canViewAnalytics && <div className="w-2 h-2 bg-gray-500 rounded-full" title="Может просматривать аналитику"></div>}
                         </div>
                       </td>
                       <td className="px-4 py-3">
@@ -564,15 +564,15 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             onClick={() => toggleUserStatus(user.id)}
                             className={`px-3 py-1 rounded text-sm transition-all ${
                               user.status === 'active' 
-                                ? 'bg-red-100 text-red-800 hover:bg-red-200' 
-                                : 'bg-green-100 text-green-800 hover:bg-green-200'
+                                ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' 
+                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                             }`}
                           >
                             {user.status === 'active' ? 'Деактивировать' : 'Активировать'}
                           </button>
                           <button
                             onClick={() => deleteUser(user.id)}
-                            className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                            className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                           >
                             <Trash2 className="w-4 h-4 inline mr-1" />
                             Удалить
@@ -930,7 +930,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <p className="text-sm text-gray-600">Активных сегодня</p>
                     <p className="text-2xl font-bold text-black">{users.filter(u => u.status === 'active').length}</p>
                   </div>
-                  <Activity className="w-8 h-8 text-green-600" />
+                  <Activity className="w-8 h-8 text-gray-600" />
                 </div>
               </div>
 
@@ -941,7 +941,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <p className="text-sm text-gray-600">Администраторов</p>
                     <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'admin').length}</p>
                   </div>
-                  <Crown className="w-8 h-8 text-purple-600" />
+                  <Crown className="w-8 h-8 text-gray-600" />
                 </div>
               </div>
 
@@ -951,7 +951,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <p className="text-sm text-gray-600">Ожидают активации</p>
                     <p className="text-2xl font-bold text-black">{users.filter(u => u.status === 'pending').length}</p>
                   </div>
-                  <Clock className="w-8 h-8 text-yellow-600" />
+                  <Clock className="w-8 h-8 text-gray-600" />
                 </div>
               </div>
             </div>

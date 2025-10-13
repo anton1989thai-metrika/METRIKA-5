@@ -170,7 +170,7 @@ export default function TaskCalendar({ tasks, onTaskClick, onDateClick, currentD
                       className={`
                         min-h-[80px] border border-gray-200 p-1 cursor-pointer
                         ${date ? 'hover:bg-gray-50' : 'bg-gray-50'}
-                        ${isCurrentDay ? 'bg-yellow-50 border-yellow-300' : ''}
+                        ${isCurrentDay ? 'bg-gray-50 border-gray-300' : ''}
                         ${isWeekendDay ? 'bg-gray-50' : ''}
                       `}
                       onClick={() => date && onDateClick(date)}
@@ -180,7 +180,7 @@ export default function TaskCalendar({ tasks, onTaskClick, onDateClick, currentD
                           {/* Номер дня */}
                           <div className={`
                             text-sm font-medium mb-1
-                            ${isCurrentDay ? 'text-yellow-800' : 'text-black'}
+                            ${isCurrentDay ? 'text-gray-800' : 'text-black'}
                             ${isWeekendDay ? 'text-gray-500' : ''}
                           `}>
                             {date.getDate()}

@@ -50,7 +50,7 @@ export default function MortgageCalculator({ isOpen, onClose, propertyPrice }: M
       <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border-2 border-black">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
-            <Calculator className="w-6 h-6 text-blue-600 mr-3" />
+            <Calculator className="w-6 h-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Калькулятор ипотеки</h2>
           </div>
           <button
@@ -149,36 +149,36 @@ export default function MortgageCalculator({ isOpen, onClose, propertyPrice }: M
           {/* Кнопка расчета */}
           <button
             onClick={calculateMortgage}
-            className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
           >
             Рассчитать платеж
           </button>
 
           {/* Результаты расчета */}
           {(monthlyPayment > 0) && (
-            <div className="bg-blue-50 rounded-lg p-6 space-y-4">
-              <h3 className="text-lg font-semibold text-blue-900">Результаты расчета</h3>
+            <div className="bg-gray-50 rounded-lg p-6 space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Результаты расчета</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-gray-600">
                     {monthlyPayment.toLocaleString()} ₽
                   </div>
-                  <div className="text-sm text-blue-800">Ежемесячный платеж</div>
+                  <div className="text-sm text-gray-800">Ежемесячный платеж</div>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-gray-600">
                     {totalInterest.toLocaleString()} ₽
                   </div>
-                  <div className="text-sm text-blue-800">Общая сумма процентов</div>
+                  <div className="text-sm text-gray-800">Общая сумма процентов</div>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-gray-600">
                     {totalAmount.toLocaleString()} ₽
                   </div>
-                  <div className="text-sm text-blue-800">Общая сумма выплат</div>
+                  <div className="text-sm text-gray-800">Общая сумма выплат</div>
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ export default function MortgageCalculator({ isOpen, onClose, propertyPrice }: M
             <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Подать заявку в банк
             </button>
-            <button className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
               Консультация с банком
             </button>
           </div>

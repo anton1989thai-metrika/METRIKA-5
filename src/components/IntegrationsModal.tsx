@@ -194,14 +194,14 @@ export default function IntegrationsModal({
 
   // Типы интеграций
   const integrationTypes = [
-    { id: 'cian', name: 'ЦИАН', icon: Home, color: 'text-blue-600', description: 'Крупнейший портал недвижимости в России' },
-    { id: 'avito', name: 'Авито', icon: Store, color: 'text-green-600', description: 'Популярная доска объявлений' },
-    { id: 'domclick', name: 'Домклик', icon: Building, color: 'text-purple-600', description: 'Сервис Сбербанка для недвижимости' },
-    { id: 'yandex', name: 'Яндекс.Недвижимость', icon: Globe, color: 'text-red-600', description: 'Поиск недвижимости от Яндекса' },
-    { id: 'google', name: 'Google My Business', icon: Globe, color: 'text-blue-500', description: 'Бизнес-профиль в Google' },
-    { id: 'facebook', name: 'Facebook', icon: Share, color: 'text-blue-700', description: 'Социальная сеть Facebook' },
-    { id: 'vk', name: 'ВКонтакте', icon: Users, color: 'text-blue-500', description: 'Социальная сеть ВКонтакте' },
-    { id: 'telegram', name: 'Telegram', icon: MessageCircle, color: 'text-blue-400', description: 'Мессенджер Telegram' }
+    { id: 'cian', name: 'ЦИАН', icon: Home, color: 'text-gray-600', description: 'Крупнейший портал недвижимости в России' },
+    { id: 'avito', name: 'Авито', icon: Store, color: 'text-gray-600', description: 'Популярная доска объявлений' },
+    { id: 'domclick', name: 'Домклик', icon: Building, color: 'text-gray-600', description: 'Сервис Сбербанка для недвижимости' },
+    { id: 'yandex', name: 'Яндекс.Недвижимость', icon: Globe, color: 'text-gray-600', description: 'Поиск недвижимости от Яндекса' },
+    { id: 'google', name: 'Google My Business', icon: Globe, color: 'text-gray-600', description: 'Бизнес-профиль в Google' },
+    { id: 'facebook', name: 'Facebook', icon: Share, color: 'text-gray-600', description: 'Социальная сеть Facebook' },
+    { id: 'vk', name: 'ВКонтакте', icon: Users, color: 'text-gray-600', description: 'Социальная сеть ВКонтакте' },
+    { id: 'telegram', name: 'Telegram', icon: MessageCircle, color: 'text-gray-600', description: 'Мессенджер Telegram' }
   ]
 
   // Поля для синхронизации
@@ -412,7 +412,7 @@ export default function IntegrationsModal({
             <ExternalLink className="w-6 h-6 text-black" />
             <h3 className="text-xl font-semibold text-black">Интеграции с внешними сервисами</h3>
             <div className="flex items-center space-x-2">
-              <div className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                 {integrations.filter(i => i.status === 'active').length} активных
               </div>
               <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
@@ -471,7 +471,7 @@ export default function IntegrationsModal({
                         {integrations.reduce((sum, i) => sum + i.statistics.totalObjects, 0)}
                       </p>
                     </div>
-                    <Database className="w-8 h-8 text-blue-600" />
+                    <Database className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -483,7 +483,7 @@ export default function IntegrationsModal({
                         {integrations.reduce((sum, i) => sum + i.statistics.publishedObjects, 0)}
                       </p>
                     </div>
-                    <Upload className="w-8 h-8 text-green-600" />
+                    <Upload className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -495,7 +495,7 @@ export default function IntegrationsModal({
                         {integrations.reduce((sum, i) => sum + i.statistics.updatedObjects, 0)}
                       </p>
                     </div>
-                    <RefreshCw className="w-8 h-8 text-blue-600" />
+                    <RefreshCw className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -507,7 +507,7 @@ export default function IntegrationsModal({
                         {integrations.reduce((sum, i) => sum + i.statistics.errorObjects, 0)}
                       </p>
                     </div>
-                    <AlertCircle className="w-8 h-8 text-red-600" />
+                    <AlertCircle className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
               </div>
@@ -584,10 +584,10 @@ export default function IntegrationsModal({
                         </div>
                         <div className="flex items-center space-x-2">
                           <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            integration.status === 'active' ? 'bg-green-100 text-green-800' :
+                            integration.status === 'active' ? 'bg-gray-100 text-gray-800' :
                             integration.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
-                            integration.status === 'error' ? 'bg-red-100 text-red-800' :
-                            'bg-yellow-100 text-yellow-800'
+                            integration.status === 'error' ? 'bg-gray-100 text-gray-800' :
+                            'bg-gray-100 text-gray-800'
                           }`}>
                             {integration.status === 'active' ? 'Активна' :
                              integration.status === 'inactive' ? 'Неактивна' :
@@ -597,8 +597,8 @@ export default function IntegrationsModal({
                             onClick={() => toggleIntegration(integration.id)}
                             className={`px-3 py-1 rounded text-sm transition-all ${
                               integration.status === 'active' 
-                                ? 'bg-red-100 text-red-800 hover:bg-red-200' 
-                                : 'bg-green-100 text-green-800 hover:bg-green-200'
+                                ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' 
+                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                             }`}
                           >
                             {integration.status === 'active' ? 'Отключить' : 'Включить'}
@@ -647,7 +647,7 @@ export default function IntegrationsModal({
                           </button>
                           <button
                             onClick={() => removeIntegration(integration.id)}
-                            className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                            className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                           >
                             <Trash2 className="w-4 h-4 inline mr-1" />
                             Удалить
@@ -775,7 +775,7 @@ export default function IntegrationsModal({
                         />
                         <span className="text-sm text-gray-700">
                           {field.name}
-                          {field.required && <span className="text-red-500 ml-1">*</span>}
+                          {field.required && <span className="text-gray-500 ml-1">*</span>}
                         </span>
                       </label>
                     ))}
@@ -817,14 +817,14 @@ export default function IntegrationsModal({
               <h4 className="text-lg font-semibold text-black">Синхронизация объектов</h4>
               
               {isSyncing && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-blue-800">Синхронизация в процессе...</span>
-                    <span className="text-sm text-blue-600">{syncProgress}%</span>
+                    <span className="text-sm font-medium text-gray-800">Синхронизация в процессе...</span>
+                    <span className="text-sm text-gray-600">{syncProgress}%</span>
                   </div>
-                  <div className="w-full bg-blue-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-gray-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${syncProgress}%` }}
                     ></div>
                   </div>
@@ -895,7 +895,7 @@ export default function IntegrationsModal({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Ошибки:</span>
-                      <span className="font-medium text-red-600">
+                      <span className="font-medium text-gray-600">
                         {integrations.reduce((sum, i) => sum + i.statistics.errorObjects, 0)}
                       </span>
                     </div>
@@ -921,7 +921,7 @@ export default function IntegrationsModal({
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                       <div className="flex items-center space-x-3">
                         <div className={`w-2 h-2 rounded-full ${
-                          log.status === 'success' ? 'bg-green-500' : 'bg-red-500'
+                          log.status === 'success' ? 'bg-gray-500' : 'bg-gray-500'
                         }`}></div>
                         <div>
                           <div className="text-sm font-medium text-black">{log.action}</div>

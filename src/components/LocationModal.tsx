@@ -441,13 +441,13 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
             <h3 className="text-xl font-semibold text-black">Геолокация и карты</h3>
             <div className="flex items-center space-x-2">
               {locationData.verified && (
-                <div className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                   <CheckCircle className="w-3 h-3 inline mr-1" />
                   Проверено
                 </div>
               )}
               {locationData.source === 'gps' && (
-                <div className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                   <Navigation className="w-3 h-3 inline mr-1" />
                   GPS
                 </div>
@@ -520,7 +520,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
                   </button>
                 </div>
                 {geocodingError && (
-                  <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 text-sm">
                     <AlertCircle className="w-4 h-4 inline mr-2" />
                     {geocodingError}
                   </div>
@@ -581,7 +581,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
                   Получить координаты
                 </button>
                 {gpsError && (
-                  <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 text-sm">
                     <AlertCircle className="w-4 h-4 inline mr-2" />
                     {gpsError}
                   </div>

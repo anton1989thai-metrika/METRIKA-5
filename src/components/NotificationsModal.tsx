@@ -483,10 +483,10 @@ export default function NotificationsModal({
             <Bell className="w-6 h-6 text-black" />
             <h3 className="text-xl font-semibold text-black">Система уведомлений</h3>
             <div className="flex items-center space-x-2">
-              <div className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                 {notifications.filter(n => n.status === 'pending').length} ожидают
               </div>
-              <div className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
                 {notifications.filter(n => n.status === 'sent').length} отправлено
               </div>
               <div className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
@@ -543,7 +543,7 @@ export default function NotificationsModal({
                       <p className="text-sm text-gray-600">Всего уведомлений</p>
                       <p className="text-2xl font-bold text-black">{notifications.length}</p>
                     </div>
-                    <Bell className="w-8 h-8 text-blue-600" />
+                    <Bell className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -555,7 +555,7 @@ export default function NotificationsModal({
                         {notifications.filter(n => n.status === 'pending').length}
                       </p>
                     </div>
-                    <Clock className="w-8 h-8 text-yellow-600" />
+                    <Clock className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -567,7 +567,7 @@ export default function NotificationsModal({
                         {notifications.filter(n => n.status === 'sent').length}
                       </p>
                     </div>
-                    <CheckCircle className="w-8 h-8 text-green-600" />
+                    <CheckCircle className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
 
@@ -579,7 +579,7 @@ export default function NotificationsModal({
                         {rules.filter(r => r.isActive).length}
                       </p>
                     </div>
-                    <Settings className="w-8 h-8 text-purple-600" />
+                    <Settings className="w-8 h-8 text-gray-600" />
                   </div>
                 </div>
               </div>
@@ -592,9 +592,9 @@ export default function NotificationsModal({
                     <div key={notification.id} className="flex items-center justify-between p-4 bg-white border border-gray-300 rounded-lg shadow-sm">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
-                          notification.priority === 'urgent' ? 'bg-red-500' :
-                          notification.priority === 'high' ? 'bg-orange-500' :
-                          notification.priority === 'normal' ? 'bg-blue-500' :
+                          notification.priority === 'urgent' ? 'bg-gray-500' :
+                          notification.priority === 'high' ? 'bg-gray-500' :
+                          notification.priority === 'normal' ? 'bg-gray-500' :
                           'bg-gray-500'
                         }`}></div>
                         <div>
@@ -689,9 +689,9 @@ export default function NotificationsModal({
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
-                          notification.priority === 'urgent' ? 'bg-red-500' :
-                          notification.priority === 'high' ? 'bg-orange-500' :
-                          notification.priority === 'normal' ? 'bg-blue-500' :
+                          notification.priority === 'urgent' ? 'bg-gray-500' :
+                          notification.priority === 'high' ? 'bg-gray-500' :
+                          notification.priority === 'normal' ? 'bg-gray-500' :
                           'bg-gray-500'
                         }`}></div>
                         <div>
@@ -701,9 +701,9 @@ export default function NotificationsModal({
                       </div>
                       <div className="flex items-center space-x-2">
                         <div className={`px-2 py-1 rounded-full text-xs ${
-                          notification.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          notification.status === 'sent' ? 'bg-green-100 text-green-800' :
-                          notification.status === 'read' ? 'bg-blue-100 text-blue-800' :
+                          notification.status === 'pending' ? 'bg-gray-100 text-gray-800' :
+                          notification.status === 'sent' ? 'bg-gray-100 text-gray-800' :
+                          notification.status === 'read' ? 'bg-gray-100 text-gray-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
                           {notification.status === 'pending' ? 'Ожидает' :
@@ -711,9 +711,9 @@ export default function NotificationsModal({
                            notification.status === 'read' ? 'Прочитано' : 'Отклонено'}
                         </div>
                         <div className={`px-2 py-1 rounded-full text-xs ${
-                          notification.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                          notification.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                          notification.priority === 'normal' ? 'bg-blue-100 text-blue-800' :
+                          notification.priority === 'urgent' ? 'bg-gray-100 text-gray-800' :
+                          notification.priority === 'high' ? 'bg-gray-100 text-gray-800' :
+                          notification.priority === 'normal' ? 'bg-gray-100 text-gray-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
                           {notification.priority}
@@ -756,7 +756,7 @@ export default function NotificationsModal({
                         </button>
                         <button
                           onClick={() => deleteNotification(notification.id)}
-                          className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                          className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                         >
                           <Trash2 className="w-4 h-4 inline mr-1" />
                           Удалить
@@ -857,7 +857,7 @@ export default function NotificationsModal({
                   <div key={rule.id} className="p-4 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${rule.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                        <div className={`w-3 h-3 rounded-full ${rule.isActive ? 'bg-gray-500' : 'bg-gray-400'}`}></div>
                         <div>
                           <div className="font-medium text-black">{rule.name}</div>
                           <div className="text-sm text-gray-600">{rule.description}</div>
@@ -865,9 +865,9 @@ export default function NotificationsModal({
                       </div>
                       <div className="flex items-center space-x-2">
                         <div className={`px-2 py-1 rounded-full text-xs ${
-                          rule.actions?.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                          rule.actions?.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                          rule.actions?.priority === 'normal' ? 'bg-blue-100 text-blue-800' :
+                          rule.actions?.priority === 'urgent' ? 'bg-gray-100 text-gray-800' :
+                          rule.actions?.priority === 'high' ? 'bg-gray-100 text-gray-800' :
+                          rule.actions?.priority === 'normal' ? 'bg-gray-100 text-gray-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
                           {rule.actions?.priority}
@@ -891,8 +891,8 @@ export default function NotificationsModal({
                           onClick={() => toggleRule(rule.id)}
                           className={`px-3 py-1 rounded text-sm transition-all ${
                             rule.isActive 
-                              ? 'bg-red-100 text-red-800 hover:bg-red-200' 
-                              : 'bg-green-100 text-green-800 hover:bg-green-200'
+                              ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' 
+                              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                           }`}
                         >
                           {rule.isActive ? 'Отключить' : 'Включить'}
@@ -906,7 +906,7 @@ export default function NotificationsModal({
                         </button>
                         <button
                           onClick={() => deleteRule(rule.id)}
-                          className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
+                          className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
                         >
                           <Trash2 className="w-4 h-4 inline mr-1" />
                           Удалить

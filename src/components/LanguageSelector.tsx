@@ -69,7 +69,7 @@ export default function LanguageSelector() {
                     key={language.code}
                     onClick={() => handleLanguageSelect(language)}
                     className={`flex items-center gap-3 p-3 rounded-md text-left hover:bg-gray-50 transition-colors ${
-                      selectedLanguage.code === language.code ? 'bg-blue-50 border border-blue-200' : ''
+                      selectedLanguage.code === language.code ? 'bg-gray-50 border border-gray-200' : ''
                     }`}
                   >
                     <span className="text-xl">{language.flag}</span>

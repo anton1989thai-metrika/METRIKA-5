@@ -32,7 +32,7 @@ export default function MapFilters() {
         <h2 className="text-xl font-semibold text-black mb-6">
           {t('objects.filters')}
           {(filters.country || filters.propertyType || filters.areaUnit !== 'm2') && (
-            <span className="ml-2 text-sm text-blue-600">
+            <span className="ml-2 text-sm text-gray-600">
               (Активны: {[
                 filters.country && filters.country.length > 0 && filters.country.map(country => {
                   switch(country) {

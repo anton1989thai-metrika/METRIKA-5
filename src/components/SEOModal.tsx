@@ -410,9 +410,9 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
             <h3 className="text-xl font-semibold text-black">SEO-оптимизация</h3>
             <div className="flex items-center space-x-2">
               <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                seoScore >= 80 ? 'bg-green-100 text-green-800' :
-                seoScore >= 60 ? 'bg-yellow-100 text-yellow-800' :
-                'bg-red-100 text-red-800'
+                seoScore >= 80 ? 'bg-gray-100 text-gray-800' :
+                seoScore >= 60 ? 'bg-gray-100 text-gray-800' :
+                'bg-gray-100 text-gray-800'
               }`}>
                 SEO: {seoScore}%
               </div>
@@ -537,7 +537,7 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
                       {keyword}
                       <button
                         onClick={() => removeKeyword(keyword)}
-                        className="ml-2 text-gray-600 hover:text-red-600"
+                        className="ml-2 text-gray-600 hover:text-gray-800"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -743,7 +743,7 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
                       <span className="text-sm text-gray-800">{lang.url}</span>
                       <button
                         onClick={() => removeLanguage(index)}
-                        className="text-red-600 hover:text-red-800"
+                        className="text-gray-600 hover:text-gray-800"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -797,10 +797,10 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                 <h5 className="font-medium text-black mb-2">Google поиск</h5>
                 <div className="space-y-2">
-                  <div className="text-blue-600 text-lg hover:underline cursor-pointer">
+                  <div className="text-gray-600 text-lg hover:underline cursor-pointer">
                     {seoData.metaTitle || 'Заголовок не указан'}
                   </div>
-                  <div className="text-green-600 text-sm">
+                  <div className="text-gray-600 text-sm">
                     {seoData.canonicalUrl || 'URL не указан'}
                   </div>
                   <div className="text-gray-600 text-sm">
@@ -836,12 +836,12 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
 
               {/* SEO рекомендации */}
               {suggestions.length > 0 && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <h5 className="font-medium text-yellow-800 mb-2 flex items-center">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <h5 className="font-medium text-gray-800 mb-2 flex items-center">
                     <Lightbulb className="w-4 h-4 mr-2" />
                     Рекомендации по улучшению
                   </h5>
-                  <ul className="text-sm text-yellow-700 space-y-1">
+                  <ul className="text-sm text-gray-700 space-y-1">
                     {suggestions.map((suggestion, index) => (
                       <li key={index} className="flex items-start">
                         <AlertTriangle className="w-3 h-3 mr-2 mt-0.5 flex-shrink-0" />
