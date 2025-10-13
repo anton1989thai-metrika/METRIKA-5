@@ -363,8 +363,8 @@ export default function SalaryCalculationPanel() {
             disabled={isCalculating}
             className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium disabled:opacity-50"
             style={{backgroundColor: '#fff60b'}}
-            onMouseEnter={(e) => !isCalculating && (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-            onMouseLeave={(e) => !isCalculating && (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            onMouseEnter={(e) => !isCalculating ? (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a' : null}
+            onMouseLeave={(e) => !isCalculating ? (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b' : null}
           >
             {isCalculating ? (
               <>
