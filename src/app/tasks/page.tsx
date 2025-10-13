@@ -73,21 +73,6 @@ export default function TasksPage() {
   const updateLinkInput = (index: number, value: string) => {
     setLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
   };
-  
-  // Состояние для управления ссылками в подзадачах
-  const [subtaskLinkInputs, setSubtaskLinkInputs] = useState<string[]>(['']);
-  const [showSubtaskAttachments, setShowSubtaskAttachments] = useState(false);
-
-  // Функция для добавления новой ссылки в подзадаче
-  const addSubtaskLinkInput = () => {
-    setSubtaskLinkInputs(prev => [...prev, '']);
-  };
-
-  // Функция для обновления ссылки в подзадаче
-  const updateSubtaskLinkInput = (index: number, value: string) => {
-    setSubtaskLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
-  };
-  
   const [currentUser, setCurrentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin" }); // Текущий пользователь
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedTaskForComments, setSelectedTaskForComments] = useState<any>(null);
@@ -445,8 +430,6 @@ export default function TasksPage() {
       attachments: []
     });
     setSubtaskFormErrors({});
-    setSubtaskLinkInputs(['']);
-    setShowSubtaskAttachments(false);
     setIsCreateSubtaskModalOpen(false);
   };
 
@@ -2136,8 +2119,6 @@ export default function TasksPage() {
                     attachments: []
                   });
                   setSubtaskFormErrors({});
-                  setSubtaskLinkInputs(['']);
-                  setShowSubtaskAttachments(false);
                 }}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -2434,61 +2415,6 @@ export default function TasksPage() {
                 </div>
               </div>
 
-              {/* Блок 3: Вложения */}
-              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-black">Вложения</h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowSubtaskAttachments(!showSubtaskAttachments)}
-                    className="px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
-                  >
-                    {showSubtaskAttachments ? '−' : '+'}
-                  </button>
-                </div>
-                {showSubtaskAttachments && (
-                  <div className="mt-4 space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Изображения
-                      </label>
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Ссылки
-                      </label>
-                      <div className="space-y-2">
-                        {subtaskLinkInputs.map((link, index) => (
-                          <div key={index} className="flex space-x-2">
-                            <input
-                              type="url"
-                              value={link}
-                              onChange={(e) => updateSubtaskLinkInput(index, e.target.value)}
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                              placeholder="https://example.com"
-                            />
-                          </div>
-                        ))}
-                        <button 
-                          type="button"
-                          onClick={addSubtaskLinkInput}
-                          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
-                        >
-                          Добавить ещё ссылку
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
               {/* Кнопки действий */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <button
@@ -2508,8 +2434,6 @@ export default function TasksPage() {
                       attachments: []
                     });
                     setSubtaskFormErrors({});
-                    setSubtaskLinkInputs(['']);
-                    setShowSubtaskAttachments(false);
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
@@ -2570,7 +2494,8 @@ export default function TasksPage() {
                 <div className="border border-gray-300 rounded-lg overflow-hidden">
                   <div className="bg-gray-50 px-4 py-2 border-b border-gray-300">
                     <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-700">
-                      <div className="col-span-7">Действие</div>
+                      <div className="col-span-1 text-center">✓</div>
+                      <div className="col-span-6">Действие</div>
                       <div className="col-span-2 text-center">Куратор</div>
                       <div className="col-span-2 text-center">Исполнитель</div>
                       <div className="col-span-1 text-center">✕</div>
@@ -2581,8 +2506,13 @@ export default function TasksPage() {
                     {checklistFormData.items.map((item, index) => (
                       <div key={item.id} className="p-4">
                         <div className="grid grid-cols-12 gap-4 items-center">
+                          {/* Чекбокс */}
+                          <div className="col-span-1 flex justify-center">
+                            <div className="w-5 h-5 border-2 border-gray-300 rounded bg-gray-100"></div>
+                          </div>
+                          
                           {/* Поле ввода действия */}
-                          <div className="col-span-7">
+                          <div className="col-span-6">
                             <input
                               type="text"
                               value={item.text}
@@ -2734,10 +2664,7 @@ export default function TasksPage() {
                 <button
                   type="button"
                   onClick={handleChecklistSubmit}
-                  className="px-6 py-2 text-black rounded-md transition-colors shadow-sm"
-                  style={{backgroundColor: '#fff60b'}}
-                  onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                  onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                  className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors shadow-sm"
                 >
                   Создать чек-лист
                 </button>
