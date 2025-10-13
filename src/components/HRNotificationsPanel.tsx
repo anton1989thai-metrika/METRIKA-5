@@ -493,9 +493,9 @@ export default function HRNotificationsPanel() {
         
         <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
           <div className="flex items-center">
-            <Star className="w-8 h-8 text-yellow-600 mr-3" />
+            <Star className="w-8 h-8 text-gray-600 mr-3" />
             <div>
-              <div className="text-2xl font-bold text-yellow-600">{importantCount}</div>
+              <div className="text-2xl font-bold text-black">{importantCount}</div>
               <div className="text-sm text-gray-600">Важных</div>
             </div>
           </div>
@@ -611,7 +611,7 @@ export default function HRNotificationsPanel() {
                       {notification.title}
                     </h3>
                     {notification.isImportant && (
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                      <Star className="w-4 h-4 text-gray-500 fill-current" />
                     )}
                     <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">
                       {notification.category}
@@ -666,11 +666,11 @@ export default function HRNotificationsPanel() {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => toggleImportant(notification.id)}
-                  className="p-2 text-gray-500 hover:text-yellow-600 transition-colors"
+                  className="p-2 text-gray-500 hover:text-gray-600 transition-colors"
                   title={notification.isImportant ? 'Убрать из важных' : 'Отметить как важное'}
                 >
                   {notification.isImportant ? (
-                    <Star className="w-4 h-4 fill-current text-yellow-500" />
+                    <Star className="w-4 h-4 fill-current text-gray-500" />
                   ) : (
                     <StarOff className="w-4 h-4" />
                   )}
