@@ -20,7 +20,66 @@
     "createdAt": "2023-06-01T00:00:00Z",
     "phone": "+7 (999) 123-45-67",
     "department": "Руководство",
-    "notes": "Основатель компании"
+    "notes": "Основатель компании",
+    "detailedPermissions": {
+      "personalCabinet": {
+        "enabled": true
+      },
+      "myObjects": {
+        "enabled": true
+      },
+      "email": {
+        "enabled": true,
+        "viewMail": true,
+        "sendEmails": true,
+        "manageMailboxes": true,
+        "mailSettings": true
+      },
+      "academy": {
+        "enabled": true,
+        "dashboard": true,
+        "courses": true,
+        "tests": true,
+        "achievements": true,
+        "materials": true
+      },
+      "knowledgeBase": {
+        "enabled": true
+      },
+      "taskManager": {
+        "enabled": true,
+        "viewTasks": true,
+        "createTasks": true,
+        "assignExecutors": true,
+        "closeTasks": true,
+        "editTasks": true,
+        "changeExecutors": true,
+        "changeCurators": true,
+        "editSubtasks": true,
+        "editChecklists": true,
+        "viewOtherUsersTasks": true
+      },
+      "adminPanel": {
+        "enabled": true,
+        "dashboard": true,
+        "email": true,
+        "content": true,
+        "objects": true,
+        "users": true,
+        "tasks": true,
+        "media": true,
+        "hr": true,
+        "analytics": true,
+        "settings": true
+      },
+      "otherPermissions": {
+        "enabled": true,
+        "placeholder1": true,
+        "placeholder2": true,
+        "placeholder3": true,
+        "placeholder4": true
+      }
+    }
   },
   {
     "id": "2",
@@ -43,7 +102,45 @@
     "createdAt": "2023-08-15T00:00:00Z",
     "phone": "+7 (999) 234-56-78",
     "department": "Продажи",
-    "notes": "Ведущий менеджер"
+    "notes": "Ведущий менеджер",
+    "detailedPermissions": {
+      "objects": {
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true
+      },
+      "hr": {
+        "viewEmployees": true,
+        "manageSalaries": true,
+        "timeTracking": true,
+        "financialReports": true
+      },
+      "email": {
+        "viewMail": true,
+        "sendEmails": true,
+        "manageMailboxes": true,
+        "mailSettings": true
+      },
+      "content": {
+        "viewContent": true,
+        "createArticles": true,
+        "editArticles": true,
+        "publishContent": true
+      },
+      "tasks": {
+        "viewTasks": true,
+        "createTasks": true,
+        "assignExecutors": true,
+        "closeTasks": true
+      },
+      "settings": {
+        "viewSettings": true,
+        "changeSettings": true,
+        "systemSettings": true,
+        "backup": true
+      }
+    }
   },
   {
     "id": "3",

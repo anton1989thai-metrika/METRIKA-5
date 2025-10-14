@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator } from "lucide-react"
 import Link from "next/link"
 import { UserRole } from "@/types/auth"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { hasPermission } from "@/lib/permissions"
+import { User as UserType } from "@/data/users"
 
 interface MenuItem {
   href: string
@@ -17,10 +19,38 @@ interface MenuItem {
 
 export default function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null)
   const { data: session } = useSession()
   const { t } = useLanguage()
   
   const userRole: UserRole = (session?.user?.role as UserRole) || "guest"
+  
+  // Загружаем данные пользователя для проверки разрешений
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (session?.user?.email) {
+        try {
+          const response = await fetch('/api/user', {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+          if (response.ok) {
+            const user = await response.json()
+            console.log('Загружен пользователь:', user)
+            setCurrentUser(user)
+          } else {
+            console.error('Ошибка загрузки данных пользователя:', response.statusText)
+          }
+        } catch (error) {
+          console.error('Ошибка загрузки данных пользователя:', error)
+        }
+      }
+    }
+    
+    loadUserData()
+  }, [session])
   
   const menuItemsWithTranslations: MenuItem[] = [
     {
@@ -103,8 +133,28 @@ export default function BurgerMenu() {
     }
   ]
   
+  // Функция для проверки доступа к разделу
+  const canAccessSection = (href: string): boolean => {
+    // Публичные разделы всегда доступны
+    const publicSections = ['/', '/objects', '/map', '/about', '/contacts', '/blog']
+    if (publicSections.includes(href)) {
+      return true
+    }
+    
+    // Для авторизованных пользователей проверяем разрешения
+    if (session && currentUser) {
+      const section = href.replace('/', '') || 'profile'
+      const hasAccess = hasPermission(currentUser, section)
+      console.log(`Проверка доступа к ${section}:`, hasAccess, currentUser.detailedPermissions)
+      return hasAccess
+    }
+    
+    // Для неавторизованных пользователей доступны только публичные разделы
+    return false
+  }
+  
   const filteredMenuItems = menuItemsWithTranslations.filter(item => 
-    item.roles.includes(userRole)
+    item.roles.includes(userRole) && canAccessSection(item.href)
   )
 
   const handleSignOut = () => {

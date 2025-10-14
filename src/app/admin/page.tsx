@@ -1,10 +1,10 @@
 "use client"
 
+import { useSession } from "next-auth/react"
 import { useState } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
-import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
+import ProtectedRoute from "@/components/ProtectedRoute"
 import { 
   Users, 
   Building2, 
@@ -150,41 +150,15 @@ import HRNotificationsPanel from "@/components/HRNotificationsPanel"
 import HRReportingPanel from "@/components/HRReportingPanel"
 
 export default function AdminPage() {
-  const { data: session, status } = useSession()
+  return (
+    <ProtectedRoute requiredPermission="admin">
+      <AdminPageContent />
+    </ProtectedRoute>
+  )
+}
 
-  // Проверка авторизации
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-lg text-gray-600">Загрузка...</div>
-      </div>
-    )
-  }
-
-  if (!session) {
-    redirect("/auth/signin")
-  }
-
-  // Проверка прав доступа к админ панели
-  if (session.user.role !== 'admin' && session.user.role !== 'manager') {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-black mb-4">Доступ запрещен</h1>
-          <p className="text-gray-600 mb-4">У вас нет прав для доступа к админ панели</p>
-          <button
-            onClick={() => window.history.back()}
-            className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
-            style={{backgroundColor: '#fff60b'}}
-            onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-            onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-          >
-            Назад
-          </button>
-        </div>
-      </div>
-    )
-  }
+function AdminPageContent() {
+  const { data: session } = useSession()
   
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
@@ -456,10 +430,10 @@ export default function AdminPage() {
                   <h1 className="text-3xl font-bold text-black mb-2">Админ панель МЕТРИКА</h1>
                   <p className="text-gray-600">Управление сайтом и контентом</p>
                   <div className="mt-2 text-sm text-gray-500">
-                    <p>Вошли как: <span className="font-medium text-black">{session.user.name}</span></p>
-                    <p>Роль: <span className="font-medium text-black capitalize">{session.user.role}</span></p>
-                    {(session.user as any).department && (
-                      <p>Отдел: <span className="font-medium text-black">{(session.user as any).department}</span></p>
+                    <p>Вошли как: <span className="font-medium text-black">{session?.user?.name}</span></p>
+                    <p>Роль: <span className="font-medium text-black capitalize">{session?.user?.role}</span></p>
+                    {(session?.user as any)?.department && (
+                      <p>Отдел: <span className="font-medium text-black">{(session?.user as any)?.department}</span></p>
                     )}
                   </div>
                 </div>

@@ -166,7 +166,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   };
 
   const [activeTab, setActiveTab] = useState('list')
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
   const [isCreatingUser, setIsCreatingUser] = useState(false)
   const [isEditingUser, setIsEditingUser] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -174,6 +174,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'name' | 'role' | 'lastLogin' | 'createdAt'>('name')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  
+  // State for permissions sub-tabs
+  const [permissionsSubTab, setPermissionsSubTab] = useState<'roles' | 'users' | 'permissions'>('roles')
+  const [selectedUserForPermissions, setSelectedUserForPermissions] = useState<UserType | null>(null)
 
   // Новый пользователь
   const [newUser, setNewUser] = useState<Partial<UserType>>({
@@ -332,6 +336,60 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         ? { ...user, status: user.status === 'active' ? 'inactive' : 'active' }
         : user
     );
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
+  }
+
+  // Обновление детальных разрешений
+  const updateDetailedPermission = async (userId: string, section: keyof NonNullable<UserType['detailedPermissions']>, permission: string, value: boolean) => {
+    const updatedUsers = users.map(user => {
+      if (user.id === userId) {
+        const updatedUser = { ...user };
+        if (!updatedUser.detailedPermissions) {
+          updatedUser.detailedPermissions = {
+            personalCabinet: { enabled: false },
+            myObjects: { enabled: false },
+            email: { enabled: false, viewMail: false, sendEmails: false, manageMailboxes: false, mailSettings: false },
+            academy: { enabled: false, dashboard: false, courses: false, tests: false, achievements: false, materials: false },
+            knowledgeBase: { enabled: false },
+            taskManager: { enabled: false, viewTasks: false, createTasks: false, assignExecutors: false, closeTasks: false, editTasks: false, changeExecutors: false, changeCurators: false, editSubtasks: false, editChecklists: false, viewOtherUsersTasks: false },
+            adminPanel: { enabled: false, dashboard: false, email: false, content: false, objects: false, users: false, tasks: false, media: false, hr: false, analytics: false, settings: false },
+            otherPermissions: { enabled: false, placeholder1: false, placeholder2: false, placeholder3: false, placeholder4: false }
+          };
+        }
+        
+        // Если включаем категорию, автоматически включаем все подразделы
+        if (permission === 'enabled' && value === true) {
+          const sectionData = updatedUser.detailedPermissions[section] as any;
+          if (sectionData) {
+            Object.keys(sectionData).forEach(key => {
+              if (key !== 'enabled') {
+                sectionData[key] = true;
+              }
+            });
+          }
+        }
+        
+        // Если отключаем категорию, автоматически отключаем все подразделы
+        if (permission === 'enabled' && value === false) {
+          const sectionData = updatedUser.detailedPermissions[section] as any;
+          if (sectionData) {
+            Object.keys(sectionData).forEach(key => {
+              if (key !== 'enabled') {
+                sectionData[key] = false;
+              }
+            });
+          }
+        }
+        
+        updatedUser.detailedPermissions[section] = {
+          ...updatedUser.detailedPermissions[section],
+          [permission]: value
+        };
+        return updatedUser;
+      }
+      return user;
+    });
     setUsers(updatedUsers);
     await syncUsersWithServer(updatedUsers);
   }
@@ -692,8 +750,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               ].map(({ id, label, icon: IconComponent }) => (
                 <button
                   key={id}
+                  onClick={() => setPermissionsSubTab(id as 'roles' | 'users' | 'permissions')}
                   className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-colors ${
-                    activeTab === id
+                    permissionsSubTab === id
                       ? 'border-black text-black'
                       : 'border-transparent text-gray-600 hover:text-black'
                   }`}
@@ -704,8 +763,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               ))}
             </div>
 
-            {/* Карточки ролей */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Содержимое под-вкладок */}
+            {permissionsSubTab === 'roles' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Администратор */}
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
@@ -823,8 +883,526 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
             </div>
+            )}
 
-            {/* Расширенные разрешения для всех разделов */}
+            {/* Пользователи под-вкладка */}
+            {permissionsSubTab === 'users' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-lg font-semibold text-black">Выбор пользователя</h4>
+                    <p className="text-sm text-gray-600">Выберите пользователя для настройки детальных разрешений</p>
+                  </div>
+                </div>
+
+                {/* Сетка пользователей */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {users.map(user => (
+                    <button
+                      key={user.id}
+                      onClick={() => setSelectedUserForPermissions(user)}
+                      className={`p-4 border rounded-lg text-left transition-all ${
+                        selectedUserForPermissions?.id === user.id
+                          ? 'border-black bg-gray-50'
+                          : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                          <User className="w-5 h-5 text-gray-600" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium text-black">{user.name}</div>
+                          <div className="text-sm text-gray-600">{user.email}</div>
+                          <div className="text-xs text-gray-500 capitalize">{user.role}</div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Детальные разрешения для выбранного пользователя */}
+                {selectedUserForPermissions && (
+                  <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h4 className="text-lg font-semibold text-black">
+                          Разрешения для {selectedUserForPermissions.name}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          Настройте детальные разрешения для всех разделов системы
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setSelectedUserForPermissions(null)}
+                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-all"
+                      >
+                        <X className="w-4 h-4 inline mr-1" />
+                        Закрыть
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6">
+                      {/* Личный кабинет */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.personalCabinet?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'personalCabinet', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Личный кабинет
+                        </h5>
+                      </div>
+
+                      {/* Мои объекты */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.myObjects?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'myObjects', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Мои объекты
+                        </h5>
+                      </div>
+
+                      {/* Email */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.email?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Email
+                        </h5>
+                        <div className="space-y-2 ml-6">
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.email?.viewMail || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'viewMail', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Просмотр почты</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.email?.sendEmails || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'sendEmails', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Отправка писем</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.email?.manageMailboxes || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'manageMailboxes', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Управление ящиками</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.email?.mailSettings || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'mailSettings', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Настройки почты</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Академия */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.academy?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Академия
+                        </h5>
+                        <div className="space-y-2 ml-6">
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.academy?.dashboard || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'dashboard', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Дашборд</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.academy?.courses || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'courses', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Курсы</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.academy?.tests || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'tests', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Тесты</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.academy?.achievements || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'achievements', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Достижения</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.academy?.materials || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'materials', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Материалы</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* База знаний */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.knowledgeBase?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'knowledgeBase', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          База знаний
+                        </h5>
+                      </div>
+
+                      {/* Менеджер задач */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Менеджер задач
+                        </h5>
+                        <div className="space-y-2 ml-6">
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.viewTasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'viewTasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Просмотр задач</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.createTasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'createTasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Создание задач</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.assignExecutors || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'assignExecutors', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Назначение исполнителей</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.closeTasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'closeTasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Закрытие задач</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.editTasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'editTasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Редактирование задач</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.changeExecutors || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'changeExecutors', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Изменение исполнителей</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.changeCurators || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'changeCurators', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Изменение кураторов</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.editSubtasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'editSubtasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Редактирование подзадач</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.editChecklists || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'editChecklists', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Редактирование чек-листов</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.taskManager?.viewOtherUsersTasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'viewOtherUsersTasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Видимость задач других пользователей</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Админ панель */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Админ панель
+                        </h5>
+                        <div className="space-y-2 ml-6">
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.dashboard || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'dashboard', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Дашборд</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.email || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'email', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Email</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.content || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'content', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Контент</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.objects || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'objects', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Объекты</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.users || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'users', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Пользователи</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.tasks || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'tasks', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Задачи</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.media || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'media', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Медиа</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.hr || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'hr', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Кадры и бухгалтерия</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.analytics || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'analytics', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Аналитика</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.settings || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'settings', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">Настройки</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Другие разрешения */}
+                      <div className="space-y-3">
+                        <h5 className="font-medium text-black flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'enabled', e.target.checked)}
+                            className="mr-2"
+                          />
+                          Другие разрешения
+                        </h5>
+                        <div className="space-y-2 ml-6">
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder1 || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder1', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">В разработке</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder2 || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder2', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">В разработке</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder3 || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder3', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">В разработке</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder4 || false}
+                              onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder4', e.target.checked)}
+                              className="mr-2"
+                              disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                            />
+                            <span className="text-sm text-gray-700">В разработке</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Разрешения под-вкладка */}
+            {permissionsSubTab === 'permissions' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-lg font-semibold text-black">Общие разрешения</h4>
+                    <p className="text-sm text-gray-600">Управление общими разрешениями для всех разделов системы</p>
+                  </div>
+                </div>
+
+                {/* Расширенные разрешения для всех разделов */}
             <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
               <h4 className="text-lg font-semibold text-black mb-4">Разрешения по разделам</h4>
               
@@ -986,6 +1564,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
             </div>
+              </div>
+            )}
           </div>
         )}
 

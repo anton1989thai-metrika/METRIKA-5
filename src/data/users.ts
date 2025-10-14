@@ -21,6 +21,66 @@ export interface User {
     canManageContent: boolean;
     canManageSettings: boolean;
   };
+  detailedPermissions?: {
+    // Категории с подразделами
+    personalCabinet: {
+      enabled: boolean;
+    };
+    myObjects: {
+      enabled: boolean;
+    };
+    email: {
+      enabled: boolean;
+      viewMail: boolean;
+      sendEmails: boolean;
+      manageMailboxes: boolean;
+      mailSettings: boolean;
+    };
+    academy: {
+      enabled: boolean;
+      dashboard: boolean;
+      courses: boolean;
+      tests: boolean;
+      achievements: boolean;
+      materials: boolean;
+    };
+    knowledgeBase: {
+      enabled: boolean;
+    };
+    taskManager: {
+      enabled: boolean;
+      viewTasks: boolean;
+      createTasks: boolean;
+      assignExecutors: boolean;
+      closeTasks: boolean;
+      editTasks: boolean;
+      changeExecutors: boolean;
+      changeCurators: boolean;
+      editSubtasks: boolean;
+      editChecklists: boolean;
+      viewOtherUsersTasks: boolean;
+    };
+    adminPanel: {
+      enabled: boolean;
+      dashboard: boolean;
+      email: boolean;
+      content: boolean;
+      objects: boolean;
+      users: boolean;
+      tasks: boolean;
+      media: boolean;
+      hr: boolean;
+      analytics: boolean;
+      settings: boolean;
+    };
+    otherPermissions: {
+      enabled: boolean;
+      placeholder1: boolean;
+      placeholder2: boolean;
+      placeholder3: boolean;
+      placeholder4: boolean;
+    };
+  };
   lastLogin?: string;
   createdAt: string;
   phone?: string;
@@ -47,6 +107,65 @@ export const defaultUsers: User[] = [
       canManageContent: true,
       canManageSettings: true
     },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: true,
+        mailSettings: true
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: true,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: true,
+        changeCurators: true,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: true
+      },
+      adminPanel: {
+        enabled: true,
+        dashboard: true,
+        email: true,
+        content: true,
+        objects: true,
+        users: true,
+        tasks: true,
+        media: true,
+        hr: true,
+        analytics: true,
+        settings: true
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
+    },
     lastLogin: '2024-01-15T10:30:00Z',
     createdAt: '2023-06-01T00:00:00Z',
     phone: '+7 (999) 123-45-67',
@@ -69,6 +188,65 @@ export const defaultUsers: User[] = [
       canManageMedia: true,
       canManageContent: true,
       canManageSettings: false
+    },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: true,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: true,
+        changeCurators: true,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: true
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
     },
     lastLogin: '2024-01-15T09:15:00Z',
     createdAt: '2023-08-15T00:00:00Z',
@@ -93,6 +271,65 @@ export const defaultUsers: User[] = [
       canManageContent: false,
       canManageSettings: false
     },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: false,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
+    },
     lastLogin: '2024-01-15T08:45:00Z',
     createdAt: '2023-10-01T00:00:00Z',
     phone: '+7 (999) 345-67-89',
@@ -115,6 +352,65 @@ export const defaultUsers: User[] = [
       canManageMedia: false,
       canManageContent: false,
       canManageSettings: false
+    },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: false,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
     },
     lastLogin: '2024-01-15T08:30:00Z',
     createdAt: '2023-10-15T00:00:00Z',
@@ -139,6 +435,65 @@ export const defaultUsers: User[] = [
       canManageContent: false,
       canManageSettings: false
     },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: false,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
+    },
     lastLogin: '2024-01-15T08:15:00Z',
     createdAt: '2023-11-01T00:00:00Z',
     phone: '+7 (999) 567-89-01',
@@ -161,6 +516,65 @@ export const defaultUsers: User[] = [
       canManageMedia: false,
       canManageContent: false,
       canManageSettings: false
+    },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: false,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
     },
     lastLogin: '2024-01-15T08:00:00Z',
     createdAt: '2023-11-15T00:00:00Z',
@@ -185,6 +599,65 @@ export const defaultUsers: User[] = [
       canManageContent: false,
       canManageSettings: false
     },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: true
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: true,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: true,
+        assignExecutors: false,
+        closeTasks: true,
+        editTasks: true,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: true,
+        editChecklists: true,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
+    },
     lastLogin: '2024-01-15T07:45:00Z',
     createdAt: '2023-12-01T00:00:00Z',
     phone: '+7 (999) 789-01-23',
@@ -207,6 +680,65 @@ export const defaultUsers: User[] = [
       canManageMedia: false,
       canManageContent: false,
       canManageSettings: false
+    },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: false
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: false,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: false,
+        assignExecutors: false,
+        closeTasks: false,
+        editTasks: false,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: false,
+        editChecklists: false,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
     },
     lastLogin: '2024-01-14T17:30:00Z',
     createdAt: '2023-12-15T00:00:00Z',
@@ -231,6 +763,65 @@ export const defaultUsers: User[] = [
       canManageContent: false,
       canManageSettings: false
     },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: false
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: false,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: false,
+        assignExecutors: false,
+        closeTasks: false,
+        editTasks: false,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: false,
+        editChecklists: false,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
+    },
     lastLogin: '2024-01-14T17:15:00Z',
     createdAt: '2024-01-01T00:00:00Z',
     phone: '+7 (999) 901-23-45',
@@ -254,6 +845,65 @@ export const defaultUsers: User[] = [
       canManageContent: false,
       canManageSettings: false
     },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: false
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: false,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: false,
+        assignExecutors: false,
+        closeTasks: false,
+        editTasks: false,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: false,
+        editChecklists: false,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
+    },
     lastLogin: '2024-01-14T17:00:00Z',
     createdAt: '2024-01-15T00:00:00Z',
     phone: '+7 (999) 012-34-56',
@@ -276,6 +926,65 @@ export const defaultUsers: User[] = [
       canManageMedia: false,
       canManageContent: false,
       canManageSettings: false
+    },
+    detailedPermissions: {
+      personalCabinet: {
+        enabled: true
+      },
+      myObjects: {
+        enabled: false
+      },
+      email: {
+        enabled: true,
+        viewMail: true,
+        sendEmails: false,
+        manageMailboxes: false,
+        mailSettings: false
+      },
+      academy: {
+        enabled: true,
+        dashboard: true,
+        courses: true,
+        tests: true,
+        achievements: true,
+        materials: true
+      },
+      knowledgeBase: {
+        enabled: true
+      },
+      taskManager: {
+        enabled: true,
+        viewTasks: true,
+        createTasks: false,
+        assignExecutors: false,
+        closeTasks: false,
+        editTasks: false,
+        changeExecutors: false,
+        changeCurators: false,
+        editSubtasks: false,
+        editChecklists: false,
+        viewOtherUsersTasks: false
+      },
+      adminPanel: {
+        enabled: false,
+        dashboard: false,
+        email: false,
+        content: false,
+        objects: false,
+        users: false,
+        tasks: false,
+        media: false,
+        hr: false,
+        analytics: false,
+        settings: false
+      },
+      otherPermissions: {
+        enabled: true,
+        placeholder1: true,
+        placeholder2: true,
+        placeholder3: true,
+        placeholder4: true
+      }
     },
     lastLogin: '2024-01-14T16:45:00Z',
     createdAt: '2024-01-20T00:00:00Z',
