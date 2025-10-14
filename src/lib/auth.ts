@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { getUsers } from "@/data/users"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -14,42 +15,26 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Здесь будет логика проверки пользователя
-        // Пока используем моковые данные
-        const mockUsers = [
-          {
-            id: "1",
-            email: "client@metrika.ru",
-            password: "client123",
-            role: "client",
-            name: "Клиент"
-          },
-          {
-            id: "2", 
-            email: "employee@metrika.ru",
-            password: "employee123",
-            role: "employee",
-            name: "Сотрудник"
-          },
-          {
-            id: "3",
-            email: "admin@metrika.ru", 
-            password: "admin123",
-            role: "admin",
-            name: "Администратор"
-          }
-        ]
+        // Получаем актуальных пользователей
+        const users = await getUsers();
 
-        const user = mockUsers.find(
-          u => u.email === credentials.email && u.password === credentials.password
-        )
+        // Ищем пользователя по email или логину
+        const user = users.find(
+          u => (u.email === credentials.email || u.login === credentials.email) && 
+               u.password === credentials.password &&
+               u.status === 'active'
+        );
 
         if (user) {
           return {
             id: user.id,
             email: user.email,
             name: user.name,
-            role: user.role
+            role: user.role,
+            login: user.login,
+            permissions: user.permissions,
+            department: user.department,
+            phone: user.phone
           }
         }
 
@@ -61,6 +46,10 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role
+        token.login = user.login
+        token.permissions = user.permissions
+        token.department = user.department
+        token.phone = user.phone
       }
       return token
     },
@@ -68,6 +57,10 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.sub || ""
         session.user.role = token.role
+        session.user.login = token.login
+        session.user.permissions = token.permissions
+        session.user.department = token.department
+        session.user.phone = token.phone
       }
       return session
     }

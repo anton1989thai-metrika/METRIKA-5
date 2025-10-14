@@ -44,7 +44,7 @@ export default function HeaderFilters() {
           <div className="flex flex-wrap gap-3 justify-center items-center">
             {/* Страна */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Страна:</span>
+              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Страна:</span>
               <div className="flex gap-1">
                 <label className="flex items-center">
                   <input 
@@ -53,7 +53,7 @@ export default function HeaderFilters() {
                     checked={filters.country?.includes('russia') || false}
                     onChange={() => handleCountryChange('russia')}
                   />
-                  <span className="text-sm text-gray-700">Россия</span>
+                  <span className="text-base text-gray-700">Россия</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -62,7 +62,7 @@ export default function HeaderFilters() {
                     checked={filters.country?.includes('thailand') || false}
                     onChange={() => handleCountryChange('thailand')}
                   />
-                  <span className="text-sm text-gray-700">Таиланд</span>
+                  <span className="text-base text-gray-700">Таиланд</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -71,7 +71,7 @@ export default function HeaderFilters() {
                     checked={filters.country?.includes('china') || false}
                     onChange={() => handleCountryChange('china')}
                   />
-                  <span className="text-sm text-gray-700">Китай</span>
+                  <span className="text-base text-gray-700">Китай</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -80,14 +80,14 @@ export default function HeaderFilters() {
                     checked={filters.country?.includes('south-korea') || false}
                     onChange={() => handleCountryChange('south-korea')}
                   />
-                  <span className="text-sm text-gray-700">Южная Корея</span>
+                  <span className="text-base text-gray-700">Южная Корея</span>
                 </label>
               </div>
             </div>
 
             {/* Тип недвижимости */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Тип:</span>
+              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Тип:</span>
               <div className="flex gap-1 flex-wrap">
                 <label className="flex items-center">
                   <input 
@@ -96,7 +96,7 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('apartment') || false}
                     onChange={() => handlePropertyTypeChange('apartment')}
                   />
-                  <span className="text-sm text-gray-700">Квартира</span>
+                  <span className="text-base text-gray-700">Квартира</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -105,7 +105,7 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('house') || false}
                     onChange={() => handlePropertyTypeChange('house')}
                   />
-                  <span className="text-sm text-gray-700">Дом</span>
+                  <span className="text-base text-gray-700">Дом</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -114,7 +114,7 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('land') || false}
                     onChange={() => handlePropertyTypeChange('land')}
                   />
-                  <span className="text-sm text-gray-700">Участок</span>
+                  <span className="text-base text-gray-700">Участок</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -123,7 +123,7 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('commercial') || false}
                     onChange={() => handlePropertyTypeChange('commercial')}
                   />
-                  <span className="text-sm text-gray-700">Коммерция</span>
+                  <span className="text-base text-gray-700">Коммерция</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -132,7 +132,7 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('building') || false}
                     onChange={() => handlePropertyTypeChange('building')}
                   />
-                  <span className="text-sm text-gray-700">Здание</span>
+                  <span className="text-base text-gray-700">Здание</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -141,7 +141,7 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('nonCapital') || false}
                     onChange={() => handlePropertyTypeChange('nonCapital')}
                   />
-                  <span className="text-sm text-gray-700">Некопитальный</span>
+                  <span className="text-base text-gray-700">Некопитальный</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -150,14 +150,14 @@ export default function HeaderFilters() {
                     checked={filters.propertyType?.includes('shares') || false}
                     onChange={() => handlePropertyTypeChange('shares')}
                   />
-                  <span className="text-sm text-gray-700">Доля</span>
+                  <span className="text-base text-gray-700">Доля</span>
                 </label>
               </div>
             </div>
 
             {/* Тип операции */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Операция:</span>
+              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Операция:</span>
               <div className="flex gap-1">
                 <label className="flex items-center">
                   <input 
@@ -166,7 +166,7 @@ export default function HeaderFilters() {
                     checked={filters.operationType?.includes('sale') || false}
                     onChange={() => handleOperationTypeChange('sale')}
                   />
-                  <span className="text-sm text-gray-700">Продажа</span>
+                  <span className="text-base text-gray-700">Продажа</span>
                 </label>
                 <label className="flex items-center">
                   <input 
@@ -175,44 +175,44 @@ export default function HeaderFilters() {
                     checked={filters.operationType?.includes('rent') || false}
                     onChange={() => handleOperationTypeChange('rent')}
                   />
-                  <span className="text-sm text-gray-700">Аренда</span>
+                  <span className="text-base text-gray-700">Аренда</span>
                 </label>
               </div>
             </div>
 
             {/* Цена */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Цена:</span>
+              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Цена:</span>
               <div className="flex gap-1">
                 <input 
                   type="number" 
                   placeholder="От" 
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-20 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <input 
                   type="number" 
                   placeholder="До" 
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-20 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>
 
             {/* Площадь */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Площадь:</span>
+              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Площадь:</span>
               <div className="flex gap-1">
                 <input 
                   type="number" 
                   placeholder="От" 
-                  className="w-16 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-16 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <input 
                   type="number" 
                   placeholder="До" 
-                  className="w-16 px-2 py-1 border border-gray-300 rounded text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-16 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <select 
-                  className="text-sm border border-gray-300 rounded px-2 py-1 h-8"
+                  className="text-base border border-gray-300 rounded px-2 py-1 h-8"
                   value={filters.areaUnit}
                   onChange={(e) => updateFilter('areaUnit', e.target.value)}
                 >
@@ -232,17 +232,17 @@ export default function HeaderFilters() {
             <div className="flex gap-1">
               <button 
                 onClick={() => setIsAdditionalFiltersOpen(true)}
-                className="px-3 py-2 text-black rounded text-sm transition-colors"
+                className="px-3 py-2 text-black rounded text-base transition-colors"
                 style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
               >
                 Доп. фильтры
               </button>
-              <button className="px-3 py-2 bg-gray-600 text-white rounded text-sm hover:bg-gray-700 transition-colors">
+              <button className="px-3 py-2 bg-gray-600 text-white rounded text-base hover:bg-gray-700 transition-colors">
                 Применить
               </button>
-              <button className="px-3 py-2 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400 transition-colors">
+              <button className="px-3 py-2 bg-gray-300 text-gray-700 rounded text-base hover:bg-gray-400 transition-colors">
                 Сбросить
               </button>
             </div>

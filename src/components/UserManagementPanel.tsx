@@ -109,121 +109,61 @@ import {
   Laugh,
   CheckSquare
 } from "lucide-react"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  role: 'admin' | 'manager' | 'agent' | 'employee'
-  status: 'active' | 'inactive' | 'pending'
-  permissions: {
-    canManageObjects: boolean
-    canManageUsers: boolean
-    canViewAnalytics: boolean
-    canManageTasks: boolean
-    canManageMedia: boolean
-    canManageContent: boolean
-    canManageSettings: boolean
-  }
-  lastLogin?: string
-  createdAt: string
-  avatar?: string
-  phone?: string
-  department?: string
-  notes?: string
-}
+import { User as UserType } from '@/data/users'; // Импортируем интерфейс User с алиасом
 
 interface UserManagementPanelProps {
   onClose?: () => void
 }
 
 export default function UserManagementPanel({ onClose }: UserManagementPanelProps) {
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: '1',
-      name: 'Антон Нехорошков',
-      email: 'nekhoroshkov@metrika.direct',
-      role: 'admin',
-      status: 'active',
-      permissions: {
-        canManageObjects: true,
-        canManageUsers: true,
-        canViewAnalytics: true,
-        canManageTasks: true,
-        canManageMedia: true,
-        canManageContent: true,
-        canManageSettings: true
-      },
-      lastLogin: '2024-01-15T10:30:00Z',
-      createdAt: '2023-06-01T00:00:00Z',
-      phone: '+7 (999) 123-45-67',
-      department: 'Руководство',
-      notes: 'Основатель компании'
-    },
-    {
-      id: '2',
-      name: 'Иван Сидоров',
-      email: 'sidorov@metrika.direct',
-      role: 'manager',
-      status: 'active',
-      permissions: {
-        canManageObjects: true,
-        canManageUsers: false,
-        canViewAnalytics: true,
-        canManageTasks: true,
-        canManageMedia: true,
-        canManageContent: true,
-        canManageSettings: false
-      },
-      lastLogin: '2024-01-15T09:15:00Z',
-      createdAt: '2023-08-15T00:00:00Z',
-      phone: '+7 (999) 234-56-78',
-      department: 'Продажи',
-      notes: 'Ведущий менеджер'
-    },
-    {
-      id: '3',
-      name: 'Анна Петрова',
-      email: 'petrova@metrika.direct',
-      role: 'agent',
-      status: 'active',
-      permissions: {
-        canManageObjects: true,
-        canManageUsers: false,
-        canViewAnalytics: false,
-        canManageTasks: true,
-        canManageMedia: false,
-        canManageContent: false,
-        canManageSettings: false
-      },
-      lastLogin: '2024-01-15T08:45:00Z',
-      createdAt: '2023-10-01T00:00:00Z',
-      phone: '+7 (999) 345-67-89',
-      department: 'Продажи',
-      notes: 'Агент по недвижимости'
-    },
-    {
-      id: '4',
-      name: 'Мария Козлова',
-      email: 'kozlova@metrika.direct',
-      role: 'employee',
-      status: 'active',
-      permissions: {
-        canManageObjects: false,
-        canManageUsers: false,
-        canViewAnalytics: false,
-        canManageTasks: false,
-        canManageMedia: false,
-        canManageContent: false,
-        canManageSettings: false
-      },
-      lastLogin: '2024-01-14T17:30:00Z',
-      createdAt: '2023-12-01T00:00:00Z',
-      phone: '+7 (999) 456-78-90',
-      department: 'Администрация',
-      notes: 'Секретарь'
+  const [users, setUsers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Загрузка пользователей при инициализации
+  useEffect(() => {
+    const fetchInitialUsers = async () => {
+      try {
+        const response = await fetch('/api/users');
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data: UserType[] = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching initial users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInitialUsers();
+  }, []);
+
+  // Обновление времени последнего сохранения
+  const updateLastSaved = () => {
+    setLastSaved(new Date());
+  };
+
+  // Синхронизация пользователей с сервером
+  const syncUsersWithServer = async (updatedUsers: UserType[]) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedUsers),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to sync users with server');
+      }
+      updateLastSaved();
+      console.log('Users synced with server successfully.');
+    } catch (error) {
+      console.error('Error syncing users with server:', error);
+      alert('Ошибка при синхронизации пользователей с сервером.');
     }
-  ])
+  };
 
   const [activeTab, setActiveTab] = useState('list')
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
@@ -236,9 +176,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
   // Новый пользователь
-  const [newUser, setNewUser] = useState<Partial<User>>({
+  const [newUser, setNewUser] = useState<Partial<UserType>>({
     name: '',
     email: '',
+    login: '',
+    password: '',
     role: 'employee',
     status: 'pending',
     permissions: {
@@ -284,13 +226,30 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     })
 
   // Создание пользователя
-  const createUser = () => {
-    if (!newUser.name || !newUser.email) return
+  const createUser = async () => {
+    if (!newUser.name || !newUser.email) {
+      alert('Пожалуйста, заполните обязательные поля: Имя и Email');
+      return;
+    }
 
-    const user: User = {
+    // Проверка уникальности логина
+    if (newUser.login && users.some(user => user.login === newUser.login)) {
+      alert('Пользователь с таким логином уже существует');
+      return;
+    }
+
+    // Проверка уникальности email
+    if (users.some(user => user.email === newUser.email)) {
+      alert('Пользователь с таким email уже существует');
+      return;
+    }
+
+    const user: UserType = {
       id: Date.now().toString(),
       name: newUser.name,
       email: newUser.email,
+      login: newUser.login,
+      password: newUser.password,
       role: newUser.role || 'employee',
       status: newUser.status || 'pending',
       permissions: newUser.permissions || {
@@ -308,10 +267,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       notes: newUser.notes
     }
 
-    setUsers(prev => [...prev, user])
+    const updatedUsers = [...users, user];
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
     setNewUser({
       name: '',
       email: '',
+      login: '',
+      password: '',
       role: 'employee',
       status: 'pending',
       permissions: {
@@ -331,41 +294,103 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   }
 
   // Обновление пользователя
-  const updateUser = (userId: string, updates: Partial<User>) => {
-    setUsers(prev => prev.map(user => 
+  const updateUser = async (userId: string, updates: Partial<UserType>) => {
+    // Проверка уникальности логина (исключая текущего пользователя)
+    if (updates.login && users.some(user => user.login === updates.login && user.id !== userId)) {
+      alert('Пользователь с таким логином уже существует');
+      return;
+    }
+
+    // Проверка уникальности email (исключая текущего пользователя)
+    if (updates.email && users.some(user => user.email === updates.email && user.id !== userId)) {
+      alert('Пользователь с таким email уже существует');
+      return;
+    }
+
+    const updatedUsers = users.map(user => 
       user.id === userId ? { ...user, ...updates } : user
-    ))
-    setIsEditingUser(false)
-    setSelectedUser(null)
+    );
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
+    setIsEditingUser(false);
+    setSelectedUser(null);
   }
 
   // Удаление пользователя
-  const deleteUser = (userId: string) => {
+  const deleteUser = async (userId: string) => {
     if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
-      setUsers(prev => prev.filter(user => user.id !== userId))
+      const updatedUsers = users.filter(user => user.id !== userId);
+      setUsers(updatedUsers);
+      await syncUsersWithServer(updatedUsers);
     }
   }
 
   // Переключение статуса
-  const toggleUserStatus = (userId: string) => {
-    setUsers(prev => prev.map(user => 
+  const toggleUserStatus = async (userId: string) => {
+    const updatedUsers = users.map(user => 
       user.id === userId 
         ? { ...user, status: user.status === 'active' ? 'inactive' : 'active' }
         : user
-    ))
+    );
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
   }
 
-  // Обновление прав
-  const updatePermission = (userId: string, permission: keyof User['permissions'], value: boolean) => {
-    setUsers(prev => prev.map(user => 
-      user.id === userId 
-        ? { 
-            ...user, 
-            permissions: { ...user.permissions, [permission]: value }
+  // Экспорт пользователей
+  const exportUsers = () => {
+    const dataStr = JSON.stringify(users, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `metrika_users_${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Импорт пользователей
+  const importUsers = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const importedUsers = JSON.parse(e.target?.result as string);
+        if (Array.isArray(importedUsers)) {
+          if (confirm('Это заменит всех текущих пользователей. Продолжить?')) {
+            setUsers(importedUsers);
+            await syncUsersWithServer(importedUsers);
+            alert('Пользователи успешно импортированы');
           }
-        : user
-    ))
-  }
+        } else {
+          alert('Неверный формат файла');
+        }
+      } catch (error) {
+        alert('Ошибка при чтении файла');
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // Сброс к дефолтным пользователям
+  const resetToDefaults = async () => {
+    if (confirm('Это удалит всех текущих пользователей и загрузит дефолтных. Продолжить?')) {
+      // Загружаем дефолтных пользователей с сервера
+      try {
+        const response = await fetch('/api/users');
+        if (response.ok) {
+          const data = await response.json();
+          setUsers(data);
+          await syncUsersWithServer(data);
+          alert('Пользователи сброшены к дефолтным');
+        }
+      } catch (error) {
+        console.error('Error resetting to defaults:', error);
+        alert('Ошибка при сбросе к дефолтным пользователям');
+      }
+    }
+  };
 
   // Получение иконки роли
   const getRoleIcon = (role: string) => {
@@ -388,6 +413,16 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     }
   }
 
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-lg text-gray-600">Загрузка пользователей...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Заголовок */}
@@ -399,7 +434,43 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         <div className="flex items-center space-x-4">
           <div className="text-sm text-gray-600">
             Всего: {users.length} • Активных: {users.filter(u => u.status === 'active').length}
+            {lastSaved && (
+              <span className="ml-2 text-xs text-gray-500">
+                • Сохранено: {lastSaved.toLocaleTimeString()}
+              </span>
+            )}
           </div>
+          
+          {/* Кнопка экспорта */}
+          <button
+            onClick={exportUsers}
+            className="px-3 py-2 text-gray-700 bg-gray-100 rounded-lg shadow-sm hover:shadow-md transition-all font-medium hover:bg-gray-200"
+          >
+            <Download className="w-4 h-4 inline mr-2" />
+            Экспорт
+          </button>
+          
+          {/* Кнопка импорта */}
+          <label className="px-3 py-2 text-gray-700 bg-gray-100 rounded-lg shadow-sm hover:shadow-md transition-all font-medium hover:bg-gray-200 cursor-pointer">
+            <Upload className="w-4 h-4 inline mr-2" />
+            Импорт
+            <input
+              type="file"
+              accept=".json"
+              onChange={importUsers}
+              className="hidden"
+            />
+          </label>
+          
+          {/* Кнопка сброса */}
+          <button
+            onClick={resetToDefaults}
+            className="px-3 py-2 text-red-700 bg-red-100 rounded-lg shadow-sm hover:shadow-md transition-all font-medium hover:bg-red-200"
+          >
+            <RefreshCw className="w-4 h-4 inline mr-2" />
+            Сброс
+          </button>
+          
           <button
             onClick={() => setIsCreatingUser(true)}
             className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
@@ -1071,6 +1142,26 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   />
                 </div>
                 <div>
+                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
+                  <input
+                    type="text"
+                    value={newUser.login || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, login: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите логин"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
+                  <input
+                    type="password"
+                    value={newUser.password || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, password: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите пароль"
+                  />
+                </div>
+                <div>
                   <label className="block text-sm font-medium text-black mb-2">Роль</label>
                   <select
                     value={newUser.role || 'employee'}
@@ -1228,6 +1319,26 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     value={selectedUser.email}
                     onChange={(e) => setSelectedUser(prev => prev ? { ...prev, email: e.target.value } : null)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
+                  <input
+                    type="text"
+                    value={selectedUser.login || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, login: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите логин"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
+                  <input
+                    type="password"
+                    value={selectedUser.password || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, password: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите пароль"
                   />
                 </div>
                 <div>

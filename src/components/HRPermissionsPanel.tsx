@@ -245,8 +245,8 @@ export default function HRPermissionsPanel() {
   const [users, setUsers] = useState<User[]>([
     {
       id: '1',
-      name: 'Антон Нехорошков',
-      email: 'admin@metrika.direct',
+      name: 'Нехорошков Антон',
+      email: 'nekhoroshkov@metrika.direct',
       role: 'Администратор',
       status: 'active',
       lastLogin: '2024-01-15T10:30:00Z',
@@ -254,8 +254,8 @@ export default function HRPermissionsPanel() {
     },
     {
       id: '2',
-      name: 'Мария Козлова',
-      email: 'maria@metrika.direct',
+      name: 'Сникфайкер',
+      email: 'snikfayker@metrika.direct',
       role: 'HR Менеджер',
       status: 'active',
       lastLogin: '2024-01-15T09:15:00Z',
@@ -263,29 +263,83 @@ export default function HRPermissionsPanel() {
     },
     {
       id: '3',
-      name: 'Анна Петрова',
-      email: 'anna@metrika.direct',
-      role: 'Бухгалтер',
+      name: 'Маслова Ирина',
+      email: 'maslova@metrika.direct',
+      role: 'Агент',
       status: 'active',
-      lastLogin: '2024-01-14T16:45:00Z',
-      permissions: ['salary_view', 'salary_edit', 'cash_view', 'cash_edit', 'reports_view']
+      lastLogin: '2024-01-15T08:45:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
     },
     {
       id: '4',
-      name: 'Иван Сидоров',
-      email: 'ivan@metrika.direct',
-      role: 'Менеджер',
+      name: 'Ионин Владислав',
+      email: 'ionin@metrika.direct',
+      role: 'Агент',
       status: 'active',
-      lastLogin: '2024-01-15T08:20:00Z',
-      permissions: ['hr_view', 'salary_view', 'time_view', 'reports_view']
+      lastLogin: '2024-01-15T08:30:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
     },
     {
       id: '5',
-      name: 'Алексей Иванов',
-      email: 'alexey@metrika.direct',
+      name: 'Андрей Широких',
+      email: 'shirokikh@metrika.direct',
+      role: 'Агент',
+      status: 'active',
+      lastLogin: '2024-01-15T08:15:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
+    },
+    {
+      id: '6',
+      name: 'Бердник Вадим',
+      email: 'berdnik@metrika.direct',
+      role: 'Агент',
+      status: 'active',
+      lastLogin: '2024-01-15T08:00:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
+    },
+    {
+      id: '7',
+      name: 'Дерик Олег',
+      email: 'derik@metrika.direct',
+      role: 'Агент',
+      status: 'active',
+      lastLogin: '2024-01-15T07:45:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
+    },
+    {
+      id: '8',
+      name: 'Кан Татьяна',
+      email: 'kan@metrika.direct',
       role: 'Сотрудник',
       status: 'active',
-      lastLogin: '2024-01-15T09:00:00Z',
+      lastLogin: '2024-01-14T17:30:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
+    },
+    {
+      id: '9',
+      name: 'Поврезнюк Мария',
+      email: 'povreznyuk@metrika.direct',
+      role: 'Сотрудник',
+      status: 'active',
+      lastLogin: '2024-01-14T17:15:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
+    },
+    {
+      id: '10',
+      name: 'Стулина Елена',
+      email: 'stulina@metrika.direct',
+      role: 'Сотрудник',
+      status: 'active',
+      lastLogin: '2024-01-14T17:00:00Z',
+      permissions: ['profile_view', 'salary_view_own', 'time_view_own']
+    },
+    {
+      id: '11',
+      name: 'Тамбовцева Екатерина',
+      email: 'tambovtseva@metrika.direct',
+      role: 'Сотрудник',
+      status: 'active',
+      lastLogin: '2024-01-14T16:45:00Z',
       permissions: ['profile_view', 'salary_view_own', 'time_view_own']
     }
   ])

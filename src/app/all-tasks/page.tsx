@@ -37,21 +37,24 @@ interface User {
 
 export default function AllTasksPage() {
   const { t } = useLanguage();
-  const [currentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin", email: "anna@metrika.ru" });
+  const [currentUser] = useState<User>({ id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" });
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [activeTab, setActiveTab] = useState('all');
 
   // Тестовые пользователи
   const users = [
-    { id: 1, name: "Анна Петрова", role: "admin", email: "anna@metrika.ru" },
-    { id: 2, name: "Иван Сидоров", role: "manager", email: "ivan@metrika.ru" },
-    { id: 3, name: "Мария Козлова", role: "employee", email: "maria@metrika.ru" },
-    { id: 4, name: "Алексей Волков", role: "employee", email: "alexey@metrika.ru" },
-    { id: 5, name: "Елена Соколова", role: "employee", email: "elena@metrika.ru" },
-    { id: 6, name: "Дмитрий Морозов", role: "freelancer", email: "dmitry@metrika.ru" },
-    { id: 7, name: "Ольга Новикова", role: "client", email: "olga@metrika.ru" },
-    { id: 8, name: "Сергей Лебедев", role: "employee", email: "sergey@metrika.ru" }
+    { id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" },
+    { id: 2, name: "Сникфайкер", role: "manager", email: "snikfayker@metrika.direct" },
+    { id: 3, name: "Маслова Ирина", role: "agent", email: "maslova@metrika.direct" },
+    { id: 4, name: "Ионин Владислав", role: "agent", email: "ionin@metrika.direct" },
+    { id: 5, name: "Андрей Широких", role: "agent", email: "shirokikh@metrika.direct" },
+    { id: 6, name: "Бердник Вадим", role: "agent", email: "berdnik@metrika.direct" },
+    { id: 7, name: "Дерик Олег", role: "agent", email: "derik@metrika.direct" },
+    { id: 8, name: "Кан Татьяна", role: "employee", email: "kan@metrika.direct" },
+    { id: 9, name: "Поврезнюк Мария", role: "employee", email: "povreznyuk@metrika.direct" },
+    { id: 10, name: "Стулина Елена", role: "employee", email: "stulina@metrika.direct" },
+    { id: 11, name: "Тамбовцева Екатерина", role: "employee", email: "tambovtseva@metrika.direct" }
   ];
 
   // Расширенные тестовые задачи (все задачи всех пользователей)

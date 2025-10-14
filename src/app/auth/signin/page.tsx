@@ -55,17 +55,17 @@ export default function SignIn() {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-black">
-                Email
+                Логин или Email
               </label>
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-400 text-black bg-white"
-                placeholder="Введите email"
+                placeholder="Введите логин или email"
               />
             </div>
 
@@ -123,13 +123,24 @@ export default function SignIn() {
           </div>
         </form>
 
-        {/* Тестовые аккаунты */}
+        {/* Реальные пользователи */}
         <div className="mt-8 p-4 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <h3 className="text-sm font-medium text-black mb-2">Тестовые аккаунты:</h3>
+          <h3 className="text-sm font-medium text-black mb-2">Реальные пользователи:</h3>
           <div className="text-xs text-gray-600 space-y-1">
-            <p><strong>Клиент:</strong> client@metrika.ru / client123</p>
-            <p><strong>Сотрудник:</strong> employee@metrika.ru / employee123</p>
-            <p><strong>Админ:</strong> admin@metrika.ru / admin123</p>
+            <p><strong>Админ:</strong> admin / admin123 (Нехорошков Антон)</p>
+            <p><strong>Менеджер:</strong> snikfayker / manager123 (Сникфайкер)</p>
+            <p><strong>Агент:</strong> maslova / agent123 (Маслова Ирина)</p>
+            <p><strong>Агент:</strong> ionin / agent123 (Ионин Владислав)</p>
+            <p><strong>Агент:</strong> shirokikh / agent123 (Андрей Широких)</p>
+            <p><strong>Агент:</strong> berdnik / agent123 (Бердник Вадим)</p>
+            <p><strong>Агент:</strong> derik / agent123 (Дерик Олег)</p>
+            <p><strong>Сотрудник:</strong> kan / employee123 (Кан Татьяна)</p>
+            <p><strong>Сотрудник:</strong> povreznyuk / employee123 (Поврезнюк Мария)</p>
+            <p><strong>Сотрудник:</strong> stulina / employee123 (Стулина Елена)</p>
+            <p><strong>Сотрудник:</strong> tambovtseva / employee123 (Тамбовцева Екатерина)</p>
+          </div>
+          <div className="mt-2 text-xs text-gray-500">
+            <p>Можно входить как по email, так и по логину</p>
           </div>
         </div>
       </div>

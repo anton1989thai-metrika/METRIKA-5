@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Типы для состояний
 interface TaskFormData {
@@ -110,6 +111,9 @@ export default function TasksPage() {
   const [showChecklists, setShowChecklists] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [showAutomation, setShowAutomation] = useState(false);
+  const [showAutomationCalendar, setShowAutomationCalendar] = useState(false);
+  const [selectedAutomationDates, setSelectedAutomationDates] = useState<string[]>([]);
+  const [automationCalendarMonth, setAutomationCalendarMonth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -231,6 +235,22 @@ export default function TasksPage() {
       }
     }
     return days;
+  };
+
+  const handleAutomationDateSelect = (day: number) => {
+    if (day === null) return;
+    
+    const year = automationCalendarMonth.getFullYear();
+    const month = automationCalendarMonth.getMonth();
+    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    
+    setSelectedAutomationDates(prev => {
+      if (prev.includes(dateString)) {
+        return prev.filter(date => date !== dateString);
+      } else {
+        return [...prev, dateString];
+      }
+    });
   };
 
   // Функции склонения
@@ -2263,50 +2283,106 @@ export default function TasksPage() {
                 </div>
                 {showAutomation && (
                   <div className="mt-4 space-y-4">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="autoTask"
-                        checked={formData.isAutoTask}
-                        onChange={(e) => handleInputChange('isAutoTask', e.target.checked)}
-                        className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500"
-                      />
-                      <label htmlFor="autoTask" className="text-sm text-gray-700">
-                        Автоматическая задача (повторяется по расписанию)
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Периодичность
                       </label>
+                      <select 
+                        value={formData.autoFrequency}
+                        onChange={(e) => {
+                          handleInputChange('autoFrequency', e.target.value);
+                          if (e.target.value === 'custom') {
+                            setShowAutomationCalendar(true);
+                          } else {
+                            setShowAutomationCalendar(false);
+                            setSelectedAutomationDates([]);
+                          }
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      >
+                        <option value="daily">Ежедневно</option>
+                        <option value="weekly">Еженедельно</option>
+                        <option value="monthly">Ежемесячно</option>
+                        <option value="custom">Произвольно</option>
+                      </select>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Периодичность
-                        </label>
-                        <select 
-                          value={formData.autoFrequency}
-                          onChange={(e) => handleInputChange('autoFrequency', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                        >
-                          <option value="daily">Ежедневно</option>
-                          <option value="weekly">Еженедельно</option>
-                          <option value="monthly">Ежемесячно</option>
-                          <option value="custom">Произвольно</option>
-                        </select>
+                    {formData.autoFrequency === 'custom' && (
+                      <div className="relative">
+                        <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-4 min-w-80">
+                          <div className="flex items-center justify-between mb-4">
+                            <h4 className="text-lg font-medium text-black">
+                              {automationCalendarMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
+                            </h4>
+                            <div className="flex space-x-2">
+                              <button
+                                type="button"
+                                onClick={() => setAutomationCalendarMonth(new Date(automationCalendarMonth.getFullYear(), automationCalendarMonth.getMonth() - 1))}
+                                className="p-1 hover:bg-gray-100 rounded"
+                              >
+                                <ChevronLeft className="w-4 h-4" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setAutomationCalendarMonth(new Date(automationCalendarMonth.getFullYear(), automationCalendarMonth.getMonth() + 1))}
+                                className="p-1 hover:bg-gray-100 rounded"
+                              >
+                                <ChevronRight className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-7 gap-1 mb-2">
+                            <div className="p-2 text-center font-medium text-gray-500">Пн</div>
+                            <div className="p-2 text-center font-medium text-gray-500">Вт</div>
+                            <div className="p-2 text-center font-medium text-gray-500">Ср</div>
+                            <div className="p-2 text-center font-medium text-gray-500">Чт</div>
+                            <div className="p-2 text-center font-medium text-gray-500">Пт</div>
+                            <div className="p-2 text-center font-medium text-gray-500">Сб</div>
+                            <div className="p-2 text-center font-medium text-gray-500">Вс</div>
+                          </div>
+                          
+                          <div className="grid grid-cols-7 gap-1">
+                            {getCalendarDays(automationCalendarMonth.getFullYear(), automationCalendarMonth.getMonth()).map((day, index) => (
+                              <button
+                                key={index}
+                                type="button"
+                                onClick={() => handleAutomationDateSelect(day)}
+                                className={`p-2 text-center text-sm ${
+                                  day === null 
+                                    ? 'text-gray-300 cursor-not-allowed' 
+                                    : selectedAutomationDates.includes(`${automationCalendarMonth.getFullYear()}-${String(automationCalendarMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`)
+                                    ? 'text-black font-semibold'
+                                    : 'hover:bg-gray-100 text-gray-700'
+                                }`}
+                                style={{
+                                  backgroundColor: day !== null && selectedAutomationDates.includes(`${automationCalendarMonth.getFullYear()}-${String(automationCalendarMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`) ? '#fff60b' : 'transparent'
+                                }}
+                                disabled={day === null}
+                              >
+                                {day}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {selectedAutomationDates.length > 0 && (
+                          <div className="mt-4">
+                            <h5 className="text-sm font-medium text-gray-700 mb-2">Выбранные даты:</h5>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedAutomationDates.map((date, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs"
+                                >
+                                  {new Date(date).toLocaleDateString('ru-RU')}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Количество повторений
-                        </label>
-                        <input
-                          type="number"
-                          min="1"
-                          value={formData.autoRepetitions}
-                          onChange={(e) => handleInputChange('autoRepetitions', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-                          placeholder="Без ограничений"
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -2344,6 +2420,17 @@ export default function TasksPage() {
                     setShowCompletionTime(false);
                     setShowBlockingTask(false);
                     setIsBlockingTask(false);
+                    setShowDatePicker(false);
+                    setShowDeadline(false);
+                    setShowExecutorsDropdown(false);
+                    setShowCuratorsDropdown(false);
+                    setShowSubtasks(false);
+                    setShowChecklists(false);
+                    setShowAttachments(false);
+                    setShowAutomation(false);
+                    setShowAutomationCalendar(false);
+                    setSelectedAutomationDates([]);
+                    setAutomationCalendarMonth(new Date());
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
@@ -3072,6 +3159,8 @@ export default function TasksPage() {
                     setShowCompletionTime(false);
                     setShowBlockingTask(false);
                     setIsBlockingTask(false);
+                    setShowSubtaskAttachments(false);
+                    setSubtaskLinkInputs(['']);
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
