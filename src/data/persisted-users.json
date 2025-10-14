@@ -139,6 +139,42 @@
         "changeSettings": true,
         "systemSettings": true,
         "backup": true
+      },
+      "personalCabinet": {
+        "enabled": true
+      },
+      "adminPanel": {
+        "enabled": true,
+        "dashboard": true,
+        "email": true,
+        "content": true,
+        "objects": true,
+        "users": true,
+        "tasks": true,
+        "media": true,
+        "analytics": true,
+        "hr": true
+      },
+      "academy": {
+        "enabled": true,
+        "dashboard": true,
+        "courses": true,
+        "tests": true,
+        "achievements": true,
+        "materials": true
+      },
+      "taskManager": {
+        "enabled": true,
+        "viewTasks": true,
+        "createTasks": true,
+        "assignExecutors": true,
+        "closeTasks": true,
+        "editTasks": true,
+        "changeExecutors": true,
+        "changeCurators": true,
+        "editSubtasks": true,
+        "editChecklists": true,
+        "viewOtherUsersTasks": true
       }
     }
   },

@@ -9,7 +9,6 @@ import {
   Send, 
   Inbox, 
   Archive, 
-  Trash2, 
   Star, 
   Search, 
   Filter, 
@@ -19,25 +18,9 @@ import {
   BellOff,
   Pin,
   MoreVertical,
-  Download,
-  Reply,
-  Forward,
-  Delete,
-  CheckCircle2 as MarkAsRead,
-  Eye,
-  EyeOff,
-  Calendar,
-  Clock,
-  User,
   Paperclip,
-  Image,
-  FileText,
-  ChevronDown,
-  ChevronRight,
   RefreshCw,
-  CheckCircle,
-  AlertCircle,
-  Info
+  AlertCircle
 } from 'lucide-react'
 
 interface Email {
