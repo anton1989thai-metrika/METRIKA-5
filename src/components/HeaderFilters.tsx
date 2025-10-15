@@ -167,6 +167,29 @@ const LegalIcon = ({ className }: { className?: string }) => (
     <path d="M3 4h8"/>
   </svg>
 );
+
+// Кастомная иконка для Основные характеристики (линейка с измерениями)
+const CharacteristicsIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 15v-3.014"/>
+    <path d="M16 15v-3.014"/>
+    <path d="M20 6H4"/>
+    <path d="M20 8V4"/>
+    <path d="M4 8V4"/>
+    <path d="M8 15v-3.014"/>
+    <rect x="3" y="12" width="18" height="7" rx="1"/>
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -398,7 +421,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="basic">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Square className="w-5 h-5" />
+                          <CharacteristicsIcon className="w-5 h-5" />
                           <span>Основные характеристики</span>
                         </div>
                       </AccordionTrigger>
