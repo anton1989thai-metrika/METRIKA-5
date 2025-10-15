@@ -98,7 +98,7 @@ export default function ObjectsPage() {
                     <p className="text-gray-600 text-sm font-normal px-4">
                       {object.address} • {object.area}
                     </p>
-                    <div className="card-actions justify-end px-4 pb-4 mt-1">
+                    <div className="card-actions justify-end px-4 pb-4 mt-2">
                       <div className="text-lg font-normal text-black">
                         {object.price}
                       </div>
