@@ -57,7 +57,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     'academy': false,
     'knowledge-base': false,
     'tasks': false,
-    'admin': false
+    'admin': false,
+    'hide-in-tasks': false
   })
   
   // Состояние для модального окна подтверждения удаления роли
@@ -338,12 +339,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       'academy': false,
       'knowledge-base': false,
       'tasks': false,
-      'admin': false
+      'admin': false,
+      'hide-in-tasks': false
     }
 
     switch (role) {
       case 'site-user':
         basePermissions['profile'] = true
+        basePermissions['hide-in-tasks'] = true // По умолчанию скрываем пользователей сайта в задачах
         break
       case 'client':
         basePermissions['profile'] = true
@@ -1909,6 +1912,16 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <span className="text-black">Админ панель</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['hide-in-tasks']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'hide-in-tasks': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Не отображать в задачах</span>
                   </label>
                 </div>
               </div>
