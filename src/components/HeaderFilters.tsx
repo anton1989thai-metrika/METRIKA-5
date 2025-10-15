@@ -69,12 +69,12 @@ export default function HeaderFilters() {
     <>
       <div className="bg-white border-b border-gray-200 py-4">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-wrap gap-4 justify-center items-center">
+          <div className="flex flex-nowrap gap-3 justify-center items-center overflow-x-auto">
             
             {/* Страна - Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="min-w-[120px] justify-between">
+                <Button variant="outline" className="min-w-[100px] justify-between">
                   <span className="text-sm font-medium">
                     {filters.country?.length > 0 
                       ? `${filters.country.length} выбрано` 
@@ -100,7 +100,7 @@ export default function HeaderFilters() {
             {/* Тип недвижимости - Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="min-w-[140px] justify-between">
+                <Button variant="outline" className="min-w-[80px] justify-between">
                   <span className="text-sm font-medium">
                     {filters.propertyType?.length > 0 
                       ? `${filters.propertyType.length} выбрано` 
@@ -126,7 +126,7 @@ export default function HeaderFilters() {
             {/* Тип операции - Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="min-w-[120px] justify-between">
+                <Button variant="outline" className="min-w-[100px] justify-between">
                   <span className="text-sm font-medium">
                     {filters.operationType?.length > 0 
                       ? `${filters.operationType.length} выбрано` 
@@ -156,12 +156,12 @@ export default function HeaderFilters() {
                 <Input 
                   type="number" 
                   placeholder="От" 
-                  className="w-20"
+                  className="w-16"
                 />
                 <Input 
                   type="number" 
                   placeholder="До" 
-                  className="w-20"
+                  className="w-16"
                 />
               </div>
             </div>
@@ -173,15 +173,15 @@ export default function HeaderFilters() {
                 <Input 
                   type="number" 
                   placeholder="От" 
-                  className="w-16"
+                  className="w-14"
                 />
                 <Input 
                   type="number" 
                   placeholder="До" 
-                  className="w-16"
+                  className="w-14"
                 />
                 <Select value={filters.areaUnit} onValueChange={(value) => updateFilter('areaUnit', value)}>
-                  <SelectTrigger className="w-20">
+                  <SelectTrigger className="w-16">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
