@@ -225,7 +225,7 @@ export default function HeaderFilters() {
             <div className="flex gap-2">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="text-sm font-normal">
+                  <Button variant="outline" className="text-sm font-normal" style={{ fontWeight: 'normal' }}>
                     Доп. фильтры
                   </Button>
                 </SheetTrigger>
@@ -897,13 +897,13 @@ export default function HeaderFilters() {
               <Button 
                 variant="default"
                 className="text-black rounded-md transition-colors text-sm font-normal"
-                style={{ backgroundColor: '#fff60b' }}
+                style={{ backgroundColor: '#fff60b', fontWeight: 'normal' }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
               >
                 Применить
               </Button>
-              <Button variant="outline" className="text-sm font-normal">
+              <Button variant="outline" className="text-sm font-normal" style={{ fontWeight: 'normal' }}>
                 Сбросить
               </Button>
             </div>
