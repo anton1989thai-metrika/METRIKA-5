@@ -7,6 +7,7 @@ import BurgerMenu from "@/components/BurgerMenu"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects"
 import Image from "next/image"
+import Link from "next/link"
 import { 
   Phone, 
   MessageCircle, 
@@ -30,6 +31,14 @@ import {
   Bell,
   Cloud
 } from "lucide-react"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import MortgageCalculator from "@/components/MortgageCalculator"
 import UtilitiesCalculator from "@/components/UtilitiesCalculator"
 import AgentChat from "@/components/AgentChat"
@@ -142,15 +151,27 @@ export default function ObjectDetailPage() {
       <main className="pt-20 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Хлебные крошки */}
-          <nav className="py-4">
-            <ol className="flex items-center space-x-2 text-sm text-gray-500">
-              <li><a href="/" className="hover:text-gray-700">Главная</a></li>
-              <li>/</li>
-              <li><a href="/objects" className="hover:text-gray-700">Объекты</a></li>
-              <li>/</li>
-              <li className="text-gray-900">{object.title}</li>
-            </ol>
-          </nav>
+          <div className="py-4">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/">Главная</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/objects">Объекты</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{object.title}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Левая колонка - Описание */}
