@@ -84,6 +84,47 @@ const LandPlotIcon = ({ className }: { className?: string }) => (
     <path d="M17.51 12.85 6.5 19.15"/>
   </svg>
 );
+
+// Кастомная иконка для Расположение и вид (вид из окна)
+const ViewIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+    <path d="M4.14 15.08c2.62-1.57 5.24-1.43 7.86.42 2.74 1.94 5.49 2 8.23.19"/>
+  </svg>
+);
+
+// Кастомная иконка для Коммуникации (столб с проводами)
+const CommunicationsIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 2v20"/>
+    <path d="M2 5h20"/>
+    <path d="M3 3v2"/>
+    <path d="M7 3v2"/>
+    <path d="M17 3v2"/>
+    <path d="M21 3v2"/>
+    <path d="m19 5-7 7-7-7"/>
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -402,7 +443,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="location">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Home className="w-5 h-5" />
+                          <ViewIcon className="w-5 h-5" />
                           <span>Расположение и вид</span>
                         </div>
                       </AccordionTrigger>
@@ -561,7 +602,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="communications">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Settings className="w-5 h-5" />
+                          <CommunicationsIcon className="w-5 h-5" />
                           <span>Коммуникации</span>
                         </div>
                       </AccordionTrigger>
