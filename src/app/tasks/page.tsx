@@ -1692,10 +1692,10 @@ export default function TasksPage() {
           <button
             type="button"
             onClick={() => handleInputChange('isHiddenTask', !formData.isHiddenTask)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-black font-medium transition-colors ${
+            className={`w-full px-3 py-1.5 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 font-medium transition-colors ${
               formData.isHiddenTask 
                 ? 'bg-red-500 text-black border-red-500' 
-                : 'bg-white border-gray-300 hover:bg-gray-50'
+                : 'bg-white border-gray-300 hover:bg-gray-50 text-white'
             }`}
           >
             {formData.isHiddenTask ? 'Открыть' : 'Скрыть'}
@@ -2723,10 +2723,10 @@ export default function TasksPage() {
           <button
             type="button"
             onClick={() => handleSubtaskInputChange('isHiddenTask', !subtaskFormData.isHiddenTask)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-black font-medium transition-colors ${
+            className={`w-full px-3 py-1.5 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 font-medium transition-colors ${
               subtaskFormData.isHiddenTask 
                 ? 'bg-red-500 text-black border-red-500' 
-                : 'bg-white border-gray-300 hover:bg-gray-50'
+                : 'bg-white border-gray-300 hover:bg-gray-50 text-white'
             }`}
           >
             {subtaskFormData.isHiddenTask ? 'Открыть' : 'Скрыть'}
