@@ -3,7 +3,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
 import { useState } from "react";
-import { ChevronDown, Square, Eye, Hammer, Building, Star, TreePine, Calendar, FileText, Key, SquareMeter, Window, Wrench } from "lucide-react";
+import { ChevronDown, Square, Eye, Hammer, Building, Star, TreePine, Calendar, FileText, Key, Home, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -235,7 +235,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="basic">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <SquareMeter className="w-5 h-5" />
+                          <Square className="w-5 h-5" />
                           <span>Основные характеристики</span>
                         </div>
                       </AccordionTrigger>
@@ -322,7 +322,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="location">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Window className="w-5 h-5" />
+                          <Home className="w-5 h-5" />
                           <span>Расположение и вид</span>
                         </div>
                       </AccordionTrigger>
@@ -481,7 +481,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="communications">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Wrench className="w-5 h-5" />
+                          <Settings className="w-5 h-5" />
                           <span>Коммуникации</span>
                         </div>
                       </AccordionTrigger>
