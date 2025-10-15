@@ -229,11 +229,11 @@ export default function HeaderFilters() {
                     Доп. фильтры
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto [&>button]:ml-4">
+                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto [&>button]:ml-5">
                   <Accordion type="single" collapsible className="w-full mt-4">
                     {/* Основные характеристики */}
                     <AccordionItem value="basic">
-                      <AccordionTrigger className="text-xl">Основные характеристики</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Основные характеристики</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Количество комнат */}
                         <div>
@@ -315,7 +315,7 @@ export default function HeaderFilters() {
 
                     {/* Расположение и вид */}
                     <AccordionItem value="location">
-                      <AccordionTrigger className="text-xl">Расположение и вид</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Расположение и вид</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Вид */}
                         <div>
@@ -380,7 +380,7 @@ export default function HeaderFilters() {
 
                     {/* Тип и состояние */}
                     <AccordionItem value="type">
-                      <AccordionTrigger className="text-xl">Тип и состояние</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Тип и состояние</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Вид квартиры */}
                         <div>
@@ -464,7 +464,7 @@ export default function HeaderFilters() {
 
                     {/* Коммуникации */}
                     <AccordionItem value="communications">
-                      <AccordionTrigger className="text-xl">Коммуникации</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Коммуникации</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Тип отопления */}
                         <div>
@@ -538,7 +538,7 @@ export default function HeaderFilters() {
 
                     {/* Инфраструктура */}
                     <AccordionItem value="infrastructure">
-                      <AccordionTrigger className="text-xl">Инфраструктура</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Инфраструктура</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Инфраструктура дома */}
                         <div>
@@ -611,7 +611,7 @@ export default function HeaderFilters() {
 
                     {/* Дополнительные удобства */}
                     <AccordionItem value="amenities">
-                      <AccordionTrigger className="text-xl">Дополнительные удобства</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Дополнительные удобства</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Балкон */}
                         <div>
@@ -658,7 +658,7 @@ export default function HeaderFilters() {
 
                     {/* Земельный участок */}
                     <AccordionItem value="land">
-                      <AccordionTrigger className="text-xl">Земельный участок</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Земельный участок</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Вид использования земельного участка */}
                         <div>
@@ -681,7 +681,7 @@ export default function HeaderFilters() {
 
                     {/* Строительство */}
                     <AccordionItem value="construction">
-                      <AccordionTrigger className="text-xl">Строительство</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Строительство</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Год постройки */}
                         <div>
@@ -708,7 +708,7 @@ export default function HeaderFilters() {
 
                     {/* Права и условия */}
                     <AccordionItem value="rights">
-                      <AccordionTrigger className="text-xl">Права и условия</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Права и условия</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Тип права */}
                         <div>
@@ -748,7 +748,7 @@ export default function HeaderFilters() {
 
                     {/* Аренда */}
                     <AccordionItem value="rent">
-                      <AccordionTrigger className="text-xl">Аренда</AccordionTrigger>
+                      <AccordionTrigger className="text-xl hover:no-underline">Аренда</AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Срок аренды */}
                         <div>
