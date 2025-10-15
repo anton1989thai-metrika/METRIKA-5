@@ -98,7 +98,7 @@ export default function HeaderFilters() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="min-w-[100px] justify-between">
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-normal">
                     {filters.country?.length > 0 
                       ? `${filters.country.length} выбрано` 
                       : 'Страна'
@@ -124,7 +124,7 @@ export default function HeaderFilters() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="min-w-[80px] justify-between">
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-normal">
                     {filters.propertyType?.length > 0 
                       ? `${filters.propertyType.length} выбрано` 
                       : 'Тип'
@@ -150,7 +150,7 @@ export default function HeaderFilters() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="min-w-[100px] justify-between">
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-normal">
                     {filters.operationType?.length > 0 
                       ? `${filters.operationType.length} выбрано` 
                       : 'Операция'
@@ -896,14 +896,14 @@ export default function HeaderFilters() {
               </Sheet>
               <Button 
                 variant="default"
-                className="text-black rounded-md transition-colors"
+                className="text-black rounded-md transition-colors text-sm font-normal"
                 style={{ backgroundColor: '#fff60b' }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
               >
                 Применить
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" className="text-sm font-normal">
                 Сбросить
               </Button>
             </div>
