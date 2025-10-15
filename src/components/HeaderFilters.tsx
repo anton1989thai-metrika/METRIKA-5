@@ -146,6 +146,27 @@ const AmenitiesIcon = ({ className }: { className?: string }) => (
     <path d="M9 5a2 2 0 0 0-2 2v11"/>
   </svg>
 );
+
+// Кастомная иконка для Права и условия (рукопожатие)
+const LegalIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m11 17 2 2a1 1 0 1 0 3-3"/>
+    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/>
+    <path d="m21 3 1 11h-2"/>
+    <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/>
+    <path d="M3 4h8"/>
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -892,7 +913,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="rights">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <FileText className="w-5 h-5" />
+                          <LegalIcon className="w-5 h-5" />
                           <span>Права и условия</span>
                         </div>
                       </AccordionTrigger>
