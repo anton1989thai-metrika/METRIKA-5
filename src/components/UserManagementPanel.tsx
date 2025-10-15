@@ -391,6 +391,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const saveRolePermissions = () => {
     // Здесь будет логика сохранения разрешений роли
     console.log('Сохранение разрешений для роли:', selectedRole, rolePermissions)
+    
+    // В реальном приложении здесь была бы отправка на сервер
+    // Пока что просто закрываем модальное окно
+    alert(`Разрешения для роли "${getRoleDisplayName(selectedRole!)}" сохранены!`)
+    
     setIsRoleModalOpen(false)
     setSelectedRole(null)
   }
