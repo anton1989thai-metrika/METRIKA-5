@@ -484,7 +484,30 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   // Функция для открытия модального окна индивидуальных разрешений
   const openIndividualPermissionsModal = (user: UserType) => {
     setSelectedUserForPermissions(user)
-    setIndividualPermissions(user.detailedPermissions || {
+    
+    // Пытаемся загрузить сохраненные индивидуальные разрешения из localStorage
+    const userPermissionsKey = `userPermissions_${user.id}`;
+    const savedPermissions = localStorage.getItem(userPermissionsKey);
+    
+    let initialPermissions;
+    if (savedPermissions) {
+      try {
+        initialPermissions = JSON.parse(savedPermissions);
+      } catch (error) {
+        console.error('Ошибка загрузки индивидуальных разрешений:', error);
+        initialPermissions = user.detailedPermissions || getDefaultPermissions();
+      }
+    } else {
+      initialPermissions = user.detailedPermissions || getDefaultPermissions();
+    }
+    
+    setIndividualPermissions(initialPermissions)
+    setIsIndividualPermissionsModalOpen(true)
+  }
+  
+  // Функция для получения дефолтных разрешений
+  const getDefaultPermissions = () => {
+    return {
       personalCabinet: { enabled: true },
       myObjects: { enabled: false },
       email: { 
@@ -538,8 +561,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         canViewHiddenTasks: false,
         hiddenTasksFrom: []
       }
-    })
-    setIsIndividualPermissionsModalOpen(true)
+    }
   }
 
   // Функция для сохранения индивидуальных разрешений
@@ -552,6 +574,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         : user
     )
     setUsers(updatedUsers)
+    
+    // Сохраняем индивидуальные разрешения в localStorage
+    const userPermissionsKey = `userPermissions_${selectedUserForPermissions.id}`;
+    localStorage.setItem(userPermissionsKey, JSON.stringify(individualPermissions));
+    
     await syncUsersWithServer(updatedUsers)
     
     // Индивидуальные разрешения сохранены
@@ -633,6 +660,66 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         hiddenTasksFrom: []
       }
     })
+    
+    // Сохраняем сброшенные настройки в localStorage
+    if (selectedUserForPermissions) {
+      const userPermissionsKey = `userPermissions_${selectedUserForPermissions.id}`;
+      localStorage.setItem(userPermissionsKey, JSON.stringify({
+        personalCabinet: { enabled: roleSettingsForUser['profile'] },
+        myObjects: { enabled: roleSettingsForUser['my-objects'] },
+        email: { 
+          enabled: roleSettingsForUser['email'],
+          viewMail: roleSettingsForUser['email'],
+          sendEmails: roleSettingsForUser['email'],
+          manageMailboxes: roleSettingsForUser['email'],
+          mailSettings: roleSettingsForUser['email']
+        },
+        academy: { 
+          enabled: roleSettingsForUser['academy'],
+          dashboard: roleSettingsForUser['academy'],
+          courses: roleSettingsForUser['academy'],
+          tests: roleSettingsForUser['academy'],
+          achievements: roleSettingsForUser['academy'],
+          materials: roleSettingsForUser['academy']
+        },
+        knowledgeBase: { enabled: roleSettingsForUser['knowledge-base'] },
+        taskManager: { 
+          enabled: roleSettingsForUser['tasks'],
+          viewTasks: roleSettingsForUser['tasks'],
+          createTasks: roleSettingsForUser['tasks'],
+          assignExecutors: roleSettingsForUser['tasks'],
+          closeTasks: roleSettingsForUser['tasks'],
+          editTasks: roleSettingsForUser['tasks'],
+          changeExecutors: roleSettingsForUser['tasks'],
+          changeCurators: roleSettingsForUser['tasks'],
+          editSubtasks: roleSettingsForUser['tasks'],
+          editChecklists: roleSettingsForUser['tasks'],
+          viewOtherUsersTasks: roleSettingsForUser['tasks']
+        },
+        adminPanel: { 
+          enabled: roleSettingsForUser['admin'],
+          dashboard: roleSettingsForUser['admin'],
+          email: roleSettingsForUser['admin'],
+          content: roleSettingsForUser['admin'],
+          objects: roleSettingsForUser['admin'],
+          users: roleSettingsForUser['admin'],
+          tasks: roleSettingsForUser['admin'],
+          media: roleSettingsForUser['admin'],
+          hr: roleSettingsForUser['admin'],
+          analytics: roleSettingsForUser['admin'],
+          settings: roleSettingsForUser['admin']
+        },
+        otherPermissions: {
+          enabled: false,
+          canChangeExecutorInOwnTasks: false,
+          canChangeCuratorInOwnTasks: false,
+          cannotEditTasksFrom: [],
+          canCreateHiddenTasks: false,
+          canViewHiddenTasks: false,
+          hiddenTasksFrom: []
+        }
+      }));
+    }
     
     // Устанавливаем состояние нажатия кнопки
     setIsRoleButtonPressed(true)
