@@ -174,7 +174,7 @@ export default function HeaderFilters() {
 
             {/* Цена */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium whitespace-nowrap">Цена:</span>
+              <span className="text-sm font-normal whitespace-nowrap">Цена:</span>
               <div className="flex gap-2">
                 <Input 
                   type="number" 
@@ -191,7 +191,7 @@ export default function HeaderFilters() {
 
             {/* Площадь */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium whitespace-nowrap">Площадь:</span>
+              <span className="text-sm font-normal whitespace-nowrap">Площадь:</span>
               <div className="flex gap-2">
                 <Input 
                   type="number" 
@@ -225,7 +225,7 @@ export default function HeaderFilters() {
             <div className="flex gap-2">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" className="text-sm font-normal">
                     Доп. фильтры
                   </Button>
                 </SheetTrigger>
