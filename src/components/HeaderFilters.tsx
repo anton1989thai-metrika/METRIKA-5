@@ -24,6 +24,27 @@ const CatIcon = ({ className }: { className?: string }) => (
     <path d="M11.25 16.25h1.5L12 17l-.75-.75Z"/>
   </svg>
 );
+
+// Кастомная иконка для Инфраструктура (больница)
+const HospitalIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 7v4"/>
+    <path d="M14 21v-3a2 2 0 0 0-4 0v3"/>
+    <path d="M14 9h-4"/>
+    <path d="M18 11h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/>
+    <path d="M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16"/>
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -580,7 +601,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="infrastructure">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Building className="w-5 h-5" />
+                          <HospitalIcon className="w-5 h-5" />
                           <span>Инфраструктура</span>
                         </div>
                       </AccordionTrigger>
