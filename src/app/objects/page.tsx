@@ -98,20 +98,85 @@ export default function ObjectsPage() {
                     <p className="text-gray-600 text-sm font-normal px-4 mb-2">
                       {(() => {
                         const fullText = `${object.address} • ${object.area}`;
-                        const maxLength = 45; // Примерная максимальная длина для одной строки
                         
-                        if (fullText.length <= maxLength) {
+                        // Создаем временный элемент для измерения ширины текста
+                        const measureElement = document.createElement('span');
+                        measureElement.style.visibility = 'hidden';
+                        measureElement.style.position = 'absolute';
+                        measureElement.style.fontSize = '14px'; // text-sm
+                        measureElement.style.fontFamily = 'inherit';
+                        measureElement.textContent = fullText;
+                        document.body.appendChild(measureElement);
+                        
+                        const fullWidth = measureElement.offsetWidth;
+                        const availableWidth = 280 - 32; // ширина карточки минус padding (px-4 = 16px с каждой стороны)
+                        
+                        document.body.removeChild(measureElement);
+                        
+                        if (fullWidth <= availableWidth) {
                           return fullText;
                         }
                         
-                        // Обрезаем адрес, оставляя место для площади
+                        // Если не помещается, обрезаем адрес
                         const areaText = ` ${object.area}`;
-                        const availableLength = maxLength - areaText.length - 3; // 3 символа для "..."
-                        const truncatedAddress = object.address.length > availableLength 
-                          ? object.address.substring(0, availableLength) + '...'
-                          : object.address;
+                        const ellipsisText = '...';
+                        const areaWidth = (() => {
+                          const areaElement = document.createElement('span');
+                          areaElement.style.visibility = 'hidden';
+                          areaElement.style.position = 'absolute';
+                          areaElement.style.fontSize = '14px';
+                          areaElement.style.fontFamily = 'inherit';
+                          areaElement.textContent = areaText;
+                          document.body.appendChild(areaElement);
+                          const width = areaElement.offsetWidth;
+                          document.body.removeChild(areaElement);
+                          return width;
+                        })();
                         
-                        return `${truncatedAddress}${areaText}`;
+                        const ellipsisWidth = (() => {
+                          const ellipsisElement = document.createElement('span');
+                          ellipsisElement.style.visibility = 'hidden';
+                          ellipsisElement.style.position = 'absolute';
+                          ellipsisElement.style.fontSize = '14px';
+                          ellipsisElement.style.fontFamily = 'inherit';
+                          ellipsisElement.textContent = ellipsisText;
+                          document.body.appendChild(ellipsisElement);
+                          const width = ellipsisElement.offsetWidth;
+                          document.body.removeChild(ellipsisElement);
+                          return width;
+                        })();
+                        
+                        const availableForAddress = availableWidth - areaWidth - ellipsisWidth;
+                        
+                        // Бинарный поиск для точной обрезки адреса
+                        let left = 0;
+                        let right = object.address.length;
+                        let bestLength = 0;
+                        
+                        while (left <= right) {
+                          const mid = Math.floor((left + right) / 2);
+                          const testAddress = object.address.substring(0, mid);
+                          
+                          const testElement = document.createElement('span');
+                          testElement.style.visibility = 'hidden';
+                          testElement.style.position = 'absolute';
+                          testElement.style.fontSize = '14px';
+                          testElement.style.fontFamily = 'inherit';
+                          testElement.textContent = testAddress;
+                          document.body.appendChild(testElement);
+                          const testWidth = testElement.offsetWidth;
+                          document.body.removeChild(testElement);
+                          
+                          if (testWidth <= availableForAddress) {
+                            bestLength = mid;
+                            left = mid + 1;
+                          } else {
+                            right = mid - 1;
+                          }
+                        }
+                        
+                        const truncatedAddress = object.address.substring(0, bestLength);
+                        return `${truncatedAddress}${ellipsisText}${areaText}`;
                       })()}
                     </p>
                     <div className="card-actions justify-end px-4 pb-2 mt-1">
