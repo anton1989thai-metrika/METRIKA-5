@@ -233,9 +233,11 @@ export default function HeaderFilters() {
                   <Accordion type="single" collapsible className="w-full mt-4">
                     {/* Основные характеристики */}
                     <AccordionItem value="basic">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Square className="w-5 h-5" />
-                        <span>Основные характеристики</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Square className="w-5 h-5" />
+                          <span>Основные характеристики</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Количество комнат */}
@@ -318,9 +320,11 @@ export default function HeaderFilters() {
 
                     {/* Расположение и вид */}
                     <AccordionItem value="location">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Eye className="w-5 h-5" />
-                        <span>Расположение и вид</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Eye className="w-5 h-5" />
+                          <span>Расположение и вид</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Вид */}
@@ -386,9 +390,11 @@ export default function HeaderFilters() {
 
                     {/* Тип и состояние */}
                     <AccordionItem value="type">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Hammer className="w-5 h-5" />
-                        <span>Тип и состояние</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Hammer className="w-5 h-5" />
+                          <span>Тип и состояние</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Вид квартиры */}
@@ -473,9 +479,11 @@ export default function HeaderFilters() {
 
                     {/* Коммуникации */}
                     <AccordionItem value="communications">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Building className="w-5 h-5" />
-                        <span>Коммуникации</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Building className="w-5 h-5" />
+                          <span>Коммуникации</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Тип отопления */}
@@ -550,9 +558,11 @@ export default function HeaderFilters() {
 
                     {/* Инфраструктура */}
                     <AccordionItem value="infrastructure">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Building className="w-5 h-5" />
-                        <span>Инфраструктура</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Building className="w-5 h-5" />
+                          <span>Инфраструктура</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Инфраструктура дома */}
@@ -626,9 +636,11 @@ export default function HeaderFilters() {
 
                     {/* Дополнительные удобства */}
                     <AccordionItem value="amenities">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Star className="w-5 h-5" />
-                        <span>Дополнительные удобства</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Star className="w-5 h-5" />
+                          <span>Дополнительные удобства</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Балкон */}
@@ -676,9 +688,11 @@ export default function HeaderFilters() {
 
                     {/* Земельный участок */}
                     <AccordionItem value="land">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <TreePine className="w-5 h-5" />
-                        <span>Земельный участок</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <TreePine className="w-5 h-5" />
+                          <span>Земельный участок</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Вид использования земельного участка */}
@@ -702,9 +716,11 @@ export default function HeaderFilters() {
 
                     {/* Строительство */}
                     <AccordionItem value="construction">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Calendar className="w-5 h-5" />
-                        <span>Строительство</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Calendar className="w-5 h-5" />
+                          <span>Строительство</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Год постройки */}
@@ -732,9 +748,11 @@ export default function HeaderFilters() {
 
                     {/* Права и условия */}
                     <AccordionItem value="rights">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <FileText className="w-5 h-5" />
-                        <span>Права и условия</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <FileText className="w-5 h-5" />
+                          <span>Права и условия</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Тип права */}
@@ -775,9 +793,11 @@ export default function HeaderFilters() {
 
                     {/* Аренда */}
                     <AccordionItem value="rent">
-                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-start">
-                        <Key className="w-5 h-5" />
-                        <span>Аренда</span>
+                      <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Key className="w-5 h-5" />
+                          <span>Аренда</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent className="flex flex-col gap-4">
                         {/* Срок аренды */}
