@@ -115,27 +115,27 @@ export default function ObjectsPage() {
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" className="text-sm font-normal">
+                  <PaginationPrevious href="#">
                     {t('objects.previous')}
                   </PaginationPrevious>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#" className="text-sm font-normal">
+                  <PaginationLink href="#">
                     1
                   </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#" isActive className="text-sm font-normal">
+                  <PaginationLink href="#" isActive>
                     2
                   </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#" className="text-sm font-normal">
+                  <PaginationLink href="#">
                     3
                   </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext href="#" className="text-sm font-normal">
+                  <PaginationNext href="#">
                     {t('objects.next')}
                   </PaginationNext>
                 </PaginationItem>
