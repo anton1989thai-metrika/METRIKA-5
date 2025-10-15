@@ -156,12 +156,12 @@ export default function HeaderFilters() {
                 <Input 
                   type="number" 
                   placeholder="От" 
-                  className="w-16"
+                  className="w-16 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <Input 
                   type="number" 
                   placeholder="До" 
-                  className="w-16"
+                  className="w-16 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>
@@ -173,12 +173,12 @@ export default function HeaderFilters() {
                 <Input 
                   type="number" 
                   placeholder="От" 
-                  className="w-14"
+                  className="w-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <Input 
                   type="number" 
                   placeholder="До" 
-                  className="w-14"
+                  className="w-14 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <Select value={filters.areaUnit} onValueChange={(value) => updateFilter('areaUnit', value)}>
                   <SelectTrigger className="w-16">
