@@ -292,7 +292,7 @@ export default function HeaderFilters() {
                       <div>
                         <h4 className="font-medium text-black mb-2">Количество санузлов</h4>
                         <div className="flex flex-wrap gap-2">
-                          {['Без', '1', '2', '3', 'Более 3'].map(option => (
+                          {['Без', '1', '2', '3', '4 и более'].map(option => (
                             <Button
                               key={option}
                               variant={filters.bathrooms?.includes(option) ? "default" : "outline"}
