@@ -249,15 +249,6 @@ export default function HeaderFilters() {
                       {/* Количество спален */}
                       <div>
                         <h4 className="font-medium text-black mb-2">Количество спален</h4>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          <Button
-                            variant={filters.isStudio ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => handleInputChange('isStudio', (!filters.isStudio).toString())}
-                          >
-                            Студия
-                          </Button>
-                        </div>
                         <div className="flex gap-2">
                           <Input 
                             type="number" 
