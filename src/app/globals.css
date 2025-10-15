@@ -255,7 +255,7 @@ input[type="checkbox"]:checked {
   --card-foreground: oklch(0 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0 0 0);
-  --primary: oklch(0.9 0.15 85);
+  --primary: #fff60b;
   --primary-foreground: oklch(0 0 0);
   --secondary: oklch(1 0 0);
   --secondary-foreground: oklch(0 0 0);
