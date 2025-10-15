@@ -45,6 +45,25 @@ const HospitalIcon = ({ className }: { className?: string }) => (
     <path d="M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16"/>
   </svg>
 );
+
+// Кастомная иконка для Тип и состояние (валик для покраски)
+const PaintRollerIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="16" height="6" x="2" y="2" rx="2"/>
+    <path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+    <rect width="4" height="6" x="8" y="16" rx="1"/>
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -433,7 +452,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="type">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <Hammer className="w-5 h-5" />
+                          <PaintRollerIcon className="w-5 h-5" />
                           <span>Тип и состояние</span>
                         </div>
                       </AccordionTrigger>
