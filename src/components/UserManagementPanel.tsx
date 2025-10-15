@@ -154,6 +154,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     roles: []
   })
   
+  // Состояние для отслеживания нажатий кнопок
+  const [isRoleButtonPressed, setIsRoleButtonPressed] = useState(false)
+  
   const [searchQuery, setSearchQuery] = useState('')
   const [filterRole, setFilterRole] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
@@ -207,6 +210,17 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     };
 
     fetchInitialUsers();
+    
+    // Загружаем сохраненные настройки ролей из localStorage
+    const savedRoleSettings = localStorage.getItem('roleSettings');
+    if (savedRoleSettings) {
+      try {
+        const parsedSettings = JSON.parse(savedRoleSettings);
+        setRoleSettings(prev => ({ ...prev, ...parsedSettings }));
+      } catch (error) {
+        console.error('Ошибка загрузки настроек ролей:', error);
+      }
+    }
   }, []);
 
   // Синхронизация пользователей с сервером
@@ -432,6 +446,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       [selectedRole]: rolePermissions as RoleSettings
     }));
     
+    // Сохраняем в localStorage для персистентности
+    const updatedRoleSettings = {
+      ...roleSettings,
+      [selectedRole]: rolePermissions as RoleSettings
+    };
+    localStorage.setItem('roleSettings', JSON.stringify(updatedRoleSettings));
+    
     console.log('Сохранение разрешений для роли:', selectedRole, rolePermissions)
     
     // В реальном приложении здесь была бы отправка на сервер
@@ -612,6 +633,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         hiddenTasksFrom: []
       }
     })
+    
+    // Устанавливаем состояние нажатия кнопки
+    setIsRoleButtonPressed(true)
+    
+    // Сбрасываем состояние через 2 секунды
+    setTimeout(() => {
+      setIsRoleButtonPressed(false)
+    }, 2000)
     
     // Индивидуальные разрешения сброшены к ролевым
   }
@@ -1952,7 +1981,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
               <button
                 onClick={saveRolePermissions}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                style={{ backgroundColor: '#fff60b' }}
               >
                 Применить
               </button>
@@ -2746,7 +2776,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             <div className="flex items-center justify-between p-6 border-t border-gray-300 bg-gray-50">
               <button
                 onClick={resetToRolePermissions}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                className={`px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all ${
+                  isRoleButtonPressed 
+                    ? 'text-black' 
+                    : 'bg-gray-600 text-white'
+                }`}
+                style={{
+                  backgroundColor: isRoleButtonPressed ? '#fff60b' : undefined
+                }}
               >
                 По роли
               </button>
@@ -2763,7 +2800,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </button>
                 <button
                   onClick={saveIndividualPermissions}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                  className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                  style={{ backgroundColor: '#fff60b' }}
                 >
                   Применить
                 </button>
