@@ -8,6 +8,15 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
 import Link from "next/link";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function ObjectsPage() {
   const { t } = useLanguage()
@@ -103,23 +112,35 @@ export default function ObjectsPage() {
           
           {/* Пагинация */}
           <div className="flex justify-center pb-8">
-            <div className="flex gap-2">
-              <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                {t('objects.previous')}
-              </button>
-              <button className="px-3 py-2 text-black rounded-md" style={{ backgroundColor: '#fff60b' }}>
-                1
-              </button>
-              <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                2
-              </button>
-              <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                3
-              </button>
-              <button className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                {t('objects.next')}
-              </button>
-            </div>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href="#" className="text-sm font-normal">
+                    {t('objects.previous')}
+                  </PaginationPrevious>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" className="text-sm font-normal">
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" isActive className="text-sm font-normal">
+                    2
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" className="text-sm font-normal">
+                    3
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext href="#" className="text-sm font-normal">
+                    {t('objects.next')}
+                  </PaginationNext>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </main>
