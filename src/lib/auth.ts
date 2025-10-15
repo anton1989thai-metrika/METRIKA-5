@@ -33,8 +33,12 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             login: user.login,
             permissions: user.permissions,
-            department: user.department,
-            phone: user.phone
+            dateOfBirth: (user as any).dateOfBirth,
+            phoneWork: (user as any).phoneWork,
+            phonePersonal: (user as any).phonePersonal,
+            address: (user as any).address,
+            userObjects: (user as any).userObjects,
+            comments: (user as any).comments
           }
         }
 
@@ -48,8 +52,12 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role
         token.login = user.login
         token.permissions = user.permissions
-        token.department = user.department
-        token.phone = user.phone
+        token.dateOfBirth = (user as any).dateOfBirth
+        token.phoneWork = (user as any).phoneWork
+        token.phonePersonal = (user as any).phonePersonal
+        token.address = (user as any).address
+        token.userObjects = (user as any).userObjects
+        token.comments = (user as any).comments
       }
       return token
     },
@@ -59,8 +67,12 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role
         session.user.login = token.login
         session.user.permissions = token.permissions
-        session.user.department = token.department
-        session.user.phone = token.phone
+        session.user.dateOfBirth = (token as any).dateOfBirth
+        session.user.phoneWork = (token as any).phoneWork
+        session.user.phonePersonal = (token as any).phonePersonal
+        session.user.address = (token as any).address
+        session.user.userObjects = (token as any).userObjects
+        session.user.comments = (token as any).comments
       }
       return session
     }

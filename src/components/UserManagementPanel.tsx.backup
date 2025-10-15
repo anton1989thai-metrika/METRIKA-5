@@ -1,0 +1,2312 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { arePermissionsStandard, getRoleDisplayName } from '@/lib/permissions'
+import {
+  Users,
+  UserPlus,
+  Edit,
+  Trash2,
+  Save,
+  X,
+  Check,
+  AlertTriangle,
+  Shield,
+  ShieldCheck,
+  Mail,
+  Phone,
+  Calendar,
+  MoreVertical,
+  Search,
+  Filter,
+  Eye,
+  EyeOff,
+  Key,
+  User,
+  UserCheck,
+  UserX,
+  Settings,
+  Lock,
+  Unlock,
+  Crown,
+  Star,
+  Clock,
+  Activity,
+  Plus,
+  Minus,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw,
+  Download,
+  Upload,
+  FileText,
+  BarChart,
+  Home,
+  Building,
+  LandPlot,
+  Store,
+  Factory,
+  Share,
+  MessageCircle,
+  Calculator,
+  Play,
+  QrCode,
+  Info,
+  Cloud,
+  Zap,
+  Image,
+  Tag,
+  Archive,
+  Copy,
+  Grid,
+  List,
+  Target,
+  Layers,
+  MapPin,
+  Video,
+  Music,
+  Folder,
+  Cog,
+  Link,
+  Link2,
+  Unlink,
+  ArrowUp,
+  ArrowDown,
+  RotateCcw,
+  PlayCircle,
+  PauseCircle,
+  StopCircle,
+  SkipForward,
+  SkipBack,
+  Volume2,
+  VolumeX,
+  Mic,
+  MicOff,
+  Camera,
+  CameraOff,
+  Monitor,
+  Smartphone,
+  Tablet,
+  Laptop,
+  Server,
+  HardDrive,
+  Wifi,
+  WifiOff,
+  Signal,
+  SignalZero,
+  Battery,
+  BatteryLow,
+  Power,
+  PowerOff,
+  Sun,
+  Moon,
+  Heart,
+  ThumbsUp,
+  ThumbsDown,
+  Smile,
+  Frown,
+  Meh,
+  Angry,
+  Laugh,
+  CheckSquare
+} from "lucide-react"
+import { User as UserType } from '@/data/users'; // Импортируем интерфейс User с алиасом
+
+interface UserManagementPanelProps {
+  onClose?: () => void
+}
+
+export default function UserManagementPanel({ onClose }: UserManagementPanelProps) {
+  const [users, setUsers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Загрузка пользователей при инициализации
+  useEffect(() => {
+    const fetchInitialUsers = async () => {
+      try {
+        const response = await fetch('/api/users');
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data: UserType[] = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching initial users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInitialUsers();
+  }, []);
+
+  // Обновление времени последнего сохранения
+  const updateLastSaved = () => {
+    setLastSaved(new Date());
+  };
+
+  // Синхронизация пользователей с сервером
+  const syncUsersWithServer = async (updatedUsers: UserType[]) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedUsers),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to sync users with server');
+      }
+      updateLastSaved();
+      console.log('Users synced with server successfully.');
+    } catch (error) {
+      console.error('Error syncing users with server:', error);
+      alert('Ошибка при синхронизации пользователей с сервером.');
+    }
+  };
+
+  const [activeTab, setActiveTab] = useState('list')
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
+  const [isCreatingUser, setIsCreatingUser] = useState(false)
+  const [isEditingUser, setIsEditingUser] = useState(false)
+  const [isUserCardOpen, setIsUserCardOpen] = useState(false)
+  const [selectedUserForCard, setSelectedUserForCard] = useState<UserType | null>(null)
+  
+  // Состояние для модального окна редактирования роли
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false)
+  const [selectedRole, setSelectedRole] = useState<string | null>(null)
+  const [rolePermissions, setRolePermissions] = useState<Record<string, boolean>>({
+    'profile': false,
+    'my-objects': false,
+    'email': false,
+    'academy': false,
+    'knowledge-base': false,
+    'tasks': false,
+    'admin': false
+  })
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterRole, setFilterRole] = useState<string>('all')
+  const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [sortBy, setSortBy] = useState<'name' | 'role' | 'lastLogin' | 'createdAt'>('name')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  
+  // State for permissions sub-tabs
+  const [selectedUserForPermissions, setSelectedUserForPermissions] = useState<UserType | null>(null)
+
+  // Новый пользователь
+  const [newUser, setNewUser] = useState<Partial<UserType>>({
+    name: '',
+    email: '',
+    login: '',
+    password: '',
+    role: 'employee',
+    status: 'pending',
+    permissions: {
+      canManageObjects: false,
+      canManageUsers: false,
+      canViewAnalytics: false,
+      canManageTasks: false,
+      canManageMedia: false,
+      canManageContent: false,
+      canManageSettings: false
+    },
+    dateOfBirth: '',
+    phoneWork: '',
+    phonePersonal: '',
+    address: '',
+    userObjects: [],
+    comments: ''
+  })
+
+  // Фильтрация и сортировка
+  const filteredUsers = users
+    .filter(user => {
+      if (searchQuery && !user.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !user.email.toLowerCase().includes(searchQuery.toLowerCase())) return false
+      if (filterRole !== 'all' && user.role !== filterRole) return false
+      if (filterStatus !== 'all' && user.status !== filterStatus) return false
+      return true
+    })
+    .sort((a, b) => {
+      let comparison = 0
+      switch (sortBy) {
+        case 'name':
+          comparison = a.name.localeCompare(b.name)
+          break
+        case 'role':
+          comparison = a.role.localeCompare(b.role)
+          break
+        case 'lastLogin':
+          comparison = new Date(a.lastLogin || 0).getTime() - new Date(b.lastLogin || 0).getTime()
+          break
+        case 'createdAt':
+          comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          break
+      }
+      return sortOrder === 'asc' ? comparison : -comparison
+    })
+
+  // Создание пользователя
+  const createUser = async () => {
+    if (!newUser.name || !newUser.email) {
+      alert('Пожалуйста, заполните обязательные поля: Имя и Email');
+      return;
+    }
+
+    // Проверка уникальности логина
+    if (newUser.login && users.some(user => user.login === newUser.login)) {
+      alert('Пользователь с таким логином уже существует');
+      return;
+    }
+
+    // Проверка уникальности email
+    if (users.some(user => user.email === newUser.email)) {
+      alert('Пользователь с таким email уже существует');
+      return;
+    }
+
+    const user: UserType = {
+      id: Date.now().toString(),
+      name: newUser.name,
+      email: newUser.email,
+      login: newUser.login,
+      password: newUser.password,
+      role: newUser.role || 'employee',
+      status: newUser.status || 'pending',
+      permissions: newUser.permissions || {
+        canManageObjects: false,
+        canManageUsers: false,
+        canViewAnalytics: false,
+        canManageTasks: false,
+        canManageMedia: false,
+        canManageContent: false,
+        canManageSettings: false
+      },
+      createdAt: new Date().toISOString(),
+      dateOfBirth: newUser.dateOfBirth,
+      phoneWork: newUser.phoneWork,
+      phonePersonal: newUser.phonePersonal,
+      address: newUser.address,
+      userObjects: newUser.userObjects || [],
+      comments: newUser.comments
+    }
+
+    const updatedUsers = [...users, user];
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
+    setNewUser({
+      name: '',
+      email: '',
+      login: '',
+      password: '',
+      role: 'employee',
+      status: 'pending',
+      permissions: {
+        canManageObjects: false,
+        canManageUsers: false,
+        canViewAnalytics: false,
+        canManageTasks: false,
+        canManageMedia: false,
+        canManageContent: false,
+        canManageSettings: false
+      },
+      dateOfBirth: '',
+      phoneWork: '',
+      phonePersonal: '',
+      address: '',
+      userObjects: [],
+      comments: ''
+    })
+    setIsCreatingUser(false)
+  }
+
+  // Обновление пользователя
+  const updateUser = async (userId: string, updates: Partial<UserType>) => {
+    // Проверка уникальности логина (исключая текущего пользователя)
+    if (updates.login && users.some(user => user.login === updates.login && user.id !== userId)) {
+      alert('Пользователь с таким логином уже существует');
+      return;
+    }
+
+    // Проверка уникальности email (исключая текущего пользователя)
+    if (updates.email && users.some(user => user.email === updates.email && user.id !== userId)) {
+      alert('Пользователь с таким email уже существует');
+      return;
+    }
+
+    const updatedUsers = users.map(user => 
+      user.id === userId ? { ...user, ...updates } : user
+    );
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
+    setIsEditingUser(false);
+    setSelectedUser(null);
+  }
+
+  // Удаление пользователя
+  const deleteUser = async (userId: string) => {
+    if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
+      const updatedUsers = users.filter(user => user.id !== userId);
+      setUsers(updatedUsers);
+      await syncUsersWithServer(updatedUsers);
+    }
+  }
+
+  // Переключение статуса
+  const toggleUserStatus = async (userId: string) => {
+    const updatedUsers = users.map(user => 
+      user.id === userId 
+        ? { ...user, status: user.status === 'active' ? 'inactive' as const : 'active' as const }
+        : user
+    );
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
+  }
+
+  // Обновление детальных разрешений
+  const updateDetailedPermission = async (userId: string, section: keyof NonNullable<UserType['detailedPermissions']>, permission: string, value: boolean) => {
+    const updatedUsers = users.map(user => {
+      if (user.id === userId) {
+        const updatedUser = { ...user };
+        if (!updatedUser.detailedPermissions) {
+          updatedUser.detailedPermissions = {
+            personalCabinet: { enabled: false },
+            myObjects: { enabled: false },
+            email: { enabled: false, viewMail: false, sendEmails: false, manageMailboxes: false, mailSettings: false },
+            academy: { enabled: false, dashboard: false, courses: false, tests: false, achievements: false, materials: false },
+            knowledgeBase: { enabled: false },
+            taskManager: { enabled: false, viewTasks: false, createTasks: false, assignExecutors: false, closeTasks: false, editTasks: false, changeExecutors: false, changeCurators: false, editSubtasks: false, editChecklists: false, viewOtherUsersTasks: false },
+            adminPanel: { enabled: false, dashboard: false, email: false, content: false, objects: false, users: false, tasks: false, media: false, hr: false, analytics: false, settings: false },
+            otherPermissions: { enabled: false, placeholder1: false, placeholder2: false, placeholder3: false, placeholder4: false }
+          };
+        }
+        
+        // Если включаем категорию, автоматически включаем все подразделы
+        if (permission === 'enabled' && value === true) {
+          const sectionData = updatedUser.detailedPermissions[section] as any;
+          if (sectionData) {
+            Object.keys(sectionData).forEach(key => {
+              if (key !== 'enabled') {
+                sectionData[key] = true;
+              }
+            });
+          }
+        }
+        
+        // Если отключаем категорию, автоматически отключаем все подразделы
+        if (permission === 'enabled' && value === false) {
+          const sectionData = updatedUser.detailedPermissions[section] as any;
+          if (sectionData) {
+            Object.keys(sectionData).forEach(key => {
+              if (key !== 'enabled') {
+                sectionData[key] = false;
+              }
+            });
+          }
+        }
+        
+        (updatedUser.detailedPermissions[section] as any)[permission] = value;
+        return updatedUser;
+      }
+      return user;
+    });
+    setUsers(updatedUsers);
+    await syncUsersWithServer(updatedUsers);
+  }
+
+  // Экспорт пользователей
+  const exportUsers = () => {
+    const dataStr = JSON.stringify(users, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `metrika_users_${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Импорт пользователей
+  const importUsers = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const importedUsers = JSON.parse(e.target?.result as string);
+        if (Array.isArray(importedUsers)) {
+          if (confirm('Это заменит всех текущих пользователей. Продолжить?')) {
+            setUsers(importedUsers);
+            await syncUsersWithServer(importedUsers);
+            alert('Пользователи успешно импортированы');
+          }
+        } else {
+          alert('Неверный формат файла');
+        }
+      } catch (error) {
+        alert('Ошибка при чтении файла');
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // Сброс к дефолтным пользователям
+  const resetToDefaults = async () => {
+    if (confirm('Это удалит всех текущих пользователей и загрузит дефолтных. Продолжить?')) {
+      // Загружаем дефолтных пользователей с сервера
+      try {
+        const response = await fetch('/api/users');
+        if (response.ok) {
+          const data = await response.json();
+          setUsers(data);
+          await syncUsersWithServer(data);
+          alert('Пользователи сброшены к дефолтным');
+        }
+      } catch (error) {
+        console.error('Error resetting to defaults:', error);
+        alert('Ошибка при сбросе к дефолтным пользователям');
+      }
+    }
+  };
+
+  // Функция для открытия модального окна редактирования роли
+  const openRoleModal = (role: string) => {
+    setSelectedRole(role)
+    
+    // Получаем базовые разрешения роли
+    const basePermissions: Record<string, boolean> = {
+      'profile': false,
+      'my-objects': false,
+      'email': false,
+      'academy': false,
+      'knowledge-base': false,
+      'tasks': false,
+      'admin': false
+    }
+
+    switch (role) {
+      case 'site-user':
+        basePermissions['profile'] = true
+        break
+      case 'client':
+        basePermissions['profile'] = true
+        basePermissions['my-objects'] = true
+        break
+      case 'foreign-employee':
+      case 'freelancer':
+        basePermissions['profile'] = true
+        basePermissions['my-objects'] = true
+        basePermissions['email'] = true
+        break
+      case 'employee':
+        basePermissions['profile'] = true
+        basePermissions['my-objects'] = true
+        basePermissions['email'] = true
+        basePermissions['academy'] = true
+        basePermissions['knowledge-base'] = true
+        basePermissions['tasks'] = true
+        break
+      case 'manager':
+        basePermissions['profile'] = true
+        basePermissions['my-objects'] = true
+        basePermissions['email'] = true
+        basePermissions['academy'] = true
+        basePermissions['knowledge-base'] = true
+        basePermissions['tasks'] = true
+        basePermissions['admin'] = true
+        break
+      case 'admin':
+        // Администратор видит всё
+        Object.keys(basePermissions).forEach(key => {
+          basePermissions[key] = true
+        })
+        break
+    }
+    
+    setRolePermissions(basePermissions)
+    setIsRoleModalOpen(true)
+  }
+
+  // Функция для сохранения изменений роли
+  const saveRolePermissions = () => {
+    // Здесь будет логика сохранения разрешений роли
+    console.log('Сохранение разрешений для роли:', selectedRole, rolePermissions)
+    setIsRoleModalOpen(false)
+    setSelectedRole(null)
+  }
+
+  // Получение иконки роли
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'admin': return <Crown className="w-4 h-4 text-gray-600" />
+      case 'manager': return <Star className="w-4 h-4 text-gray-600" />
+      case 'employee': return <UserCheck className="w-4 h-4 text-gray-600" />
+      case 'freelancer': return <User className="w-4 h-4 text-gray-600" />
+      case 'foreign-employee': return <User className="w-4 h-4 text-gray-600" />
+      case 'client': return <User className="w-4 h-4 text-gray-600" />
+      case 'site-user': return <User className="w-4 h-4 text-gray-600" />
+      default: return <User className="w-4 h-4 text-gray-600" />
+    }
+  }
+
+  // Получение цвета статуса
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-gray-100 text-gray-800'
+      case 'inactive': return 'bg-gray-100 text-gray-800'
+      case 'pending': return 'bg-gray-100 text-gray-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-lg text-gray-600">Загрузка пользователей...</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Заголовок */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-black">Управление пользователями</h2>
+          <p className="text-gray-600">Управление пользователями и их правами доступа</p>
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="text-sm text-gray-600">
+            Всего: {users.length} • Активных: {users.filter(u => u.status === 'active').length}
+            {lastSaved && (
+              <span className="ml-2 text-xs text-gray-500">
+                • Сохранено: {lastSaved.toLocaleTimeString()}
+              </span>
+            )}
+          </div>
+          
+          {/* Кнопка экспорта */}
+          <button
+            onClick={exportUsers}
+            className="px-3 py-2 text-gray-700 bg-gray-100 rounded-lg shadow-sm hover:shadow-md transition-all font-medium hover:bg-gray-200"
+          >
+            <Download className="w-4 h-4 inline mr-2" />
+            Экспорт
+          </button>
+          
+          {/* Кнопка импорта */}
+          <label className="px-3 py-2 text-gray-700 bg-gray-100 rounded-lg shadow-sm hover:shadow-md transition-all font-medium hover:bg-gray-200 cursor-pointer">
+            <Upload className="w-4 h-4 inline mr-2" />
+            Импорт
+            <input
+              type="file"
+              accept=".json"
+              onChange={importUsers}
+              className="hidden"
+            />
+          </label>
+          
+          {/* Кнопка сброса */}
+          <button
+            onClick={resetToDefaults}
+            className="px-3 py-2 text-red-700 bg-red-100 rounded-lg shadow-sm hover:shadow-md transition-all font-medium hover:bg-red-200"
+          >
+            <RefreshCw className="w-4 h-4 inline mr-2" />
+            Сброс
+          </button>
+          
+          <button
+            onClick={() => setIsCreatingUser(true)}
+            className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
+            style={{backgroundColor: '#fff60b'}}
+            onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+            onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+          >
+            <UserPlus className="w-4 h-4 inline mr-2" />
+            Добавить пользователя
+          </button>
+        </div>
+      </div>
+
+      {/* Навигация по вкладкам */}
+      <div className="flex border-b border-gray-300">
+        {[
+          { id: 'list', label: 'Список пользователей', icon: Users },
+          { id: 'permissions', label: 'Индивидуальные разрешения', icon: Shield },
+          { id: 'roles', label: 'Роли', icon: Crown },
+          { id: 'activity', label: 'Активность', icon: Activity }
+        ].map(tab => {
+          const IconComponent = tab.icon
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center space-x-2 px-4 py-3 border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? 'border-black text-black'
+                  : 'border-transparent text-gray-600 hover:text-black'
+              }`}
+            >
+              <IconComponent className="w-4 h-4" />
+              <span className="text-sm font-medium">{tab.label}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Содержимое вкладок */}
+      <div className="space-y-6">
+        {/* Список пользователей */}
+        {activeTab === 'list' && (
+          <div className="space-y-6">
+            {/* Фильтры и поиск */}
+            <div className="flex items-center space-x-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Поиск по имени или email..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  />
+                </div>
+              </div>
+              <select
+                value={filterRole}
+                onChange={(e) => setFilterRole(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+              >
+                <option value="all">Все роли</option>
+                <option value="site-user">Пользователь сайта</option>
+                <option value="client">Клиент Метрики</option>
+                <option value="foreign-employee">Иностранный сотрудник</option>
+                <option value="freelancer">Внештатный сотрудник</option>
+                <option value="employee">Сотрудник</option>
+                <option value="manager">Менеджер</option>
+                <option value="admin">Администратор</option>
+              </select>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+              >
+                <option value="all">Все статусы</option>
+                <option value="active">Активные</option>
+                <option value="inactive">Неактивные</option>
+                <option value="pending">Ожидают</option>
+              </select>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+              >
+                <option value="name">По имени</option>
+                <option value="role">По роли</option>
+                <option value="lastLogin">По последнему входу</option>
+                <option value="createdAt">По дате создания</option>
+              </select>
+              <button
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                className="px-3 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+              >
+                {sortOrder === 'asc' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {/* Таблица пользователей */}
+            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Пользователь</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Роль</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Статус</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Последний вход</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Права</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Действия</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredUsers.map(user => (
+                    <tr key={user.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() => {
+                              setSelectedUserForCard(user)
+                              setIsUserCardOpen(true)
+                            }}
+                            className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors cursor-pointer"
+                          >
+                            <User className="w-4 h-4 text-gray-600" />
+                          </button>
+                          <div>
+                            <div className="font-medium text-black">{user.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center space-x-2">
+                          {getRoleIcon(user.role)}
+                          <span className="text-sm font-medium text-black">{getRoleDisplayName(user.role)}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(user.status)}`}>
+                          {user.status === 'active' ? 'Активен' :
+                           user.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="text-sm text-gray-600">
+                          {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Никогда'}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          arePermissionsStandard(user) 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {arePermissionsStandard(user) ? 'Стандартные права' : 'Нестандартные права'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => {
+                              setSelectedUser(user)
+                              setIsEditingUser(true)
+                            }}
+                            className="px-3 py-1 bg-white border border-gray-300 text-black rounded text-sm hover:shadow-sm transition-all"
+                          >
+                            <Edit className="w-4 h-4 inline mr-1" />
+                            Редактировать
+                          </button>
+                          <button
+                            onClick={() => toggleUserStatus(user.id)}
+                            className={`px-3 py-1 rounded text-sm transition-all ${
+                              user.status === 'active' 
+                                ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' 
+                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                            }`}
+                          >
+                            {user.status === 'active' ? 'Деактивировать' : 'Активировать'}
+                          </button>
+                          <button
+                            onClick={() => deleteUser(user.id)}
+                            className="px-3 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200 transition-all"
+                          >
+                            <Trash2 className="w-4 h-4 inline mr-1" />
+                            Удалить
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Права доступа */}
+        {activeTab === 'permissions' && (
+          <div className="space-y-6">
+            {/* Заголовок и действия */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-black">Права доступа</h3>
+                <p className="text-sm text-gray-600">Управление ролями и разрешениями для всех разделов сайта</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  className="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all text-gray-700 hover:text-black"
+                >
+                  <Plus className="w-4 h-4 inline mr-2" />
+                  Создать роль
+                </button>
+                <button
+                  className="px-4 py-2 bg-black text-white rounded-lg shadow-sm hover:bg-gray-800 transition-all"
+                >
+                  <UserPlus className="w-4 h-4 inline mr-2" />
+                  Добавить пользователя
+                </button>
+              </div>
+            </div>
+
+            {/* Содержимое раздела "Индивидуальные разрешения" */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-lg font-semibold text-black">Выбор пользователя</h4>
+                  <p className="text-sm text-gray-600">Выберите пользователя для настройки детальных разрешений</p>
+                </div>
+              </div>
+
+              {/* Сетка пользователей */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {users.map(user => (
+                  <button
+                    key={user.id}
+                    onClick={() => setSelectedUserForPermissions(user)}
+                    className={`p-4 border rounded-lg text-left transition-all ${
+                      selectedUserForPermissions?.id === user.id
+                        ? 'border-black bg-gray-50'
+                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                        <User className="w-5 h-5 text-gray-600" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-black">{user.name}</div>
+                        <div className="text-sm text-gray-600">{user.email}</div>
+                        <div className="text-xs text-gray-500 capitalize">{user.role}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Детальные разрешения для выбранного пользователя */}
+              {selectedUserForPermissions && (
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h4 className="text-lg font-semibold text-black">
+                        Разрешения для {selectedUserForPermissions.name}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        Настройте детальные разрешения для всех разделов системы
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setSelectedUserForPermissions(null)}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-all"
+                    >
+                      <X className="w-4 h-4 inline mr-1" />
+                      Закрыть
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    {/* Личный кабинет */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.personalCabinet?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'personalCabinet', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Личный кабинет
+                      </h5>
+                    </div>
+
+                    {/* Мои объекты */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.myObjects?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'myObjects', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Мои объекты
+                      </h5>
+                    </div>
+
+                    {/* Email */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.email?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Email
+                      </h5>
+                      <div className="space-y-2 ml-6">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.email?.viewMail || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'viewMail', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Просмотр почты</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.email?.sendEmails || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'sendEmails', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Отправка писем</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.email?.manageMailboxes || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'manageMailboxes', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Управление ящиками</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.email?.mailSettings || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'email', 'mailSettings', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.email?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Настройки почты</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Академия */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.academy?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Академия
+                      </h5>
+                      <div className="space-y-2 ml-6">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.academy?.dashboard || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'dashboard', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Дашборд</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.academy?.courses || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'courses', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Курсы</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.academy?.tests || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'tests', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Тесты</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.academy?.achievements || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'achievements', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Достижения</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.academy?.materials || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'academy', 'materials', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.academy?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Материалы</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* База знаний */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.knowledgeBase?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'knowledgeBase', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        База знаний
+                      </h5>
+                    </div>
+
+                    {/* Менеджер задач */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.taskManager?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Менеджер задач
+                      </h5>
+                      <div className="space-y-2 ml-6">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.viewTasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'viewTasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Просмотр задач</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.createTasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'createTasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Создание задач</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.assignExecutors || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'assignExecutors', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Назначение исполнителей</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.closeTasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'closeTasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Закрытие задач</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.editTasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'editTasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Редактирование задач</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.changeExecutors || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'changeExecutors', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Изменение исполнителей</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.changeCurators || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'changeCurators', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Изменение кураторов</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.editSubtasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'editSubtasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Редактирование подзадач</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.editChecklists || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'editChecklists', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Редактирование чек-листов</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.taskManager?.viewOtherUsersTasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'taskManager', 'viewOtherUsersTasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.taskManager?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Видимость задач других пользователей</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Админ панель */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Админ панель
+                      </h5>
+                      <div className="space-y-2 ml-6">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.dashboard || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'dashboard', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Дашборд</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.email || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'email', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Email</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.content || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'content', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Контент</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.objects || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'objects', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Объекты</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.users || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'users', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Пользователи</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.tasks || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'tasks', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Задачи</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.media || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'media', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Медиа</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.hr || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'hr', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Кадры и бухгалтерия</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.analytics || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'analytics', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Аналитика</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.adminPanel?.settings || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'adminPanel', 'settings', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.adminPanel?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">Настройки</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Другие разрешения */}
+                    <div className="space-y-3">
+                      <h5 className="font-medium text-black flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled || false}
+                          onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'enabled', e.target.checked)}
+                          className="mr-2"
+                        />
+                        Другие разрешения
+                      </h5>
+                      <div className="space-y-2 ml-6">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder1 || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder1', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">В разработке</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder2 || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder2', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">В разработке</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder3 || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder3', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">В разработке</span>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedUserForPermissions.detailedPermissions?.otherPermissions?.placeholder4 || false}
+                            onChange={(e) => updateDetailedPermission(selectedUserForPermissions.id, 'otherPermissions', 'placeholder4', e.target.checked)}
+                            className="mr-2"
+                            disabled={!selectedUserForPermissions.detailedPermissions?.otherPermissions?.enabled}
+                          />
+                          <span className="text-sm text-gray-700">В разработке</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Роли */}
+        {activeTab === 'roles' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-black">Роли</h3>
+                <p className="text-sm text-gray-600">Управление ролями и их разрешениями</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  className="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all text-gray-700 hover:text-black"
+                >
+                  <Plus className="w-4 h-4 inline mr-2" />
+                  Создать роль
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Пользователь сайта */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Пользователь сайта</h4>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Базовый доступ к сайту</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Просмотр объектов</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Контакты</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('client')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Клиент Метрики</h4>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Расширенный доступ клиента</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Просмотр объектов</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Заявки</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('foreign-employee')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              </div>
+
+              {/* Иностранный сотрудник */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Иностранный сотрудник</h4>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Ограниченный доступ для иностранцев</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Собственные данные</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('admin')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              </div>
+
+              {/* Внештатный сотрудник */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Внештатный сотрудник</h4>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Доступ для фрилансеров</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Задачи</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Отчеты</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('employee')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              </div>
+
+              {/* Сотрудник */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <UserCheck className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Сотрудник</h4>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">8 пользователей</span>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Стандартный доступ сотрудника</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Задачи</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Объекты</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('admin')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              </div>
+
+              {/* Менеджер */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Star className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Менеджер</h4>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">1 пользователей</span>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Управленческий доступ</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Управление командой</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Отчеты</span>
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Аналитика</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('manager')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              </div>
+
+              {/* Администратор */}
+              <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Crown className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-black text-sm">Администратор</h4>
+                      <div className="flex items-center space-x-1 mt-1">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Системная</span>
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">1 пользователей</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
+                    <Edit className="w-3 h-3" />
+                  </button>
+                </div>
+                
+                <p className="text-xs text-gray-600 mb-3">Полный доступ к системе</p>
+                
+                <div className="space-y-1 mb-3">
+                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Полный доступ</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
+                  <button 
+                    onClick={() => openRoleModal('admin')}
+                    className="text-xs text-gray-600 hover:text-black transition-colors"
+                  >
+                    Редактировать
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {/* Активность */}
+        {activeTab === 'activity' && (
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-black">Активность пользователей</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Активных сегодня</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.status === 'active').length}</p>
+                  </div>
+                  <Activity className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Пользователей сайта</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'site-user').length}</p>
+                  </div>
+                  <User className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Клиентов</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'client').length}</p>
+                  </div>
+                  <User className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Иностранных сотрудников</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'foreign-employee').length}</p>
+                  </div>
+                  <User className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Внештатных сотрудников</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'freelancer').length}</p>
+                  </div>
+                  <User className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Сотрудников</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'employee').length}</p>
+                  </div>
+                  <UserCheck className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Менеджеров</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'manager').length}</p>
+                  </div>
+                  <Star className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Администраторов</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.role === 'admin').length}</p>
+                  </div>
+                  <Crown className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Ожидают активации</p>
+                    <p className="text-2xl font-bold text-black">{users.filter(u => u.status === 'pending').length}</p>
+                  </div>
+                  <Clock className="w-8 h-8 text-gray-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+              <h4 className="font-medium text-black mb-4">Последняя активность</h4>
+              <div className="space-y-3">
+                {users
+                  .filter(u => u.lastLogin)
+                  .sort((a, b) => new Date(b.lastLogin || 0).getTime() - new Date(a.lastLogin || 0).getTime())
+                  .slice(0, 5)
+                  .map(user => (
+                    <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4 text-gray-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-black">{user.name}</div>
+                          <div className="text-sm text-gray-600">{user.email}</div>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Никогда'}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+    {/* Модальные окна */}
+    {/* Модальное окно создания пользователя */}
+      {isCreatingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+              <h3 className="text-xl font-semibold text-black">Добавить пользователя</h3>
+              <button
+                onClick={() => setIsCreatingUser(false)}
+                className="p-1 text-gray-600 hover:text-black"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Имя</label>
+                  <input
+                    type="text"
+                    value={newUser.name || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите имя"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={newUser.email || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="user@metrika.direct"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
+                  <input
+                    type="text"
+                    value={newUser.login || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, login: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите логин"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
+                  <input
+                    type="password"
+                    value={newUser.password || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, password: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите пароль"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Роль</label>
+                  <select
+                    value={newUser.role || 'employee'}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, role: e.target.value as any }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  >
+                    <option value="site-user">Пользователь сайта</option>
+                    <option value="client">Клиент Метрики</option>
+                    <option value="foreign-employee">Иностранный сотрудник</option>
+                    <option value="freelancer">Внештатный сотрудник</option>
+                    <option value="employee">Сотрудник</option>
+                    <option value="manager">Менеджер</option>
+                    <option value="admin">Администратор</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Телефон</label>
+                  <input
+                    type="tel"
+                    value={newUser.phoneWork || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, phoneWork: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="+7 (999) 123-45-67"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
+                  <input
+                    type="tel"
+                    value={newUser.phonePersonal || ''}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, phonePersonal: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="+7 (999) 123-45-68"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Статус</label>
+                  <select
+                    value={newUser.status || 'pending'}
+                    onChange={(e) => setNewUser(prev => ({ ...prev, status: e.target.value as any }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  >
+                    <option value="pending">Ожидает активации</option>
+                    <option value="active">Активен</option>
+                    <option value="inactive">Неактивен</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Примечания</label>
+                <textarea
+                  value={newUser.comments || ''}
+                  onChange={(e) => setNewUser(prev => ({ ...prev, comments: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  rows={3}
+                  placeholder="Дополнительная информация о пользователе..."
+                />
+              </div>
+
+            </div>
+
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+              <button
+                onClick={() => setIsCreatingUser(false)}
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={createUser}
+                className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
+                <UserPlus className="w-4 h-4 inline mr-2" />
+                Создать пользователя
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно редактирования пользователя */}
+      {isEditingUser && selectedUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+              <h3 className="text-xl font-semibold text-black">Редактировать пользователя</h3>
+              <button
+                onClick={() => {
+                  setIsEditingUser(false)
+                  setSelectedUser(null)
+                }}
+                className="p-1 text-gray-600 hover:text-black"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Имя</label>
+                  <input
+                    type="text"
+                    value={selectedUser.name}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, name: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={selectedUser.email}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, email: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
+                  <input
+                    type="text"
+                    value={selectedUser.login || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, login: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите логин"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
+                  <input
+                    type="password"
+                    value={selectedUser.password || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, password: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="Введите пароль"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Роль</label>
+                  <select
+                    value={selectedUser.role}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, role: e.target.value as any } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  >
+                    <option value="site-user">Пользователь сайта</option>
+                    <option value="client">Клиент Метрики</option>
+                    <option value="foreign-employee">Иностранный сотрудник</option>
+                    <option value="freelancer">Внештатный сотрудник</option>
+                    <option value="employee">Сотрудник</option>
+                    <option value="manager">Менеджер</option>
+                    <option value="admin">Администратор</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
+                  <input
+                    type="text"
+                    value={selectedUser.dateOfBirth || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, dateOfBirth: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="ДД.ММ.ГГГГ"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
+                  <input
+                    type="tel"
+                    value={selectedUser.phoneWork || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, phoneWork: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="+7 (999) 123-45-67"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
+                  <input
+                    type="tel"
+                    value={selectedUser.phonePersonal || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, phonePersonal: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="+7 (999) 123-45-68"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Адрес</label>
+                  <input
+                    type="text"
+                    value={selectedUser.address || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, address: e.target.value } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    placeholder="г. Москва, ул. Примерная, д. 1"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Статус</label>
+                  <select
+                    value={selectedUser.status}
+                    onChange={(e) => setSelectedUser(prev => prev ? { ...prev, status: e.target.value as any } : null)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  >
+                    <option value="pending">Ожидает активации</option>
+                    <option value="active">Активен</option>
+                    <option value="inactive">Неактивен</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
+                <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
+                  <div className="text-sm text-gray-500">
+                    Список объектов будет отображаться здесь после реализации функционала
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
+                <textarea
+                  value={selectedUser.comments || ''}
+                  onChange={(e) => setSelectedUser(prev => prev ? { ...prev, comments: e.target.value } : null)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  rows={3}
+                  placeholder="Дополнительная информация о пользователе..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
+                <input
+                  type="text"
+                  value={new Date(selectedUser.createdAt).toLocaleDateString()}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-500 bg-gray-100"
+                  disabled
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+              <button
+                onClick={() => {
+                  setIsEditingUser(false)
+                  setSelectedUser(null)
+                }}
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={() => updateUser(selectedUser.id, selectedUser)}
+                className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              >
+                <Save className="w-4 h-4 inline mr-2" />
+                Сохранить изменения
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно "Карточка пользователя" */}
+      {isUserCardOpen && selectedUserForCard && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+              <h3 className="text-xl font-semibold text-black">Карточка пользователя</h3>
+              <button
+                onClick={() => {
+                  setIsUserCardOpen(false)
+                  setSelectedUserForCard(null)
+                }}
+                className="p-1 text-gray-600 hover:text-black"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Основная информация */}
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-gray-600" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-semibold text-black">{selectedUserForCard.name}</h4>
+                  <p className="text-gray-600">{selectedUserForCard.email}</p>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(selectedUserForCard.status)}`}>
+                      {selectedUserForCard.status === 'active' ? 'Активен' :
+                       selectedUserForCard.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
+                    </span>
+                    <span className="text-sm text-gray-500 capitalize">{selectedUserForCard.role}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Детальная информация */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Логин</label>
+                    <p className="text-black">{selectedUserForCard.login || 'Не указан'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Дата рождения</label>
+                    <p className="text-black">{selectedUserForCard.dateOfBirth || 'Не указана'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Рабочий телефон</label>
+                    <p className="text-black">{selectedUserForCard.phoneWork || 'Не указан'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Личный телефон</label>
+                    <p className="text-black">{selectedUserForCard.phonePersonal || 'Не указан'}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Адрес</label>
+                    <p className="text-black">{selectedUserForCard.address || 'Не указан'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Дата создания</label>
+                    <p className="text-black">{new Date(selectedUserForCard.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Последний вход</label>
+                    <p className="text-black">
+                      {selectedUserForCard.lastLogin ? new Date(selectedUserForCard.lastLogin).toLocaleString() : 'Никогда'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Объекты пользователя */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Объекты пользователя</label>
+                <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
+                  {selectedUserForCard.userObjects && selectedUserForCard.userObjects.length > 0 ? (
+                    <div className="space-y-2">
+                      {selectedUserForCard.userObjects.map((objectId, index) => (
+                        <div key={index} className="p-2 bg-white rounded border text-sm">
+                          Объект {objectId} (функционал в разработке)
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-500">Объекты не назначены</div>
+                  )}
+                </div>
+              </div>
+
+              {/* Комментарии */}
+              {selectedUserForCard.comments && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Комментарии</label>
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <p className="text-black">{selectedUserForCard.comments}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+              <button
+                onClick={() => {
+                  setIsUserCardOpen(false)
+                  setSelectedUserForCard(null)
+                }}
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Модальные окна */}
+    {/* Модальное окно редактирования роли */}
+      {isRoleModalOpen && selectedRole && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+              <h3 className="text-xl font-semibold text-black">
+                Редактирование роли: {getRoleDisplayName(selectedRole)}
+              </h3>
+              <button
+                onClick={() => {
+                  setIsRoleModalOpen(false)
+                  setSelectedRole(null)
+                }}
+                className="p-1 text-gray-600 hover:text-black"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Чекбоксы разрешений */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-medium text-black">Разрешения доступа</h4>
+                
+                <div className="space-y-3">
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['profile']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'profile': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Личный кабинет</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['my-objects']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'my-objects': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Мои объекты</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['email']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'email': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Email</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['academy']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'academy': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Академия</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['knowledge-base']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'knowledge-base': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">База знаний</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['tasks']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'tasks': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Менеджер задач</span>
+                  </label>
+                  
+                  <label className="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={rolePermissions['admin']}
+                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'admin': e.target.checked }))}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-black">Админ панель</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+              <button
+                onClick={() => {
+                  setIsRoleModalOpen(false)
+                  setSelectedRole(null)
+                }}
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+              >
+                Отменить
+              </button>
+              <button
+                onClick={saveRolePermissions}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+              >
+                Применить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

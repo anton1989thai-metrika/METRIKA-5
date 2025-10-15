@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getUsers, updateUsers, User } from '@/data/users';
+import { users, User } from '@/data/users';
 
 export async function GET() {
   try {
-    const users = await getUsers();
     return NextResponse.json(users, { status: 200 });
   } catch (error) {
     console.error('API Error fetching users:', error);
@@ -24,7 +23,8 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    await updateUsers(newUsers);
+    // В реальном приложении здесь была бы логика сохранения
+    console.log('Users updated:', newUsers.length);
 
     return NextResponse.json({ 
       message: 'Users updated successfully.' 

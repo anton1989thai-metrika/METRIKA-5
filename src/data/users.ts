@@ -1,8 +1,4 @@
-import fs from 'fs/promises';
-import path from 'path';
-
-// Путь к файлу с сохраненными пользователями
-const PERSISTED_USERS_FILE = path.join(process.cwd(), 'src', 'data', 'persisted-users.json');
+// Статические данные пользователей
 
 export interface User {
   id: string;
@@ -10,7 +6,7 @@ export interface User {
   email: string;
   login?: string;
   password?: string;
-  role: 'admin' | 'manager' | 'agent' | 'employee';
+  role: 'site-user' | 'client' | 'foreign-employee' | 'freelancer' | 'employee' | 'manager' | 'admin';
   status: 'active' | 'inactive' | 'pending';
   permissions: {
     canManageObjects: boolean;
@@ -75,17 +71,23 @@ export interface User {
     };
     otherPermissions: {
       enabled: boolean;
-      placeholder1: boolean;
-      placeholder2: boolean;
-      placeholder3: boolean;
-      placeholder4: boolean;
+      canChangeExecutorInOwnTasks: boolean;
+      canChangeCuratorInOwnTasks: boolean;
+      cannotEditTasksFrom: string[];
+      canCreateHiddenTasks: boolean;
+      canViewHiddenTasks: boolean;
+      hiddenTasksFrom: string[];
     };
   };
   lastLogin?: string;
   createdAt: string;
-  phone?: string;
-  department?: string;
-  notes?: string;
+  // Новые поля
+  dateOfBirth?: string; // Дата рождения (формат: ДД.ММ.ГГГГ)
+  phoneWork?: string; // Рабочий телефон
+  phonePersonal?: string; // Личный телефон
+  address?: string; // Адрес
+  userObjects?: string[]; // ID объектов пользователя
+  comments?: string; // Комментарии
 }
 
 // Дефолтные пользователи
@@ -160,17 +162,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T10:30:00Z',
     createdAt: '2023-06-01T00:00:00Z',
-    phone: '+7 (999) 123-45-67',
-    department: 'Руководство',
-    notes: 'Основатель компании'
+    dateOfBirth: '15.03.1985',
+    phoneWork: '+7 (999) 123-45-67',
+    phonePersonal: '+7 (999) 123-45-68',
+    address: 'г. Москва, ул. Тверская, д. 1',
+    userObjects: ['obj1', 'obj2'],
+    comments: 'Основатель компании'
   },
   {
     id: '2',
@@ -242,17 +249,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T09:15:00Z',
     createdAt: '2023-08-15T00:00:00Z',
-    phone: '+7 (999) 234-56-78',
-    department: 'Продажи',
-    notes: 'Ведущий менеджер'
+    dateOfBirth: '22.07.1990',
+    phoneWork: '+7 (999) 234-56-78',
+    phonePersonal: '+7 (999) 234-56-79',
+    address: 'г. Москва, ул. Арбат, д. 10',
+    userObjects: ['obj3'],
+    comments: 'Ведущий менеджер'
   },
   {
     id: '3',
@@ -260,7 +272,7 @@ export const defaultUsers: User[] = [
     email: 'maslova@metrika.direct',
     login: 'maslova',
     password: 'agent123',
-    role: 'agent',
+    role: 'employee',
     status: 'active',
     permissions: {
       canManageObjects: true,
@@ -324,17 +336,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T08:45:00Z',
     createdAt: '2023-10-01T00:00:00Z',
-    phone: '+7 (999) 345-67-89',
-    department: 'Продажи',
-    notes: 'Агент по недвижимости'
+    dateOfBirth: '10.05.1988',
+    phoneWork: '+7 (999) 345-67-89',
+    phonePersonal: '+7 (999) 345-67-90',
+    address: 'г. Москва, ул. Ленина, д. 5',
+    userObjects: ['obj4', 'obj5'],
+    comments: 'Агент по недвижимости'
   },
   {
     id: '4',
@@ -342,7 +359,7 @@ export const defaultUsers: User[] = [
     email: 'ionin@metrika.direct',
     login: 'ionin',
     password: 'agent123',
-    role: 'agent',
+    role: 'employee',
     status: 'active',
     permissions: {
       canManageObjects: true,
@@ -406,17 +423,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T08:30:00Z',
     createdAt: '2023-10-15T00:00:00Z',
-    phone: '+7 (999) 456-78-90',
-    department: 'Продажи',
-    notes: 'Агент по недвижимости'
+    dateOfBirth: '18.12.1992',
+    phoneWork: '+7 (999) 456-78-90',
+    phonePersonal: '+7 (999) 456-78-91',
+    address: 'г. Москва, ул. Красная, д. 15',
+    userObjects: ['obj6'],
+    comments: 'Агент по недвижимости'
   },
   {
     id: '5',
@@ -424,7 +446,7 @@ export const defaultUsers: User[] = [
     email: 'shirokikh@metrika.direct',
     login: 'shirokikh',
     password: 'agent123',
-    role: 'agent',
+    role: 'employee',
     status: 'active',
     permissions: {
       canManageObjects: true,
@@ -488,17 +510,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T08:15:00Z',
     createdAt: '2023-11-01T00:00:00Z',
-    phone: '+7 (999) 567-89-01',
-    department: 'Продажи',
-    notes: 'Агент по недвижимости'
+    dateOfBirth: '25.09.1987',
+    phoneWork: '+7 (999) 567-89-01',
+    phonePersonal: '+7 (999) 567-89-02',
+    address: 'г. Москва, ул. Пушкина, д. 20',
+    userObjects: ['obj7', 'obj8'],
+    comments: 'Агент по недвижимости'
   },
   {
     id: '6',
@@ -506,7 +533,7 @@ export const defaultUsers: User[] = [
     email: 'berdnik@metrika.direct',
     login: 'berdnik',
     password: 'agent123',
-    role: 'agent',
+    role: 'employee',
     status: 'active',
     permissions: {
       canManageObjects: true,
@@ -570,17 +597,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T08:00:00Z',
     createdAt: '2023-11-15T00:00:00Z',
-    phone: '+7 (999) 678-90-12',
-    department: 'Продажи',
-    notes: 'Агент по недвижимости'
+    dateOfBirth: '03.11.1991',
+    phoneWork: '+7 (999) 678-90-12',
+    phonePersonal: '+7 (999) 678-90-13',
+    address: 'г. Москва, ул. Гагарина, д. 25',
+    userObjects: ['obj9'],
+    comments: 'Агент по недвижимости'
   },
   {
     id: '7',
@@ -588,7 +620,7 @@ export const defaultUsers: User[] = [
     email: 'derik@metrika.direct',
     login: 'derik',
     password: 'agent123',
-    role: 'agent',
+    role: 'employee',
     status: 'active',
     permissions: {
       canManageObjects: true,
@@ -652,17 +684,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-15T07:45:00Z',
     createdAt: '2023-12-01T00:00:00Z',
-    phone: '+7 (999) 789-01-23',
-    department: 'Продажи',
-    notes: 'Агент по недвижимости'
+    dateOfBirth: '14.06.1989',
+    phoneWork: '+7 (999) 789-01-23',
+    phonePersonal: '+7 (999) 789-01-24',
+    address: 'г. Москва, ул. Мира, д. 30',
+    userObjects: ['obj10'],
+    comments: 'Агент по недвижимости'
   },
   {
     id: '8',
@@ -734,17 +771,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-14T17:30:00Z',
     createdAt: '2023-12-15T00:00:00Z',
-    phone: '+7 (999) 890-12-34',
-    department: 'Администрация',
-    notes: 'Секретарь'
+    dateOfBirth: '28.02.1995',
+    phoneWork: '+7 (999) 890-12-34',
+    phonePersonal: '+7 (999) 890-12-35',
+    address: 'г. Москва, ул. Советская, д. 35',
+    userObjects: [],
+    comments: 'Секретарь'
   },
   {
     id: '9',
@@ -816,17 +858,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-14T17:15:00Z',
     createdAt: '2024-01-01T00:00:00Z',
-    phone: '+7 (999) 901-23-45',
-    department: 'Администрация',
-    notes: 'Секретарь'
+    dateOfBirth: '07.08.1993',
+    phoneWork: '+7 (999) 901-23-45',
+    phonePersonal: '+7 (999) 901-23-46',
+    address: 'г. Москва, ул. Комсомольская, д. 40',
+    userObjects: [],
+    comments: 'Секретарь'
   },
   {
     id: '10',
@@ -898,17 +945,22 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-14T17:00:00Z',
     createdAt: '2024-01-15T00:00:00Z',
-    phone: '+7 (999) 012-34-56',
-    department: 'Администрация',
-    notes: 'Секретарь'
+    dateOfBirth: '19.04.1994',
+    phoneWork: '+7 (999) 012-34-56',
+    phonePersonal: '+7 (999) 012-34-57',
+    address: 'г. Москва, ул. Парковая, д. 45',
+    userObjects: [],
+    comments: 'Секретарь'
   },
   {
     id: '11',
@@ -980,45 +1032,24 @@ export const defaultUsers: User[] = [
       },
       otherPermissions: {
         enabled: true,
-        placeholder1: true,
-        placeholder2: true,
-        placeholder3: true,
-        placeholder4: true
+        canChangeExecutorInOwnTasks: true,
+        canChangeCuratorInOwnTasks: true,
+        cannotEditTasksFrom: [],
+        canCreateHiddenTasks: true,
+        canViewHiddenTasks: true,
+        hiddenTasksFrom: []
       }
     },
     lastLogin: '2024-01-14T16:45:00Z',
     createdAt: '2024-01-20T00:00:00Z',
-    phone: '+7 (999) 123-45-78',
-    department: 'Администрация',
-    notes: 'Секретарь'
+    dateOfBirth: '12.10.1996',
+    phoneWork: '+7 (999) 123-45-78',
+    phonePersonal: '+7 (999) 123-45-79',
+    address: 'г. Москва, ул. Садовая, д. 50',
+    userObjects: [],
+    comments: 'Секретарь'
   }
 ];
 
-// Функция для получения пользователей (приоритет - файл с сохраненными данными)
-export const getUsers = async (): Promise<User[]> => {
-  try {
-    const data = await fs.readFile(PERSISTED_USERS_FILE, 'utf-8');
-    const persistedUsers: User[] = JSON.parse(data);
-    if (Array.isArray(persistedUsers) && persistedUsers.length > 0) {
-      return persistedUsers;
-    }
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
-      console.log('persisted-users.json не найден, возвращаем дефолтных пользователей.');
-    } else {
-      console.error('Ошибка чтения persisted-users.json:', error);
-    }
-  }
-  return defaultUsers;
-};
-
-// Функция для обновления пользователей в файле
-export const updateUsers = async (newUsers: User[]): Promise<void> => {
-  try {
-    await fs.writeFile(PERSISTED_USERS_FILE, JSON.stringify(newUsers, null, 2), 'utf-8');
-    console.log('Пользователи успешно сохранены в файл.');
-  } catch (error) {
-    console.error('Ошибка записи в persisted-users.json:', error);
-    throw new Error('Не удалось сохранить пользователей.');
-  }
-};
+// Экспорт дефолтных пользователей
+export { defaultUsers as users };

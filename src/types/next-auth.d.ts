@@ -16,8 +16,12 @@ declare module "next-auth" {
         canManageContent: boolean
         canManageSettings: boolean
       }
-      department?: string
-      phone?: string
+      dateOfBirth?: string
+      phoneWork?: string
+      phonePersonal?: string
+      address?: string
+      userObjects?: string[]
+      comments?: string
     } & DefaultSession["user"]
   }
 
@@ -33,8 +37,12 @@ declare module "next-auth" {
       canManageContent: boolean
       canManageSettings: boolean
     }
-    department?: string
-    phone?: string
+    dateOfBirth?: string
+    phoneWork?: string
+    phonePersonal?: string
+    address?: string
+    userObjects?: string[]
+    comments?: string
   }
 }
 
@@ -51,7 +59,11 @@ declare module "next-auth/jwt" {
       canManageContent: boolean
       canManageSettings: boolean
     }
-    department?: string
-    phone?: string
+    dateOfBirth?: string
+    phoneWork?: string
+    phonePersonal?: string
+    address?: string
+    userObjects?: string[]
+    comments?: string
   }
 }

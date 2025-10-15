@@ -143,7 +143,7 @@ export default function BurgerMenu() {
     
     // Для авторизованных пользователей проверяем разрешения
     if (session && currentUser) {
-      const section = href.replace('/', '') || 'profile'
+      const section = href.replace('/', '') || 'home'
       const hasAccess = hasPermission(currentUser, section)
       console.log(`Проверка доступа к ${section}:`, hasAccess, currentUser.detailedPermissions)
       return hasAccess
@@ -154,7 +154,7 @@ export default function BurgerMenu() {
   }
   
   const filteredMenuItems = menuItemsWithTranslations.filter(item => 
-    item.roles.includes(userRole) && canAccessSection(item.href)
+    canAccessSection(item.href)
   )
 
   const handleSignOut = () => {

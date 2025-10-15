@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
-import { getUsers } from '@/data/users'
+import { users } from '@/data/users'
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
     }
     
     // Получаем данные пользователя
-    const users = await getUsers()
     console.log('API /user - загружены пользователи:', users.length)
     const user = users.find(u => u.email === token.email || u.login === token.email)
     console.log('API /user - найден пользователь:', user?.name)
