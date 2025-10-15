@@ -653,7 +653,7 @@ export default function ObjectManagementPanel() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+            className="medusa-form-select"
           >
             <option value="all">Все статусы</option>
             <option value="published">Опубликовано</option>
@@ -664,7 +664,7 @@ export default function ObjectManagementPanel() {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+            className="medusa-form-select"
           >
             <option value="all">Все типы</option>
             {PROPERTY_TYPES.map(type => (
@@ -675,7 +675,7 @@ export default function ObjectManagementPanel() {
           <select
             value={agentFilter}
             onChange={(e) => setAgentFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+            className="medusa-form-select"
           >
             <option value="all">Все агенты</option>
             {AGENTS.map(agent => (

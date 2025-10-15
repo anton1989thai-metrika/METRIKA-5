@@ -4,11 +4,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
 import { useState } from "react";
 import AdditionalFiltersModal from "./AdditionalFiltersModal";
+import { ChevronDown } from "lucide-react";
 
 export default function HeaderFilters() {
   const { t } = useLanguage();
   const { filters, updateFilter } = useFilters();
   const [isAdditionalFiltersOpen, setIsAdditionalFiltersOpen] = useState(false);
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
+  const [isOperationDropdownOpen, setIsOperationDropdownOpen] = useState(false);
 
   // Обработчик изменения фильтра по стране (множественный выбор)
   const handleCountryChange = (country: string) => {
@@ -37,182 +41,163 @@ export default function HeaderFilters() {
     updateFilter('operationType', newOperations);
   };
 
+  const countries = [
+    { id: 'russia', name: 'Россия' },
+    { id: 'thailand', name: 'Таиланд' },
+    { id: 'china', name: 'Китай' },
+    { id: 'south-korea', name: 'Южная Корея' }
+  ];
+
+  const propertyTypes = [
+    { id: 'apartment', name: 'Квартира' },
+    { id: 'house', name: 'Дом' },
+    { id: 'land', name: 'Участок' },
+    { id: 'commercial', name: 'Коммерция' },
+    { id: 'building', name: 'Здание' },
+    { id: 'nonCapital', name: 'Некопитальный' },
+    { id: 'shares', name: 'Доля' }
+  ];
+
+  const operationTypes = [
+    { id: 'sale', name: 'Продажа' },
+    { id: 'rent', name: 'Аренда' }
+  ];
+
   return (
     <>
-      <div className="bg-gray-50 border-b border-gray-200 py-3">
+      <div className="bg-white border-b border-gray-200 py-4">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-wrap gap-3 justify-center items-center">
-            {/* Страна */}
-            <div className="flex items-center gap-2">
-              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Страна:</span>
-              <div className="flex gap-1">
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.country?.includes('russia') || false}
-                    onChange={() => handleCountryChange('russia')}
-                  />
-                  <span className="text-base text-gray-700">Россия</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.country?.includes('thailand') || false}
-                    onChange={() => handleCountryChange('thailand')}
-                  />
-                  <span className="text-base text-gray-700">Таиланд</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.country?.includes('china') || false}
-                    onChange={() => handleCountryChange('china')}
-                  />
-                  <span className="text-base text-gray-700">Китай</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.country?.includes('south-korea') || false}
-                    onChange={() => handleCountryChange('south-korea')}
-                  />
-                  <span className="text-base text-gray-700">Южная Корея</span>
-                </label>
-              </div>
+          <div className="flex flex-wrap gap-4 justify-center items-center">
+            
+            {/* Страна - Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                className="medusa-select min-w-[120px]"
+              >
+                <span className="text-sm font-medium text-gray-700">
+                  {filters.country?.length > 0 
+                    ? `${filters.country.length} выбрано` 
+                    : 'Страна'
+                  }
+                </span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+              
+              {isCountryDropdownOpen && (
+                <div className="medusa-dropdown">
+                  {countries.map(country => (
+                    <label key={country.id} className="medusa-dropdown-item">
+                      <input
+                        type="checkbox"
+                        className="medusa-checkbox mr-2"
+                        checked={filters.country?.includes(country.id) || false}
+                        onChange={() => handleCountryChange(country.id)}
+                      />
+                      {country.name}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Тип недвижимости */}
-            <div className="flex items-center gap-2">
-              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Тип:</span>
-              <div className="flex gap-1 flex-wrap">
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('apartment') || false}
-                    onChange={() => handlePropertyTypeChange('apartment')}
-                  />
-                  <span className="text-base text-gray-700">Квартира</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('house') || false}
-                    onChange={() => handlePropertyTypeChange('house')}
-                  />
-                  <span className="text-base text-gray-700">Дом</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('land') || false}
-                    onChange={() => handlePropertyTypeChange('land')}
-                  />
-                  <span className="text-base text-gray-700">Участок</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('commercial') || false}
-                    onChange={() => handlePropertyTypeChange('commercial')}
-                  />
-                  <span className="text-base text-gray-700">Коммерция</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('building') || false}
-                    onChange={() => handlePropertyTypeChange('building')}
-                  />
-                  <span className="text-base text-gray-700">Здание</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('nonCapital') || false}
-                    onChange={() => handlePropertyTypeChange('nonCapital')}
-                  />
-                  <span className="text-base text-gray-700">Некопитальный</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.propertyType?.includes('shares') || false}
-                    onChange={() => handlePropertyTypeChange('shares')}
-                  />
-                  <span className="text-base text-gray-700">Доля</span>
-                </label>
-              </div>
+            {/* Тип недвижимости - Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
+                className="medusa-select min-w-[140px]"
+              >
+                <span className="text-sm font-medium text-gray-700">
+                  {filters.propertyType?.length > 0 
+                    ? `${filters.propertyType.length} выбрано` 
+                    : 'Тип'
+                  }
+                </span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+              
+              {isTypeDropdownOpen && (
+                <div className="medusa-dropdown">
+                  {propertyTypes.map(type => (
+                    <label key={type.id} className="medusa-dropdown-item">
+                      <input
+                        type="checkbox"
+                        className="medusa-checkbox mr-2"
+                        checked={filters.propertyType?.includes(type.id) || false}
+                        onChange={() => handlePropertyTypeChange(type.id)}
+                      />
+                      {type.name}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Тип операции */}
-            <div className="flex items-center gap-2">
-              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Операция:</span>
-              <div className="flex gap-1">
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.operationType?.includes('sale') || false}
-                    onChange={() => handleOperationTypeChange('sale')}
-                  />
-                  <span className="text-base text-gray-700">Продажа</span>
-                </label>
-                <label className="flex items-center">
-                  <input 
-                    type="checkbox" 
-                    className="mr-1 w-4 h-4 border border-gray-300 rounded shadow-sm custom-checkbox" 
-                    checked={filters.operationType?.includes('rent') || false}
-                    onChange={() => handleOperationTypeChange('rent')}
-                  />
-                  <span className="text-base text-gray-700">Аренда</span>
-                </label>
-              </div>
+            {/* Тип операции - Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsOperationDropdownOpen(!isOperationDropdownOpen)}
+                className="medusa-select min-w-[120px]"
+              >
+                <span className="text-sm font-medium text-gray-700">
+                  {filters.operationType?.length > 0 
+                    ? `${filters.operationType.length} выбрано` 
+                    : 'Операция'
+                  }
+                </span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+              
+              {isOperationDropdownOpen && (
+                <div className="medusa-dropdown">
+                  {operationTypes.map(operation => (
+                    <label key={operation.id} className="medusa-dropdown-item">
+                      <input
+                        type="checkbox"
+                        className="medusa-checkbox mr-2"
+                        checked={filters.operationType?.includes(operation.id) || false}
+                        onChange={() => handleOperationTypeChange(operation.id)}
+                      />
+                      {operation.name}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Цена */}
             <div className="flex items-center gap-2">
-              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Цена:</span>
-              <div className="flex gap-1">
+              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Цена:</span>
+              <div className="flex gap-2">
                 <input 
                   type="number" 
                   placeholder="От" 
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="medusa-input w-20"
                 />
                 <input 
                   type="number" 
                   placeholder="До" 
-                  className="w-20 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="medusa-input w-20"
                 />
               </div>
             </div>
 
             {/* Площадь */}
             <div className="flex items-center gap-2">
-              <span className="text-base font-medium text-gray-600 whitespace-nowrap">Площадь:</span>
-              <div className="flex gap-1">
+              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Площадь:</span>
+              <div className="flex gap-2">
                 <input 
                   type="number" 
                   placeholder="От" 
-                  className="w-16 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="medusa-input w-16"
                 />
                 <input 
                   type="number" 
                   placeholder="До" 
-                  className="w-16 px-2 py-1 border border-gray-300 rounded text-base [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="medusa-input w-16"
                 />
                 <select 
-                  className="text-base border border-gray-300 rounded px-2 py-1 h-8"
+                  className="medusa-form-select w-20"
                   value={filters.areaUnit}
                   onChange={(e) => updateFilter('areaUnit', e.target.value)}
                 >
@@ -229,20 +214,17 @@ export default function HeaderFilters() {
             </div>
 
             {/* Кнопки действий */}
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <button 
                 onClick={() => setIsAdditionalFiltersOpen(true)}
-                className="px-3 py-2 text-black rounded text-base transition-colors"
-                style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
+                className="medusa-button-yellow"
               >
                 Доп. фильтры
               </button>
-              <button className="px-3 py-2 bg-gray-600 text-white rounded text-base hover:bg-gray-700 transition-colors">
+              <button className="medusa-button">
                 Применить
               </button>
-              <button className="px-3 py-2 bg-gray-300 text-gray-700 rounded text-base hover:bg-gray-400 transition-colors">
+              <button className="medusa-button-secondary">
                 Сбросить
               </button>
             </div>

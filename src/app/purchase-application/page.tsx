@@ -63,10 +63,10 @@ export default function PurchaseApplicationPage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-black mb-2">
+                <label className="medusa-form-label">
                   {t('purchaseApplication.propertyType')}
                 </label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-md text-black">
+                <select className="medusa-form-select">
                   <option>{t('purchaseApplication.selectPropertyType')}</option>
                   <option>{t('objects.apartments')}</option>
                   <option>{t('objects.houses')}</option>

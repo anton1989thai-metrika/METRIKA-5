@@ -663,7 +663,7 @@ export default function AnalyticsModal({
                 <select
                   value={filterUser}
                   onChange={(e) => setFilterUser(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  className="medusa-form-select"
                 >
                   <option value="all">Все пользователи</option>
                   <option value="current-user">Текущий пользователь</option>
@@ -671,7 +671,7 @@ export default function AnalyticsModal({
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  className="medusa-form-select"
                 >
                   <option value="all">Все типы</option>
                   <option value="apartment">Квартира</option>
@@ -682,7 +682,7 @@ export default function AnalyticsModal({
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  className="medusa-form-select"
                 >
                   <option value="duration">По времени</option>
                   <option value="created">По дате</option>

@@ -681,13 +681,13 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-black mb-2">
+                  <label className="medusa-form-label">
                     Страна
                   </label>
                   <select
                     value={formData.country}
                     onChange={(e) => updateFormData('country', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    className="medusa-form-select"
                   >
                     {COUNTRIES.map(country => (
                       <option key={country.id} value={country.id}>{country.name}</option>
@@ -696,13 +696,13 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-black mb-2">
+                  <label className="medusa-form-label">
                     Тип операции
                   </label>
                   <select
                     value={formData.operation}
                     onChange={(e) => updateFormData('operation', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    className="medusa-form-select"
                   >
                     {OPERATION_TYPES.map(operation => (
                       <option key={operation.id} value={operation.id}>{operation.name}</option>
@@ -711,13 +711,13 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-black mb-2">
+                  <label className="medusa-form-label">
                     Агент
                   </label>
                   <select
                     value={formData.agent}
                     onChange={(e) => updateFormData('agent', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    className="medusa-form-select"
                   >
                     {AGENTS.map(agent => (
                       <option key={agent.id} value={agent.id}>{agent.name}</option>

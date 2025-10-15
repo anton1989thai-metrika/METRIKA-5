@@ -618,11 +618,11 @@ export default function AcademyPage() {
                 {showFilters && (
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-black mb-2">Категория</label>
+                      <label className="medusa-form-label">Категория</label>
                       <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
+                        className="medusa-form-select"
                       >
                         {categories.map(cat => (
                           <option key={cat} value={cat}>
@@ -632,11 +632,11 @@ export default function AcademyPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-black mb-2">Уровень</label>
+                      <label className="medusa-form-label">Уровень</label>
                       <select
                         value={selectedLevel}
                         onChange={(e) => setSelectedLevel(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
+                        className="medusa-form-select"
                       >
                         {levels.map(level => (
                           <option key={level} value={level}>

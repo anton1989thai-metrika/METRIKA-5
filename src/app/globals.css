@@ -90,6 +90,102 @@ input[type="checkbox"]:checked {
   outline: none;
 }
 
+/* Medusa-style dropdown styles */
+.medusa-select {
+  @apply relative inline-flex items-center justify-between w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-md shadow-sm hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+}
+
+.medusa-select:focus {
+  @apply ring-2 ring-blue-500 border-blue-500;
+}
+
+.medusa-select-option {
+  @apply block w-full px-3 py-2 text-sm text-gray-900 hover:bg-gray-50 hover:text-gray-900 cursor-pointer transition-colors duration-150;
+}
+
+.medusa-select-option:hover {
+  @apply bg-gray-50;
+}
+
+.medusa-select-option.selected {
+  @apply bg-blue-50 text-blue-900;
+}
+
+.medusa-dropdown {
+  @apply absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto;
+}
+
+.medusa-dropdown-item {
+  @apply block w-full px-3 py-2 text-sm text-gray-900 hover:bg-gray-50 cursor-pointer transition-colors duration-150;
+}
+
+.medusa-dropdown-item:hover {
+  @apply bg-gray-50;
+}
+
+.medusa-dropdown-item.selected {
+  @apply bg-blue-50 text-blue-900;
+}
+
+.medusa-input {
+  @apply block w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+}
+
+.medusa-input:focus {
+  @apply ring-2 ring-blue-500 border-blue-500;
+}
+
+.medusa-button {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-900 border border-transparent rounded-md shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200;
+}
+
+.medusa-button-secondary {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200;
+}
+
+.medusa-button-yellow {
+  @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-black bg-yellow-400 border border-transparent rounded-md shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200;
+}
+
+/* Medusa-style form elements */
+.medusa-form-group {
+  @apply space-y-1;
+}
+
+.medusa-form-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.medusa-form-input {
+  @apply block w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+}
+
+.medusa-form-select {
+  @apply block w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200;
+}
+
+/* Medusa-style checkbox */
+.medusa-checkbox {
+  @apply h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500;
+}
+
+/* Medusa-style filter chips */
+.medusa-filter-chip {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors duration-150;
+}
+
+.medusa-filter-chip.active {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.medusa-filter-chip:hover {
+  @apply bg-gray-200;
+}
+
+.medusa-filter-chip.active:hover {
+  @apply bg-blue-200;
+}
+
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
