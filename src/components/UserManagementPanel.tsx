@@ -435,8 +435,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     console.log('Сохранение разрешений для роли:', selectedRole, rolePermissions)
     
     // В реальном приложении здесь была бы отправка на сервер
-    // Пока что просто закрываем модальное окно
-    alert(`Разрешения для роли "${getRoleDisplayName(selectedRole)}" сохранены!`)
+    // Разрешения сохранены
     
     setIsRoleModalOpen(false)
     setSelectedRole(null)
@@ -534,8 +533,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     setUsers(updatedUsers)
     await syncUsersWithServer(updatedUsers)
     
-    // Показываем уведомление о сохранении
-    alert(`Индивидуальные разрешения для пользователя "${selectedUserForPermissions.name}" сохранены!`)
+    // Индивидуальные разрешения сохранены
     
     setIsIndividualPermissionsModalOpen(false)
     setSelectedUserForPermissions(null)
@@ -615,8 +613,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       }
     })
     
-    // Показываем визуальную обратную связь
-    alert(`Индивидуальные разрешения сброшены к настройкам роли "${getRoleDisplayName(selectedUserForPermissions.role)}"`)
+    // Индивидуальные разрешения сброшены к ролевым
   }
 
   // Получение иконки роли
