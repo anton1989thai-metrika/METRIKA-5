@@ -5,14 +5,16 @@ import { useFilters } from "@/contexts/FiltersContext";
 import { useState } from "react";
 import AdditionalFiltersModal from "./AdditionalFiltersModal";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 
 export default function HeaderFilters() {
   const { t } = useLanguage();
   const { filters, updateFilter } = useFilters();
   const [isAdditionalFiltersOpen, setIsAdditionalFiltersOpen] = useState(false);
-  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
-  const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
-  const [isOperationDropdownOpen, setIsOperationDropdownOpen] = useState(false);
 
   // Обработчик изменения фильтра по стране (множественный выбор)
   const handleCountryChange = (country: string) => {
@@ -70,163 +72,146 @@ export default function HeaderFilters() {
           <div className="flex flex-wrap gap-4 justify-center items-center">
             
             {/* Страна - Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                className="medusa-select min-w-[120px]"
-              >
-                <span className="text-sm font-medium text-gray-700">
-                  {filters.country?.length > 0 
-                    ? `${filters.country.length} выбрано` 
-                    : 'Страна'
-                  }
-                </span>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
-              </button>
-              
-              {isCountryDropdownOpen && (
-                <div className="medusa-dropdown">
-                  {countries.map(country => (
-                    <label key={country.id} className="medusa-dropdown-item">
-                      <input
-                        type="checkbox"
-                        className="medusa-checkbox mr-2"
-                        checked={filters.country?.includes(country.id) || false}
-                        onChange={() => handleCountryChange(country.id)}
-                      />
-                      {country.name}
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="min-w-[120px] justify-between">
+                  <span className="text-sm font-medium">
+                    {filters.country?.length > 0 
+                      ? `${filters.country.length} выбрано` 
+                      : 'Страна'
+                    }
+                  </span>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {countries.map(country => (
+                  <DropdownMenuCheckboxItem
+                    key={country.id}
+                    checked={filters.country?.includes(country.id) || false}
+                    onCheckedChange={() => handleCountryChange(country.id)}
+                  >
+                    {country.name}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Тип недвижимости - Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
-                className="medusa-select min-w-[140px]"
-              >
-                <span className="text-sm font-medium text-gray-700">
-                  {filters.propertyType?.length > 0 
-                    ? `${filters.propertyType.length} выбрано` 
-                    : 'Тип'
-                  }
-                </span>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
-              </button>
-              
-              {isTypeDropdownOpen && (
-                <div className="medusa-dropdown">
-                  {propertyTypes.map(type => (
-                    <label key={type.id} className="medusa-dropdown-item">
-                      <input
-                        type="checkbox"
-                        className="medusa-checkbox mr-2"
-                        checked={filters.propertyType?.includes(type.id) || false}
-                        onChange={() => handlePropertyTypeChange(type.id)}
-                      />
-                      {type.name}
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="min-w-[140px] justify-between">
+                  <span className="text-sm font-medium">
+                    {filters.propertyType?.length > 0 
+                      ? `${filters.propertyType.length} выбрано` 
+                      : 'Тип'
+                    }
+                  </span>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {propertyTypes.map(type => (
+                  <DropdownMenuCheckboxItem
+                    key={type.id}
+                    checked={filters.propertyType?.includes(type.id) || false}
+                    onCheckedChange={() => handlePropertyTypeChange(type.id)}
+                  >
+                    {type.name}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Тип операции - Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setIsOperationDropdownOpen(!isOperationDropdownOpen)}
-                className="medusa-select min-w-[120px]"
-              >
-                <span className="text-sm font-medium text-gray-700">
-                  {filters.operationType?.length > 0 
-                    ? `${filters.operationType.length} выбрано` 
-                    : 'Операция'
-                  }
-                </span>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
-              </button>
-              
-              {isOperationDropdownOpen && (
-                <div className="medusa-dropdown">
-                  {operationTypes.map(operation => (
-                    <label key={operation.id} className="medusa-dropdown-item">
-                      <input
-                        type="checkbox"
-                        className="medusa-checkbox mr-2"
-                        checked={filters.operationType?.includes(operation.id) || false}
-                        onChange={() => handleOperationTypeChange(operation.id)}
-                      />
-                      {operation.name}
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="min-w-[120px] justify-between">
+                  <span className="text-sm font-medium">
+                    {filters.operationType?.length > 0 
+                      ? `${filters.operationType.length} выбрано` 
+                      : 'Операция'
+                    }
+                  </span>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {operationTypes.map(operation => (
+                  <DropdownMenuCheckboxItem
+                    key={operation.id}
+                    checked={filters.operationType?.includes(operation.id) || false}
+                    onCheckedChange={() => handleOperationTypeChange(operation.id)}
+                  >
+                    {operation.name}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Цена */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Цена:</span>
+              <span className="text-sm font-medium whitespace-nowrap">Цена:</span>
               <div className="flex gap-2">
-                <input 
+                <Input 
                   type="number" 
                   placeholder="От" 
-                  className="medusa-input w-20"
+                  className="w-20"
                 />
-                <input 
+                <Input 
                   type="number" 
                   placeholder="До" 
-                  className="medusa-input w-20"
+                  className="w-20"
                 />
               </div>
             </div>
 
             {/* Площадь */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Площадь:</span>
+              <span className="text-sm font-medium whitespace-nowrap">Площадь:</span>
               <div className="flex gap-2">
-                <input 
+                <Input 
                   type="number" 
                   placeholder="От" 
-                  className="medusa-input w-16"
+                  className="w-16"
                 />
-                <input 
+                <Input 
                   type="number" 
                   placeholder="До" 
-                  className="medusa-input w-16"
+                  className="w-16"
                 />
-                <select 
-                  className="medusa-form-select w-20"
-                  value={filters.areaUnit}
-                  onChange={(e) => updateFilter('areaUnit', e.target.value)}
-                >
-                  <option value="m2">м²</option>
-                  <option value="hectare">Гектар</option>
-                  <option value="sotka">Сотки</option>
-                  <option value="mu">亩</option>
-                  <option value="wah2">Wah²</option>
-                  <option value="ngan">Ngan</option>
-                  <option value="rai">Rai</option>
-                  <option value="pyeong">평</option>
-                </select>
+                <Select value={filters.areaUnit} onValueChange={(value) => updateFilter('areaUnit', value)}>
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="m2">м²</SelectItem>
+                    <SelectItem value="hectare">Гектар</SelectItem>
+                    <SelectItem value="sotka">Сотки</SelectItem>
+                    <SelectItem value="mu">亩</SelectItem>
+                    <SelectItem value="wah2">Wah²</SelectItem>
+                    <SelectItem value="ngan">Ngan</SelectItem>
+                    <SelectItem value="rai">Rai</SelectItem>
+                    <SelectItem value="pyeong">평</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             {/* Кнопки действий */}
             <div className="flex gap-2">
-              <button 
+              <Button 
                 onClick={() => setIsAdditionalFiltersOpen(true)}
-                className="medusa-button-yellow"
+                variant="default"
               >
                 Доп. фильтры
-              </button>
-              <button className="medusa-button">
+              </Button>
+              <Button variant="default">
                 Применить
-              </button>
-              <button className="medusa-button-secondary">
+              </Button>
+              <Button variant="outline">
                 Сбросить
-              </button>
+              </Button>
             </div>
           </div>
         </div>
