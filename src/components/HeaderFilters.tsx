@@ -208,6 +208,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
 export default function HeaderFilters() {
   const { t } = useLanguage();
@@ -803,19 +805,23 @@ export default function HeaderFilters() {
                           </div>
                           <div className="mt-2">
                             <label className="text-sm text-gray-600">Расстояние (км):</label>
-                            <input 
-                              type="range" 
-                              min="0.5" 
-                              max="10" 
-                              step="0.5" 
-                              className="w-full mt-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                              style={{
-                                background: `linear-gradient(to right, #fff60b 0%, #fff60b ${((parseFloat(filters.infrastructureDistance || 0.5) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb ${((parseFloat(filters.infrastructureDistance || 0.5) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb 100%)`
-                              }}
-                              value={filters.infrastructureDistance || 0.5}
-                              onChange={(e) => handleInputChange('infrastructureDistance', e.target.value)}
-                            />
-                            <span className="text-sm text-gray-600">{filters.infrastructureDistance || 0.5} км</span>
+                            <div className="mt-2">
+                              <Slider
+                                value={[parseFloat(filters.infrastructureDistance || 0.5)]}
+                                onValueChange={(value) => handleInputChange('infrastructureDistance', value[0].toString())}
+                                min={0.5}
+                                max={10}
+                                step={0.5}
+                                className="w-full"
+                              />
+                              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>0.5 км</span>
+                                <span>свыше 10 км</span>
+                              </div>
+                              <div className="text-center mt-1">
+                                <span className="text-sm text-gray-600">{filters.infrastructureDistance || 0.5} км</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </AccordionContent>
