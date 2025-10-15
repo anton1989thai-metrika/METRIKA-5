@@ -95,8 +95,24 @@ export default function ObjectsPage() {
                     <h2 className="card-title text-lg font-normal text-black px-4 pt-4">
                       {object.title}
                     </h2>
-                    <p className="text-gray-600 text-sm font-normal px-4 mb-2 truncate">
-                      {object.address} • {object.area}
+                    <p className="text-gray-600 text-sm font-normal px-4 mb-2">
+                      {(() => {
+                        const fullText = `${object.address} • ${object.area}`;
+                        const maxLength = 45; // Примерная максимальная длина для одной строки
+                        
+                        if (fullText.length <= maxLength) {
+                          return fullText;
+                        }
+                        
+                        // Обрезаем адрес, оставляя место для площади
+                        const areaText = ` ${object.area}`;
+                        const availableLength = maxLength - areaText.length - 3; // 3 символа для "..."
+                        const truncatedAddress = object.address.length > availableLength 
+                          ? object.address.substring(0, availableLength) + '...'
+                          : object.address;
+                        
+                        return `${truncatedAddress}${areaText}`;
+                      })()}
                     </p>
                     <div className="card-actions justify-end px-4 pb-2 mt-1">
                       <div className="text-lg font-normal text-black">
