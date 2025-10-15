@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 // Типы для состояний
@@ -2124,9 +2124,9 @@ export default function TasksPage() {
                         <p className="mt-1 text-sm text-red-600">{formErrors.executors}</p>
                       )}
                       {showExecutorsDropdown && (
-                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                        <div className="medusa-dropdown">
                           {users.filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role)).map(user => (
-                            <label key={user.id} className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                            <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
                                 checked={formData.executors.includes(user.id)}
@@ -2137,7 +2137,7 @@ export default function TasksPage() {
                                     handleInputChange('executors', formData.executors.filter(id => id !== user.id));
                                   }
                                 }}
-                                className="mr-2"
+                                className="medusa-checkbox mr-2"
                               />
                               <span className="text-sm">{user.name} ({user.role})</span>
                             </label>
@@ -2155,17 +2155,20 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowCuratorsDropdown(!showCuratorsDropdown)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white"
+                        className="medusa-select w-full"
                       >
-                        {formData.curators.length > 0 
-                          ? `${formData.curators.length} выбрано` 
-                          : 'Выберите кураторов'
-                        }
+                        <span className="text-sm font-medium text-gray-700">
+                          {formData.curators.length > 0 
+                            ? `${formData.curators.length} выбрано` 
+                            : 'Выберите кураторов'
+                          }
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
                       </button>
                       {showCuratorsDropdown && (
-                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                        <div className="medusa-dropdown">
                           {users.map(user => (
-                            <label key={user.id} className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                            <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
                                 checked={formData.curators.includes(user.id)}
@@ -2176,7 +2179,7 @@ export default function TasksPage() {
                                     handleInputChange('curators', formData.curators.filter(id => id !== user.id));
                                   }
                                 }}
-                                className="mr-2"
+                                className="medusa-checkbox mr-2"
                               />
                               <span className="text-sm">{user.name} ({user.role})</span>
                             </label>
@@ -3141,22 +3144,25 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowExecutorsDropdown(!showExecutorsDropdown)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white ${
-                          subtaskFormErrors.executors ? 'border-red-500' : 'border-gray-300'
+                        className={`medusa-select w-full ${
+                          subtaskFormErrors.executors ? 'border-red-500' : ''
                         }`}
                       >
-                        {subtaskFormData.executors.length > 0 
-                          ? `${subtaskFormData.executors.length} выбрано` 
-                          : 'Выберите исполнителей'
-                        }
+                        <span className="text-sm font-medium text-gray-700">
+                          {subtaskFormData.executors.length > 0 
+                            ? `${subtaskFormData.executors.length} выбрано` 
+                            : 'Выберите исполнителей'
+                          }
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
                       </button>
                       {subtaskFormErrors.executors && (
                         <p className="mt-1 text-sm text-red-600">{subtaskFormErrors.executors}</p>
                       )}
                       {showExecutorsDropdown && (
-                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                        <div className="medusa-dropdown">
                           {users.filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role)).map(user => (
-                            <label key={user.id} className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                            <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
                                 checked={subtaskFormData.executors.includes(user.id)}
@@ -3167,7 +3173,7 @@ export default function TasksPage() {
                                     handleSubtaskInputChange('executors', subtaskFormData.executors.filter(id => id !== user.id));
                                   }
                                 }}
-                                className="mr-2"
+                                className="medusa-checkbox mr-2"
                               />
                               <span className="text-sm">{user.name} ({user.role})</span>
                             </label>
@@ -3185,17 +3191,20 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => setShowCuratorsDropdown(!showCuratorsDropdown)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-left bg-white"
+                        className="medusa-select w-full"
                       >
-                        {subtaskFormData.curators.length > 0 
-                          ? `${subtaskFormData.curators.length} выбрано` 
-                          : 'Выберите кураторов'
-                        }
+                        <span className="text-sm font-medium text-gray-700">
+                          {subtaskFormData.curators.length > 0 
+                            ? `${subtaskFormData.curators.length} выбрано` 
+                            : 'Выберите кураторов'
+                          }
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
                       </button>
                       {showCuratorsDropdown && (
-                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                        <div className="medusa-dropdown">
                           {users.map(user => (
-                            <label key={user.id} className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                            <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
                                 checked={subtaskFormData.curators.includes(user.id)}
@@ -3206,7 +3215,7 @@ export default function TasksPage() {
                                     handleSubtaskInputChange('curators', subtaskFormData.curators.filter(id => id !== user.id));
                                   }
                                 }}
-                                className="mr-2"
+                                className="medusa-checkbox mr-2"
                               />
                               <span className="text-sm">{user.name} ({user.role})</span>
                             </label>

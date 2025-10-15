@@ -869,14 +869,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Поиск по имени или email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    className="medusa-input pl-10"
                   />
                 </div>
               </div>
               <select
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                className="medusa-form-select"
               >
                 <option value="all">Все роли</option>
                 <option value="site-user">Пользователь сайта</option>
@@ -890,7 +890,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                className="medusa-form-select"
               >
                 <option value="all">Все статусы</option>
                 <option value="active">Активные</option>
@@ -1016,14 +1016,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Поиск по имени или email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                    className="medusa-input pl-10"
                   />
                 </div>
               </div>
               <select
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                className="medusa-form-select"
               >
                 <option value="all">Все роли</option>
                 <option value="site-user">Пользователь сайта</option>
@@ -1037,7 +1037,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                className="medusa-form-select"
               >
                 <option value="all">Все статусы</option>
                 <option value="active">Активные</option>
