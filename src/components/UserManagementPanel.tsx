@@ -1486,8 +1486,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальное окно создания пользователя */}
       {isCreatingUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">Добавить пользователя</h3>
               <button
                 onClick={() => setIsCreatingUser(false)}
@@ -1497,9 +1497,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Имя *</label>
                   <input
                     type="text"
@@ -1509,7 +1509,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Введите имя"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Email *</label>
                   <input
                     type="email"
@@ -1519,7 +1519,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Введите email"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Логин</label>
                   <input
                     type="text"
@@ -1529,7 +1529,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Введите логин"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Пароль</label>
                   <input
                     type="password"
@@ -1539,7 +1539,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Введите пароль"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Роль</label>
                   <select
                     value={newUser.role || 'employee'}
@@ -1555,7 +1555,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <option value="admin">Администратор</option>
                   </select>
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Статус</label>
                   <select
                     value={newUser.status || 'pending'}
@@ -1567,7 +1567,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <option value="pending">Ожидает</option>
                   </select>
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
                   <input
                     type="text"
@@ -1577,7 +1577,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="ДД.ММ.ГГГГ"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
                   <input
                     type="text"
@@ -1587,7 +1587,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="+7 (999) 123-45-67"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
                   <input
                     type="text"
@@ -1597,7 +1597,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="+7 (999) 123-45-67"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Адрес</label>
                   <input
                     type="text"
@@ -1609,14 +1609,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
               
-              <div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
                 <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
                   <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
                 </div>
               </div>
               
-              <div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
                 <textarea
                   value={newUser.comments || ''}
@@ -1628,7 +1628,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
               <button
                 onClick={() => setIsCreatingUser(false)}
                 className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
@@ -1637,7 +1637,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
               <button
                 onClick={createUser}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
               >
                 Создать пользователя
               </button>
@@ -1836,8 +1839,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальное окно карточки пользователя */}
       {isUserCardOpen && selectedUserForCard && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">Карточка пользователя</h3>
               <button
                 onClick={() => {
@@ -1850,28 +1853,30 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
               {/* Основная информация */}
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-gray-600" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-semibold text-black">{selectedUserForCard.name}</h4>
-                  <p className="text-gray-600">{selectedUserForCard.email}</p>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(selectedUserForCard.status)}`}>
-                      {selectedUserForCard.status === 'active' ? 'Активен' :
-                       selectedUserForCard.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
-                    </span>
-                    <span className="text-sm text-gray-500 capitalize">{selectedUserForCard.role}</span>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                    <User className="w-8 h-8 text-gray-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-semibold text-black">{selectedUserForCard.name}</h4>
+                    <p className="text-gray-600">{selectedUserForCard.email}</p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(selectedUserForCard.status)}`}>
+                        {selectedUserForCard.status === 'active' ? 'Активен' :
+                         selectedUserForCard.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
+                      </span>
+                      <span className="text-sm text-gray-500 capitalize">{selectedUserForCard.role}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Детальная информация */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Логин</label>
                     <p className="text-black">{selectedUserForCard.login || 'Не указан'}</p>
@@ -1889,7 +1894,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <p className="text-black">{selectedUserForCard.phonePersonal || 'Не указан'}</p>
                   </div>
                 </div>
-                <div className="space-y-4">
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Адрес</label>
                     <p className="text-black">{selectedUserForCard.address || 'Не указан'}</p>
@@ -1908,7 +1913,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
 
               {/* Объекты пользователя */}
-              <div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Объекты пользователя</label>
                 <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
                   {selectedUserForCard.userObjects && selectedUserForCard.userObjects.length > 0 ? (
@@ -1927,7 +1932,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
 
               {/* Комментарии */}
               {selectedUserForCard.comments && (
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Комментарии</label>
                   <div className="p-3 bg-gray-50 rounded-lg">
                     <p className="text-black">{selectedUserForCard.comments}</p>
@@ -1936,7 +1941,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               )}
             </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
               <button
                 onClick={() => {
                   setIsUserCardOpen(false)
@@ -1954,8 +1959,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальное окно редактирования роли */}
       {isRoleModalOpen && selectedRole && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">
                 Редактирование роли: {getRoleDisplayName(selectedRole)}
               </h3>
@@ -1970,13 +1975,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
               {/* Чекбоксы разрешений */}
-              <div className="space-y-4">
-                <h4 className="text-lg font-medium text-black">Разрешения доступа</h4>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <h4 className="text-lg font-medium text-black mb-4">Разрешения доступа</h4>
                 
                 <div className="space-y-3">
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['profile']}
@@ -1986,7 +1991,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">Личный кабинет</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['my-objects']}
@@ -1996,7 +2001,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">Мои объекты</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['email']}
@@ -2006,7 +2011,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">Email</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['academy']}
@@ -2016,7 +2021,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">Академия</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['knowledge-base']}
@@ -2026,7 +2031,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">База знаний</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['tasks']}
@@ -2036,7 +2041,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">Менеджер задач</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['admin']}
@@ -2046,7 +2051,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <span className="text-black">Админ панель</span>
                   </label>
                   
-                  <label className="flex items-center space-x-3">
+                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
                     <input
                       type="checkbox"
                       checked={rolePermissions['hide-in-tasks']}
@@ -2059,7 +2064,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
               <button
                 onClick={() => {
                   setIsRoleModalOpen(false)
@@ -2071,8 +2076,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
               <button
                 onClick={saveRolePermissions}
-                className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-                style={{ backgroundColor: '#fff60b' }}
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
               >
                 Применить
               </button>
@@ -2084,8 +2091,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальное окно подтверждения удаления роли */}
       {isDeleteRoleModalOpen && roleToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">
                 Подтверждение удаления
               </h3>
@@ -2119,13 +2126,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               <div className="flex items-center justify-end space-x-3">
                 <button
                   onClick={cancelDeleteRole}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   Отменить
                 </button>
                 <button
                   onClick={confirmDeleteRole}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   Удалить роль
                 </button>
@@ -2138,8 +2145,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальное окно индивидуальных разрешений */}
       {isIndividualPermissionsModalOpen && selectedUserForPermissions && individualPermissions && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">
                 Индивидуальные разрешения: {selectedUserForPermissions.name}
               </h3>
@@ -2155,7 +2162,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
               {/* Основные разделы */}
               <div className="space-y-4">
                 <h4 className="text-lg font-medium text-black">Основные разделы</h4>
@@ -2863,17 +2870,19 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-6 border-t border-gray-300 bg-gray-50">
+            <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
               <button
                 onClick={resetToRolePermissions}
                 className={`px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all ${
                   isRoleButtonPressed 
                     ? 'text-black' 
-                    : 'bg-gray-600 text-white'
+                    : 'bg-white border border-gray-300 text-black'
                 }`}
                 style={{
                   backgroundColor: isRoleButtonPressed ? '#fff60b' : undefined
                 }}
+                onMouseEnter={!isRoleButtonPressed ? (e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a' : undefined}
+                onMouseLeave={!isRoleButtonPressed ? (e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b' : undefined}
               >
                 По роли
               </button>
@@ -2890,8 +2899,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </button>
                 <button
                   onClick={saveIndividualPermissions}
-                  className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                  className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                   style={{ backgroundColor: '#fff60b' }}
+                  onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                  onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
                 >
                   Применить
                 </button>
