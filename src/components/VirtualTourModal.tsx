@@ -84,19 +84,19 @@ export default function VirtualTourModal({ isOpen, onClose }: VirtualTourModalPr
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
-      <div className={`relative bg-white rounded-lg shadow-xl w-full mx-4 overflow-hidden border-2 border-black ${
+      <div className={`relative bg-white border border-gray-300 rounded-lg shadow-xl w-full mx-4 overflow-hidden ${
         isFullscreen ? 'max-w-none max-h-none h-screen' : 'max-w-6xl max-h-[90vh]'
       }`}>
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center">
             <Play className="w-6 h-6 text-gray-600 mr-3" />
-            <h2 className="text-2xl font-bold text-gray-900">Виртуальный тур</h2>
+            <h2 className="text-2xl font-bold text-black">Виртуальный тур</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-1 text-gray-600 hover:text-black"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

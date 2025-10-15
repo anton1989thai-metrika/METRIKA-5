@@ -100,7 +100,7 @@ export default function TaskModal({ task, isOpen, onClose, onSave, mode }: TaskM
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden">
         {/* Заголовок */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-black">
@@ -108,16 +108,14 @@ export default function TaskModal({ task, isOpen, onClose, onSave, mode }: TaskM
           </h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="p-1 text-gray-600 hover:text-black"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Форма */}
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
           {/* Название */}
           <div>
             <label className="block text-sm font-medium text-black mb-2">
@@ -276,16 +274,19 @@ export default function TaskModal({ task, isOpen, onClose, onSave, mode }: TaskM
         </div>
 
         {/* Кнопки */}
-        <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200">
+        <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
           <button
             onClick={handleClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+            className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
           >
             {t('tasks.cancel')}
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors shadow-sm"
+            className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+            style={{backgroundColor: '#fff60b'}}
+            onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+            onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
           >
             {mode === 'create' ? t('tasks.create') : t('tasks.save')}
           </button>
