@@ -95,7 +95,7 @@ export default function ObjectsPage() {
                     <h2 className="card-title text-lg font-normal text-black px-4 pt-4">
                       {object.title}
                     </h2>
-                    <p className="text-gray-600 text-sm font-normal px-4 mb-2">
+                    <p className="text-gray-600 text-sm font-normal px-4 mb-2 truncate">
                       {object.address} • {object.area}
                     </p>
                     <div className="card-actions justify-end px-4 pb-2 mt-1">
