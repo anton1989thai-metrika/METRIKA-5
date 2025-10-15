@@ -85,25 +85,29 @@ export default function ObjectsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8 gap-4 pb-8">
             {filteredObjects.map((object) => (
               <Link key={object.id} href={`/objects/${object.id}`}>
-                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                  <div className="w-full h-48 bg-gray-200 rounded-md flex items-center justify-center mb-3">
-                    <span className="text-gray-500">{t('objects.photo')}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-black mb-2 line-clamp-2">
+                <div className="card bg-base-100 w-full shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                  <figure>
+                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-500">{t('objects.photo')}</span>
+                    </div>
+                  </figure>
+                  <div className="card-body">
+                    <h2 className="card-title text-lg font-semibold text-black line-clamp-2">
                       {object.title}
-                    </h3>
-                    <p className="text-gray-600 mb-2 text-sm line-clamp-2">
+                    </h2>
+                    <p className="text-gray-600 text-sm line-clamp-2">
                       {object.address}
                     </p>
-                    <div className="flex flex-wrap gap-2 text-xs text-gray-500 mb-2">
+                    <div className="flex flex-wrap gap-2 text-xs text-gray-500">
                       <span>{object.area}</span>
                       <span>{object.floor}</span>
                       <span>{object.material}</span>
                     </div>
-                    <p className="text-lg font-bold text-black">
-                      {object.price}
-                    </p>
+                    <div className="card-actions justify-end">
+                      <div className="text-lg font-bold text-black">
+                        {object.price}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Link>
