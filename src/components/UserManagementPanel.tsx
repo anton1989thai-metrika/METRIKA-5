@@ -60,6 +60,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     'admin': false
   })
   
+  // Состояние для модального окна подтверждения удаления роли
+  const [isDeleteRoleModalOpen, setIsDeleteRoleModalOpen] = useState(false)
+  const [roleToDelete, setRoleToDelete] = useState<string | null>(null)
+  
   // Состояние для модального окна индивидуальных разрешений
   const [isIndividualPermissionsModalOpen, setIsIndividualPermissionsModalOpen] = useState(false)
   const [selectedUserForPermissions, setSelectedUserForPermissions] = useState<UserType | null>(null)
@@ -388,6 +392,25 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     setSelectedRole(null)
   }
 
+  const openDeleteRoleModal = (role: string) => {
+    setRoleToDelete(role)
+    setIsDeleteRoleModalOpen(true)
+  }
+
+  const confirmDeleteRole = () => {
+    if (roleToDelete) {
+      // TODO: Удалить роль
+      console.log('Удаление роли:', roleToDelete)
+      setIsDeleteRoleModalOpen(false)
+      setRoleToDelete(null)
+    }
+  }
+
+  const cancelDeleteRole = () => {
+    setIsDeleteRoleModalOpen(false)
+    setRoleToDelete(null)
+  }
+
   // Функция для открытия модального окна индивидуальных разрешений
   const openIndividualPermissionsModal = (user: UserType) => {
     setSelectedUserForPermissions(user)
@@ -649,23 +672,28 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           <h2 className="text-2xl font-bold text-black">Управление пользователями</h2>
           <p className="text-gray-600">Управление пользователями и их правами доступа</p>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="text-sm text-gray-600">
-            Всего: {users.length} • Активных: {users.filter(u => u.status === 'active').length}
-          </div>
-          {lastSaved && (
-            <div className="text-xs text-gray-500">
-              Последнее сохранение: {lastSaved.toLocaleTimeString()}
+        {activeTab === 'list' && (
+          <div className="flex items-center space-x-4">
+            <div className="text-sm text-gray-600">
+              Всего: {users.length} • Активных: {users.filter(u => u.status === 'active').length}
             </div>
-          )}
-          <button
-            onClick={() => setIsCreatingUser(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all flex items-center space-x-2"
-          >
-            <UserPlus className="w-4 h-4" />
-            Добавить пользователя
-          </button>
-        </div>
+            {lastSaved && (
+              <div className="text-xs text-gray-500">
+                Последнее сохранение: {lastSaved.toLocaleTimeString()}
+              </div>
+            )}
+            <button
+              onClick={() => setIsCreatingUser(true)}
+              className="px-4 py-2 text-black rounded-lg shadow-sm hover:shadow-md transition-all flex items-center space-x-2"
+              style={{backgroundColor: '#fff60b'}}
+              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            >
+              <UserPlus className="w-4 h-4" />
+              Добавить пользователя
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Навигация по вкладкам */}
@@ -846,39 +874,160 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
             
-            {/* Список пользователей для индивидуальных разрешений */}
-            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
-              <div className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {users.map(user => (
-                    <button
-                      key={user.id}
-                      onClick={() => openIndividualPermissionsModal(user)}
-                      className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <User className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-medium text-black">{user.name}</div>
-                          <div className="text-sm text-gray-600">{user.email}</div>
-                          <div className="text-xs text-gray-500 capitalize">{user.role}</div>
-                        </div>
-                        <div className="text-right">
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            arePermissionsStandard(user) 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {arePermissionsStandard(user) ? 'Стандартные' : 'Нестандартные'}
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
+            {/* Фильтры и поиск */}
+            <div className="flex items-center space-x-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Поиск по имени или email..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                  />
                 </div>
               </div>
+              <select
+                value={filterRole}
+                onChange={(e) => setFilterRole(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+              >
+                <option value="all">Все роли</option>
+                <option value="site-user">Пользователь сайта</option>
+                <option value="client">Клиент Метрики</option>
+                <option value="foreign-employee">Иностранный сотрудник</option>
+                <option value="freelancer">Внештатный сотрудник</option>
+                <option value="employee">Сотрудник</option>
+                <option value="manager">Менеджер</option>
+                <option value="admin">Администратор</option>
+              </select>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+              >
+                <option value="all">Все статусы</option>
+                <option value="active">Активные</option>
+                <option value="inactive">Неактивные</option>
+                <option value="pending">Ожидающие</option>
+              </select>
+            </div>
+
+            {/* Таблица пользователей для индивидуальных разрешений */}
+            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      <button
+                        onClick={() => {
+                          if (sortBy === 'name') {
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                          } else {
+                            setSortBy('name')
+                            setSortOrder('asc')
+                          }
+                        }}
+                        className="flex items-center space-x-1 hover:text-gray-900"
+                      >
+                        <span>Пользователь</span>
+                        {sortBy === 'name' && (
+                          <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </button>
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      <button
+                        onClick={() => {
+                          if (sortBy === 'role') {
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                          } else {
+                            setSortBy('role')
+                            setSortOrder('asc')
+                          }
+                        }}
+                        className="flex items-center space-x-1 hover:text-gray-900"
+                      >
+                        <span>Роль</span>
+                        {sortBy === 'role' && (
+                          <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </button>
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      <button
+                        onClick={() => {
+                          if (sortBy === 'lastLogin') {
+                            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                          } else {
+                            setSortBy('lastLogin')
+                            setSortOrder('asc')
+                          }
+                        }}
+                        className="flex items-center space-x-1 hover:text-gray-900"
+                      >
+                        <span>Последний вход</span>
+                        {sortBy === 'lastLogin' && (
+                          <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </button>
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Права</th>
+                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Действия</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredUsers.map(user => (
+                    <tr key={user.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() => {
+                              setSelectedUserForCard(user)
+                              setIsUserCardOpen(true)
+                            }}
+                            className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors cursor-pointer"
+                          >
+                            <User className="w-4 h-4 text-gray-600" />
+                          </button>
+                          <div>
+                            <div className="font-medium text-black">{user.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center space-x-2">
+                          {getRoleIcon(user.role)}
+                          <span className="text-sm font-medium text-black">{getRoleDisplayName(user.role)}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="text-sm text-gray-600">
+                          {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Никогда'}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          arePermissionsStandard(user) 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {arePermissionsStandard(user) ? 'Стандартные права' : 'Нестандартные права'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => openIndividualPermissionsModal(user)}
+                          className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-all"
+                        >
+                          Настроить разрешения
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
@@ -893,234 +1042,228 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {/* Пользователь сайта */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Пользователь сайта</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Пользователь сайта</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Базовый доступ к сайту</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Просмотр объектов</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Контакты</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('site-user')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('site-user')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('site-user')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Клиент Метрики */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Клиент Метрики</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Клиент Метрики</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Доступ к личному кабинету</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Просмотр объектов</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Заявки</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('client')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('client')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('client')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Иностранный сотрудник */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Иностранный сотрудник</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Иностранный сотрудник</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Расширенный доступ</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Задачи</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Отчеты</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('foreign-employee')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('foreign-employee')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('foreign-employee')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Внештатный сотрудник */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Внештатный сотрудник</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Внештатный сотрудник</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Временный доступ</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Задачи</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Отчеты</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('freelancer')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('freelancer')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('freelancer')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Сотрудник */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <UserCheck className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Сотрудник</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">8 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Сотрудник</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">8 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Полный доступ к работе</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Личный кабинет</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Задачи</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Отчеты</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <UserCheck className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('employee')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('employee')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('employee')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Менеджер */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <Star className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Менеджер</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">1 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Менеджер</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">1 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Управленческий доступ</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Управление командой</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Отчеты</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Аналитика</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Star className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('manager')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('manager')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('manager')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Администратор */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <Crown className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-black text-sm">Администратор</h4>
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">1 пользователей</span>
-                    </div>
-                  </div>
-                  <button className="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-                    <Edit className="w-3 h-3" />
-                  </button>
+                <div className="text-center mb-3">
+                  <h4 className="font-semibold text-black text-sm mb-2">Администратор</h4>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">1 пользователей</span>
                 </div>
-                <p className="text-xs text-gray-600 mb-3">Полный доступ ко всем функциям</p>
-                <div className="space-y-1 mb-3">
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Все разделы</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Управление</span>
-                  <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Настройки</span>
+                <div className="flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Crown className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
-                  <button 
-                    onClick={() => openRoleModal('admin')}
-                    className="text-xs text-gray-600 hover:text-black transition-colors"
-                  >
-                    Редактировать
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      onClick={() => openRoleModal('admin')}
+                      className="p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                      title="Редактировать роль"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => openDeleteRoleModal('admin')}
+                      className="p-1 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Удалить роль"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1787,6 +1930,60 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               >
                 Применить
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно подтверждения удаления роли */}
+      {isDeleteRoleModalOpen && roleToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+              <h3 className="text-xl font-semibold text-black">
+                Подтверждение удаления
+              </h3>
+              <button
+                onClick={cancelDeleteRole}
+                className="p-1 text-gray-600 hover:text-black"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-red-600" />
+                </div>
+                <div>
+                  <p className="text-black font-medium">
+                    Вы уверены, что хотите удалить роль?
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Роль: <span className="font-medium">{getRoleDisplayName(roleToDelete)}</span>
+                  </p>
+                </div>
+              </div>
+              
+              <p className="text-sm text-gray-600 mb-6">
+                Это действие нельзя отменить. Все пользователи с этой ролью будут переназначены на роль "Пользователь сайта".
+              </p>
+
+              <div className="flex items-center justify-end space-x-3">
+                <button
+                  onClick={cancelDeleteRole}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  Отменить
+                </button>
+                <button
+                  onClick={confirmDeleteRole}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Удалить роль
+                </button>
+              </div>
             </div>
           </div>
         </div>
