@@ -33,6 +33,11 @@ interface User {
   name: string;
   role: string;
   email: string;
+  detailedPermissions?: {
+    otherPermissions?: {
+      hideInTasks?: boolean;
+    };
+  };
 }
 
 export default function AllTasksPage() {
@@ -41,20 +46,26 @@ export default function AllTasksPage() {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [activeTab, setActiveTab] = useState('all');
+  const [selectedUserFilter, setSelectedUserFilter] = useState<number | null>(null);
+  const [showUserFilter, setShowUserFilter] = useState(false);
 
   // Тестовые пользователи
   const users = [
     { id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" },
     { id: 2, name: "Сникфайкер", role: "manager", email: "snikfayker@metrika.direct" },
-    { id: 3, name: "Маслова Ирина", role: "agent", email: "maslova@metrika.direct" },
-    { id: 4, name: "Ионин Владислав", role: "agent", email: "ionin@metrika.direct" },
-    { id: 5, name: "Андрей Широких", role: "agent", email: "shirokikh@metrika.direct" },
-    { id: 6, name: "Бердник Вадим", role: "agent", email: "berdnik@metrika.direct" },
-    { id: 7, name: "Дерик Олег", role: "agent", email: "derik@metrika.direct" },
+    { id: 3, name: "Маслова Ирина", role: "employee", email: "maslova@metrika.direct" },
+    { id: 4, name: "Ионин Владислав", role: "employee", email: "ionin@metrika.direct" },
+    { id: 5, name: "Андрей Широких", role: "employee", email: "shirokikh@metrika.direct" },
+    { id: 6, name: "Бердник Вадим", role: "employee", email: "berdnik@metrika.direct" },
+    { id: 7, name: "Дерик Олег", role: "employee", email: "derik@metrika.direct" },
     { id: 8, name: "Кан Татьяна", role: "employee", email: "kan@metrika.direct" },
     { id: 9, name: "Поврезнюк Мария", role: "employee", email: "povreznyuk@metrika.direct" },
     { id: 10, name: "Стулина Елена", role: "employee", email: "stulina@metrika.direct" },
-    { id: 11, name: "Тамбовцева Екатерина", role: "employee", email: "tambovtseva@metrika.direct" }
+    { id: 11, name: "Тамбовцева Екатерина", role: "employee", email: "tambovtseva@metrika.direct" },
+    { id: 12, name: "Пользователь сайта 1", role: "site-user", email: "user1@example.com", detailedPermissions: { otherPermissions: { hideInTasks: true } } },
+    { id: 13, name: "Клиент Метрики 1", role: "client", email: "client1@example.com" },
+    { id: 14, name: "Иностранный сотрудник 1", role: "foreign-employee", email: "foreign1@example.com" },
+    { id: 15, name: "Внештатный сотрудник 1", role: "freelancer", email: "freelancer1@example.com" }
   ];
 
   // Расширенные тестовые задачи (все задачи всех пользователей)
@@ -248,6 +259,23 @@ export default function AllTasksPage() {
     return user ? user.name : 'Неизвестный пользователь';
   };
 
+  // Функция для получения пользователей, которые должны отображаться в фильтре задач
+  const getVisibleUsers = () => {
+    return users.filter(user => {
+      // Если у пользователя есть индивидуальные разрешения с hideInTasks = true, скрываем его
+      if (user.detailedPermissions?.otherPermissions?.hideInTasks) {
+        return false;
+      }
+      
+      // Если роль "site-user", скрываем по умолчанию (можно будет настроить через роли)
+      if (user.role === 'site-user') {
+        return false;
+      }
+      
+      return true;
+    });
+  };
+
   // Функция для получения роли пользователя в задаче
   const getUserRoleInTask = (task: Task) => {
     if (task.createdBy === currentUser.id) return 'Создатель';
@@ -258,9 +286,19 @@ export default function AllTasksPage() {
 
   // Фильтрация задач
   useEffect(() => {
-    const tasks = getTasksByStatus(activeTab);
+    let tasks = getTasksByStatus(activeTab);
+    
+    // Если выбран фильтр по пользователю, фильтруем задачи
+    if (selectedUserFilter) {
+      tasks = tasks.filter(task => 
+        task.executors.includes(selectedUserFilter) || 
+        task.curators.includes(selectedUserFilter) || 
+        task.createdBy === selectedUserFilter
+      );
+    }
+    
     setFilteredTasks(tasks);
-  }, [allTasks, activeTab, currentUser.id]);
+  }, [allTasks, activeTab, currentUser.id, selectedUserFilter]);
 
   const tabs = [
     { id: 'all', name: 'Все задачи', count: allTasks.length },
@@ -307,7 +345,69 @@ export default function AllTasksPage() {
             </div>
           </div>
 
-          {/* Список задач */}
+          {/* Фильтр по пользователям */}
+          <div className="bg-white rounded-lg border border-gray-200 mb-6 p-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-black">Фильтры</h3>
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserFilter(!showUserFilter)}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    <span>Пользователь:</span>
+                    <span className="font-medium">
+                      {selectedUserFilter ? getUserName(selectedUserFilter) : 'Все'}
+                    </span>
+                    <svg className={`w-4 h-4 transition-transform ${showUserFilter ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {showUserFilter && (
+                    <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                      <div className="p-2">
+                        <button
+                          onClick={() => {
+                            setSelectedUserFilter(null);
+                            setShowUserFilter(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 ${
+                            selectedUserFilter === null ? 'bg-gray-100 font-medium' : ''
+                          }`}
+                        >
+                          Все пользователи
+                        </button>
+                        {getVisibleUsers().map(user => (
+                          <button
+                            key={user.id}
+                            onClick={() => {
+                              setSelectedUserFilter(user.id);
+                              setShowUserFilter(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 ${
+                              selectedUserFilter === user.id ? 'bg-gray-100 font-medium' : ''
+                            }`}
+                          >
+                            {user.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {selectedUserFilter && (
+                  <button
+                    onClick={() => setSelectedUserFilter(null)}
+                    className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+                  >
+                    Сбросить фильтр
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           <div className="space-y-4">
             {filteredTasks.length > 0 ? (
               filteredTasks.map(task => (
