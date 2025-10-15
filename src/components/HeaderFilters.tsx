@@ -804,7 +804,9 @@ export default function HeaderFilters() {
                             ))}
                           </div>
                           <div className="mt-2">
-                            <label className="text-sm text-gray-600">Расстояние (км):</label>
+                            <label className="text-sm text-gray-600">
+                              Расстояние (км): {parseFloat(filters.infrastructureDistance || 0.5) === 10 ? '10+ км' : `${filters.infrastructureDistance || 0.5} км`}
+                            </label>
                             <div className="mt-2">
                               <Slider
                                 value={[parseFloat(filters.infrastructureDistance || 0.5)]}
@@ -817,9 +819,6 @@ export default function HeaderFilters() {
                               <div className="flex justify-between text-xs text-gray-500 mt-1">
                                 <span>0.5 км</span>
                                 <span>свыше 10 км</span>
-                              </div>
-                              <div className="text-center mt-1">
-                                <span className="text-sm text-gray-600">{filters.infrastructureDistance || 0.5} км</span>
                               </div>
                             </div>
                           </div>
