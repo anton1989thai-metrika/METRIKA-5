@@ -1649,8 +1649,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальное окно редактирования пользователя */}
       {isEditingUser && selectedUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between p-6 border-b border-gray-300">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">Редактировать пользователя</h3>
               <button
                 onClick={() => {
@@ -1663,9 +1663,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Имя *</label>
                   <input
                     type="text"
@@ -1674,7 +1674,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Email *</label>
                   <input
                     type="email"
@@ -1683,7 +1683,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Логин</label>
                   <input
                     type="text"
@@ -1692,7 +1692,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Пароль</label>
                   <input
                     type="password"
@@ -1701,7 +1701,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Роль</label>
                   <select
                     value={selectedUser.role}
@@ -1717,7 +1717,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <option value="admin">Администратор</option>
                   </select>
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Статус</label>
                   <select
                     value={selectedUser.status}
@@ -1729,7 +1729,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <option value="pending">Ожидает</option>
                   </select>
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
                   <input
                     type="text"
@@ -1739,7 +1739,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="ДД.ММ.ГГГГ"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
                   <input
                     type="text"
@@ -1749,7 +1749,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="+7 (999) 123-45-67"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
                   <input
                     type="text"
@@ -1759,7 +1759,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="+7 (999) 123-45-67"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Адрес</label>
                   <input
                     type="text"
@@ -1769,7 +1769,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     placeholder="Введите адрес"
                   />
                 </div>
-                <div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
                   <input
                     type="text"
@@ -1780,7 +1780,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
               
-              <div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
                 <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
                   {selectedUser.userObjects && selectedUser.userObjects.length > 0 ? (
@@ -1797,7 +1797,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
               
-              <div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
                 <textarea
                   value={selectedUser.comments || ''}
@@ -1809,7 +1809,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-300 bg-gray-50">
+            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
               <button
                 onClick={() => {
                   setIsEditingUser(false)
@@ -1821,7 +1821,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </button>
               <button
                 onClick={() => updateUser(selectedUser.id, selectedUser)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:shadow-md transition-all"
+                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+                style={{backgroundColor: '#fff60b'}}
+                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
               >
                 Сохранить изменения
               </button>
