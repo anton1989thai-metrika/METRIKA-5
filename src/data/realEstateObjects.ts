@@ -27,7 +27,7 @@ const generateMoscowCoordinates = (id: number) => {
 
 export const realEstateObjects: RealEstateObject[] = [
   { id: 1, title: "3-комнатная квартира", address: "ул. Тверская, д. 15", area: "85 м²", floor: "5/9", price: "15 000 000 ₽", material: "Кирпич", coordinates: generateMoscowCoordinates(1), type: 'apartment', operation: 'sale', country: 'russia' },
-  { id: 2, title: "Частный дом", address: "ул. Ленина, д. 42", area: "120 м²", floor: "3/5", price: "25 000 000 ₽", material: "Дерево", coordinates: generateMoscowCoordinates(2), type: 'house', operation: 'sale', country: 'russia' },
+  { id: 2, title: "Частный дом", address: "д. Подмосковная, ул. Садовая, д. 7, корпус А, подъезд 3, квартира 45", area: "120 м²", floor: "3/5", price: "25 000 000 ₽", material: "Дерево", coordinates: generateMoscowCoordinates(2), type: 'house', operation: 'sale', country: 'russia' },
   { id: 3, title: "2-комнатная квартира", address: "пр. Мира, д. 8", area: "65 м²", floor: "7/12", price: "12 000 000 ₽", material: "Панель", coordinates: generateMoscowCoordinates(3), type: 'apartment', operation: 'rent', country: 'russia' },
   { id: 4, title: "3-комнатная квартира", address: "ул. Арбат, д. 25", area: "95 м²", floor: "2/4", price: "18 000 000 ₽", material: "Кирпич", coordinates: generateMoscowCoordinates(4), type: 'apartment', operation: 'sale', country: 'russia' },
   { id: 5, title: "Дом с участком", address: "ул. Садовая, д. 17", area: "110 м²", floor: "8/15", price: "22 000 000 ₽", material: "Кирпич", coordinates: generateMoscowCoordinates(5), type: 'house', operation: 'sale', country: 'russia' },
