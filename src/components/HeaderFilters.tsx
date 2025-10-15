@@ -225,7 +225,7 @@ export default function HeaderFilters() {
             <div className="flex gap-2">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="default">
+                  <Button variant="outline">
                     Доп. фильтры
                   </Button>
                 </SheetTrigger>
@@ -844,7 +844,13 @@ export default function HeaderFilters() {
                   </SheetFooter>
                 </SheetContent>
               </Sheet>
-              <Button variant="default">
+              <Button 
+                variant="default"
+                className="text-black rounded-md transition-colors"
+                style={{ backgroundColor: '#fff60b' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
+              >
                 Применить
               </Button>
               <Button variant="outline">
