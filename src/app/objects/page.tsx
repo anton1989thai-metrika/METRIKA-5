@@ -91,14 +91,14 @@ export default function ObjectsPage() {
                       <span className="text-gray-500">{t('objects.photo')}</span>
                     </div>
                   </figure>
-                  <div className="card-body">
-                    <h2 className="card-title text-lg font-semibold text-black">
+                  <div className="card-body p-0">
+                    <h2 className="card-title text-lg font-semibold text-black px-4 pt-4">
                       {object.title}
                     </h2>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-sm px-4">
                       {object.address} • {object.area}
                     </p>
-                    <div className="card-actions justify-end">
+                    <div className="card-actions justify-end px-4 pb-4">
                       <div className="text-lg font-bold text-black">
                         {object.price}
                       </div>
