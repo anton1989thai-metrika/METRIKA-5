@@ -1,6 +1,6 @@
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { getUsers } from "@/data/users"
+import { users } from "@/data/users"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -16,10 +16,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Получаем актуальных пользователей
-        const users = await getUsers();
+        const usersList = users;
 
         // Ищем пользователя по email или логину
-        const user = users.find(
+        const user = usersList.find(
           u => (u.email === credentials.email || u.login === credentials.email) && 
                u.password === credentials.password &&
                u.status === 'active'

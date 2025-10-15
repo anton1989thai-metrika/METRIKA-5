@@ -5,6 +5,7 @@ import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 // Типы для состояний
 interface TaskFormData {
@@ -26,6 +27,7 @@ interface TaskFormData {
   isAutoTask: boolean;
   autoFrequency: string;
   autoRepetitions: string;
+  isHiddenTask: boolean;
 }
 
 interface FormErrors {
@@ -56,6 +58,7 @@ interface ChecklistFormData {
 }
 
 export default function TasksPage() {
+  const { data: session } = useSession();
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [formData, setFormData] = useState<TaskFormData>({
     title: '',
@@ -75,7 +78,8 @@ export default function TasksPage() {
     links: [],
     isAutoTask: false,
     autoFrequency: 'daily',
-    autoRepetitions: ''
+    autoRepetitions: '',
+    isHiddenTask: false
   });
 
   // Состояние для управления ссылками
@@ -91,6 +95,7 @@ export default function TasksPage() {
     setLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
   };
   const [currentUser, setCurrentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin" }); // Текущий пользователь
+  const [userPermissions, setUserPermissions] = useState<any>(null); // Разрешения пользователя
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedTaskForComments, setSelectedTaskForComments] = useState<any>(null);
   const [newComment, setNewComment] = useState('');
@@ -137,7 +142,8 @@ export default function TasksPage() {
     isBlocking: false,
     subtasks: [],
     checklists: [],
-    attachments: []
+    attachments: [],
+    isHiddenTask: false
   });
   const [subtaskFormErrors, setSubtaskFormErrors] = useState({});
 
@@ -190,6 +196,31 @@ export default function TasksPage() {
   }, [isCreateChecklistModalOpen, showChecklistCuratorDropdown, showChecklistExecutorDropdown]);
 
   // Функции для работы с задачами
+  // Загрузка данных пользователя и его разрешений
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/user');
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+          setUserPermissions(userData.detailedPermissions);
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки данных пользователя:', error);
+      }
+    };
+
+    if (session) {
+      fetchUserData();
+    }
+  }, [session]);
+
+  // Функция для проверки разрешения на создание скрытых задач
+  const canCreateHiddenTasks = () => {
+    return userPermissions?.otherPermissions?.canCreateHiddenTasks || false;
+  };
+
   // Функции навигации календаря
   const goToPreviousMonth = () => {
     setCurrentMonth(prev => {
@@ -506,9 +537,14 @@ export default function TasksPage() {
       priority: 'low',
       deadline: '',
       deadlineTime: '12:00',
+      startDate: '',
+      startTime: '',
+      completionTime: '',
+      isBlocking: false,
       subtasks: [],
       checklists: [],
-      attachments: []
+      attachments: [],
+      isHiddenTask: false
     });
     setSubtaskFormErrors({});
     setIsCreateSubtaskModalOpen(false);
@@ -935,6 +971,10 @@ export default function TasksPage() {
         priority: 'low',
         deadline: '',
         deadlineTime: '12:00',
+        startDate: '',
+        startTime: '',
+        completionTime: '',
+        isBlocking: false,
         executors: [],
         curators: [],
         subtasks: [],
@@ -943,7 +983,8 @@ export default function TasksPage() {
         links: [],
         isAutoTask: false,
         autoFrequency: 'daily',
-        autoRepetitions: ''
+        autoRepetitions: '',
+        isHiddenTask: false
       });
       
       // Закрываем модальное окно
@@ -1276,6 +1317,10 @@ export default function TasksPage() {
                               priority: template.priority,
                               deadline: template.deadline,
                               deadlineTime: template.deadlineTime,
+                              startDate: '',
+                              startTime: '',
+                              completionTime: '',
+                              isBlocking: false,
                               executors: [],
                               curators: [],
                               subtasks: [],
@@ -1284,7 +1329,8 @@ export default function TasksPage() {
                               links: [],
                               isAutoTask: false,
                               autoFrequency: 'daily',
-                              autoRepetitions: ''
+                              autoRepetitions: '',
+                              isHiddenTask: false
                             });
                             setShowTemplates(false);
                             setIsCreateTaskModalOpen(true);
@@ -1563,7 +1609,8 @@ export default function TasksPage() {
                     links: [],
                     isAutoTask: false,
                     autoFrequency: 'daily',
-                    autoRepetitions: ''
+                    autoRepetitions: '',
+                    isHiddenTask: false
                   });
                   setLinkInputs(['']);
                   setFormErrors({});
@@ -1621,7 +1668,7 @@ export default function TasksPage() {
               </div>
               
                   <div className="flex gap-4">
-                <div className="w-1/4">
+                <div className={canCreateHiddenTasks() ? "w-1/8" : "w-1/4"}>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                     Приоритет
                   </label>
@@ -1636,6 +1683,25 @@ export default function TasksPage() {
                         <option value="boss">🟡 Задача от руководителя</option>
                   </select>
                 </div>
+                
+      {canCreateHiddenTasks() && (
+        <div className="w-1/8">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Скрытая задача
+          </label>
+          <button
+            type="button"
+            onClick={() => handleInputChange('isHiddenTask', !formData.isHiddenTask)}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-black font-medium transition-colors ${
+              formData.isHiddenTask 
+                ? 'bg-red-500 text-black border-red-500' 
+                : 'bg-white border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            {formData.isHiddenTask ? 'Открыть' : 'Скрыть'}
+          </button>
+        </div>
+      )}
                 
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -2411,7 +2477,8 @@ export default function TasksPage() {
                       links: [],
                       isAutoTask: false,
                       autoFrequency: 'daily',
-                      autoRepetitions: ''
+                      autoRepetitions: '',
+                      isHiddenTask: false
                     });
                     setLinkInputs(['']);
                     setFormErrors({});
@@ -2575,7 +2642,8 @@ export default function TasksPage() {
                     isBlocking: false,
                     subtasks: [],
                     checklists: [],
-                    attachments: []
+                    attachments: [],
+                    isHiddenTask: false
                   });
                   setSubtaskFormErrors({});
                   setShowStartDate(false);
@@ -2631,7 +2699,7 @@ export default function TasksPage() {
                   </div>
                   
                   <div className="flex gap-4">
-                    <div className="w-1/4">
+                    <div className={canCreateHiddenTasks() ? "w-1/8" : "w-1/4"}>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Приоритет
                       </label>
@@ -2646,6 +2714,25 @@ export default function TasksPage() {
                         <option value="boss">🟡 Задача от руководителя</option>
                       </select>
                     </div>
+                    
+      {canCreateHiddenTasks() && (
+        <div className="w-1/8">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Скрытая задача
+          </label>
+          <button
+            type="button"
+            onClick={() => handleSubtaskInputChange('isHiddenTask', !subtaskFormData.isHiddenTask)}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 text-black font-medium transition-colors ${
+              subtaskFormData.isHiddenTask 
+                ? 'bg-red-500 text-black border-red-500' 
+                : 'bg-white border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            {subtaskFormData.isHiddenTask ? 'Открыть' : 'Скрыть'}
+          </button>
+        </div>
+      )}
                     
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -3151,7 +3238,8 @@ export default function TasksPage() {
                       isBlocking: false,
                       subtasks: [],
                       checklists: [],
-                      attachments: []
+                      attachments: [],
+                      isHiddenTask: false
                     });
                     setSubtaskFormErrors({});
                     setShowStartDate(false);
