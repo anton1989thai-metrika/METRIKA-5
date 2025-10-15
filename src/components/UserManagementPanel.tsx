@@ -1170,7 +1170,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </TableBody>
               </Table>
             </div>
-          </div>
+                    </div>
         )}
 
         {/* Роли */}
@@ -1211,7 +1211,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       title="Удалить роль"
                     >
                       <Trash2 className="w-4 h-4" />
-                    </button>
+                  </button>
                 </div>
                 </div>
                 </div>
@@ -1647,7 +1647,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-black">Редактировать пользователя</h3>
-              <button
+                    <button
                 onClick={() => {
                   setIsEditingUser(false)
                   setSelectedUser(null)
@@ -1656,7 +1656,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               >
                 <X className="w-5 h-5" />
               </button>
-            </div>
+                        </div>
 
             <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1668,7 +1668,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, name: e.target.value } : null)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                   />
-                </div>
+                        </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Email *</label>
                             <input
@@ -1677,7 +1677,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, email: e.target.value } : null)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                   />
-                </div>
+                      </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                   <label className="block text-sm font-medium text-black mb-2">Логин</label>
                             <input
@@ -1790,8 +1790,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
                   )}
                 </div>
-              </div>
-              
+                </div>
+
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
                 <textarea
@@ -1852,7 +1852,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
                     <User className="w-8 h-8 text-gray-600" />
                   </div>
-                  <div>
+                      <div>
                     <h4 className="text-xl font-semibold text-black">{selectedUserForCard.name}</h4>
                     <p className="text-gray-600">{selectedUserForCard.email}</p>
                     <div className="flex items-center space-x-2 mt-1">
@@ -1899,8 +1899,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <label className="block text-sm font-medium text-gray-700 mb-1">Последний вход</label>
                     <p className="text-black">
                       {selectedUserForCard.lastLogin ? new Date(selectedUserForCard.lastLogin).toLocaleString() : 'Никогда'}
-                    </p>
-                  </div>
+                        </p>
+                      </div>
                 </div>
               </div>
 
@@ -1934,16 +1934,16 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             </div>
 
             <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
-              <button
+                      <button
                 onClick={() => {
                   setIsUserCardOpen(false)
                   setSelectedUserForCard(null)
                 }}
                 className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
               >
-                Закрыть
-              </button>
-            </div>
+                        Закрыть
+                      </button>
+                    </div>
           </div>
         </div>
       )}
@@ -1965,17 +1965,17 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               >
                 <X className="w-5 h-5" />
               </button>
-            </div>
+                      </div>
 
             <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
               {/* Чекбоксы разрешений */}
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
                 <h4 className="text-lg font-medium text-black mb-4">Разрешения доступа</h4>
                 
-                <div className="space-y-3">
+                      <div className="space-y-3">
                   <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
+                          <input
+                            type="checkbox"
                       checked={rolePermissions['profile']}
                       onChange={(e) => setRolePermissions(prev => ({ ...prev, 'profile': e.target.checked }))}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -1984,8 +1984,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           </label>
                   
                   <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
+                          <input
+                            type="checkbox"
                       checked={rolePermissions['my-objects']}
                       onChange={(e) => setRolePermissions(prev => ({ ...prev, 'my-objects': e.target.checked }))}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -2032,10 +2032,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     />
                     <span className="text-black">Менеджер задач</span>
                           </label>
-                  
+
                   <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
+                          <input
+                            type="checkbox"
                       checked={rolePermissions['admin']}
                       onChange={(e) => setRolePermissions(prev => ({ ...prev, 'admin': e.target.checked }))}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -2161,8 +2161,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <label className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
+                            <input
+                              type="checkbox"
                       checked={individualPermissions.personalCabinet?.enabled || false}
                       onChange={(e) => setIndividualPermissions((prev: any) => ({
                         ...prev,
@@ -2171,7 +2171,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <span className="text-black">Личный кабинет</span>
-                  </label>
+                          </label>
 
                   <label className="flex items-center space-x-3">
                             <input
@@ -2213,8 +2213,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           </label>
 
                   <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                          <input
+                            type="checkbox"
                       checked={individualPermissions.knowledgeBase?.enabled || false}
                       onChange={(e) => setIndividualPermissions((prev: any) => ({
                         ...prev,
@@ -2226,8 +2226,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           </label>
 
                   <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                          <input
+                            type="checkbox"
                       checked={individualPermissions.taskManager?.enabled || false}
                       onChange={(e) => setIndividualPermissions((prev: any) => ({
                         ...prev,
@@ -2319,8 +2319,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <h4 className="text-lg font-medium text-black">Академия - Подразделы</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.academy?.dashboard || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2329,7 +2329,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Дашборд</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
                             <input
@@ -2382,8 +2382,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       />
                       <span className="text-black">Материалы</span>
                           </label>
-                    </div>
-              </div>
+                        </div>
+                      </div>
             )}
 
               {/* Подразделы Админ панель */}
@@ -2392,8 +2392,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <h4 className="text-lg font-medium text-black">Админ панель - Подразделы</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                          <input
+                            type="checkbox"
                         checked={individualPermissions.adminPanel?.dashboard || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2402,11 +2402,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Дашборд</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.email || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2415,11 +2415,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Email</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.content || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2428,11 +2428,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Контент</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.objects || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2441,11 +2441,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Объекты</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.users || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2454,11 +2454,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Пользователи</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.tasks || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2467,11 +2467,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Задачи</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.media || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2480,11 +2480,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Медиа</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.hr || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2493,11 +2493,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Кадры и бухгалтерия</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.analytics || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2506,11 +2506,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Аналитика</span>
-                  </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.adminPanel?.settings || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2519,9 +2519,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Настройки</span>
-                  </label>
-            </div>
-          </div>
+                          </label>
+                        </div>
+                      </div>
         )}
 
               {/* Подразделы Менеджер задач */}
@@ -2530,8 +2530,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <h4 className="text-lg font-medium text-black">Менеджер задач - Подразделы</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
+                          <input
+                            type="checkbox"
                         checked={individualPermissions.taskManager?.viewTasks || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2543,8 +2543,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     </label>
 
                     <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.taskManager?.createTasks || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2553,11 +2553,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Создание задач</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.taskManager?.assignExecutors || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2566,11 +2566,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Назначение исполнителей</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.taskManager?.closeTasks || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2579,11 +2579,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Закрытие задач</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
+                            <input
+                              type="checkbox"
                         checked={individualPermissions.taskManager?.editTasks || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
                           ...prev,
@@ -2592,7 +2592,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-black">Редактирование задач</span>
-                    </label>
+                          </label>
 
                     <label className="flex items-center space-x-3">
                   <input
@@ -2631,7 +2631,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                       <span className="text-black">Редактирование подзадач</span>
-                  </label>
+                    </label>
 
                     <label className="flex items-center space-x-3">
                     <input
@@ -2644,7 +2644,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                       <span className="text-black">Редактирование чек-листов</span>
-                  </label>
+                    </label>
 
                     <label className="flex items-center space-x-3">
                     <input
@@ -2657,10 +2657,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                       <span className="text-black">Просмотр задач других пользователей</span>
-                  </label>
+                    </label>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
               {/* Фильтр видимости задач */}
               {individualPermissions.taskManager?.enabled && (
@@ -2669,7 +2669,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <p className="text-sm text-gray-600">Выберите пользователей, чьи задачи этот пользователь не может видеть</p>
                   
                   <div className="space-y-4">
-                <div>
+                  <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Пользователи</label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {users.filter(u => u.id !== selectedUserForPermissions?.id).map(user => (
@@ -2694,9 +2694,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             />
                             <span className="text-sm text-black">{user.name}</span>
                           </label>
-                        ))}
-                </div>
-                </div>
+                  ))}
+              </div>
+            </div>
 
                 <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Роли в задачах</label>
@@ -2746,7 +2746,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
                 </div>
                 </div>
-              </div>
+                </div>
               )}
 
               {/* Дополнительные разрешения */}
@@ -2765,9 +2765,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             ...prev.otherPermissions, 
                             canChangeExecutorInOwnTasks: e.target.checked 
                           }
-                        }))}
+                      }))}
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
+                    />
                       <span className="text-black">Менять исполнителя в своих задачах</span>
                   </label>
 
@@ -2781,9 +2781,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             ...prev.otherPermissions, 
                             canChangeCuratorInOwnTasks: e.target.checked 
                           }
-                        }))}
+                      }))}
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
+                    />
                       <span className="text-black">Менять куратора в своих задачах</span>
                   </label>
 
@@ -2797,14 +2797,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             ...prev.otherPermissions, 
                             canCreateHiddenTasks: e.target.checked 
                           }
-                        }))}
+                      }))}
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
+                    />
                       <span className="text-black">Создавать скрытые задачи</span>
-                    </label>
+                  </label>
 
                     <label className="flex items-center space-x-3">
-                      <input
+                  <input
                         type="checkbox"
                         checked={individualPermissions.otherPermissions?.canViewHiddenTasks || false}
                         onChange={(e) => setIndividualPermissions((prev: any) => ({
@@ -2818,24 +2818,24 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       />
                       <span className="text-black">Видеть скрытые задачи</span>
                   </label>
-                  </div>
+              </div>
 
                   {/* Пользователи, чьи задачи нельзя редактировать/удалять */}
-                  <div>
+              <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Не может редактировать/удалять задачи пользователей:
-                    </label>
+                  </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {users.filter(u => u.id !== selectedUserForPermissions?.id).map(user => (
                         <label key={user.id} className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
+                    <input
+                      type="checkbox"
                             checked={individualPermissions.otherPermissions?.cannotEditTasksFrom?.includes(user.id) || false}
                             onChange={(e) => {
                               const currentList = individualPermissions.otherPermissions?.cannotEditTasksFrom || []
                               if (e.target.checked) {
                                 setIndividualPermissions((prev: any) => ({
-                                  ...prev,
+                        ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
                                     cannotEditTasksFrom: [...currentList, user.id]
@@ -2843,7 +2843,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                 }))
                               } else {
                                 setIndividualPermissions((prev: any) => ({
-                                  ...prev,
+                        ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
                                     cannotEditTasksFrom: currentList.filter((id: string) => id !== user.id)
@@ -2854,7 +2854,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                           />
                           <span className="text-sm text-black">{user.name}</span>
-                        </label>
+                  </label>
                       ))}
                     </div>
                   </div>

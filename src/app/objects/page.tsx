@@ -92,17 +92,12 @@ export default function ObjectsPage() {
                     </div>
                   </figure>
                   <div className="card-body">
-                    <h2 className="card-title text-lg font-semibold text-black line-clamp-2">
+                    <h2 className="card-title text-lg font-semibold text-black">
                       {object.title}
                     </h2>
-                    <p className="text-gray-600 text-sm line-clamp-2">
-                      {object.address}
+                    <p className="text-gray-600 text-sm">
+                      {object.address} • {object.area}
                     </p>
-                    <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-                      <span>{object.area}</span>
-                      <span>{object.floor}</span>
-                      <span>{object.material}</span>
-                    </div>
                     <div className="card-actions justify-end">
                       <div className="text-lg font-bold text-black">
                         {object.price}
