@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { User as UserType, RoleSettings } from '@/data/users'
-import { arePermissionsStandard, getRoleDisplayName } from '@/lib/permissions'
+import { arePermissionsStandardWithLocalStorage, arePermissionsStandardWithLocalStorageWithLocalStorage, getRoleDisplayName } from '@/lib/permissions'
 import {
   Users,
   UserPlus,
@@ -950,11 +950,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </td>
                       <td className="px-4 py-3">
                         <span className={`px-2 py-1 rounded-full text-xs ${
-                          arePermissionsStandard(user) 
+                          arePermissionsStandardWithLocalStorage(user) 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {arePermissionsStandard(user) ? 'Стандартные права' : 'Нестандартные права'}
+                          {arePermissionsStandardWithLocalStorage(user) ? 'Стандартные права' : 'Нестандартные права'}
                         </span>
                       </td>
                       <td className="px-4 py-3">
@@ -1141,11 +1141,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </td>
                       <td className="px-4 py-3">
                         <span className={`px-2 py-1 rounded-full text-xs ${
-                          arePermissionsStandard(user) 
+                          arePermissionsStandardWithLocalStorage(user) 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {arePermissionsStandard(user) ? 'Стандартные права' : 'Нестандартные права'}
+                          {arePermissionsStandardWithLocalStorage(user) ? 'Стандартные права' : 'Нестандартные права'}
                         </span>
                       </td>
                       <td className="px-4 py-3">

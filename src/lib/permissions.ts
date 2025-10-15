@@ -182,6 +182,72 @@ export const arePermissionsStandard = (user: User | null): boolean => {
   return true // Все права совпадают
 }
 
+// Функция для проверки прав с учетом localStorage (для использования в UI)
+export const arePermissionsStandardWithLocalStorage = (user: User | null): boolean => {
+  if (!user) {
+    return true
+  }
+
+  // Получаем сохраненные индивидуальные разрешения из localStorage
+  const userPermissionsKey = `userPermissions_${user.id}`;
+  const savedPermissions = localStorage.getItem(userPermissionsKey);
+  
+  let individualPermissions = user.detailedPermissions;
+  if (savedPermissions) {
+    try {
+      individualPermissions = JSON.parse(savedPermissions);
+    } catch (error) {
+      console.error('Ошибка загрузки индивидуальных разрешений:', error);
+    }
+  }
+
+  // Если нет индивидуальных разрешений, права стандартные
+  if (!individualPermissions) {
+    return true
+  }
+
+  const rolePermissions = getRolePermissions(user.role)
+  
+  // Проверяем каждое разрешение
+  const sections = ['profile', 'my-objects', 'email', 'academy', 'knowledge-base', 'tasks', 'admin']
+  
+  for (const section of sections) {
+    const roleHasAccess = rolePermissions[section]
+    let individualHasAccess = false
+    
+    switch (section) {
+      case 'profile':
+        individualHasAccess = individualPermissions.personalCabinet?.enabled ?? false
+        break
+      case 'my-objects':
+        individualHasAccess = individualPermissions.myObjects?.enabled ?? false
+        break
+      case 'email':
+        individualHasAccess = individualPermissions.email?.enabled ?? false
+        break
+      case 'academy':
+        individualHasAccess = individualPermissions.academy?.enabled ?? false
+        break
+      case 'knowledge-base':
+        individualHasAccess = individualPermissions.knowledgeBase?.enabled ?? false
+        break
+      case 'tasks':
+        individualHasAccess = individualPermissions.taskManager?.enabled ?? false
+        break
+      case 'admin':
+        individualHasAccess = individualPermissions.adminPanel?.enabled ?? false
+        break
+    }
+    
+    // Если права отличаются, то они нестандартные
+    if (roleHasAccess !== individualHasAccess) {
+      return false
+    }
+  }
+  
+  return true // Все права совпадают
+}
+
 // Функция для проверки конкретного разрешения внутри раздела
 export const hasDetailedPermission = (user: User | null, section: string, permission: string): boolean => {
   if (!user || !user.detailedPermissions) {
