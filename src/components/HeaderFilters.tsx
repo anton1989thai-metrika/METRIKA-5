@@ -13,10 +13,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 
@@ -227,13 +224,6 @@ export default function HeaderFilters() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
-                  <SheetHeader>
-                    <SheetTitle>Дополнительные фильтры</SheetTitle>
-                    <SheetDescription>
-                      Настройте дополнительные параметры поиска недвижимости
-                    </SheetDescription>
-                  </SheetHeader>
-                  
                   <div className="grid flex-1 auto-rows-min gap-6 py-4">
                     {/* Основные характеристики */}
                     <div className="grid gap-3">
