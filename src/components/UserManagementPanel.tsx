@@ -869,39 +869,41 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
+                  <Input
                     type="text"
                     placeholder="Поиск по имени или email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="medusa-input pl-10"
+                    className="pl-10"
                   />
                 </div>
               </div>
-              <select
-                value={filterRole}
-                onChange={(e) => setFilterRole(e.target.value)}
-                className="medusa-form-select"
-              >
-                <option value="all">Все роли</option>
-                <option value="site-user">Пользователь сайта</option>
-                <option value="client">Клиент Метрики</option>
-                <option value="foreign-employee">Иностранный сотрудник</option>
-                <option value="freelancer">Внештатный сотрудник</option>
-                <option value="employee">Сотрудник</option>
-                <option value="manager">Менеджер</option>
-                <option value="admin">Администратор</option>
-              </select>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="medusa-form-select"
-              >
-                <option value="all">Все статусы</option>
-                <option value="active">Активные</option>
-                <option value="inactive">Неактивные</option>
-                <option value="pending">Ожидающие</option>
-              </select>
+              <Select value={filterRole} onValueChange={setFilterRole}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Все роли" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все роли</SelectItem>
+                  <SelectItem value="site-user">Пользователь сайта</SelectItem>
+                  <SelectItem value="client">Клиент Метрики</SelectItem>
+                  <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
+                  <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
+                  <SelectItem value="employee">Сотрудник</SelectItem>
+                  <SelectItem value="manager">Менеджер</SelectItem>
+                  <SelectItem value="admin">Администратор</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Все статусы" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все статусы</SelectItem>
+                  <SelectItem value="active">Активные</SelectItem>
+                  <SelectItem value="inactive">Неактивные</SelectItem>
+                  <SelectItem value="pending">Ожидающие</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Таблица пользователей */}
@@ -1016,39 +1018,41 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
+                  <Input
                     type="text"
                     placeholder="Поиск по имени или email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="medusa-input pl-10"
+                    className="pl-10"
                   />
                 </div>
               </div>
-              <select
-                value={filterRole}
-                onChange={(e) => setFilterRole(e.target.value)}
-                className="medusa-form-select"
-              >
-                <option value="all">Все роли</option>
-                <option value="site-user">Пользователь сайта</option>
-                <option value="client">Клиент Метрики</option>
-                <option value="foreign-employee">Иностранный сотрудник</option>
-                <option value="freelancer">Внештатный сотрудник</option>
-                <option value="employee">Сотрудник</option>
-                <option value="manager">Менеджер</option>
-                <option value="admin">Администратор</option>
-              </select>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="medusa-form-select"
-              >
-                <option value="all">Все статусы</option>
-                <option value="active">Активные</option>
-                <option value="inactive">Неактивные</option>
-                <option value="pending">Ожидающие</option>
-              </select>
+              <Select value={filterRole} onValueChange={setFilterRole}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Все роли" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все роли</SelectItem>
+                  <SelectItem value="site-user">Пользователь сайта</SelectItem>
+                  <SelectItem value="client">Клиент Метрики</SelectItem>
+                  <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
+                  <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
+                  <SelectItem value="employee">Сотрудник</SelectItem>
+                  <SelectItem value="manager">Менеджер</SelectItem>
+                  <SelectItem value="admin">Администратор</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Все статусы" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все статусы</SelectItem>
+                  <SelectItem value="active">Активные</SelectItem>
+                  <SelectItem value="inactive">Неактивные</SelectItem>
+                  <SelectItem value="pending">Ожидающие</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Таблица пользователей для индивидуальных разрешений */}
@@ -1498,113 +1502,107 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Имя *</label>
-                          <input
+                  <Label className="block text-sm font-medium text-black mb-2">Имя *</Label>
+                  <Input
                     type="text"
                     value={newUser.name || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="Введите имя"
                   />
-                      </div>
+                </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Email *</label>
-                          <input
+                  <Label className="block text-sm font-medium text-black mb-2">Email *</Label>
+                  <Input
                     type="email"
                     value={newUser.email || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="Введите email"
                   />
-                      </div>
+                </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
-                          <input
+                  <Label className="block text-sm font-medium text-black mb-2">Логин</Label>
+                  <Input
                     type="text"
                     value={newUser.login || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, login: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="Введите логин"
                   />
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
-                            <input
+                  <Label className="block text-sm font-medium text-black mb-2">Пароль</Label>
+                  <Input
                     type="password"
                     value={newUser.password || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, password: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="Введите пароль"
                   />
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Роль</label>
-                  <select
-                    value={newUser.role || 'employee'}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, role: e.target.value as any }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  >
-                    <option value="site-user">Пользователь сайта</option>
-                    <option value="client">Клиент Метрики</option>
-                    <option value="foreign-employee">Иностранный сотрудник</option>
-                    <option value="freelancer">Внештатный сотрудник</option>
-                    <option value="employee">Сотрудник</option>
-                    <option value="manager">Менеджер</option>
-                    <option value="admin">Администратор</option>
-                  </select>
+                  <Label className="block text-sm font-medium text-black mb-2">Роль</Label>
+                  <Select value={newUser.role || 'employee'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, role: value as any }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите роль" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="site-user">Пользователь сайта</SelectItem>
+                      <SelectItem value="client">Клиент Метрики</SelectItem>
+                      <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
+                      <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
+                      <SelectItem value="employee">Сотрудник</SelectItem>
+                      <SelectItem value="manager">Менеджер</SelectItem>
+                      <SelectItem value="admin">Администратор</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Статус</label>
-                  <select
-                    value={newUser.status || 'pending'}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, status: e.target.value as any }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  >
-                    <option value="active">Активен</option>
-                    <option value="inactive">Неактивен</option>
-                    <option value="pending">Ожидает</option>
-                  </select>
+                  <Label className="block text-sm font-medium text-black mb-2">Статус</Label>
+                  <Select value={newUser.status || 'pending'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, status: value as any }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите статус" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Активен</SelectItem>
+                      <SelectItem value="inactive">Неактивен</SelectItem>
+                      <SelectItem value="pending">Ожидает</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
-                            <input
+                  <Label className="block text-sm font-medium text-black mb-2">Дата рождения</Label>
+                  <Input
                     type="text"
                     value={newUser.dateOfBirth || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, dateOfBirth: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="ДД.ММ.ГГГГ"
                   />
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
-                            <input
+                  <Label className="block text-sm font-medium text-black mb-2">Рабочий телефон</Label>
+                  <Input
                     type="text"
                     value={newUser.phoneWork || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phoneWork: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="+7 (999) 123-45-67"
                   />
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
-                            <input
+                  <Label className="block text-sm font-medium text-black mb-2">Личный телефон</Label>
+                  <Input
                     type="text"
                     value={newUser.phonePersonal || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phonePersonal: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="+7 (999) 123-45-67"
                   />
                 </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Адрес</label>
-                  <input
+                  <Label className="block text-sm font-medium text-black mb-2">Адрес</Label>
+                  <Input
                     type="text"
                     value={newUser.address || ''}
                     onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, address: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                     placeholder="Введите адрес"
                   />
-                        </div>
+                </div>
                       </div>
 
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
@@ -1615,7 +1613,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
               
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
+                <Label className="block text-sm font-medium text-black mb-2">Комментарии</Label>
                 <textarea
                   value={newUser.comments || ''}
                   onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, comments: e.target.value }))}
