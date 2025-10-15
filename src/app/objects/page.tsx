@@ -82,7 +82,7 @@ export default function ObjectsPage() {
           )}
           
           {/* Сетка объектов - адаптивная */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 4xl:grid-cols-8 gap-4 pb-8">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 pb-8">
             {filteredObjects.map((object) => (
               <Link key={object.id} href={`/objects/${object.id}`}>
                 <div className="card bg-base-100 w-full shadow-sm hover:shadow-md transition-shadow cursor-pointer">
