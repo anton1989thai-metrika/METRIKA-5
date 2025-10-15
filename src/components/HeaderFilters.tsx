@@ -416,7 +416,7 @@ export default function HeaderFilters() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto p-6 [&>button]:ml-6 [&>button]:relative [&>button]:left-[295px] [&>button]:top-0 [&>button]:border-0 [&>button]:outline-none [&>button]:ring-0 [&>button]:shadow-none [&>button]:focus:outline-none [&>button]:focus:ring-0 [&>button]:focus:shadow-none [&>button]:focus-visible:outline-none [&>button]:focus-visible:ring-0 [&>button]:focus-visible:shadow-none">
-                  <div className="text-xl font-semibold text-black mb-4">Дополнительные фильтры</div>
+                  <div className="text-xl font-semibold text-black mb-4 text-center">Дополнительные фильтры</div>
                   <Accordion type="single" collapsible className="w-full">
                     {/* Основные характеристики */}
                     <AccordionItem value="basic">
