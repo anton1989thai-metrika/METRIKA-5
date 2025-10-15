@@ -229,7 +229,7 @@ export default function HeaderFilters() {
                     Доп. фильтры
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto [&>button]:ml-6 [&>button]:relative [&>button]:left-[187px]">
+                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto [&>button]:ml-6 [&>button]:relative [&>button]:left-[237px]">
                   <Accordion type="single" collapsible className="w-full mt-4">
                     {/* Основные характеристики */}
                     <AccordionItem value="basic">
