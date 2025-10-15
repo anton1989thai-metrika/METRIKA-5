@@ -16,6 +16,12 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function HeaderFilters() {
   const { t } = useLanguage();
@@ -224,596 +230,606 @@ export default function HeaderFilters() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
-                  <div className="grid flex-1 auto-rows-min gap-6 py-4">
+                  <Accordion type="single" collapsible className="w-full">
                     {/* Основные характеристики */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Основные характеристики</h3>
-                      
-                      {/* Количество комнат */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Количество комнат</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['1', '2', '3', '4', '5 и более'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.rooms?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('rooms', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="basic">
+                      <AccordionTrigger>Основные характеристики</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Количество комнат */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Количество комнат</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['1', '2', '3', '4', '5 и более'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.rooms?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('rooms', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Количество спален */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Количество спален</h4>
-                        <div className="flex gap-2">
-                          <Input 
-                            type="number" 
-                            placeholder="От" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.bedroomsFrom}
-                            onChange={(e) => handleInputChange('bedroomsFrom', e.target.value)}
-                          />
-                          <Input 
-                            type="number" 
-                            placeholder="До" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.bedroomsTo}
-                            onChange={(e) => handleInputChange('bedroomsTo', e.target.value)}
-                          />
+                        {/* Количество спален */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Количество спален</h4>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="number" 
+                              placeholder="От" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.bedroomsFrom}
+                              onChange={(e) => handleInputChange('bedroomsFrom', e.target.value)}
+                            />
+                            <Input 
+                              type="number" 
+                              placeholder="До" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.bedroomsTo}
+                              onChange={(e) => handleInputChange('bedroomsTo', e.target.value)}
+                            />
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Жилая площадь */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Жилая площадь (м²)</h4>
-                        <div className="flex gap-2">
-                          <Input 
-                            type="number" 
-                            placeholder="От" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.livingAreaFrom}
-                            onChange={(e) => handleInputChange('livingAreaFrom', e.target.value)}
-                          />
-                          <Input 
-                            type="number" 
-                            placeholder="До" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.livingAreaTo}
-                            onChange={(e) => handleInputChange('livingAreaTo', e.target.value)}
-                          />
+                        {/* Жилая площадь */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Жилая площадь (м²)</h4>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="number" 
+                              placeholder="От" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.livingAreaFrom}
+                              onChange={(e) => handleInputChange('livingAreaFrom', e.target.value)}
+                            />
+                            <Input 
+                              type="number" 
+                              placeholder="До" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.livingAreaTo}
+                              onChange={(e) => handleInputChange('livingAreaTo', e.target.value)}
+                            />
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Количество санузлов */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Количество санузлов</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без', '1', '2', '3', '4 и более'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.bathrooms?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('bathrooms', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Количество санузлов */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Количество санузлов</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без', '1', '2', '3', '4 и более'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.bathrooms?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('bathrooms', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Расположение и вид */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Расположение и вид</h3>
-                      
-                      {/* Вид */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Вид</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['На море', 'На горы', 'На город', 'На озеро или реку', 'Во двор'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.view?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('view', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="location">
+                      <AccordionTrigger>Расположение и вид</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Вид */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Вид</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['На море', 'На горы', 'На город', 'На озеро или реку', 'Во двор'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.view?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('view', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Этаж */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Этаж</h4>
-                        <div className="flex gap-2">
-                          <Input 
-                            type="number" 
-                            placeholder="От" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.floorFrom}
-                            onChange={(e) => handleInputChange('floorFrom', e.target.value)}
-                          />
-                          <Input 
-                            type="number" 
-                            placeholder="До" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.floorTo}
-                            onChange={(e) => handleInputChange('floorTo', e.target.value)}
-                          />
+                        {/* Этаж */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Этаж</h4>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="number" 
+                              placeholder="От" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.floorFrom}
+                              onChange={(e) => handleInputChange('floorFrom', e.target.value)}
+                            />
+                            <Input 
+                              type="number" 
+                              placeholder="До" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.floorTo}
+                              onChange={(e) => handleInputChange('floorTo', e.target.value)}
+                            />
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Этажность дома */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Этажность дома</h4>
-                        <div className="flex gap-2">
-                          <Input 
-                            type="number" 
-                            placeholder="От" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.floorsFrom}
-                            onChange={(e) => handleInputChange('floorsFrom', e.target.value)}
-                          />
-                          <Input 
-                            type="number" 
-                            placeholder="До" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.floorsTo}
-                            onChange={(e) => handleInputChange('floorsTo', e.target.value)}
-                          />
+                        {/* Этажность дома */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Этажность дома</h4>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="number" 
+                              placeholder="От" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.floorsFrom}
+                              onChange={(e) => handleInputChange('floorsFrom', e.target.value)}
+                            />
+                            <Input 
+                              type="number" 
+                              placeholder="До" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.floorsTo}
+                              onChange={(e) => handleInputChange('floorsTo', e.target.value)}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Тип и состояние */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Тип и состояние</h3>
-                      
-                      {/* Вид квартиры */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Вид квартиры</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Вторичное жильё', 'Новостройка'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.apartmentType?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('apartmentType', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="type">
+                      <AccordionTrigger>Тип и состояние</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Вид квартиры */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Вид квартиры</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Вторичное жильё', 'Новостройка'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.apartmentType?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('apartmentType', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Тип дома */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Тип дома</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Панельный', 'Кирпичный', 'Монолитный', 'Деревянный', 'Блочный'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.houseType?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('houseType', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Тип дома */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Тип дома</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Панельный', 'Кирпичный', 'Монолитный', 'Деревянный', 'Блочный'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.houseType?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('houseType', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Тип ремонта */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Тип ремонта</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без отделки', 'В состоянии ремонта', 'Бюджетный ремонт', 'Базовая отделка', 'Устаревшая отделка', 'Современный евроремонт', 'Дизайнерский'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.renovationType?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('renovationType', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Тип ремонта */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Тип ремонта</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без отделки', 'В состоянии ремонта', 'Бюджетный ремонт', 'Базовая отделка', 'Устаревшая отделка', 'Современный евроремонт', 'Дизайнерский'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.renovationType?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('renovationType', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Готовность объекта */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Готовность объекта</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Строящийся', 'Построен'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.readiness?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('readiness', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Готовность объекта */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Готовность объекта</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Строящийся', 'Построен'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.readiness?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('readiness', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Дата завершения ремонта */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Дата завершения ремонта</h4>
-                        <Input 
-                          type="date" 
-                          value={filters.renovationDate}
-                          onChange={(e) => handleInputChange('renovationDate', e.target.value)}
-                        />
-                      </div>
-                    </div>
+                        {/* Дата завершения ремонта */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Дата завершения ремонта</h4>
+                          <Input 
+                            type="date" 
+                            value={filters.renovationDate}
+                            onChange={(e) => handleInputChange('renovationDate', e.target.value)}
+                          />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Коммуникации */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Коммуникации</h3>
-                      
-                      {/* Тип отопления */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Тип отопления</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без отопления', 'Центральное', 'Электрическое', 'Газовое', 'Твердотопливное', 'Другое'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.heating?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('heating', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="communications">
+                      <AccordionTrigger>Коммуникации</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Тип отопления */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Тип отопления</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без отопления', 'Центральное', 'Электрическое', 'Газовое', 'Твердотопливное', 'Другое'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.heating?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('heating', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Тип водоснабжения */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Тип водоснабжения</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без водоснабжения', 'Центральное', 'Скважина', 'Централизованная подача горячей воды'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.waterSupply?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('waterSupply', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Тип водоснабжения */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Тип водоснабжения</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без водоснабжения', 'Центральное', 'Скважина', 'Централизованная подача горячей воды'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.waterSupply?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('waterSupply', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Тип канализации */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Тип канализации</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без канализации', 'Централизованная канализация', 'Септик', 'Выгребная яма'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.sewage?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('sewage', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Тип канализации */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Тип канализации</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без канализации', 'Централизованная канализация', 'Септик', 'Выгребная яма'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.sewage?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('sewage', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Наличие интернета */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Наличие интернета</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Есть', 'Нет'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.internet?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('internet', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Наличие интернета */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Наличие интернета</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Есть', 'Нет'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.internet?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('internet', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Инфраструктура */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Инфраструктура</h3>
-                      
-                      {/* Инфраструктура дома */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Инфраструктура дома</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Бассейн', 'Тренажерный зал', 'Теннисный корт', 'Круглосуточная охрана'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.houseInfrastructure?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('houseInfrastructure', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="infrastructure">
+                      <AccordionTrigger>Инфраструктура</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Инфраструктура дома */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Инфраструктура дома</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Бассейн', 'Тренажерный зал', 'Теннисный корт', 'Круглосуточная охрана'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.houseInfrastructure?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('houseInfrastructure', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Парковка */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Парковка</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Наземная', 'Подземная', 'Отдельное здание'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.parking?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('parking', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Парковка */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Парковка</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Наземная', 'Подземная', 'Отдельное здание'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.parking?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('parking', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Инфраструктура с расстоянием */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Инфраструктура</h4>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {['Школа', 'Детский сад', 'Больница', 'Стадион', 'Супермаркет', 'Метро', 'Автобусная остановка'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.infrastructure?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('infrastructure', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Инфраструктура с расстоянием */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Инфраструктура</h4>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {['Школа', 'Детский сад', 'Больница', 'Стадион', 'Супермаркет', 'Метро', 'Автобусная остановка'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.infrastructure?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('infrastructure', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
+                          <div className="mt-2">
+                            <label className="text-sm text-gray-600">Расстояние (км):</label>
+                            <input 
+                              type="range" 
+                              min="0.5" 
+                              max="10" 
+                              step="0.5" 
+                              className="w-full mt-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                              style={{
+                                background: `linear-gradient(to right, #fff60b 0%, #fff60b ${((parseFloat(filters.infrastructureDistance || 0.5) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb ${((parseFloat(filters.infrastructureDistance || 0.5) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb 100%)`
+                              }}
+                              value={filters.infrastructureDistance || 0.5}
+                              onChange={(e) => handleInputChange('infrastructureDistance', e.target.value)}
+                            />
+                            <span className="text-sm text-gray-600">{filters.infrastructureDistance || 0.5} км</span>
+                          </div>
                         </div>
-                        <div className="mt-2">
-                          <label className="text-sm text-gray-600">Расстояние (км):</label>
-                          <input 
-                            type="range" 
-                            min="0.5" 
-                            max="10" 
-                            step="0.5" 
-                            className="w-full mt-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                            style={{
-                              background: `linear-gradient(to right, #fff60b 0%, #fff60b ${((parseFloat(filters.infrastructureDistance || 0.5) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb ${((parseFloat(filters.infrastructureDistance || 0.5) - 0.5) / (10 - 0.5)) * 100}%, #e5e7eb 100%)`
-                            }}
-                            value={filters.infrastructureDistance || 0.5}
-                            onChange={(e) => handleInputChange('infrastructureDistance', e.target.value)}
-                          />
-                          <span className="text-sm text-gray-600">{filters.infrastructureDistance || 0.5} км</span>
-                        </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Дополнительные удобства */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Дополнительные удобства</h3>
-                      
-                      {/* Балкон */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Балкон</h4>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {['Нет', 'Есть'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.balcony?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('balcony', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="amenities">
+                      <AccordionTrigger>Дополнительные удобства</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Балкон */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Балкон</h4>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {['Нет', 'Есть'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.balcony?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('balcony', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
+                          <Input 
+                            type="number" 
+                            placeholder="Площадь балкона (м²)" 
+                            className="w-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.balconyArea}
+                            onChange={(e) => handleInputChange('balconyArea', e.target.value)}
+                          />
                         </div>
-                        <Input 
-                          type="number" 
-                          placeholder="Площадь балкона (м²)" 
-                          className="w-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                          value={filters.balconyArea}
-                          onChange={(e) => handleInputChange('balconyArea', e.target.value)}
-                        />
-                      </div>
 
-                      {/* Подъездные пути */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Подъездные пути</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без подъездных путей', 'Грунтовая дорога', 'Асфальтированная дорога', 'Комбинированная дорога'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.accessRoads?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('accessRoads', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Подъездные пути */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Подъездные пути</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без подъездных путей', 'Грунтовая дорога', 'Асфальтированная дорога', 'Комбинированная дорога'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.accessRoads?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('accessRoads', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Земельный участок */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Земельный участок</h3>
-                      
-                      {/* Вид использования земельного участка */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Вид использования</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['ИЖС', 'Магазин', 'Под склад', 'Под производство', 'Под сельскохозяйственную деятельность', 'Под открытое хранение', 'Под гараж', 'Под организацию отдыха'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.landUse?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('landUse', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="land">
+                      <AccordionTrigger>Земельный участок</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Вид использования земельного участка */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Вид использования</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['ИЖС', 'Магазин', 'Под склад', 'Под производство', 'Под сельскохозяйственную деятельность', 'Под открытое хранение', 'Под гараж', 'Под организацию отдыха'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.landUse?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('landUse', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Строительство */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Строительство</h3>
-                      
-                      {/* Год постройки */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Год постройки дома</h4>
-                        <div className="flex gap-2">
-                          <Input 
-                            type="number" 
-                            placeholder="От" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.buildYearFrom}
-                            onChange={(e) => handleInputChange('buildYearFrom', e.target.value)}
-                          />
-                          <Input 
-                            type="number" 
-                            placeholder="До" 
-                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            value={filters.buildYearTo}
-                            onChange={(e) => handleInputChange('buildYearTo', e.target.value)}
-                          />
+                    <AccordionItem value="construction">
+                      <AccordionTrigger>Строительство</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Год постройки */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Год постройки дома</h4>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="number" 
+                              placeholder="От" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.buildYearFrom}
+                              onChange={(e) => handleInputChange('buildYearFrom', e.target.value)}
+                            />
+                            <Input 
+                              type="number" 
+                              placeholder="До" 
+                              className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              value={filters.buildYearTo}
+                              onChange={(e) => handleInputChange('buildYearTo', e.target.value)}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Права и условия */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Права и условия</h3>
-                      
-                      {/* Тип права */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Тип права</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Собственность', 'Аренда', 'Собственность+аренда', 'Доля'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.ownershipType?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('ownershipType', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="rights">
+                      <AccordionTrigger>Права и условия</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Тип права */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Тип права</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Собственность', 'Аренда', 'Собственность+аренда', 'Доля'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.ownershipType?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('ownershipType', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Торг */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Торг</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без торга', 'Минимальный', 'Существенный'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.bargaining?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('bargaining', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Торг */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Торг</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без торга', 'Минимальный', 'Существенный'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.bargaining?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('bargaining', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
                     {/* Аренда */}
-                    <div className="grid gap-3">
-                      <h3 className="text-lg font-semibold text-black">Аренда</h3>
-                      
-                      {/* Срок аренды */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Срок аренды</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['До 1 месяца', '1-3 месяца', '3-6 месяцев', '6-12 месяцев', 'Более года'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.rentPeriod?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('rentPeriod', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                    <AccordionItem value="rent">
+                      <AccordionTrigger>Аренда</AccordionTrigger>
+                      <AccordionContent className="flex flex-col gap-4">
+                        {/* Срок аренды */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Срок аренды</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['До 1 месяца', '1-3 месяца', '3-6 месяцев', '6-12 месяцев', 'Более года'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.rentPeriod?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('rentPeriod', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Аренда с питомцами */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Аренда с питомцами</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Собаки', 'Кошки', 'Другие крупные животные', 'Другие мелкие животные'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.petsAllowed?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('petsAllowed', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Аренда с питомцами */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Аренда с питомцами</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Собаки', 'Кошки', 'Другие крупные животные', 'Другие мелкие животные'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.petsAllowed?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('petsAllowed', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Аренда доступна с */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Аренда доступна с</h4>
-                        <Input 
-                          type="date" 
-                          value={filters.availableFrom}
-                          onChange={(e) => handleInputChange('availableFrom', e.target.value)}
-                        />
-                      </div>
-
-                      {/* Размер депозита */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Размер депозита</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['В размере 1 месяца', '2 месяцев', '3 месяцев', 'Конкретная сумма', 'Без депозита'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.deposit?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('deposit', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Аренда доступна с */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Аренда доступна с</h4>
+                          <Input 
+                            type="date" 
+                            value={filters.availableFrom}
+                            onChange={(e) => handleInputChange('availableFrom', e.target.value)}
+                          />
                         </div>
-                      </div>
 
-                      {/* Комиссия Метрики */}
-                      <div>
-                        <h4 className="font-medium text-black mb-2">Комиссия Метрики</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {['Без комиссии', 'Конкретная сумма'].map(option => (
-                            <Button
-                              key={option}
-                              variant={filters.commission?.includes(option) ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleArrayFilterChange('commission', option)}
-                            >
-                              {option}
-                            </Button>
-                          ))}
+                        {/* Размер депозита */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Размер депозита</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['В размере 1 месяца', '2 месяцев', '3 месяцев', 'Конкретная сумма', 'Без депозита'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.deposit?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('deposit', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
+
+                        {/* Комиссия Метрики */}
+                        <div>
+                          <h4 className="font-medium text-black mb-2">Комиссия Метрики</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Без комиссии', 'Конкретная сумма'].map(option => (
+                              <Button
+                                key={option}
+                                variant={filters.commission?.includes(option) ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => handleArrayFilterChange('commission', option)}
+                              >
+                                {option}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
 
                   <SheetFooter>
                     <SheetClose asChild>
