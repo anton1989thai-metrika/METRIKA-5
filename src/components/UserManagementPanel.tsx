@@ -905,22 +905,22 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             </div>
 
             {/* Таблица пользователей */}
-            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Пользователь</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Роль</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Статус</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Последний вход</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Права</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Действия</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Пользователь</TableHead>
+                    <TableHead>Роль</TableHead>
+                    <TableHead>Статус</TableHead>
+                    <TableHead>Последний вход</TableHead>
+                    <TableHead>Права</TableHead>
+                    <TableHead>Действия</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {filteredUsers.map(user => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3">
+                    <TableRow key={user.id}>
+                      <TableCell>
                         <div className="flex items-center space-x-3">
                           <button
                             onClick={() => {
@@ -935,25 +935,25 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             <div className="font-medium text-black">{user.name}</div>
                           </div>
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <div className="flex items-center space-x-2">
                           {getRoleIcon(user.role)}
                           <span className="text-sm font-medium text-black">{getRoleDisplayName(user.role)}</span>
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(user.status)}`}>
                           {user.status === 'active' ? 'Активен' :
                            user.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
                         </span>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <div className="text-sm text-gray-600">
                           {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Никогда'}
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           arePermissionsStandardWithLocalStorage(user) 
                             ? 'bg-green-100 text-green-800' 
@@ -961,8 +961,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }`}>
                           {arePermissionsStandardWithLocalStorage(user) ? 'Стандартные права' : 'Нестандартные права'}
                         </span>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => {
@@ -992,11 +992,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             Удалить
                           </button>
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           </div>
         )}
@@ -1052,11 +1052,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             </div>
 
             {/* Таблица пользователей для индивидуальных разрешений */}
-            <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>
                 <button
                         onClick={() => {
                           if (sortBy === 'name') {
@@ -1073,8 +1073,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                         )}
                 </button>
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                    </TableHead>
+                    <TableHead>
                 <button
                         onClick={() => {
                           if (sortBy === 'role') {
@@ -1091,8 +1091,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                         )}
                 </button>
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                    </TableHead>
+                    <TableHead>
                       <button
                         onClick={() => {
                           if (sortBy === 'lastLogin') {
@@ -1109,15 +1109,15 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                         )}
                       </button>
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Права</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Действия</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
+                    </TableHead>
+                    <TableHead>Права</TableHead>
+                    <TableHead>Действия</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {filteredUsers.map(user => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3">
+                    <TableRow key={user.id}>
+                      <TableCell>
                         <div className="flex items-center space-x-3">
                           <button
                             onClick={() => {
@@ -1132,19 +1132,19 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             <div className="font-medium text-black">{user.name}</div>
               </div>
             </div>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <div className="flex items-center space-x-2">
                           {getRoleIcon(user.role)}
                           <span className="text-sm font-medium text-black">{getRoleDisplayName(user.role)}</span>
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <div className="text-sm text-gray-600">
                           {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Никогда'}
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           arePermissionsStandardWithLocalStorage(user) 
                             ? 'bg-green-100 text-green-800' 
@@ -1152,21 +1152,21 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }`}>
                           {arePermissionsStandardWithLocalStorage(user) ? 'Стандартные права' : 'Нестандартные права'}
                         </span>
-                      </td>
-                      <td className="px-4 py-3">
+                      </TableCell>
+                      <TableCell>
                 <button
                           onClick={() => openIndividualPermissionsModal(user)}
                           className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-all"
                         >
                           Настроить разрешения
                 </button>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
               ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
-                    </div>
+          </div>
         )}
 
         {/* Роли */}
