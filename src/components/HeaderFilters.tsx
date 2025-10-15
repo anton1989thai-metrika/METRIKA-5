@@ -3,18 +3,38 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
 import { useState } from "react";
-import AdditionalFiltersModal from "./AdditionalFiltersModal";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function HeaderFilters() {
   const { t } = useLanguage();
   const { filters, updateFilter } = useFilters();
-  const [isAdditionalFiltersOpen, setIsAdditionalFiltersOpen] = useState(false);
+
+  const handleArrayFilterChange = (key: string, value: string) => {
+    const currentArray = filters[key as keyof typeof filters] as string[] || [];
+    const newArray = currentArray.includes(value)
+      ? currentArray.filter(item => item !== value)
+      : [...currentArray, value];
+    updateFilter(key, newArray);
+  };
+
+  const handleInputChange = (key: string, value: string) => {
+    updateFilter(key, value);
+  };
 
   // Обработчик изменения фильтра по стране (множественный выбор)
   const handleCountryChange = (country: string) => {
@@ -200,12 +220,267 @@ export default function HeaderFilters() {
 
             {/* Кнопки действий */}
             <div className="flex gap-2">
-              <Button 
-                onClick={() => setIsAdditionalFiltersOpen(true)}
-                variant="default"
-              >
-                Доп. фильтры
-              </Button>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="default">
+                    Доп. фильтры
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
+                  <SheetHeader>
+                    <SheetTitle>Дополнительные фильтры</SheetTitle>
+                    <SheetDescription>
+                      Настройте дополнительные параметры поиска недвижимости
+                    </SheetDescription>
+                  </SheetHeader>
+                  
+                  <div className="grid flex-1 auto-rows-min gap-6 py-4">
+                    {/* Основные характеристики */}
+                    <div className="grid gap-3">
+                      <h3 className="text-lg font-semibold text-black">Основные характеристики</h3>
+                      
+                      {/* Количество комнат */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Количество комнат</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['1', '2', '3', '4', '5 и более'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.rooms?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('rooms', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Количество спален */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Количество спален</h4>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <Button
+                            variant={filters.isStudio ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => handleInputChange('isStudio', (!filters.isStudio).toString())}
+                          >
+                            Студия
+                          </Button>
+                        </div>
+                        <div className="flex gap-2">
+                          <Input 
+                            type="number" 
+                            placeholder="От" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.bedroomsFrom}
+                            onChange={(e) => handleInputChange('bedroomsFrom', e.target.value)}
+                          />
+                          <Input 
+                            type="number" 
+                            placeholder="До" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.bedroomsTo}
+                            onChange={(e) => handleInputChange('bedroomsTo', e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Жилая площадь */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Жилая площадь (м²)</h4>
+                        <div className="flex gap-2">
+                          <Input 
+                            type="number" 
+                            placeholder="От" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.livingAreaFrom}
+                            onChange={(e) => handleInputChange('livingAreaFrom', e.target.value)}
+                          />
+                          <Input 
+                            type="number" 
+                            placeholder="До" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.livingAreaTo}
+                            onChange={(e) => handleInputChange('livingAreaTo', e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Количество санузлов */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Количество санузлов</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['Без', '1', '2', '3', 'Более 3'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.bathrooms?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('bathrooms', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Расположение и вид */}
+                    <div className="grid gap-3">
+                      <h3 className="text-lg font-semibold text-black">Расположение и вид</h3>
+                      
+                      {/* Вид */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Вид</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['На море', 'На горы', 'На город', 'На озеро или реку', 'Во двор'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.view?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('view', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Этаж */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Этаж</h4>
+                        <div className="flex gap-2">
+                          <Input 
+                            type="number" 
+                            placeholder="От" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.floorFrom}
+                            onChange={(e) => handleInputChange('floorFrom', e.target.value)}
+                          />
+                          <Input 
+                            type="number" 
+                            placeholder="До" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.floorTo}
+                            onChange={(e) => handleInputChange('floorTo', e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Этажность дома */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Этажность дома</h4>
+                        <div className="flex gap-2">
+                          <Input 
+                            type="number" 
+                            placeholder="От" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.floorsFrom}
+                            onChange={(e) => handleInputChange('floorsFrom', e.target.value)}
+                          />
+                          <Input 
+                            type="number" 
+                            placeholder="До" 
+                            className="w-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            value={filters.floorsTo}
+                            onChange={(e) => handleInputChange('floorsTo', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Тип и состояние */}
+                    <div className="grid gap-3">
+                      <h3 className="text-lg font-semibold text-black">Тип и состояние</h3>
+                      
+                      {/* Вид квартиры */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Вид квартиры</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['Вторичное жильё', 'Новостройка'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.apartmentType?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('apartmentType', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Тип дома */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Тип дома</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['Панельный', 'Кирпичный', 'Монолитный', 'Деревянный', 'Блочный'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.houseType?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('houseType', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Тип ремонта */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Тип ремонта</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['Без отделки', 'В состоянии ремонта', 'Бюджетный ремонт', 'Базовая отделка', 'Устаревшая отделка', 'Современный евроремонт', 'Дизайнерский'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.renovationType?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('renovationType', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Готовность объекта */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Готовность объекта</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {['Строящийся', 'Построен'].map(option => (
+                            <Button
+                              key={option}
+                              variant={filters.readiness?.includes(option) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleArrayFilterChange('readiness', option)}
+                            >
+                              {option}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Дата завершения ремонта */}
+                      <div>
+                        <h4 className="font-medium text-black mb-2">Дата завершения ремонта</h4>
+                        <Input 
+                          type="date" 
+                          value={filters.renovationDate}
+                          onChange={(e) => handleInputChange('renovationDate', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <SheetFooter>
+                    <SheetClose asChild>
+                      <Button variant="outline">Закрыть</Button>
+                    </SheetClose>
+                    <Button variant="default">Применить</Button>
+                  </SheetFooter>
+                </SheetContent>
+              </Sheet>
               <Button variant="default">
                 Применить
               </Button>
@@ -217,11 +492,6 @@ export default function HeaderFilters() {
         </div>
       </div>
 
-      {/* Модальное окно дополнительных фильтров */}
-      <AdditionalFiltersModal 
-        isOpen={isAdditionalFiltersOpen}
-        onClose={() => setIsAdditionalFiltersOpen(false)}
-      />
     </>
   );
 }
