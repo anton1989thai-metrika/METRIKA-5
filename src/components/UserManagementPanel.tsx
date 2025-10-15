@@ -533,6 +533,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     )
     setUsers(updatedUsers)
     await syncUsersWithServer(updatedUsers)
+    
+    // Показываем уведомление о сохранении
+    alert(`Индивидуальные разрешения для пользователя "${selectedUserForPermissions.name}" сохранены!`)
+    
     setIsIndividualPermissionsModalOpen(false)
     setSelectedUserForPermissions(null)
     setIndividualPermissions(null)
@@ -542,101 +546,63 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const resetToRolePermissions = () => {
     if (!selectedUserForPermissions) return
 
-    // Получаем базовые разрешения роли
-    const basePermissions: Record<string, boolean> = {
+    // Получаем сохраненные настройки роли
+    const roleSettingsForUser = roleSettings[selectedUserForPermissions.role] || {
       'profile': false,
       'my-objects': false,
       'email': false,
       'academy': false,
       'knowledge-base': false,
       'tasks': false,
-      'admin': false
+      'admin': false,
+      'hide-in-tasks': false
     }
 
-    switch (selectedUserForPermissions.role) {
-      case 'site-user':
-        basePermissions['profile'] = true
-        break
-      case 'client':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        break
-      case 'foreign-employee':
-      case 'freelancer':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        basePermissions['email'] = true
-        break
-      case 'employee':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        basePermissions['email'] = true
-        basePermissions['academy'] = true
-        basePermissions['knowledge-base'] = true
-        basePermissions['tasks'] = true
-        break
-      case 'manager':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        basePermissions['email'] = true
-        basePermissions['academy'] = true
-        basePermissions['knowledge-base'] = true
-        basePermissions['tasks'] = true
-        basePermissions['admin'] = true
-        break
-      case 'admin':
-        // Администратор видит всё
-        Object.keys(basePermissions).forEach(key => {
-          basePermissions[key] = true
-        })
-        break
-    }
-
-    // Обновляем индивидуальные разрешения
+    // Обновляем индивидуальные разрешения на основе сохраненных настроек роли
     setIndividualPermissions({
-      personalCabinet: { enabled: basePermissions['profile'] },
-      myObjects: { enabled: basePermissions['my-objects'] },
+      personalCabinet: { enabled: roleSettingsForUser['profile'] },
+      myObjects: { enabled: roleSettingsForUser['my-objects'] },
       email: { 
-        enabled: basePermissions['email'],
-        viewMail: basePermissions['email'],
-        sendEmails: basePermissions['email'],
-        manageMailboxes: basePermissions['email'],
-        mailSettings: basePermissions['email']
+        enabled: roleSettingsForUser['email'],
+        viewMail: roleSettingsForUser['email'],
+        sendEmails: roleSettingsForUser['email'],
+        manageMailboxes: roleSettingsForUser['email'],
+        mailSettings: roleSettingsForUser['email']
       },
       academy: { 
-        enabled: basePermissions['academy'],
-        dashboard: basePermissions['academy'],
-        courses: basePermissions['academy'],
-        tests: basePermissions['academy'],
-        achievements: basePermissions['academy'],
-        materials: basePermissions['academy']
+        enabled: roleSettingsForUser['academy'],
+        dashboard: roleSettingsForUser['academy'],
+        courses: roleSettingsForUser['academy'],
+        tests: roleSettingsForUser['academy'],
+        achievements: roleSettingsForUser['academy'],
+        materials: roleSettingsForUser['academy']
       },
-      knowledgeBase: { enabled: basePermissions['knowledge-base'] },
+      knowledgeBase: { enabled: roleSettingsForUser['knowledge-base'] },
       taskManager: { 
-        enabled: basePermissions['tasks'],
-        viewTasks: basePermissions['tasks'],
-        createTasks: basePermissions['tasks'],
-        assignExecutors: basePermissions['tasks'],
-        closeTasks: basePermissions['tasks'],
-        editTasks: basePermissions['tasks'],
-        changeExecutors: basePermissions['tasks'],
-        changeCurators: basePermissions['tasks'],
-        editSubtasks: basePermissions['tasks'],
-        editChecklists: basePermissions['tasks'],
-        viewOtherUsersTasks: basePermissions['tasks']
+        enabled: roleSettingsForUser['tasks'],
+        viewTasks: roleSettingsForUser['tasks'],
+        createTasks: roleSettingsForUser['tasks'],
+        assignExecutors: roleSettingsForUser['tasks'],
+        closeTasks: roleSettingsForUser['tasks'],
+        editTasks: roleSettingsForUser['tasks'],
+        changeExecutors: roleSettingsForUser['tasks'],
+        changeCurators: roleSettingsForUser['tasks'],
+        editSubtasks: roleSettingsForUser['tasks'],
+        editChecklists: roleSettingsForUser['tasks'],
+        viewOtherUsersTasks: roleSettingsForUser['tasks']
       },
       adminPanel: { 
-        enabled: basePermissions['admin'],
-        dashboard: basePermissions['admin'],
-        email: basePermissions['admin'],
-        content: basePermissions['admin'],
-        objects: basePermissions['admin'],
-        users: basePermissions['admin'],
-        tasks: basePermissions['admin'],
-        media: basePermissions['admin'],
-        hr: basePermissions['admin'],
-        analytics: basePermissions['admin'],
-        settings: basePermissions['admin']
+        enabled: roleSettingsForUser['admin'],
+        dashboard: roleSettingsForUser['admin'],
+        email: roleSettingsForUser['admin'],
+        content: roleSettingsForUser['admin'],
+        objects: roleSettingsForUser['admin'],
+        users: roleSettingsForUser['admin'],
+        tasks: roleSettingsForUser['admin'],
+        media: roleSettingsForUser['admin'],
+        hr: roleSettingsForUser['admin'],
+        analytics: roleSettingsForUser['admin'],
+        settings: roleSettingsForUser['admin']
       },
       otherPermissions: {
         enabled: false,
@@ -648,6 +614,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         hiddenTasksFrom: []
       }
     })
+    
+    // Показываем визуальную обратную связь
+    alert(`Индивидуальные разрешения сброшены к настройкам роли "${getRoleDisplayName(selectedUserForPermissions.role)}"`)
   }
 
   // Получение иконки роли
