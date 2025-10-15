@@ -64,6 +64,26 @@ const PaintRollerIcon = ({ className }: { className?: string }) => (
     <rect width="4" height="6" x="8" y="16" rx="1"/>
   </svg>
 );
+
+// Кастомная иконка для Земельный участок (земельный участок)
+const LandPlotIcon = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m12 8 6-3-6-3v10"/>
+    <path d="m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12"/>
+    <path d="m6.49 12.85 11.02 6.3"/>
+    <path d="M17.51 12.85 6.5 19.15"/>
+  </svg>
+);
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -750,7 +770,7 @@ export default function HeaderFilters() {
                     <AccordionItem value="land">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
                         <div className="flex items-center space-x-3">
-                          <TreePine className="w-5 h-5" />
+                          <LandPlotIcon className="w-5 h-5" />
                           <span>Земельный участок</span>
                         </div>
                       </AccordionTrigger>
