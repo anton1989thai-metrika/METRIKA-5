@@ -1,5 +1,16 @@
 // Статические данные пользователей
 
+export interface RoleSettings {
+  'profile': boolean;
+  'my-objects': boolean;
+  'email': boolean;
+  'academy': boolean;
+  'knowledge-base': boolean;
+  'tasks': boolean;
+  'admin': boolean;
+  'hide-in-tasks': boolean;
+}
+
 export interface User {
   id: string;
   name: string;

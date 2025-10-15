@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { User as UserType, RoleSettings } from '@/data/users'
 import { arePermissionsStandard, getRoleDisplayName } from '@/lib/permissions'
 import {
   Users,
@@ -46,6 +47,80 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const [isEditingUser, setIsEditingUser] = useState(false)
   const [isUserCardOpen, setIsUserCardOpen] = useState(false)
   const [selectedUserForCard, setSelectedUserForCard] = useState<UserType | null>(null)
+  
+  // Глобальное состояние для настроек ролей
+  const [roleSettings, setRoleSettings] = useState<Record<string, RoleSettings>>({
+    'site-user': {
+      'profile': true,
+      'my-objects': false,
+      'email': false,
+      'academy': false,
+      'knowledge-base': false,
+      'tasks': false,
+      'admin': false,
+      'hide-in-tasks': true
+    },
+    'client': {
+      'profile': true,
+      'my-objects': true,
+      'email': false,
+      'academy': false,
+      'knowledge-base': false,
+      'tasks': false,
+      'admin': false,
+      'hide-in-tasks': false
+    },
+    'foreign-employee': {
+      'profile': true,
+      'my-objects': true,
+      'email': true,
+      'academy': false,
+      'knowledge-base': false,
+      'tasks': false,
+      'admin': false,
+      'hide-in-tasks': false
+    },
+    'freelancer': {
+      'profile': true,
+      'my-objects': true,
+      'email': true,
+      'academy': false,
+      'knowledge-base': false,
+      'tasks': false,
+      'admin': false,
+      'hide-in-tasks': false
+    },
+    'employee': {
+      'profile': true,
+      'my-objects': true,
+      'email': true,
+      'academy': true,
+      'knowledge-base': true,
+      'tasks': true,
+      'admin': false,
+      'hide-in-tasks': false
+    },
+    'manager': {
+      'profile': true,
+      'my-objects': true,
+      'email': true,
+      'academy': true,
+      'knowledge-base': true,
+      'tasks': true,
+      'admin': true,
+      'hide-in-tasks': false
+    },
+    'admin': {
+      'profile': true,
+      'my-objects': true,
+      'email': true,
+      'academy': true,
+      'knowledge-base': true,
+      'tasks': true,
+      'admin': true,
+      'hide-in-tasks': false
+    }
+  });
   
   // Состояние для модального окна редактирования роли
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false)
@@ -331,8 +406,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const openRoleModal = (role: string) => {
     setSelectedRole(role)
     
-    // Получаем базовые разрешения роли
-    const basePermissions: Record<string, boolean> = {
+    // Получаем сохраненные настройки роли или используем базовые
+    const savedSettings = roleSettings[role] || {
       'profile': false,
       'my-objects': false,
       'email': false,
@@ -342,59 +417,26 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       'admin': false,
       'hide-in-tasks': false
     }
-
-    switch (role) {
-      case 'site-user':
-        basePermissions['profile'] = true
-        basePermissions['hide-in-tasks'] = true // По умолчанию скрываем пользователей сайта в задачах
-        break
-      case 'client':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        break
-      case 'foreign-employee':
-      case 'freelancer':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        basePermissions['email'] = true
-        break
-      case 'employee':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        basePermissions['email'] = true
-        basePermissions['academy'] = true
-        basePermissions['knowledge-base'] = true
-        basePermissions['tasks'] = true
-        break
-      case 'manager':
-        basePermissions['profile'] = true
-        basePermissions['my-objects'] = true
-        basePermissions['email'] = true
-        basePermissions['academy'] = true
-        basePermissions['knowledge-base'] = true
-        basePermissions['tasks'] = true
-        basePermissions['admin'] = true
-        break
-      case 'admin':
-        // Администратор видит всё
-        Object.keys(basePermissions).forEach(key => {
-          basePermissions[key] = true
-        })
-        break
-    }
     
-    setRolePermissions(basePermissions)
+    setRolePermissions(savedSettings)
     setIsRoleModalOpen(true)
   }
 
   // Функция для сохранения изменений роли
   const saveRolePermissions = () => {
-    // Здесь будет логика сохранения разрешений роли
+    if (!selectedRole) return;
+    
+    // Сохраняем настройки роли в глобальное состояние
+    setRoleSettings(prev => ({
+      ...prev,
+      [selectedRole]: rolePermissions as RoleSettings
+    }));
+    
     console.log('Сохранение разрешений для роли:', selectedRole, rolePermissions)
     
     // В реальном приложении здесь была бы отправка на сервер
     // Пока что просто закрываем модальное окно
-    alert(`Разрешения для роли "${getRoleDisplayName(selectedRole!)}" сохранены!`)
+    alert(`Разрешения для роли "${getRoleDisplayName(selectedRole)}" сохранены!`)
     
     setIsRoleModalOpen(false)
     setSelectedRole(null)

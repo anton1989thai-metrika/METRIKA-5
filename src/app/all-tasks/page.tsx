@@ -267,14 +267,24 @@ export default function AllTasksPage() {
         return false;
       }
       
-      // Скрываем роли, которые не являются сотрудниками Метрики
-      const hiddenRoles = ['site-user', 'client', 'foreign-employee', 'freelancer'];
-      if (hiddenRoles.includes(user.role)) {
+      // Проверяем настройки роли для скрытия в задачах
+      // Для демонстрации используем базовую логику
+      const roleHideSettings: Record<string, boolean> = {
+        'site-user': true,    // По умолчанию скрываем
+        'client': false,      // Показываем клиентов
+        'foreign-employee': false, // Показываем иностранных сотрудников
+        'freelancer': false,  // Показываем внештатных сотрудников
+        'employee': false,    // Показываем сотрудников
+        'manager': false,     // Показываем менеджеров
+        'admin': false        // Показываем администраторов
+      };
+      
+      // Если роль настроена на скрытие, скрываем пользователя
+      if (roleHideSettings[user.role]) {
         return false;
       }
       
-      // Показываем только сотрудников Метрики: admin, manager, employee
-      return ['admin', 'manager', 'employee'].includes(user.role);
+      return true;
     });
   };
 
