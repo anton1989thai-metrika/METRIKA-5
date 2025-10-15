@@ -415,8 +415,9 @@ export default function HeaderFilters() {
                     Доп. фильтры
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto [&>button]:ml-6 [&>button]:relative [&>button]:left-[295px] [&>button]:top-[-3px] [&>button]:border-0 [&>button]:outline-none [&>button]:ring-0 [&>button]:shadow-none [&>button]:focus:outline-none [&>button]:focus:ring-0 [&>button]:focus:shadow-none [&>button]:focus-visible:outline-none [&>button]:focus-visible:ring-0 [&>button]:focus-visible:shadow-none">
-                  <Accordion type="single" collapsible className="w-full mt-4">
+                <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto p-6 [&>button]:ml-6 [&>button]:relative [&>button]:left-[295px] [&>button]:top-0 [&>button]:border-0 [&>button]:outline-none [&>button]:ring-0 [&>button]:shadow-none [&>button]:focus:outline-none [&>button]:focus:ring-0 [&>button]:focus:shadow-none [&>button]:focus-visible:outline-none [&>button]:focus-visible:ring-0 [&>button]:focus-visible:shadow-none">
+                  <div className="text-xl font-semibold text-black mb-4">Дополнительные фильтры</div>
+                  <Accordion type="single" collapsible className="w-full">
                     {/* Основные характеристики */}
                     <AccordionItem value="basic">
                       <AccordionTrigger className="text-black hover:no-underline flex items-center space-x-3 justify-between text-base font-normal">
@@ -1067,7 +1068,7 @@ export default function HeaderFilters() {
                     </AccordionItem>
                   </Accordion>
 
-                  <SheetFooter>
+                  <SheetFooter className="mt-2.5 pb-6">
                     <Button 
                       variant="default" 
                       className="mt-2.5 w-full px-4 py-2 text-black rounded-md transition-colors text-base font-normal"
