@@ -6,7 +6,7 @@ export default function LoginPage() {
       <div 
         className="flex items-center justify-center"
         style={{
-          width: '1060px',
+          width: '1260px',
           height: '900px',
           border: '3px solid #d1d5db',
           padding: '50px',
@@ -14,14 +14,14 @@ export default function LoginPage() {
         }}
       >
         {/* Форма авторизации - слева от центра */}
-        <div className="flex items-center justify-end" style={{ width: 'calc(50% - 50px)' }}>
+        <div className="flex items-center justify-end" style={{ width: 'calc(40% - 50px)' }}>
           <div className="w-full max-w-xs">
             <LoginForm />
           </div>
         </div>
         
         {/* Картинка - справа от центра */}
-        <div className="flex items-center justify-start" style={{ width: 'calc(50% - 50px)' }}>
+        <div className="flex items-center justify-start" style={{ width: 'calc(60% - 50px)' }}>
           <img
             src="/images/login-bg.jpg"
             alt="МЕТРИКА - Авторизация"
