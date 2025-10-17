@@ -654,14 +654,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         </div>
         {activeTab === 'list' && (
         <div className="flex items-center space-x-4">
-          <div className="text-sm text-gray-600">
-            Всего: {users.length} • Активных: {users.filter(u => u.status === 'active').length}
-            </div>
-            {lastSaved && (
-              <div className="text-xs text-gray-500">
-                Последнее сохранение: {lastSaved.toLocaleTimeString()}
-          </div>
-            )}
           <Button
             onClick={() => router.push('/admin/users/add')}
             variant="default"
