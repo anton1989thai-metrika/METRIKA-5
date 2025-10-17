@@ -654,14 +654,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         </div>
         {activeTab === 'list' && (
         <div className="flex items-center space-x-4">
-          <Button
-            onClick={() => router.push('/admin/users/add')}
-            variant="default"
-            className="gap-2"
-          >
-            <UserPlus className="w-4 h-4" />
-            Добавить пользователя
-          </Button>
         </div>
         )}
       </div>
@@ -737,6 +729,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <SelectItem value="pending">Ожидающие</SelectItem>
                 </SelectContent>
               </Select>
+              <Button
+                onClick={() => router.push('/admin/users/add')}
+                variant="default"
+                className="gap-2 w-auto"
+              >
+                <UserPlus className="w-4 h-4" />
+                Добавить пользователя
+              </Button>
             </div>
 
             {/* Таблица пользователей */}
