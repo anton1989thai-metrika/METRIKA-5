@@ -1835,26 +1835,26 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         </SheetContent>
       </Sheet>
 
-      {/* Модальное окно карточки пользователя */}
-      <Dialog open={isUserCardOpen} onOpenChange={(open) => {
+      {/* Sheet карточки пользователя */}
+      <Sheet open={isUserCardOpen} onOpenChange={(open) => {
         if (!open) {
           setIsUserCardOpen(false)
           setSelectedUserForCard(null)
         }
       }}>
-        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden p-6">
-          <DialogHeader className="mb-6">
-            <DialogTitle className="text-xl font-semibold text-black">Карточка пользователя</DialogTitle>
-          </DialogHeader>
+        <SheetContent className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Карточка пользователя</SheetTitle>
+          </SheetHeader>
 
-          <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
+          <div className="space-y-6 mt-6">
             {/* Основная информация */}
             <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
                   <User className="w-8 h-8 text-gray-600" />
                 </div>
-                      <div>
+                <div>
                   <h4 className="text-xl font-semibold text-black">{selectedUserForCard?.name}</h4>
                   <p className="text-gray-600">{selectedUserForCard?.email}</p>
                   <div className="flex items-center space-x-2 mt-1">
@@ -1901,8 +1901,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <label className="block text-sm font-medium text-gray-700 mb-1">Последний вход</label>
                   <p className="text-black">
                     {selectedUserForCard?.lastLogin ? new Date(selectedUserForCard.lastLogin).toLocaleString() : 'Никогда'}
-                        </p>
-                      </div>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -1935,19 +1935,15 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             )}
           </div>
 
-          <DialogFooter className="mt-6 pt-6 border-t border-gray-200">
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setIsUserCardOpen(false)
-                setSelectedUserForCard(null)
-              }}
-            >
-                        Закрыть
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          <SheetFooter className="mt-6 pt-6 border-t border-gray-200">
+            <SheetClose asChild>
+              <Button variant="outline">
+                Закрыть
+              </Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       {/* Модальное окно редактирования роли */}
       {isRoleModalOpen && selectedRole && (
