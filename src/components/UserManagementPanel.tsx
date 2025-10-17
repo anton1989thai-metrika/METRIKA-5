@@ -1611,137 +1611,115 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         </SheetContent>
       </Sheet>
 
-      {/* Модальное окно редактирования роли */}
-      {isRoleModalOpen && selectedRole && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-semibold text-black">
-                Редактирование роли: {getRoleDisplayName(selectedRole)}
-              </h3>
-              <button
-                onClick={() => {
-                  setIsRoleModalOpen(false)
-                  setSelectedRole(null)
-                }}
-                className="p-1 text-gray-600 hover:text-black"
-              >
-                <X className="w-5 h-5" />
-                      </button>
-                    </div>
-
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
-              {/* Чекбоксы разрешений */}
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <h4 className="text-lg font-medium text-black mb-4">Разрешения доступа</h4>
-                
-                      <div className="space-y-3">
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                          <input
-                            type="checkbox"
-                      checked={rolePermissions['profile']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'profile': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Личный кабинет</span>
-                          </label>
-                  
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['my-objects']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'my-objects': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Мои объекты</span>
-                          </label>
-                  
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['email']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'email': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Email</span>
-                          </label>
-                  
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['academy']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'academy': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Академия</span>
-                          </label>
-                  
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['knowledge-base']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'knowledge-base': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">База знаний</span>
-                          </label>
-                  
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['tasks']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'tasks': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Менеджер задач</span>
-                          </label>
-
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['admin']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'admin': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Админ панель</span>
-                          </label>
-
-                  <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                            <input
-                              type="checkbox"
-                      checked={rolePermissions['hide-in-tasks']}
-                      onChange={(e) => setRolePermissions(prev => ({ ...prev, 'hide-in-tasks': e.target.checked }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="text-black">Не отображать в задачах</span>
-                          </label>
+      {/* Sheet редактирования роли */}
+      <Sheet open={isRoleModalOpen} onOpenChange={(open) => {
+        if (!open) {
+          setIsRoleModalOpen(false)
+          setSelectedRole(null)
+        }
+      }}>
+        <SheetContent className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>
+              Редактирование роли: {selectedRole ? getRoleDisplayName(selectedRole) : ''}
+            </SheetTitle>
+          </SheetHeader>
+          
+          <div className="space-y-6 py-6">
+            {/* Разрешения доступа */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-medium text-black">Разрешения доступа</h4>
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="profile" className="text-black">Личный кабинет</Label>
+                  <Switch
+                    id="profile"
+                    checked={rolePermissions['profile']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'profile': checked }))}
+                  />
                 </div>
-                        </div>
-                      </div>
-
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
-              <button
-                onClick={() => {
-                  setIsRoleModalOpen(false)
-                  setSelectedRole(null)
-                }}
-                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-              >
-                Отменить
-              </button>
-              <button
-                onClick={saveRolePermissions}
-                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                Применить
-              </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="my-objects" className="text-black">Мои объекты</Label>
+                  <Switch
+                    id="my-objects"
+                    checked={rolePermissions['my-objects']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'my-objects': checked }))}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="email" className="text-black">Email</Label>
+                  <Switch
+                    id="email"
+                    checked={rolePermissions['email']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'email': checked }))}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="academy" className="text-black">Академия</Label>
+                  <Switch
+                    id="academy"
+                    checked={rolePermissions['academy']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'academy': checked }))}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="knowledge-base" className="text-black">База знаний</Label>
+                  <Switch
+                    id="knowledge-base"
+                    checked={rolePermissions['knowledge-base']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'knowledge-base': checked }))}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="tasks" className="text-black">Менеджер задач</Label>
+                  <Switch
+                    id="tasks"
+                    checked={rolePermissions['tasks']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'tasks': checked }))}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="admin" className="text-black">Админ панель</Label>
+                  <Switch
+                    id="admin"
+                    checked={rolePermissions['admin']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'admin': checked }))}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="hide-in-tasks" className="text-black">Не отображать в задачах</Label>
+                  <Switch
+                    id="hide-in-tasks"
+                    checked={rolePermissions['hide-in-tasks']}
+                    onCheckedChange={(checked) => setRolePermissions(prev => ({ ...prev, 'hide-in-tasks': checked }))}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button variant="outline">Отменить</Button>
+            </SheetClose>
+            <Button 
+              onClick={saveRolePermissions}
+              style={{backgroundColor: '#fff60b'}}
+              className="text-black hover:opacity-90"
+            >
+              Применить
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       {/* Модальное окно подтверждения удаления роли */}
       {isDeleteRoleModalOpen && roleToDelete && (
