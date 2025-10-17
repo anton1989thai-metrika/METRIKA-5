@@ -800,16 +800,17 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end space-x-2">
-                          <button
+                          <Button
                             onClick={() => {
                               setSelectedUser(user)
                               setIsEditingUser(true)
                             }}
-                            className="px-3 py-1 bg-white border border-gray-300 text-black rounded text-sm hover:shadow-sm transition-all"
+                            variant="outline"
+                            className="w-auto"
                           >
                             <Edit className="w-4 h-4 inline mr-1" />
                             Редактировать
-                          </button>
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -926,6 +927,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         )}
                       </button>
                     </TableHead>
+                    <TableHead>Статус</TableHead>
                     <TableHead>Права</TableHead>
                     <TableHead className="text-right">Действия</TableHead>
                   </TableRow>
@@ -956,6 +958,15 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         </div>
                       </TableCell>
                       <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          user.status === 'active' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {user.status === 'active' ? 'Активен' : 'Неактивен'}
+                        </span>
+                      </TableCell>
+                      <TableCell>
                         <div className="text-sm text-gray-600">
                           {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Никогда'}
                         </div>
@@ -970,12 +981,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
-                <button
+                        <Button
                           onClick={() => openIndividualPermissionsModal(user)}
-                          className="px-3 py-1 bg-white text-gray-600 border border-gray-300 rounded text-sm hover:bg-gray-50 transition-all"
+                          variant="outline"
+                          className="w-auto"
                         >
                           Настроить разрешения
-                </button>
+                        </Button>
                       </TableCell>
                     </TableRow>
               ))}
