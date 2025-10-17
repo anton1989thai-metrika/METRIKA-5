@@ -1842,7 +1842,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           setSelectedUserForCard(null)
         }
       }}>
-        <SheetContent side="right" className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
+        <SheetContent className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>Карточка пользователя</SheetTitle>
           </SheetHeader>
