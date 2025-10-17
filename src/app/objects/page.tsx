@@ -17,6 +17,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Eye, Edit, Trash2 } from "lucide-react";
 
 export default function ObjectsPage() {
   const { t } = useLanguage()
@@ -82,111 +86,47 @@ export default function ObjectsPage() {
           )}
           
           {/* Сетка объектов - адаптивная */}
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 pb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-8">
             {filteredObjects.map((object) => (
-              <Link key={object.id} href={`/objects/${object.id}`}>
-                <div className="card bg-base-100 w-full shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                  <figure>
-                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500">{t('objects.photo')}</span>
+              <Card key={object.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                <Link href={`/objects/${object.id}`}>
+                  <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                    <span className="text-gray-500 text-sm">{t('objects.photo')}</span>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <CardTitle className="text-lg font-normal text-black line-clamp-2 flex-1">
+                        {object.title}
+                      </CardTitle>
+                      <Badge 
+                        variant={object.operation === 'sale' ? 'default' : 'secondary'}
+                        className="ml-2 text-xs"
+                      >
+                        {object.operation === 'sale' ? 'Продажа' : 'Аренда'}
+                      </Badge>
                     </div>
-                  </figure>
-                  <div className="card-body p-0">
-                    <h2 className="card-title text-lg font-normal text-black px-4 pt-4">
-                      {object.title}
-                    </h2>
-                    <p className="text-gray-600 text-sm font-normal px-4 mb-2">
-                      {(() => {
-                        const fullText = `${object.address} • ${object.area}`;
-                        
-                        // Создаем временный элемент для измерения ширины текста
-                        const measureElement = document.createElement('span');
-                        measureElement.style.visibility = 'hidden';
-                        measureElement.style.position = 'absolute';
-                        measureElement.style.fontSize = '14px'; // text-sm
-                        measureElement.style.fontFamily = 'inherit';
-                        measureElement.textContent = fullText;
-                        document.body.appendChild(measureElement);
-                        
-                        const fullWidth = measureElement.offsetWidth;
-                        const availableWidth = 280 - 32; // ширина карточки минус padding (px-4 = 16px с каждой стороны)
-                        
-                        document.body.removeChild(measureElement);
-                        
-                        if (fullWidth <= availableWidth) {
-                          return fullText;
-                        }
-                        
-                        // Если не помещается, обрезаем адрес
-                        const areaText = ` ${object.area}`;
-                        const ellipsisText = '...';
-                        const areaWidth = (() => {
-                          const areaElement = document.createElement('span');
-                          areaElement.style.visibility = 'hidden';
-                          areaElement.style.position = 'absolute';
-                          areaElement.style.fontSize = '14px';
-                          areaElement.style.fontFamily = 'inherit';
-                          areaElement.textContent = areaText;
-                          document.body.appendChild(areaElement);
-                          const width = areaElement.offsetWidth;
-                          document.body.removeChild(areaElement);
-                          return width;
-                        })();
-                        
-                        const ellipsisWidth = (() => {
-                          const ellipsisElement = document.createElement('span');
-                          ellipsisElement.style.visibility = 'hidden';
-                          ellipsisElement.style.position = 'absolute';
-                          ellipsisElement.style.fontSize = '14px';
-                          ellipsisElement.style.fontFamily = 'inherit';
-                          ellipsisElement.textContent = ellipsisText;
-                          document.body.appendChild(ellipsisElement);
-                          const width = ellipsisElement.offsetWidth;
-                          document.body.removeChild(ellipsisElement);
-                          return width;
-                        })();
-                        
-                        const availableForAddress = availableWidth - areaWidth - ellipsisWidth;
-                        
-                        // Бинарный поиск для точной обрезки адреса
-                        let left = 0;
-                        let right = object.address.length;
-                        let bestLength = 0;
-                        
-                        while (left <= right) {
-                          const mid = Math.floor((left + right) / 2);
-                          const testAddress = object.address.substring(0, mid);
-                          
-                          const testElement = document.createElement('span');
-                          testElement.style.visibility = 'hidden';
-                          testElement.style.position = 'absolute';
-                          testElement.style.fontSize = '14px';
-                          testElement.style.fontFamily = 'inherit';
-                          testElement.textContent = testAddress;
-                          document.body.appendChild(testElement);
-                          const testWidth = testElement.offsetWidth;
-                          document.body.removeChild(testElement);
-                          
-                          if (testWidth <= availableForAddress) {
-                            bestLength = mid;
-                            left = mid + 1;
-                          } else {
-                            right = mid - 1;
-                          }
-                        }
-                        
-                        const truncatedAddress = object.address.substring(0, bestLength);
-                        return `${truncatedAddress}${ellipsisText}${areaText}`;
-                      })()}
+                    <p className="text-gray-600 text-sm font-normal mb-3 truncate">
+                      {object.address} • {object.area}
                     </p>
-                    <div className="card-actions justify-end px-4 pb-2 mt-1">
-                      <div className="text-lg font-normal text-black">
+                    <div className="flex items-center justify-between">
+                      <div className="text-lg font-semibold text-black">
                         {object.price}
                       </div>
+                      <div className="flex items-center space-x-2">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </Link>
+                  </CardContent>
+                </Link>
+              </Card>
             ))}
           </div>
           
