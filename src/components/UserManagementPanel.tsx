@@ -909,6 +909,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         )}
                 </button>
                     </TableHead>
+                    <TableHead>Статус</TableHead>
                     <TableHead>
                       <button
                         onClick={() => {
@@ -927,7 +928,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         )}
                       </button>
                     </TableHead>
-                    <TableHead>Статус</TableHead>
                     <TableHead>Права</TableHead>
                     <TableHead className="text-right">Действия</TableHead>
                   </TableRow>
