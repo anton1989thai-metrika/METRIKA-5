@@ -1495,12 +1495,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальные окна */}
       {/* Модальное окно создания пользователя */}
       <Dialog open={isCreatingUser} onOpenChange={setIsCreatingUser}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden p-6">
-          <DialogHeader className="mb-6">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden p-0 flex flex-col">
+          <DialogHeader className="p-6 pb-4">
             <DialogTitle className="text-xl font-semibold text-black">Добавить пользователя</DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-6 overflow-y-auto max-h-[calc(85vh-180px)]">
+          <div className="flex-1 overflow-y-auto px-6">
+            <div className="space-y-6 pb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <Label className="block text-sm font-medium text-black mb-2">Имя *</Label>
@@ -1623,9 +1624,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 placeholder="Введите комментарии"
               />
             </div>
+            </div>
           </div>
 
-          <DialogFooter className="mt-6 pt-6 border-t border-gray-200">
+          <DialogFooter className="p-6 pt-4 border-t border-gray-200 bg-gray-50">
             <Button
               onClick={() => setIsCreatingUser(false)}
               variant="outline"
