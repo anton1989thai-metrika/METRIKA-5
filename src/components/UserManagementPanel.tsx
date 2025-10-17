@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from 'next/navigation'
 import { User as UserType, RoleSettings } from '@/data/users'
 import { arePermissionsStandardWithLocalStorage, getRoleDisplayName } from '@/lib/permissions'
 import { Button } from '@/components/ui/button';
@@ -47,12 +48,12 @@ interface UserManagementPanelProps {
 }
 
 export default function UserManagementPanel({ onClose }: UserManagementPanelProps) {
+  const router = useRouter()
   const [users, setUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState('list')
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
-  const [isCreatingUser, setIsCreatingUser] = useState(false)
   const [isEditingUser, setIsEditingUser] = useState(false)
   const [isUserCardOpen, setIsUserCardOpen] = useState(false)
   const [selectedUserForCard, setSelectedUserForCard] = useState<UserType | null>(null)
@@ -172,31 +173,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const [sortBy, setSortBy] = useState<'name' | 'role' | 'lastLogin' | 'createdAt'>('name')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
-  // Состояние для нового пользователя
-  const [newUser, setNewUser] = useState<Partial<UserType>>({
-    name: '',
-    email: '',
-    login: '',
-    password: '',
-    role: 'employee',
-    status: 'pending',
-    permissions: {
-      canManageObjects: false,
-      canManageUsers: false,
-      canViewAnalytics: false,
-      canManageTasks: false,
-      canManageMedia: false,
-      canManageContent: false,
-      canManageSettings: false
-    },
-    dateOfBirth: '',
-    phoneWork: '',
-    phonePersonal: '',
-    address: '',
-    userObjects: [],
-    comments: ''
-  })
-
   // Загрузка пользователей при инициализации
   useEffect(() => {
     const fetchInitialUsers = async () => {
@@ -252,141 +228,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       console.error('Error syncing users:', error);
     }
   };
-
-  // Создание пользователя
-  const createUser = async () => {
-    if (!newUser.name || !newUser.email) {
-      alert('Пожалуйста, заполните обязательные поля: Имя и Email');
-      return;
-    }
-
-    // Проверка уникальности email
-    if (users.some(user => user.email === newUser.email)) {
-      alert('Пользователь с таким email уже существует');
-      return;
-    }
-
-    // Проверка уникальности логина
-    if (newUser.login && users.some(user => user.login === newUser.login)) {
-      alert('Пользователь с таким логином уже существует');
-      return;
-    }
-
-    const user: UserType = {
-      id: Date.now().toString(),
-      name: newUser.name!,
-      email: newUser.email!,
-      login: newUser.login || '',
-      password: newUser.password || '',
-      role: newUser.role || 'employee',
-      status: newUser.status || 'pending',
-      permissions: newUser.permissions || {
-        canManageObjects: false,
-        canManageUsers: false,
-        canViewAnalytics: false,
-        canManageTasks: false,
-        canManageMedia: false,
-        canManageContent: false,
-        canManageSettings: false
-      },
-      detailedPermissions: {
-        personalCabinet: { enabled: true },
-        myObjects: { enabled: false },
-        email: { 
-          enabled: false,
-          viewMail: false,
-          sendEmails: false,
-          manageMailboxes: false,
-          mailSettings: false
-        },
-        academy: { 
-          enabled: false,
-          dashboard: false,
-          courses: false,
-          tests: false,
-          achievements: false,
-          materials: false
-        },
-        knowledgeBase: { enabled: false },
-        taskManager: { 
-          enabled: false,
-          viewTasks: false,
-          createTasks: false,
-          assignExecutors: false,
-          closeTasks: false,
-          editTasks: false,
-          changeExecutors: false,
-          changeCurators: false,
-          editSubtasks: false,
-          editChecklists: false,
-          viewOtherUsersTasks: false
-        },
-        adminPanel: { 
-          enabled: false,
-          dashboard: false,
-          email: false,
-          content: false,
-          objects: false,
-          users: false,
-          tasks: false,
-          media: false,
-          hr: false,
-          analytics: false,
-          settings: false
-        },
-        otherPermissions: {
-          enabled: false,
-          canChangeExecutorInOwnTasks: false,
-          canChangeCuratorInOwnTasks: false,
-          cannotEditTasksFrom: [],
-          canCreateHiddenTasks: false,
-          canViewHiddenTasks: false,
-          hiddenTasksFrom: []
-        }
-      },
-      lastLogin: undefined,
-      createdAt: new Date().toISOString(),
-      dateOfBirth: newUser.dateOfBirth || '',
-      phoneWork: newUser.phoneWork || '',
-      phonePersonal: newUser.phonePersonal || '',
-      address: newUser.address || '',
-      userObjects: newUser.userObjects || [],
-      comments: newUser.comments || ''
-    };
-
-    const updatedUsers = [...users, user];
-    setUsers(updatedUsers);
-    await syncUsersWithServer(updatedUsers);
-    setIsCreatingUser(false);
-    resetToDefaults();
-  }
-
-  // Сброс формы к дефолтным значениям
-  const resetToDefaults = () => {
-    setNewUser({
-      name: '',
-      email: '',
-      login: '',
-      password: '',
-      role: 'employee',
-      status: 'pending',
-      permissions: {
-        canManageObjects: false,
-        canManageUsers: false,
-        canViewAnalytics: false,
-        canManageTasks: false,
-        canManageMedia: false,
-        canManageContent: false,
-        canManageSettings: false
-      },
-      dateOfBirth: '',
-      phoneWork: '',
-      phonePersonal: '',
-      address: '',
-      userObjects: [],
-      comments: ''
-    })
-  }
 
   // Обновление пользователя
   const updateUser = async (userId: string, updates: Partial<UserType>) => {
@@ -824,7 +665,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           </div>
             )}
           <Button
-            onClick={() => setIsCreatingUser(true)}
+            onClick={() => router.push('/admin/users/add')}
             variant="default"
             className="gap-2"
           >
@@ -1496,158 +1337,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       </div>
 
       {/* Модальные окна */}
-      {/* Модальное окно создания пользователя */}
-      <Dialog open={isCreatingUser} onOpenChange={setIsCreatingUser}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden p-0 flex flex-col">
-          <DialogHeader className="p-6 pb-4">
-            <DialogTitle className="text-xl font-semibold text-black">Добавить пользователя</DialogTitle>
-          </DialogHeader>
-          
-          <div className="flex-1 overflow-y-auto px-6">
-            <div className="space-y-6 pb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Имя *</Label>
-                <Input
-                  type="text"
-                  value={newUser.name || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, name: e.target.value }))}
-                  placeholder="Введите имя"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Email *</Label>
-                <Input
-                  type="email"
-                  value={newUser.email || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, email: e.target.value }))}
-                  placeholder="Введите email"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Логин</Label>
-                <Input
-                  type="text"
-                  value={newUser.login || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, login: e.target.value }))}
-                  placeholder="Введите логин"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Пароль</Label>
-                <Input
-                  type="password"
-                  value={newUser.password || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, password: e.target.value }))}
-                  placeholder="Введите пароль"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Роль</Label>
-                <Select value={newUser.role || 'employee'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, role: value as any }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите роль" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="site-user">Пользователь сайта</SelectItem>
-                    <SelectItem value="client">Клиент Метрики</SelectItem>
-                    <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
-                    <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
-                    <SelectItem value="employee">Сотрудник</SelectItem>
-                    <SelectItem value="manager">Менеджер</SelectItem>
-                    <SelectItem value="admin">Администратор</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Статус</Label>
-                <Select value={newUser.status || 'pending'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, status: value as any }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите статус" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Активен</SelectItem>
-                    <SelectItem value="inactive">Неактивен</SelectItem>
-                    <SelectItem value="pending">Ожидает</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Дата рождения</Label>
-                <Input
-                  type="text"
-                  value={newUser.dateOfBirth || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, dateOfBirth: e.target.value }))}
-                  placeholder="ДД.ММ.ГГГГ"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Рабочий телефон</Label>
-                <Input
-                  type="text"
-                  value={newUser.phoneWork || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phoneWork: e.target.value }))}
-                  placeholder="+7 (999) 123-45-67"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Личный телефон</Label>
-                <Input
-                  type="text"
-                  value={newUser.phonePersonal || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phonePersonal: e.target.value }))}
-                  placeholder="+7 (999) 123-45-67"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <Label className="block text-sm font-medium text-black mb-2">Адрес</Label>
-                <Input
-                  type="text"
-                  value={newUser.address || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, address: e.target.value }))}
-                  placeholder="Введите адрес"
-                />
-              </div>
-            </div>
-
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-              <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
-              <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
-                <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
-              </div>
-            </div>
-            
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-              <Label className="block text-sm font-medium text-black mb-2">Комментарии</Label>
-              <textarea
-                value={newUser.comments || ''}
-                onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, comments: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                rows={3}
-                placeholder="Введите комментарии"
-              />
-            </div>
-            </div>
-          </div>
-
-          <DialogFooter className="p-6 pt-4 border-t border-gray-200 bg-gray-50">
-            <Button
-              onClick={() => setIsCreatingUser(false)}
-              variant="outline"
-            >
-              Отменить
-            </Button>
-            <Button
-              onClick={createUser}
-              style={{backgroundColor: '#fff60b'}}
-              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-            >
-              Создать пользователя
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Sheet редактирования пользователя */}
       <Sheet open={isEditingUser} onOpenChange={(open) => {
