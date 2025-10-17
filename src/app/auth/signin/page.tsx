@@ -14,7 +14,7 @@ export default function LoginPage() {
         <img
           src="/images/login-bg.jpg"
           alt="МЕТРИКА - Авторизация"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-x-0 top-[500px] bottom-[500px] h-auto w-full object-contain"
         />
       </div>
     </div>
