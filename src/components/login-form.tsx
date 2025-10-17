@@ -151,24 +151,6 @@ export function LoginForm({
           Вернуться на главную
         </Link>
       </div>
-      
-      {/* Реальные пользователи */}
-      <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-        <h3 className="text-sm font-medium text-black mb-2">Реальные пользователи:</h3>
-        <div className="text-xs text-gray-600 space-y-1">
-          <p><strong>Админ:</strong> admin / admin123 (Нехорошков Антон)</p>
-          <p><strong>Менеджер:</strong> snikfayker / manager123 (Сникфайкер)</p>
-          <p><strong>Агент:</strong> maslova / agent123 (Маслова Ирина)</p>
-          <p><strong>Агент:</strong> ionin / agent123 (Ионин Владислав)</p>
-          <p><strong>Агент:</strong> shirokikh / agent123 (Андрей Широких)</p>
-          <p><strong>Агент:</strong> berdnik / agent123 (Бердник Вадим)</p>
-          <p><strong>Агент:</strong> derik / agent123 (Дерик Олег)</p>
-          <p><strong>Сотрудник:</strong> kan / employee123 (Кан Татьяна)</p>
-          <p><strong>Сотрудник:</strong> povreznyuk / employee123 (Поврезнюк Мария)</p>
-          <p><strong>Сотрудник:</strong> stulina / employee123 (Стулина Елена)</p>
-          <p><strong>Сотрудник:</strong> tambovtseva / employee123 (Тамбовцева Екатерина)</p>
-        </div>
-      </div>
     </form>
   )
 }
