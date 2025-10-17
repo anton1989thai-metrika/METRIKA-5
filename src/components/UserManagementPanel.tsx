@@ -1495,12 +1495,12 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальные окна */}
       {/* Модальное окно создания пользователя */}
       <Dialog open={isCreatingUser} onOpenChange={setIsCreatingUser}>
-        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden p-6">
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden p-6">
           <DialogHeader className="mb-6">
             <DialogTitle className="text-xl font-semibold text-black">Добавить пользователя</DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
+          <div className="space-y-6 overflow-y-auto max-h-[calc(85vh-180px)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <Label className="block text-sm font-medium text-black mb-2">Имя *</Label>
