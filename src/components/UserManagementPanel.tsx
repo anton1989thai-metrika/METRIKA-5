@@ -1005,12 +1005,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         {/* Роли */}
         {activeTab === 'roles' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                    <div>
-                <h3 className="text-lg font-semibold text-black">Роли</h3>
-                <p className="text-sm text-gray-600">Управление ролями и их разрешениями</p>
-                      </div>
-                    </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {/* Пользователь сайта */}
