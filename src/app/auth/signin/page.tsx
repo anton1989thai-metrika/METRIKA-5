@@ -10,11 +10,11 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="bg-muted relative hidden lg:block">
+      <div className="bg-white relative hidden lg:block flex items-center justify-center">
         <img
           src="/images/login-bg.jpg"
           alt="МЕТРИКА - Авторизация"
-          className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
+          className="max-h-full max-w-full object-contain"
         />
       </div>
     </div>
