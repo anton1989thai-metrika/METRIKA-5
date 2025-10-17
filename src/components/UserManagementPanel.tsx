@@ -699,7 +699,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           <div className="space-y-6">
             {/* Фильтры и поиск */}
             <div className="flex items-center space-x-4">
-              <div className="flex-1">
+              <div className="w-64">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
@@ -712,7 +712,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
               <Select value={filterRole} onValueChange={setFilterRole}>
-                <SelectTrigger>
+                <SelectTrigger className="w-32">
                   <SelectValue placeholder="Все роли" />
                 </SelectTrigger>
                 <SelectContent>
@@ -727,7 +727,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </SelectContent>
               </Select>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger>
+                <SelectTrigger className="w-32">
                   <SelectValue placeholder="Все статусы" />
                 </SelectTrigger>
                 <SelectContent>
@@ -843,7 +843,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             
             {/* Фильтры и поиск */}
             <div className="flex items-center space-x-4">
-              <div className="flex-1">
+              <div className="w-64">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
@@ -856,7 +856,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
               <Select value={filterRole} onValueChange={setFilterRole}>
-                <SelectTrigger>
+                <SelectTrigger className="w-32">
                   <SelectValue placeholder="Все роли" />
                 </SelectTrigger>
                 <SelectContent>
@@ -871,7 +871,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </SelectContent>
               </Select>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger>
+                <SelectTrigger className="w-32">
                   <SelectValue placeholder="Все статусы" />
                 </SelectTrigger>
                 <SelectContent>
