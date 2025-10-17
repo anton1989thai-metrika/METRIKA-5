@@ -651,8 +651,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Заголовок */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black">Управление пользователями</h2>
-          <p className="text-gray-600">Управление пользователями и их правами доступа</p>
         </div>
         {activeTab === 'list' && (
         <div className="flex items-center space-x-4">
