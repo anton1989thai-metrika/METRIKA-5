@@ -1656,7 +1656,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           setSelectedUser(null)
         }
       }}>
-        <SheetContent className="w-[800px] sm:w-[800px] overflow-y-auto">
+        <SheetContent className="w-[1600px] sm:w-[1600px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>Редактировать пользователя</SheetTitle>
             <SheetDescription>
@@ -1666,7 +1666,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           
           {selectedUser && (
             <div className="space-y-6 py-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                   <label className="block text-sm font-medium text-black mb-2">Имя *</label>
                   <Input
@@ -2137,7 +2137,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
 
       {/* Sheet индивидуальных разрешений */}
       <Sheet open={isIndividualPermissionsModalOpen} onOpenChange={setIsIndividualPermissionsModalOpen}>
-        <SheetContent className="w-[800px] sm:w-[800px] overflow-y-auto">
+        <SheetContent className="w-[1600px] sm:w-[1600px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>
               Индивидуальные разрешения: {selectedUserForPermissions?.name}
@@ -2153,7 +2153,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               <div className="space-y-4">
                 <h4 className="text-lg font-medium text-black">Основные разделы</h4>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-2">
                     <Switch
                       id="personal-cabinet"
@@ -2244,7 +2244,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               {individualPermissions.email?.enabled && (
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Email - Подразделы</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="view-mail"
@@ -2300,7 +2300,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               {individualPermissions.academy?.enabled && (
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Академия - Подразделы</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="academy-dashboard"
@@ -2368,7 +2368,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               {individualPermissions.adminPanel?.enabled && (
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Админ панель - Подразделы</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="admin-dashboard"
@@ -2629,7 +2629,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <div className="space-y-4">
                   <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Пользователи</label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                         {users.filter(u => u.id !== selectedUserForPermissions?.id).map(user => (
                           <div key={user.id} className="flex items-center space-x-2">
                             <Switch
@@ -2709,7 +2709,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <h4 className="text-lg font-medium text-black">Дополнительные разрешения</h4>
                 
                 <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="change-executor-own"
@@ -2776,7 +2776,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Не может редактировать/удалять задачи пользователей:
                   </label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {users.filter(u => u.id !== selectedUserForPermissions?.id).map(user => (
                         <div key={user.id} className="flex items-center space-x-2">
                           <Switch
