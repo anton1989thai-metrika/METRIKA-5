@@ -4,10 +4,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-svh bg-white flex items-center justify-center">
       <div 
-        className="flex items-center justify-center gap-[100px]"
+        className="flex items-center justify-center w-full gap-[100px]"
         style={{
-          width: '1260px',
-          height: '900px',
           border: '3px solid #d1d5db',
           padding: '50px'
         }}
