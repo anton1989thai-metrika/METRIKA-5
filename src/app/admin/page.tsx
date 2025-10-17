@@ -340,14 +340,6 @@ function AdminPageContent() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-3xl font-bold text-black mb-2">Админ панель МЕТРИКА</h1>
-                  <p className="text-gray-600">Управление сайтом и контентом</p>
-                  <div className="mt-2 text-sm text-gray-500">
-                    <p>Вошли как: <span className="font-medium text-black">{session?.user?.name}</span></p>
-                    <p>Роль: <span className="font-medium text-black capitalize">{session?.user?.role}</span></p>
-                    {(session?.user as any)?.department && (
-                      <p>Отдел: <span className="font-medium text-black">{(session?.user as any)?.department}</span></p>
-                    )}
-                  </div>
                 </div>
                 <button className="relative p-3 bg-white border border-gray-300 rounded-full shadow-lg hover:shadow-xl transition-all">
                   <Bell className="w-6 h-6 text-gray-600" />
