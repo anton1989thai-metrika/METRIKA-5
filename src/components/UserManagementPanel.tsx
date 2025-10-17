@@ -850,12 +850,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         {/* Индивидуальные разрешения */}
         {activeTab === 'permissions' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-black">Индивидуальные разрешения</h3>
-                <p className="text-sm text-gray-600">Настройка индивидуальных разрешений для каждого пользователя</p>
-              </div>
-            </div>
             
             {/* Фильтры и поиск */}
             <div className="flex items-center space-x-4">
