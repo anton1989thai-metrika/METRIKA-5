@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Users,
   UserPlus,
@@ -1648,175 +1649,176 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         </DialogContent>
       </Dialog>
 
-      {/* Модальное окно редактирования пользователя */}
-      <Dialog open={isEditingUser} onOpenChange={(open) => {
+      {/* Sheet редактирования пользователя */}
+      <Sheet open={isEditingUser} onOpenChange={(open) => {
         if (!open) {
           setIsEditingUser(false)
           setSelectedUser(null)
         }
       }}>
-        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden p-6">
-          <DialogHeader className="mb-6">
-            <DialogTitle className="text-xl font-semibold text-black">Редактировать пользователя</DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Имя *</label>
-                <Input
-                  value={selectedUser?.name || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, name: e.target.value } : null)}
-                  className="w-full"
-                />
-                        </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Email *</label>
-                <Input
-                  type="email"
-                  value={selectedUser?.email || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, email: e.target.value } : null)}
-                  className="w-full"
-                />
-                        </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Логин</label>
-                <Input
-                  value={selectedUser?.login || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, login: e.target.value } : null)}
-                  className="w-full"
-                />
-                      </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Пароль</label>
-                <Input
-                  type="password"
-                  value={selectedUser?.password || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, password: e.target.value } : null)}
-                  className="w-full"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Роль</label>
-                <Select
-                  value={selectedUser?.role || ''}
-                  onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, role: value as any } : null)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Выберите роль" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="site-user">Пользователь сайта</SelectItem>
-                    <SelectItem value="client">Клиент Метрики</SelectItem>
-                    <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
-                    <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
-                    <SelectItem value="employee">Сотрудник</SelectItem>
-                    <SelectItem value="manager">Менеджер</SelectItem>
-                    <SelectItem value="admin">Администратор</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Статус</label>
-                <Select
-                  value={selectedUser?.status || ''}
-                  onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, status: value as any } : null)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Выберите статус" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Активен</SelectItem>
-                    <SelectItem value="inactive">Неактивен</SelectItem>
-                    <SelectItem value="pending">Ожидает</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
-                <Input
-                  value={selectedUser?.dateOfBirth || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, dateOfBirth: e.target.value } : null)}
-                  placeholder="ДД.ММ.ГГГГ"
-                  className="w-full"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
-                <Input
-                  value={selectedUser?.phoneWork || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phoneWork: e.target.value } : null)}
-                  placeholder="+7 (999) 123-45-67"
-                  className="w-full"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
-                <Input
-                  value={selectedUser?.phonePersonal || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phonePersonal: e.target.value } : null)}
-                  placeholder="+7 (999) 123-45-67"
-                  className="w-full"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Адрес</label>
-                <Input
-                  value={selectedUser?.address || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, address: e.target.value } : null)}
-                  placeholder="Введите адрес"
-                  className="w-full"
-                />
-              </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-                <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
-                <Input
-                  value={selectedUser?.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString() : ''}
-                  className="w-full bg-gray-100 text-gray-500"
-                  disabled
-                />
-              </div>
+        <SheetContent className="w-[800px] sm:w-[800px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Редактировать пользователя</SheetTitle>
+            <SheetDescription>
+              Измените информацию о пользователе
+            </SheetDescription>
+          </SheetHeader>
+          
+          {selectedUser && (
+            <div className="space-y-6 py-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Имя *</label>
+                  <Input
+                    value={selectedUser?.name || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, name: e.target.value } : null)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Email *</label>
+                  <Input
+                    type="email"
+                    value={selectedUser?.email || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, email: e.target.value } : null)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
+                  <Input
+                    value={selectedUser?.login || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, login: e.target.value } : null)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
+                  <Input
+                    type="password"
+                    value={selectedUser?.password || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, password: e.target.value } : null)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Роль</label>
+                  <Select
+                    value={selectedUser?.role || ''}
+                    onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, role: value as any } : null)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Выберите роль" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="site-user">Пользователь сайта</SelectItem>
+                      <SelectItem value="client">Клиент Метрики</SelectItem>
+                      <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
+                      <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
+                      <SelectItem value="employee">Сотрудник</SelectItem>
+                      <SelectItem value="manager">Менеджер</SelectItem>
+                      <SelectItem value="admin">Администратор</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Статус</label>
+                  <Select
+                    value={selectedUser?.status || ''}
+                    onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, status: value as any } : null)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Выберите статус" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Активен</SelectItem>
+                      <SelectItem value="inactive">Неактивен</SelectItem>
+                      <SelectItem value="pending">Ожидает</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
+                  <Input
+                    value={selectedUser?.dateOfBirth || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, dateOfBirth: e.target.value } : null)}
+                    placeholder="ДД.ММ.ГГГГ"
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
+                  <Input
+                    value={selectedUser?.phoneWork || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phoneWork: e.target.value } : null)}
+                    placeholder="+7 (999) 123-45-67"
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
+                  <Input
+                    value={selectedUser?.phonePersonal || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phonePersonal: e.target.value } : null)}
+                    placeholder="+7 (999) 123-45-67"
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Адрес</label>
+                  <Input
+                    value={selectedUser?.address || ''}
+                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, address: e.target.value } : null)}
+                    placeholder="Введите адрес"
+                    className="w-full"
+                  />
+                </div>
+                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                  <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
+                  <Input
+                    value={selectedUser?.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString() : ''}
+                    className="w-full bg-gray-100 text-gray-500"
+                    disabled
+                  />
+                </div>
             </div>
             
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-              <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
-              <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
-                {selectedUser?.userObjects && selectedUser.userObjects.length > 0 ? (
-                  <div className="space-y-2">
-                    {selectedUser.userObjects.map((objectId, index) => (
-                      <div key={index} className="p-2 bg-white rounded border text-sm">
-                        Объект {objectId} (функционал в разработке)
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
-                )}
-              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
+                <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
+                  {selectedUser?.userObjects && selectedUser.userObjects.length > 0 ? (
+                    <div className="space-y-2">
+                      {selectedUser.userObjects.map((objectId, index) => (
+                        <div key={index} className="p-2 bg-white rounded border text-sm">
+                          Объект {objectId} (функционал в разработке)
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
+                  )}
                 </div>
+              </div>
 
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
-              <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
-              <textarea
-                value={selectedUser?.comments || ''}
-                onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, comments: e.target.value } : null)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                rows={3}
-                placeholder="Введите комментарии"
-              />
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Комментарии</Label>
+                <Textarea
+                  value={selectedUser?.comments || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, comments: e.target.value } : null)}
+                  className="w-full"
+                  rows={3}
+                  placeholder="Введите комментарии"
+                />
+              </div>
             </div>
-          </div>
-
-          <DialogFooter className="mt-6 pt-6 border-t border-gray-200">
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setIsEditingUser(false)
-                setSelectedUser(null)
-              }}
-            >
-              Отменить
-            </Button>
+          )}
+          
+          <SheetFooter className="flex items-center justify-between">
+            <SheetClose asChild>
+              <Button variant="outline">
+                Отменить
+              </Button>
+            </SheetClose>
             <Button 
               onClick={() => {
                 if (selectedUser) {
@@ -1826,14 +1828,12 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 }
               }}
               style={{backgroundColor: '#fff60b'}}
-              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
             >
               Сохранить изменения
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       {/* Модальное окно карточки пользователя */}
       <Dialog open={isUserCardOpen} onOpenChange={(open) => {
