@@ -989,7 +989,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <TableCell className="text-right">
                 <button
                           onClick={() => openIndividualPermissionsModal(user)}
-                          className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-all"
+                          className="px-3 py-1 bg-white text-gray-600 border border-gray-300 rounded text-sm hover:bg-gray-50 transition-all"
                         >
                           Настроить разрешения
                 </button>
