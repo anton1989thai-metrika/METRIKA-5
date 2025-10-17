@@ -6,6 +6,7 @@ import { arePermissionsStandardWithLocalStorage, getRoleDisplayName } from '@/li
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -2133,27 +2134,20 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         </div>
       )}
 
-      {/* Модальное окно индивидуальных разрешений */}
-      {isIndividualPermissionsModalOpen && selectedUserForPermissions && individualPermissions && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-semibold text-black">
-                Индивидуальные разрешения: {selectedUserForPermissions.name}
-              </h3>
-              <button
-                onClick={() => {
-                  setIsIndividualPermissionsModalOpen(false)
-                  setSelectedUserForPermissions(null)
-                  setIndividualPermissions(null)
-                }}
-                className="p-1 text-gray-600 hover:text-black"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+      {/* Sheet индивидуальных разрешений */}
+      <Sheet open={isIndividualPermissionsModalOpen} onOpenChange={setIsIndividualPermissionsModalOpen}>
+        <SheetContent className="w-[800px] sm:w-[800px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>
+              Индивидуальные разрешения: {selectedUserForPermissions?.name}
+            </SheetTitle>
+            <SheetDescription>
+              Настройте индивидуальные разрешения для пользователя
+            </SheetDescription>
+          </SheetHeader>
+          
+          {selectedUserForPermissions && individualPermissions && (
+            <div className="space-y-6 py-6">
               {/* Основные разделы */}
               <div className="space-y-4">
                 <h4 className="text-lg font-medium text-black">Основные разделы</h4>
@@ -2860,48 +2854,34 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
               </div>
             </div>
-
-            <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-              <button
-                onClick={resetToRolePermissions}
-                className={`px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all ${
-                  isRoleButtonPressed 
-                    ? 'text-black' 
-                    : 'bg-white border border-gray-300 text-black'
-                }`}
-                style={{
-                  backgroundColor: isRoleButtonPressed ? '#fff60b' : undefined
-                }}
-                onMouseEnter={!isRoleButtonPressed ? (e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a' : undefined}
-                onMouseLeave={!isRoleButtonPressed ? (e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b' : undefined}
-              >
-                По роли
-              </button>
-              <div className="flex items-center space-x-4">
-              <button
-                onClick={() => {
-                    setIsIndividualPermissionsModalOpen(false)
-                    setSelectedUserForPermissions(null)
-                    setIndividualPermissions(null)
-                }}
-                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-              >
+          )}
+          
+          <SheetFooter className="flex items-center justify-between">
+            <Button
+              onClick={resetToRolePermissions}
+              variant={isRoleButtonPressed ? "default" : "outline"}
+              style={{
+                backgroundColor: isRoleButtonPressed ? '#fff60b' : undefined
+              }}
+            >
+              По роли
+            </Button>
+            <div className="flex items-center space-x-4">
+              <SheetClose asChild>
+                <Button variant="outline">
                   Отменить
-              </button>
-              <button
-                  onClick={saveIndividualPermissions}
-                  className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-                  style={{ backgroundColor: '#fff60b' }}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                </Button>
+              </SheetClose>
+              <Button
+                onClick={saveIndividualPermissions}
+                style={{ backgroundColor: '#fff60b' }}
               >
-                  Применить
-              </button>
-              </div>
+                Применить
+              </Button>
             </div>
-          </div>
-        </div>
-      )}
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
