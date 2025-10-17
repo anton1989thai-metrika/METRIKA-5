@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCap
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import {
   Users,
   UserPlus,
@@ -2153,96 +2154,89 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <h4 className="text-lg font-medium text-black">Основные разделы</h4>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="personal-cabinet"
                       checked={individualPermissions.personalCabinet?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        personalCabinet: { ...prev.personalCabinet, enabled: e.target.checked }
+                        personalCabinet: { ...prev.personalCabinet, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">Личный кабинет</span>
-                          </label>
+                    <Label htmlFor="personal-cabinet">Личный кабинет</Label>
+                  </div>
 
-                  <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="my-objects"
                       checked={individualPermissions.myObjects?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        myObjects: { ...prev.myObjects, enabled: e.target.checked }
+                        myObjects: { ...prev.myObjects, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">Мои объекты</span>
-                          </label>
+                    <Label htmlFor="my-objects">Мои объекты</Label>
+                  </div>
 
-                  <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="email"
                       checked={individualPermissions.email?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        email: { ...prev.email, enabled: e.target.checked }
+                        email: { ...prev.email, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">Email</span>
-                          </label>
+                    <Label htmlFor="email">Email</Label>
+                  </div>
 
-                  <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="academy"
                       checked={individualPermissions.academy?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        academy: { ...prev.academy, enabled: e.target.checked }
+                        academy: { ...prev.academy, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">Академия</span>
-                          </label>
+                    <Label htmlFor="academy">Академия</Label>
+                  </div>
 
-                  <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="knowledge-base"
                       checked={individualPermissions.knowledgeBase?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        knowledgeBase: { ...prev.knowledgeBase, enabled: e.target.checked }
+                        knowledgeBase: { ...prev.knowledgeBase, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">База знаний</span>
-                          </label>
+                    <Label htmlFor="knowledge-base">База знаний</Label>
+                  </div>
 
-                  <label className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="task-manager"
                       checked={individualPermissions.taskManager?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        taskManager: { ...prev.taskManager, enabled: e.target.checked }
+                        taskManager: { ...prev.taskManager, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">Менеджер задач</span>
-                          </label>
+                    <Label htmlFor="task-manager">Менеджер задач</Label>
+                  </div>
 
-                  <label className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="admin-panel"
                       checked={individualPermissions.adminPanel?.enabled || false}
-                      onChange={(e) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                         ...prev,
-                        adminPanel: { ...prev.adminPanel, enabled: e.target.checked }
+                        adminPanel: { ...prev.adminPanel, enabled: checked }
                       }))}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-black">Админ панель</span>
-                          </label>
+                    <Label htmlFor="admin-panel">Админ панель</Label>
+                  </div>
                 </div>
               </div>
 
@@ -2251,58 +2245,54 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Email - Подразделы</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="view-mail"
                         checked={individualPermissions.email?.viewMail || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          email: { ...prev.email, viewMail: e.target.checked }
+                          email: { ...prev.email, viewMail: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Просмотр почты</span>
-                          </label>
+                      <Label htmlFor="view-mail">Просмотр почты</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="send-emails"
                         checked={individualPermissions.email?.sendEmails || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          email: { ...prev.email, sendEmails: e.target.checked }
+                          email: { ...prev.email, sendEmails: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Отправка писем</span>
-                          </label>
+                      <Label htmlFor="send-emails">Отправка писем</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="manage-mailboxes"
                         checked={individualPermissions.email?.manageMailboxes || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          email: { ...prev.email, manageMailboxes: e.target.checked }
+                          email: { ...prev.email, manageMailboxes: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Управление почтовыми ящиками</span>
-                          </label>
+                      <Label htmlFor="manage-mailboxes">Управление почтовыми ящиками</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="mail-settings"
                         checked={individualPermissions.email?.mailSettings || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          email: { ...prev.email, mailSettings: e.target.checked }
+                          email: { ...prev.email, mailSettings: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Настройки почты</span>
-                          </label>
-                        </div>
+                      <Label htmlFor="mail-settings">Настройки почты</Label>
+                    </div>
+                  </div>
                       </div>
               )}
 
@@ -2311,70 +2301,65 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Академия - Подразделы</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="academy-dashboard"
                         checked={individualPermissions.academy?.dashboard || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          academy: { ...prev.academy, dashboard: e.target.checked }
+                          academy: { ...prev.academy, dashboard: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Дашборд</span>
-                          </label>
+                      <Label htmlFor="academy-dashboard">Дашборд</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="academy-courses"
                         checked={individualPermissions.academy?.courses || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          academy: { ...prev.academy, courses: e.target.checked }
+                          academy: { ...prev.academy, courses: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Курсы</span>
-                          </label>
+                      <Label htmlFor="academy-courses">Курсы</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="academy-tests"
                         checked={individualPermissions.academy?.tests || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          academy: { ...prev.academy, tests: e.target.checked }
+                          academy: { ...prev.academy, tests: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Тесты</span>
-                          </label>
+                      <Label htmlFor="academy-tests">Тесты</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="academy-achievements"
                         checked={individualPermissions.academy?.achievements || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          academy: { ...prev.academy, achievements: e.target.checked }
+                          academy: { ...prev.academy, achievements: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Достижения</span>
-                          </label>
+                      <Label htmlFor="academy-achievements">Достижения</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="academy-materials"
                         checked={individualPermissions.academy?.materials || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          academy: { ...prev.academy, materials: e.target.checked }
+                          academy: { ...prev.academy, materials: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Материалы</span>
-                          </label>
+                      <Label htmlFor="academy-materials">Материалы</Label>
+                    </div>
                         </div>
                       </div>
             )}
@@ -2384,136 +2369,126 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Админ панель - Подразделы</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-dashboard"
                         checked={individualPermissions.adminPanel?.dashboard || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, dashboard: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, dashboard: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Дашборд</span>
-                          </label>
+                      <Label htmlFor="admin-dashboard">Дашборд</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-email"
                         checked={individualPermissions.adminPanel?.email || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, email: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, email: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Email</span>
-                          </label>
+                      <Label htmlFor="admin-email">Email</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-content"
                         checked={individualPermissions.adminPanel?.content || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, content: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, content: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Контент</span>
-                          </label>
+                      <Label htmlFor="admin-content">Контент</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-objects"
                         checked={individualPermissions.adminPanel?.objects || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, objects: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, objects: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Объекты</span>
-                          </label>
+                      <Label htmlFor="admin-objects">Объекты</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-users"
                         checked={individualPermissions.adminPanel?.users || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, users: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, users: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Пользователи</span>
-                          </label>
+                      <Label htmlFor="admin-users">Пользователи</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-tasks"
                         checked={individualPermissions.adminPanel?.tasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, tasks: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, tasks: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Задачи</span>
-                          </label>
+                      <Label htmlFor="admin-tasks">Задачи</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-media"
                         checked={individualPermissions.adminPanel?.media || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, media: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, media: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Медиа</span>
-                          </label>
+                      <Label htmlFor="admin-media">Медиа</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-hr"
                         checked={individualPermissions.adminPanel?.hr || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, hr: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, hr: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Кадры и бухгалтерия</span>
-                          </label>
+                      <Label htmlFor="admin-hr">Кадры и бухгалтерия</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-analytics"
                         checked={individualPermissions.adminPanel?.analytics || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, analytics: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, analytics: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Аналитика</span>
-                          </label>
+                      <Label htmlFor="admin-analytics">Аналитика</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="admin-settings"
                         checked={individualPermissions.adminPanel?.settings || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          adminPanel: { ...prev.adminPanel, settings: e.target.checked }
+                          adminPanel: { ...prev.adminPanel, settings: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Настройки</span>
-                          </label>
-                        </div>
+                      <Label htmlFor="admin-settings">Настройки</Label>
+                    </div>
+                  </div>
                       </div>
         )}
 
@@ -2522,135 +2497,125 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <div className="space-y-4">
                   <h4 className="text-lg font-medium text-black">Менеджер задач - Подразделы</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label className="flex items-center space-x-3">
-                          <input
-                            type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-view"
                         checked={individualPermissions.taskManager?.viewTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, viewTasks: e.target.checked }
+                          taskManager: { ...prev.taskManager, viewTasks: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Просмотр задач</span>
-                    </label>
+                      <Label htmlFor="task-view">Просмотр задач</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-create"
                         checked={individualPermissions.taskManager?.createTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, createTasks: e.target.checked }
+                          taskManager: { ...prev.taskManager, createTasks: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Создание задач</span>
-                          </label>
+                      <Label htmlFor="task-create">Создание задач</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-assign"
                         checked={individualPermissions.taskManager?.assignExecutors || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, assignExecutors: e.target.checked }
+                          taskManager: { ...prev.taskManager, assignExecutors: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Назначение исполнителей</span>
-                          </label>
+                      <Label htmlFor="task-assign">Назначение исполнителей</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-close"
                         checked={individualPermissions.taskManager?.closeTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, closeTasks: e.target.checked }
+                          taskManager: { ...prev.taskManager, closeTasks: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Закрытие задач</span>
-                          </label>
+                      <Label htmlFor="task-close">Закрытие задач</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                            <input
-                              type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-edit"
                         checked={individualPermissions.taskManager?.editTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, editTasks: e.target.checked }
+                          taskManager: { ...prev.taskManager, editTasks: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Редактирование задач</span>
-                          </label>
+                      <Label htmlFor="task-edit">Редактирование задач</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-change-executors"
                         checked={individualPermissions.taskManager?.changeExecutors || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, changeExecutors: e.target.checked }
+                          taskManager: { ...prev.taskManager, changeExecutors: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Изменение исполнителей</span>
-                    </label>
+                      <Label htmlFor="task-change-executors">Изменение исполнителей</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-change-curators"
                         checked={individualPermissions.taskManager?.changeCurators || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
-                          taskManager: { ...prev.taskManager, changeCurators: e.target.checked }
+                          taskManager: { ...prev.taskManager, changeCurators: checked }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Изменение кураторов</span>
-                    </label>
+                      <Label htmlFor="task-change-curators">Изменение кураторов</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-edit-subtasks"
                         checked={individualPermissions.taskManager?.editSubtasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
-                        ...prev,
-                          taskManager: { ...prev.taskManager, editSubtasks: e.target.checked }
-                      }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                      <span className="text-black">Редактирование подзадач</span>
-                    </label>
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                          ...prev,
+                          taskManager: { ...prev.taskManager, editSubtasks: checked }
+                        }))}
+                      />
+                      <Label htmlFor="task-edit-subtasks">Редактирование подзадач</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-edit-checklists"
                         checked={individualPermissions.taskManager?.editChecklists || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
-                        ...prev,
-                          taskManager: { ...prev.taskManager, editChecklists: e.target.checked }
-                      }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                      <span className="text-black">Редактирование чек-листов</span>
-                    </label>
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                          ...prev,
+                          taskManager: { ...prev.taskManager, editChecklists: checked }
+                        }))}
+                      />
+                      <Label htmlFor="task-edit-checklists">Редактирование чек-листов</Label>
+                    </div>
 
-                    <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="task-view-other-users"
                         checked={individualPermissions.taskManager?.viewOtherUsersTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
-                        ...prev,
-                          taskManager: { ...prev.taskManager, viewOtherUsersTasks: e.target.checked }
-                      }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                      <span className="text-black">Просмотр задач других пользователей</span>
-                    </label>
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                          ...prev,
+                          taskManager: { ...prev.taskManager, viewOtherUsersTasks: checked }
+                        }))}
+                      />
+                      <Label htmlFor="task-view-other-users">Просмотр задач других пользователей</Label>
+                    </div>
             </div>
           </div>
         )}
@@ -2666,12 +2631,12 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <label className="block text-sm font-medium text-gray-700 mb-2">Пользователи</label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {users.filter(u => u.id !== selectedUserForPermissions?.id).map(user => (
-                          <label key={user.id} className="flex items-center space-x-2">
-                  <input
-                              type="checkbox"
+                          <div key={user.id} className="flex items-center space-x-2">
+                            <Switch
+                              id={`hidden-user-${user.id}`}
                               checked={hiddenTasksFilter.users.includes(user.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
+                              onCheckedChange={(checked) => {
+                                if (checked) {
                                   setHiddenTasksFilter(prev => ({
                                     ...prev,
                                     users: [...prev.users, user.id]
@@ -2683,23 +2648,22 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                   }))
                                 }
                               }}
-                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
-                            <span className="text-sm text-black">{user.name}</span>
-                          </label>
-                  ))}
-              </div>
+                            <Label htmlFor={`hidden-user-${user.id}`} className="text-sm">{user.name}</Label>
+                          </div>
+                        ))}
+                      </div>
             </div>
 
                 <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Роли в задачах</label>
                       <div className="space-y-2">
-                        <label className="flex items-center space-x-2">
-                  <input
-                            type="checkbox"
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="hidden-executor"
                             checked={hiddenTasksFilter.roles.includes('executor')}
-                            onChange={(e) => {
-                              if (e.target.checked) {
+                            onCheckedChange={(checked) => {
+                              if (checked) {
                                 setHiddenTasksFilter(prev => ({
                                   ...prev,
                                   roles: [...prev.roles, 'executor']
@@ -2711,16 +2675,15 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                 }))
                               }
                             }}
-                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                           />
-                          <span className="text-sm text-black">Исполнитель</span>
-                        </label>
-                        <label className="flex items-center space-x-2">
-                  <input
-                            type="checkbox"
+                          <Label htmlFor="hidden-executor" className="text-sm">Исполнитель</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="hidden-curator"
                             checked={hiddenTasksFilter.roles.includes('curator')}
-                            onChange={(e) => {
-                              if (e.target.checked) {
+                            onCheckedChange={(checked) => {
+                              if (checked) {
                                 setHiddenTasksFilter(prev => ({
                                   ...prev,
                                   roles: [...prev.roles, 'curator']
@@ -2732,11 +2695,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                 }))
                               }
                             }}
-                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                           />
-                          <span className="text-sm text-black">Куратор</span>
-                        </label>
-                </div>
+                          <Label htmlFor="hidden-curator" className="text-sm">Куратор</Label>
+                        </div>
+                      </div>
                 </div>
                 </div>
                 </div>
@@ -2748,69 +2710,65 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="change-executor-own"
                         checked={individualPermissions.otherPermissions?.canChangeExecutorInOwnTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
-                        ...prev,
-                          otherPermissions: { 
-                            ...prev.otherPermissions, 
-                            canChangeExecutorInOwnTasks: e.target.checked 
-                          }
-                      }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                      <span className="text-black">Менять исполнителя в своих задачах</span>
-                  </label>
-
-                    <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                        checked={individualPermissions.otherPermissions?.canChangeCuratorInOwnTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
-                        ...prev,
-                          otherPermissions: { 
-                            ...prev.otherPermissions, 
-                            canChangeCuratorInOwnTasks: e.target.checked 
-                          }
-                      }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                      <span className="text-black">Менять куратора в своих задачах</span>
-                  </label>
-
-                    <label className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                        checked={individualPermissions.otherPermissions?.canCreateHiddenTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
-                        ...prev,
-                          otherPermissions: { 
-                            ...prev.otherPermissions, 
-                            canCreateHiddenTasks: e.target.checked 
-                          }
-                      }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                      <span className="text-black">Создавать скрытые задачи</span>
-                  </label>
-
-                    <label className="flex items-center space-x-3">
-                  <input
-                        type="checkbox"
-                        checked={individualPermissions.otherPermissions?.canViewHiddenTasks || false}
-                        onChange={(e) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
                           ...prev,
                           otherPermissions: { 
                             ...prev.otherPermissions, 
-                            canViewHiddenTasks: e.target.checked 
+                            canChangeExecutorInOwnTasks: checked 
                           }
                         }))}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span className="text-black">Видеть скрытые задачи</span>
-                  </label>
+                      <Label htmlFor="change-executor-own">Менять исполнителя в своих задачах</Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="change-curator-own"
+                        checked={individualPermissions.otherPermissions?.canChangeCuratorInOwnTasks || false}
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                          ...prev,
+                          otherPermissions: { 
+                            ...prev.otherPermissions, 
+                            canChangeCuratorInOwnTasks: checked 
+                          }
+                        }))}
+                      />
+                      <Label htmlFor="change-curator-own">Менять куратора в своих задачах</Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="create-hidden-tasks"
+                        checked={individualPermissions.otherPermissions?.canCreateHiddenTasks || false}
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                          ...prev,
+                          otherPermissions: { 
+                            ...prev.otherPermissions, 
+                            canCreateHiddenTasks: checked 
+                          }
+                        }))}
+                      />
+                      <Label htmlFor="create-hidden-tasks">Создавать скрытые задачи</Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="view-hidden-tasks"
+                        checked={individualPermissions.otherPermissions?.canViewHiddenTasks || false}
+                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                          ...prev,
+                          otherPermissions: { 
+                            ...prev.otherPermissions, 
+                            canViewHiddenTasks: checked 
+                          }
+                        }))}
+                      />
+                      <Label htmlFor="view-hidden-tasks">Видеть скрытые задачи</Label>
+                    </div>
               </div>
 
                   {/* Пользователи, чьи задачи нельзя редактировать/удалять */}
@@ -2820,15 +2778,15 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {users.filter(u => u.id !== selectedUserForPermissions?.id).map(user => (
-                        <label key={user.id} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
+                        <div key={user.id} className="flex items-center space-x-2">
+                          <Switch
+                            id={`cannot-edit-${user.id}`}
                             checked={individualPermissions.otherPermissions?.cannotEditTasksFrom?.includes(user.id) || false}
-                            onChange={(e) => {
+                            onCheckedChange={(checked) => {
                               const currentList = individualPermissions.otherPermissions?.cannotEditTasksFrom || []
-                              if (e.target.checked) {
+                              if (checked) {
                                 setIndividualPermissions((prev: any) => ({
-                        ...prev,
+                                  ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
                                     cannotEditTasksFrom: [...currentList, user.id]
@@ -2836,7 +2794,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                 }))
                               } else {
                                 setIndividualPermissions((prev: any) => ({
-                        ...prev,
+                                  ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
                                     cannotEditTasksFrom: currentList.filter((id: string) => id !== user.id)
@@ -2844,10 +2802,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                 }))
                               }
                             }}
-                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                           />
-                          <span className="text-sm text-black">{user.name}</span>
-                  </label>
+                          <Label htmlFor={`cannot-edit-${user.id}`} className="text-sm">{user.name}</Label>
+                        </div>
                       ))}
                     </div>
                   </div>
