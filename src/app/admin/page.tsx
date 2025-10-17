@@ -362,74 +362,74 @@ function AdminPageContent() {
           {/* Навигация - скрыта для раздела "Кадры и бухгалтерия" */}
           {activeTab !== 'hr' && (
             <div className="mb-8">
-              <div className="flex flex-nowrap gap-2 overflow-x-auto">
+              <div className="flex gap-2">
               <Button
                 onClick={() => setActiveTab('dashboard')}
                 variant={activeTab === 'dashboard' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Дашборд
               </Button>
               <Button
                 onClick={() => setActiveTab('email')}
                 variant={activeTab === 'email' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Email
               </Button>
               <Button
                 onClick={() => setActiveTab('content')}
                 variant={activeTab === 'content' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Контент
               </Button>
               <Button
                 onClick={() => setActiveTab('objects')}
                 variant={activeTab === 'objects' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Объекты
               </Button>
               <Button
                 onClick={() => setActiveTab('users')}
                 variant={activeTab === 'users' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Пользователи
               </Button>
               <Button
                 onClick={() => setActiveTab('tasks')}
                 variant={activeTab === 'tasks' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Задачи
               </Button>
               <Button
                 onClick={() => setActiveTab('media')}
                 variant={activeTab === 'media' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Медиа
               </Button>
               <Button
                 onClick={() => setActiveTab('analytics')}
                 variant={activeTab === 'analytics' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Аналитика
               </Button>
               <Button
                 onClick={() => setActiveTab('hr')}
                 variant={activeTab === 'hr' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Кадры и бухгалтерия
               </Button>
               <Button
                 onClick={() => setActiveTab('settings')}
                 variant={activeTab === 'settings' ? 'default' : 'outline'}
-                className="whitespace-nowrap"
+                className="flex-1"
               >
                 Настройки
               </Button>
@@ -771,60 +771,60 @@ function AdminPageContent() {
           
               {/* Навигация */}
               <div className="mb-8">
-                <div className="flex flex-nowrap gap-2 overflow-x-auto">
+                <div className="flex gap-2">
               <Button 
                     onClick={() => setHrActiveTab('dashboard')}
                     variant={hrActiveTab === 'dashboard' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Дашборд
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('employees')}
                     variant={hrActiveTab === 'employees' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Сотрудники
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('time')}
                     variant={hrActiveTab === 'time' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Рабочее время
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('salary')}
                     variant={hrActiveTab === 'salary' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Зарплата
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('cash')}
                     variant={hrActiveTab === 'cash' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Касса
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('penalties')}
                     variant={hrActiveTab === 'penalties' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Штрафы и премии
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('notifications')}
                     variant={hrActiveTab === 'notifications' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Уведомления
                   </Button>
                   <Button
                     onClick={() => setHrActiveTab('reports')}
                     variant={hrActiveTab === 'reports' ? 'default' : 'outline'}
-                    className="whitespace-nowrap"
+                    className="flex-1"
                   >
                     Отчёты
                   </Button>
