@@ -810,23 +810,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             <Edit className="w-4 h-4 inline mr-1" />
                             Редактировать
                           </button>
-                          <button
-                            onClick={() => toggleUserStatus(user.id)}
-                            className={`px-3 py-1 rounded text-sm transition-all ${
-                              user.status === 'active' 
-                                ? 'bg-red-100 text-red-800 hover:bg-red-200'
-                                : 'bg-green-100 text-green-800 hover:bg-green-200'
-                            }`}
-                          >
-                            {user.status === 'active' ? 'Деактивировать' : 'Активировать'}
-                          </button>
-                          <button
-                            onClick={() => deleteUser(user.id)}
-                            className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200 transition-all"
-                          >
-                            <Trash2 className="w-4 h-4 inline mr-1" />
-                            Удалить
-                          </button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -1479,9 +1462,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </div>
           )}
           
-          <SheetFooter className="flex items-center justify-between">
+          <SheetFooter className="flex flex-row gap-3">
             <SheetClose asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="flex-1">
                 Отменить
               </Button>
             </SheetClose>
@@ -1494,8 +1477,40 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 }
               }}
               style={{backgroundColor: '#fff60b'}}
+              className="flex-1"
             >
               Сохранить изменения
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectedUser) {
+                  toggleUserStatus(selectedUser.id)
+                  setIsEditingUser(false)
+                  setSelectedUser(null)
+                }
+              }}
+              variant="outline"
+              className={`flex-1 ${
+                selectedUser?.status === 'active' 
+                  ? 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200'
+                  : 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200'
+              }`}
+            >
+              {selectedUser?.status === 'active' ? 'Деактивировать' : 'Активировать'}
+            </Button>
+            <Button
+              onClick={() => {
+                if (selectedUser) {
+                  deleteUser(selectedUser.id)
+                  setIsEditingUser(false)
+                  setSelectedUser(null)
+                }
+              }}
+              variant="outline"
+              className="flex-1 bg-red-100 text-red-800 border-red-300 hover:bg-red-200"
+            >
+              <Trash2 className="w-4 h-4 inline mr-1" />
+              Удалить
             </Button>
           </SheetFooter>
         </SheetContent>
