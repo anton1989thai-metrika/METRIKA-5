@@ -673,7 +673,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors flex items-center space-x-2 ${
                 activeTab === tab.id
-                  ? 'border-[#fff60b] text-black bg-[#fff60b]/10'
+                  ? 'border-black text-black bg-white'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -853,7 +853,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
                   />
-                </div>
+              </div>
               </div>
               <Select value={filterRole} onValueChange={setFilterRole}>
                 <SelectTrigger className="w-32">
@@ -1012,12 +1012,12 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <div className="text-center mb-3">
                   <h4 className="font-semibold text-black text-sm mb-2">Пользователь сайта</h4>
                   <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">0 пользователей</span>
-                  </div>
+                    </div>
                 <div className="flex items-center justify-center mb-3">
                   <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                     <User className="w-4 h-4 text-gray-600" />
-                  </div>
-                </div>
+                      </div>
+                    </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">Создана: 01.01.2024</span>
                   <div className="flex items-center space-x-2">
@@ -1277,8 +1277,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </div>
                   <User className="w-8 h-8 text-gray-600" />
                 </div>
-              </div>
-              
+                    </div>
+
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
@@ -1287,8 +1287,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   </div>
                   <UserCheck className="w-8 h-8 text-gray-600" />
                 </div>
-              </div>
-              
+                      </div>
+
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
@@ -1297,8 +1297,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   </div>
                   <Star className="w-8 h-8 text-gray-600" />
                 </div>
-              </div>
-              
+                      </div>
+
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
@@ -1366,7 +1366,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, password: e.target.value } : null)}
                     className="w-full"
                   />
-                </div>
+                        </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                   <label className="block text-sm font-medium text-black mb-2">Роль</label>
                   <Select
@@ -1386,7 +1386,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <SelectItem value="admin">Администратор</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                      </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                   <label className="block text-sm font-medium text-black mb-2">Статус</label>
                   <Select
@@ -1446,9 +1446,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     className="w-full bg-gray-100 text-gray-500"
                     disabled
                   />
-                </div>
-            </div>
-            
+                        </div>
+                      </div>
+
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
                 <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
@@ -1464,7 +1464,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
                   )}
                 </div>
-              </div>
+                      </div>
 
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <Label className="block text-sm font-medium text-black mb-2">Комментарии</Label>
@@ -1475,8 +1475,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   rows={3}
                   placeholder="Введите комментарии"
                 />
-              </div>
-            </div>
+                        </div>
+                      </div>
           )}
           
           <SheetFooter className="flex items-center justify-between">
@@ -1647,8 +1647,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           </label>
                   
                   <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                          <input
-                            type="checkbox"
+                            <input
+                              type="checkbox"
                       checked={rolePermissions['my-objects']}
                       onChange={(e) => setRolePermissions(prev => ({ ...prev, 'my-objects': e.target.checked }))}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -1657,8 +1657,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           </label>
                   
                   <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                          <input
-                            type="checkbox"
+                            <input
+                              type="checkbox"
                       checked={rolePermissions['email']}
                       onChange={(e) => setRolePermissions(prev => ({ ...prev, 'email': e.target.checked }))}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -1707,8 +1707,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           </label>
 
                   <label className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
-                          <input
-                            type="checkbox"
+                            <input
+                              type="checkbox"
                       checked={rolePermissions['hide-in-tasks']}
                       onChange={(e) => setRolePermissions(prev => ({ ...prev, 'hide-in-tasks': e.target.checked }))}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -1738,10 +1738,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               >
                 Применить
               </button>
-            </div>
-          </div>
-        </div>
-      )}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
       {/* Модальное окно подтверждения удаления роли */}
       {isDeleteRoleModalOpen && roleToDelete && (
@@ -1757,23 +1757,23 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               >
                 <X className="w-5 h-5" />
               </button>
-            </div>
+              </div>
 
             <div className="p-6">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 text-red-600" />
                 </div>
-                <div>
+                  <div>
                   <p className="text-black font-medium">
                     Вы уверены, что хотите удалить роль?
                   </p>
                   <p className="text-sm text-gray-600">
                     Роль: <span className="font-medium">{getRoleDisplayName(roleToDelete)}</span>
                   </p>
+                  </div>
                 </div>
-              </div>
-              
+
               <p className="text-sm text-gray-600 mb-6">
                 Это действие нельзя отменить. Все пользователи с этой ролью будут переназначены на роль "Пользователь сайта".
               </p>
@@ -1791,10 +1791,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 >
                   Удалить роль
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
+                  </div>
+                </div>
+                  </div>
+                </div>
       )}
 
       {/* Sheet индивидуальных разрешений */}
@@ -1838,7 +1838,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       }))}
                     />
                     <Label htmlFor="my-objects">Мои объекты</Label>
-                  </div>
+                </div>
 
                   <div className="flex items-center space-x-2">
                     <Switch
@@ -1862,7 +1862,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       }))}
                     />
                     <Label htmlFor="academy">Академия</Label>
-                  </div>
+                </div>
 
                   <div className="flex items-center space-x-2">
                     <Switch
@@ -1886,7 +1886,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       }))}
                     />
                     <Label htmlFor="task-manager">Менеджер задач</Label>
-                  </div>
+                </div>
 
                   <div className="flex items-center space-x-2">
                     <Switch
@@ -1917,7 +1917,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="view-mail">Просмотр почты</Label>
-                    </div>
+            </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -1929,7 +1929,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="send-emails">Отправка писем</Label>
-                    </div>
+              </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -1941,7 +1941,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="manage-mailboxes">Управление почтовыми ящиками</Label>
-                    </div>
+          </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -1953,9 +1953,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="mail-settings">Настройки почты</Label>
-                    </div>
                   </div>
-                      </div>
+                </div>
+              </div>
               )}
 
               {/* Подразделы Академия */}
@@ -1985,7 +1985,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="academy-courses">Курсы</Label>
-                    </div>
+                  </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -1997,7 +1997,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="academy-tests">Тесты</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2009,7 +2009,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="academy-achievements">Достижения</Label>
-                    </div>
+              </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2021,9 +2021,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="academy-materials">Материалы</Label>
-                    </div>
-                        </div>
-                      </div>
+                  </div>
+                </div>
+              </div>
             )}
 
               {/* Подразделы Админ панель */}
@@ -2041,7 +2041,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-dashboard">Дашборд</Label>
-                    </div>
+            </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2053,7 +2053,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-email">Email</Label>
-                    </div>
+                        </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2065,7 +2065,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-content">Контент</Label>
-                    </div>
+                        </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2077,7 +2077,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-objects">Объекты</Label>
-                    </div>
+                      </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2089,7 +2089,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-users">Пользователи</Label>
-                    </div>
+                      </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2113,7 +2113,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-media">Медиа</Label>
-                    </div>
+              </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2125,7 +2125,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-hr">Кадры и бухгалтерия</Label>
-                    </div>
+            </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2137,7 +2137,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-analytics">Аналитика</Label>
-                    </div>
+              </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2149,9 +2149,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="admin-settings">Настройки</Label>
-                    </div>
-                  </div>
-                      </div>
+              </div>
+            </div>
+          </div>
         )}
 
               {/* Подразделы Менеджер задач */}
@@ -2169,7 +2169,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-view">Просмотр задач</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2181,7 +2181,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-create">Создание задач</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2193,7 +2193,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-assign">Назначение исполнителей</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2205,7 +2205,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-close">Закрытие задач</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2217,7 +2217,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-edit">Редактирование задач</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2229,7 +2229,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-change-executors">Изменение исполнителей</Label>
-                    </div>
+              </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2241,14 +2241,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="task-change-curators">Изменение кураторов</Label>
-                    </div>
+              </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="task-edit-subtasks"
                         checked={individualPermissions.taskManager?.editSubtasks || false}
                         onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
-                          ...prev,
+                        ...prev,
                           taskManager: { ...prev.taskManager, editSubtasks: checked }
                         }))}
                       />
@@ -2260,7 +2260,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         id="task-edit-checklists"
                         checked={individualPermissions.taskManager?.editChecklists || false}
                         onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
-                          ...prev,
+                        ...prev,
                           taskManager: { ...prev.taskManager, editChecklists: checked }
                         }))}
                       />
@@ -2272,14 +2272,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         id="task-view-other-users"
                         checked={individualPermissions.taskManager?.viewOtherUsersTasks || false}
                         onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
-                          ...prev,
+                        ...prev,
                           taskManager: { ...prev.taskManager, viewOtherUsersTasks: checked }
-                        }))}
-                      />
+                      }))}
+                    />
                       <Label htmlFor="task-view-other-users">Просмотр задач других пользователей</Label>
-                    </div>
+                </div>
+              </div>
             </div>
-          </div>
         )}
 
               {/* Фильтр видимости задач */}
@@ -2312,10 +2312,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                               }}
                             />
                             <Label htmlFor={`hidden-user-${user.id}`} className="text-sm">{user.name}</Label>
-                          </div>
-                        ))}
-                      </div>
             </div>
+                        ))}
+          </div>
+        </div>
 
                 <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Роли в задачах</label>
@@ -2339,7 +2339,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             }}
                           />
                           <Label htmlFor="hidden-executor" className="text-sm">Исполнитель</Label>
-                        </div>
+            </div>
                         <div className="flex items-center space-x-2">
                           <Switch
                             id="hidden-curator"
@@ -2371,7 +2371,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 <h4 className="text-lg font-medium text-black">Дополнительные разрешения</h4>
                 
                 <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="change-executor-own"
@@ -2385,7 +2385,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="change-executor-own">Менять исполнителя в своих задачах</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2400,7 +2400,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="change-curator-own">Менять куратора в своих задачах</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2415,7 +2415,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="create-hidden-tasks">Создавать скрытые задачи</Label>
-                    </div>
+                </div>
 
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -2430,7 +2430,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         }))}
                       />
                       <Label htmlFor="view-hidden-tasks">Видеть скрытые задачи</Label>
-                    </div>
+                </div>
               </div>
 
                   {/* Пользователи, чьи задачи нельзя редактировать/удалять */}
@@ -2448,7 +2448,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                               const currentList = individualPermissions.otherPermissions?.cannotEditTasksFrom || []
                               if (checked) {
                                 setIndividualPermissions((prev: any) => ({
-                                  ...prev,
+                        ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
                                     cannotEditTasksFrom: [...currentList, user.id]
@@ -2456,7 +2456,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                 }))
                               } else {
                                 setIndividualPermissions((prev: any) => ({
-                                  ...prev,
+                        ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
                                     cannotEditTasksFrom: currentList.filter((id: string) => id !== user.id)
@@ -2466,10 +2466,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             }}
                           />
                           <Label htmlFor={`cannot-edit-${user.id}`} className="text-sm">{user.name}</Label>
-                        </div>
+                </div>
                       ))}
-                    </div>
-                  </div>
+              </div>
+            </div>
                 </div>
               </div>
             </div>
