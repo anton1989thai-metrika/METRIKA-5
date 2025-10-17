@@ -1237,7 +1237,6 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         {/* Активность */}
         {activeTab === 'activity' && (
               <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-black">Активность пользователей</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
