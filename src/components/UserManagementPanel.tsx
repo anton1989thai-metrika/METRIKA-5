@@ -1618,7 +1618,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           setSelectedRole(null)
         }
       }}>
-        <SheetContent className="overflow-y-auto">
+        <SheetContent side="left" className="overflow-y-auto">
           <SheetHeader>
             <SheetTitle>
               Редактирование роли: {selectedRole ? getRoleDisplayName(selectedRole) : ''}
