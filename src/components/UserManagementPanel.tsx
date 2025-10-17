@@ -5,7 +5,7 @@ import { User as UserType, RoleSettings } from '@/data/users'
 import { arePermissionsStandardWithLocalStorage, getRoleDisplayName } from '@/lib/permissions'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -1643,311 +1643,305 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       </Dialog>
 
       {/* Модальное окно редактирования пользователя */}
-      {isEditingUser && selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-semibold text-black">Редактировать пользователя</h3>
-                    <button
-                onClick={() => {
-                  setIsEditingUser(false)
-                  setSelectedUser(null)
-                }}
-                className="p-1 text-gray-600 hover:text-black"
-              >
-                <X className="w-5 h-5" />
-              </button>
-                        </div>
+      <Dialog open={isEditingUser} onOpenChange={(open) => {
+        if (!open) {
+          setIsEditingUser(false)
+          setSelectedUser(null)
+        }
+      }}>
+        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-black">Редактировать пользователя</DialogTitle>
+          </DialogHeader>
 
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Имя *</label>
-                            <input
-                    type="text"
-                    value={selectedUser.name}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, name: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  />
-                        </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Email *</label>
-                            <input
-                    type="email"
-                    value={selectedUser.email}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, email: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  />
-                      </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Логин</label>
-                            <input
-                    type="text"
-                    value={selectedUser.login || ''}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, login: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Пароль</label>
-                            <input
-                    type="password"
-                    value={selectedUser.password || ''}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, password: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Роль</label>
-                  <select
-                    value={selectedUser.role}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, role: e.target.value as any } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  >
-                    <option value="site-user">Пользователь сайта</option>
-                    <option value="client">Клиент Метрики</option>
-                    <option value="foreign-employee">Иностранный сотрудник</option>
-                    <option value="freelancer">Внештатный сотрудник</option>
-                    <option value="employee">Сотрудник</option>
-                    <option value="manager">Менеджер</option>
-                    <option value="admin">Администратор</option>
-                  </select>
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Статус</label>
-                  <select
-                    value={selectedUser.status}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, status: e.target.value as any } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  >
-                    <option value="active">Активен</option>
-                    <option value="inactive">Неактивен</option>
-                    <option value="pending">Ожидает</option>
-                  </select>
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
-                            <input
-                    type="text"
-                    value={selectedUser.dateOfBirth || ''}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, dateOfBirth: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                    placeholder="ДД.ММ.ГГГГ"
-                  />
-                        </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
-                          <input
-                    type="text"
-                    value={selectedUser.phoneWork || ''}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phoneWork: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                    placeholder="+7 (999) 123-45-67"
-                  />
-                      </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
-                          <input
-                    type="text"
-                    value={selectedUser.phonePersonal || ''}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phonePersonal: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                    placeholder="+7 (999) 123-45-67"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Адрес</label>
-                            <input
-                    type="text"
-                    value={selectedUser.address || ''}
-                    onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, address: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                    placeholder="Введите адрес"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
-                            <input
-                    type="text"
-                    value={new Date(selectedUser.createdAt).toLocaleDateString()}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-500 bg-gray-100"
-                    disabled
-                  />
-                </div>
+          <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Имя *</label>
+                <Input
+                  value={selectedUser?.name || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, name: e.target.value } : null)}
+                  className="w-full"
+                />
               </div>
-              
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
-                <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
-                  {selectedUser.userObjects && selectedUser.userObjects.length > 0 ? (
-                    <div className="space-y-2">
-                      {selectedUser.userObjects.map((objectId, index) => (
-                        <div key={index} className="p-2 bg-white rounded border text-sm">
-                          Объект {objectId} (функционал в разработке)
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
-                  )}
-                </div>
-                </div>
-
+                <label className="block text-sm font-medium text-black mb-2">Email *</label>
+                <Input
+                  type="email"
+                  value={selectedUser?.email || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, email: e.target.value } : null)}
+                  className="w-full"
+                />
+              </div>
               <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
-                <textarea
-                  value={selectedUser.comments || ''}
-                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, comments: e.target.value } : null)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  rows={3}
-                  placeholder="Введите комментарии"
+                <label className="block text-sm font-medium text-black mb-2">Логин</label>
+                <Input
+                  value={selectedUser?.login || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, login: e.target.value } : null)}
+                  className="w-full"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Пароль</label>
+                <Input
+                  type="password"
+                  value={selectedUser?.password || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, password: e.target.value } : null)}
+                  className="w-full"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Роль</label>
+                <Select
+                  value={selectedUser?.role || ''}
+                  onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, role: value as any } : null)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Выберите роль" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="site-user">Пользователь сайта</SelectItem>
+                    <SelectItem value="client">Клиент Метрики</SelectItem>
+                    <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
+                    <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
+                    <SelectItem value="employee">Сотрудник</SelectItem>
+                    <SelectItem value="manager">Менеджер</SelectItem>
+                    <SelectItem value="admin">Администратор</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Статус</label>
+                <Select
+                  value={selectedUser?.status || ''}
+                  onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, status: value as any } : null)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Выберите статус" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Активен</SelectItem>
+                    <SelectItem value="inactive">Неактивен</SelectItem>
+                    <SelectItem value="pending">Ожидает</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
+                <Input
+                  value={selectedUser?.dateOfBirth || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, dateOfBirth: e.target.value } : null)}
+                  placeholder="ДД.ММ.ГГГГ"
+                  className="w-full"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
+                <Input
+                  value={selectedUser?.phoneWork || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phoneWork: e.target.value } : null)}
+                  placeholder="+7 (999) 123-45-67"
+                  className="w-full"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
+                <Input
+                  value={selectedUser?.phonePersonal || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, phonePersonal: e.target.value } : null)}
+                  placeholder="+7 (999) 123-45-67"
+                  className="w-full"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Адрес</label>
+                <Input
+                  value={selectedUser?.address || ''}
+                  onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, address: e.target.value } : null)}
+                  placeholder="Введите адрес"
+                  className="w-full"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
+                <Input
+                  value={selectedUser?.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString() : ''}
+                  className="w-full bg-gray-100 text-gray-500"
+                  disabled
                 />
               </div>
             </div>
+            
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
+              <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
+                {selectedUser?.userObjects && selectedUser.userObjects.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedUser.userObjects.map((objectId, index) => (
+                      <div key={index} className="p-2 bg-white rounded border text-sm">
+                        Объект {objectId} (функционал в разработке)
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
+                )}
+              </div>
+            </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
-              <button
-                onClick={() => {
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
+              <textarea
+                value={selectedUser?.comments || ''}
+                onChange={(e) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, comments: e.target.value } : null)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                rows={3}
+                placeholder="Введите комментарии"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="px-6 py-4">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setIsEditingUser(false)
+                setSelectedUser(null)
+              }}
+            >
+              Отменить
+            </Button>
+            <Button 
+              onClick={() => {
+                if (selectedUser) {
+                  updateUser(selectedUser.id, selectedUser)
                   setIsEditingUser(false)
                   setSelectedUser(null)
-                }}
-                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-              >
-                Отменить
-              </button>
-              <button
-                onClick={() => updateUser(selectedUser.id, selectedUser)}
-                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                Сохранить изменения
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                }
+              }}
+              style={{backgroundColor: '#fff60b'}}
+              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            >
+              Сохранить изменения
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Модальное окно карточки пользователя */}
-      {isUserCardOpen && selectedUserForCard && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[70vh] overflow-hidden">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-semibold text-black">Карточка пользователя</h3>
-              <button
-                onClick={() => {
-                  setIsUserCardOpen(false)
-                  setSelectedUserForCard(null)
-                }}
-                className="p-1 text-gray-600 hover:text-black"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Dialog open={isUserCardOpen} onOpenChange={(open) => {
+        if (!open) {
+          setIsUserCardOpen(false)
+          setSelectedUserForCard(null)
+        }
+      }}>
+        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold text-black">Карточка пользователя</DialogTitle>
+          </DialogHeader>
 
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
-              {/* Основная информация */}
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                    <User className="w-8 h-8 text-gray-600" />
-                  </div>
-                      <div>
-                    <h4 className="text-xl font-semibold text-black">{selectedUserForCard.name}</h4>
-                    <p className="text-gray-600">{selectedUserForCard.email}</p>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(selectedUserForCard.status)}`}>
-                        {selectedUserForCard.status === 'active' ? 'Активен' :
-                         selectedUserForCard.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
-                      </span>
-                      <span className="text-sm text-gray-500 capitalize">{selectedUserForCard.role}</span>
-                    </div>
+          <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
+            {/* Основная информация */}
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-gray-600" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-semibold text-black">{selectedUserForCard?.name}</h4>
+                  <p className="text-gray-600">{selectedUserForCard?.email}</p>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(selectedUserForCard?.status || 'active')}`}>
+                      {selectedUserForCard?.status === 'active' ? 'Активен' :
+                       selectedUserForCard?.status === 'inactive' ? 'Неактивен' : 'Ожидает'}
+                    </span>
+                    <span className="text-sm text-gray-500 capitalize">{selectedUserForCard?.role}</span>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Детальная информация */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Логин</label>
-                    <p className="text-black">{selectedUserForCard.login || 'Не указан'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Дата рождения</label>
-                    <p className="text-black">{selectedUserForCard.dateOfBirth || 'Не указана'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Рабочий телефон</label>
-                    <p className="text-black">{selectedUserForCard.phoneWork || 'Не указан'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Личный телефон</label>
-                    <p className="text-black">{selectedUserForCard.phonePersonal || 'Не указан'}</p>
-                  </div>
+            {/* Детальная информация */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Логин</label>
+                  <p className="text-black">{selectedUserForCard?.login || 'Не указан'}</p>
                 </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Адрес</label>
-                    <p className="text-black">{selectedUserForCard.address || 'Не указан'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Дата создания</label>
-                    <p className="text-black">{new Date(selectedUserForCard.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Последний вход</label>
-                    <p className="text-black">
-                      {selectedUserForCard.lastLogin ? new Date(selectedUserForCard.lastLogin).toLocaleString() : 'Никогда'}
-                        </p>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Дата рождения</label>
+                  <p className="text-black">{selectedUserForCard?.dateOfBirth || 'Не указана'}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Рабочий телефон</label>
+                  <p className="text-black">{selectedUserForCard?.phoneWork || 'Не указан'}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Личный телефон</label>
+                  <p className="text-black">{selectedUserForCard?.phonePersonal || 'Не указан'}</p>
+                </div>
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Адрес</label>
+                  <p className="text-black">{selectedUserForCard?.address || 'Не указан'}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Дата создания</label>
+                  <p className="text-black">{selectedUserForCard?.createdAt ? new Date(selectedUserForCard.createdAt).toLocaleDateString() : 'Не указана'}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Последний вход</label>
+                  <p className="text-black">
+                    {selectedUserForCard?.lastLogin ? new Date(selectedUserForCard.lastLogin).toLocaleString() : 'Никогда'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Объекты пользователя */}
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Объекты пользователя</label>
+              <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
+                {selectedUserForCard?.userObjects && selectedUserForCard.userObjects.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedUserForCard.userObjects.map((objectId, index) => (
+                      <div key={index} className="p-2 bg-white rounded border text-sm">
+                        Объект {objectId} (функционал в разработке)
                       </div>
-                </div>
-              </div>
-
-              {/* Объекты пользователя */}
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Объекты пользователя</label>
-                <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
-                  {selectedUserForCard.userObjects && selectedUserForCard.userObjects.length > 0 ? (
-                    <div className="space-y-2">
-                      {selectedUserForCard.userObjects.map((objectId, index) => (
-                        <div key={index} className="p-2 bg-white rounded border text-sm">
-                          Объект {objectId} (функционал в разработке)
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-sm text-gray-500">Объекты не назначены</div>
-                  )}
-                </div>
-              </div>
-
-              {/* Комментарии */}
-              {selectedUserForCard.comments && (
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Комментарии</label>
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-black">{selectedUserForCard.comments}</p>
+                    ))}
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="text-sm text-gray-500">Объекты не назначены</div>
+                )}
+              </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
-                      <button
-                onClick={() => {
-                  setIsUserCardOpen(false)
-                  setSelectedUserForCard(null)
-                }}
-                className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
-              >
-                        Закрыть
-                      </button>
-                    </div>
+            {/* Комментарии */}
+            {selectedUserForCard?.comments && (
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Комментарии</label>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-black">{selectedUserForCard.comments}</p>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
+
+          <DialogFooter className="px-6 py-4">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setIsUserCardOpen(false)
+                setSelectedUserForCard(null)
+              }}
+            >
+              Закрыть
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Модальное окно редактирования роли */}
       {isRoleModalOpen && selectedRole && (
