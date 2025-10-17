@@ -122,9 +122,9 @@ export function LoginForm({
           </Button>
           <FieldDescription className="text-center">
             Нет аккаунта?{" "}
-            <a href="#" className="underline underline-offset-4">
+            <Link href="/register" className="underline underline-offset-4">
               Зарегистрироваться
-            </a>
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

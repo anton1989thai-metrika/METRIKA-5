@@ -1,13 +1,13 @@
-import { LoginForm } from "@/components/login-form"
+import { SignupForm } from "@/components/signup-form"
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <div className="min-h-svh bg-white flex items-center justify-center">
       <div className="flex items-center justify-center w-full gap-[100px]">
-        {/* Форма авторизации - слева от центра */}
+        {/* Форма регистрации - слева от центра */}
         <div className="flex items-center justify-end" style={{ width: 'calc(50% - 100px)' }}>
           <div className="w-full max-w-xs">
-            <LoginForm />
+            <SignupForm />
           </div>
         </div>
         
@@ -15,7 +15,7 @@ export default function LoginPage() {
         <div className="flex items-center justify-start" style={{ width: 'calc(50% - 100px)' }}>
           <img
             src="/images/login-bg.jpg"
-            alt="МЕТРИКА - Авторизация"
+            alt="МЕТРИКА - Регистрация"
             className="h-[800px] w-[530px] object-contain"
           />
         </div>
