@@ -13,11 +13,13 @@ export default function SignupPage() {
         
         {/* Картинка - справа от центра */}
         <div className="flex items-center justify-start" style={{ width: 'calc(50% - 100px)' }}>
-          <img
-            src="/images/register-bg.jpg"
-            alt="МЕТРИКА - Регистрация"
-            className="h-[800px] w-[530px] object-contain"
-          />
+          <div className="h-[800px] w-[530px] bg-white overflow-hidden">
+            <img
+              src="/images/register-bg.jpg"
+              alt="МЕТРИКА - Регистрация"
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </div>
