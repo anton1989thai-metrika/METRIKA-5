@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { User as UserType, RoleSettings } from '@/data/users'
-import { arePermissionsStandardWithLocalStorage, arePermissionsStandardWithLocalStorageWithLocalStorage, getRoleDisplayName } from '@/lib/permissions'
+import { arePermissionsStandardWithLocalStorage, getRoleDisplayName } from '@/lib/permissions'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -38,7 +38,6 @@ import {
   Eye,
   EyeOff
 } from "lucide-react"
-import { User as UserType } from "@/data/users"
 
 interface UserManagementPanelProps {
   onClose?: () => void
@@ -132,7 +131,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   // Состояние для модального окна редактирования роли
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false)
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
-  const [rolePermissions, setRolePermissions] = useState<Record<string, boolean>>({
+  const [rolePermissions, setRolePermissions] = useState<RoleSettings>({
     'profile': false,
     'my-objects': false,
     'email': false,
@@ -428,7 +427,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     setSelectedRole(role)
     
     // Получаем сохраненные настройки роли или используем базовые
-    const savedSettings = roleSettings[role] || {
+    const savedSettings: RoleSettings = roleSettings[role] || {
       'profile': false,
       'my-objects': false,
       'email': false,
@@ -450,13 +449,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     // Сохраняем настройки роли в глобальное состояние
     setRoleSettings(prev => ({
       ...prev,
-      [selectedRole]: rolePermissions as RoleSettings
+      [selectedRole]: rolePermissions
     }));
     
     // Сохраняем в localStorage для персистентности
     const updatedRoleSettings = {
       ...roleSettings,
-      [selectedRole]: rolePermissions as RoleSettings
+      [selectedRole]: rolePermissions
     };
     localStorage.setItem('roleSettings', JSON.stringify(updatedRoleSettings));
     
@@ -909,20 +908,21 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             {/* Таблица пользователей */}
             <div className="rounded-md border">
               <Table>
+                <TableCaption>Список всех пользователей системы</TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Пользователь</TableHead>
+                    <TableHead className="w-[200px]">Пользователь</TableHead>
                     <TableHead>Роль</TableHead>
                     <TableHead>Статус</TableHead>
                     <TableHead>Последний вход</TableHead>
                     <TableHead>Права</TableHead>
-                    <TableHead>Действия</TableHead>
+                    <TableHead className="text-right">Действия</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredUsers.map(user => (
                     <TableRow key={user.id}>
-                      <TableCell>
+                      <TableCell className="font-medium">
                         <div className="flex items-center space-x-3">
                           <button
                             onClick={() => {
@@ -964,8 +964,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           {arePermissionsStandardWithLocalStorage(user) ? 'Стандартные права' : 'Нестандартные права'}
                         </span>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end space-x-2">
                           <button
                             onClick={() => {
                               setSelectedUser(user)
@@ -1058,9 +1058,10 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             {/* Таблица пользователей для индивидуальных разрешений */}
             <div className="rounded-md border">
               <Table>
+                <TableCaption>Управление индивидуальными разрешениями пользователей</TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>
+                    <TableHead className="w-[200px]">
                 <button
                         onClick={() => {
                           if (sortBy === 'name') {
@@ -1115,13 +1116,13 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       </button>
                     </TableHead>
                     <TableHead>Права</TableHead>
-                    <TableHead>Действия</TableHead>
+                    <TableHead className="text-right">Действия</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredUsers.map(user => (
                     <TableRow key={user.id}>
-                      <TableCell>
+                      <TableCell className="font-medium">
                         <div className="flex items-center space-x-3">
                           <button
                             onClick={() => {
@@ -1157,7 +1158,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                           {arePermissionsStandardWithLocalStorage(user) ? 'Стандартные права' : 'Нестандартные права'}
                         </span>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-right">
                 <button
                           onClick={() => openIndividualPermissionsModal(user)}
                           className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-all"
