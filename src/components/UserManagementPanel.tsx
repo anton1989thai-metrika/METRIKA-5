@@ -1649,14 +1649,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           setSelectedUser(null)
         }
       }}>
-        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden p-6">
+          <DialogHeader className="mb-6">
             <DialogTitle className="text-xl font-semibold text-black">Редактировать пользователя</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Имя *</label>
                 <Input
                   value={selectedUser?.name || ''}
@@ -1664,7 +1664,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Email *</label>
                 <Input
                   type="email"
@@ -1673,7 +1673,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Логин</label>
                 <Input
                   value={selectedUser?.login || ''}
@@ -1681,7 +1681,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Пароль</label>
                 <Input
                   type="password"
@@ -1690,7 +1690,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Роль</label>
                 <Select
                   value={selectedUser?.role || ''}
@@ -1710,7 +1710,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   </SelectContent>
                 </Select>
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Статус</label>
                 <Select
                   value={selectedUser?.status || ''}
@@ -1726,7 +1726,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   </SelectContent>
                 </Select>
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Дата рождения</label>
                 <Input
                   value={selectedUser?.dateOfBirth || ''}
@@ -1735,7 +1735,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Рабочий телефон</label>
                 <Input
                   value={selectedUser?.phoneWork || ''}
@@ -1744,7 +1744,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Личный телефон</label>
                 <Input
                   value={selectedUser?.phonePersonal || ''}
@@ -1753,7 +1753,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Адрес</label>
                 <Input
                   value={selectedUser?.address || ''}
@@ -1762,7 +1762,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   className="w-full"
                 />
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-black mb-2">Дата создания</label>
                 <Input
                   value={selectedUser?.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString() : ''}
@@ -1772,7 +1772,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
             
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
               <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
               <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
                 {selectedUser?.userObjects && selectedUser.userObjects.length > 0 ? (
@@ -1789,7 +1789,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
               </div>
             </div>
 
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
               <label className="block text-sm font-medium text-black mb-2">Комментарии</label>
               <textarea
                 value={selectedUser?.comments || ''}
@@ -1801,7 +1801,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             </div>
           </div>
 
-          <DialogFooter className="px-6 py-4">
+          <DialogFooter className="mt-6 pt-6 border-t border-gray-200">
             <Button 
               variant="outline" 
               onClick={() => {
@@ -1836,14 +1836,14 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           setSelectedUserForCard(null)
         }
       }}>
-        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden p-6">
+          <DialogHeader className="mb-6">
             <DialogTitle className="text-xl font-semibold text-black">Карточка пользователя</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
             {/* Основная информация */}
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
                   <User className="w-8 h-8 text-gray-600" />
@@ -1864,7 +1864,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
 
             {/* Детальная информация */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Логин</label>
                   <p className="text-black">{selectedUserForCard?.login || 'Не указан'}</p>
@@ -1882,7 +1882,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <p className="text-black">{selectedUserForCard?.phonePersonal || 'Не указан'}</p>
                 </div>
               </div>
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4 space-y-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Адрес</label>
                   <p className="text-black">{selectedUserForCard?.address || 'Не указан'}</p>
@@ -1901,7 +1901,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             </div>
 
             {/* Объекты пользователя */}
-            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">Объекты пользователя</label>
               <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
                 {selectedUserForCard?.userObjects && selectedUserForCard.userObjects.length > 0 ? (
@@ -1920,7 +1920,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
 
             {/* Комментарии */}
             {selectedUserForCard?.comments && (
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Комментарии</label>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-black">{selectedUserForCard.comments}</p>
@@ -1929,7 +1929,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             )}
           </div>
 
-          <DialogFooter className="px-6 py-4">
+          <DialogFooter className="mt-6 pt-6 border-t border-gray-200">
             <Button 
               variant="outline" 
               onClick={() => {
