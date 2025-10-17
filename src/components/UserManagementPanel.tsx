@@ -1495,150 +1495,152 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
       {/* Модальные окна */}
       {/* Модальное окно создания пользователя */}
       <Dialog open={isCreatingUser} onOpenChange={setIsCreatingUser}>
-        <DialogContent className="max-w-2xl max-h-[70vh]">
-          <DialogHeader>
-            <DialogTitle>Добавить пользователя</DialogTitle>
+        <DialogContent className="max-w-2xl max-h-[70vh] overflow-hidden p-6">
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-xl font-semibold text-black">Добавить пользователя</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-6 overflow-y-auto max-h-[calc(70vh-140px)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Имя *</Label>
-                  <Input
-                    type="text"
-                    value={newUser.name || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, name: e.target.value }))}
-                    placeholder="Введите имя"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Email *</Label>
-                  <Input
-                    type="email"
-                    value={newUser.email || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, email: e.target.value }))}
-                    placeholder="Введите email"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Логин</Label>
-                  <Input
-                    type="text"
-                    value={newUser.login || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, login: e.target.value }))}
-                    placeholder="Введите логин"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Пароль</Label>
-                  <Input
-                    type="password"
-                    value={newUser.password || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, password: e.target.value }))}
-                    placeholder="Введите пароль"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Роль</Label>
-                  <Select value={newUser.role || 'employee'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, role: value as any }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите роль" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="site-user">Пользователь сайта</SelectItem>
-                      <SelectItem value="client">Клиент Метрики</SelectItem>
-                      <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
-                      <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
-                      <SelectItem value="employee">Сотрудник</SelectItem>
-                      <SelectItem value="manager">Менеджер</SelectItem>
-                      <SelectItem value="admin">Администратор</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Статус</Label>
-                  <Select value={newUser.status || 'pending'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, status: value as any }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите статус" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Активен</SelectItem>
-                      <SelectItem value="inactive">Неактивен</SelectItem>
-                      <SelectItem value="pending">Ожидает</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Дата рождения</Label>
-                  <Input
-                    type="text"
-                    value={newUser.dateOfBirth || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, dateOfBirth: e.target.value }))}
-                    placeholder="ДД.ММ.ГГГГ"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Рабочий телефон</Label>
-                  <Input
-                    type="text"
-                    value={newUser.phoneWork || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phoneWork: e.target.value }))}
-                    placeholder="+7 (999) 123-45-67"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Личный телефон</Label>
-                  <Input
-                    type="text"
-                    value={newUser.phonePersonal || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phonePersonal: e.target.value }))}
-                    placeholder="+7 (999) 123-45-67"
-                  />
-                </div>
-                <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                  <Label className="block text-sm font-medium text-black mb-2">Адрес</Label>
-                  <Input
-                    type="text"
-                    value={newUser.address || ''}
-                    onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, address: e.target.value }))}
-                    placeholder="Введите адрес"
-                  />
-                </div>
-                      </div>
-
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
-                <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
-                  <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
-                </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Имя *</Label>
+                <Input
+                  type="text"
+                  value={newUser.name || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, name: e.target.value }))}
+                  placeholder="Введите имя"
+                />
               </div>
-              
-              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-4">
-                <Label className="block text-sm font-medium text-black mb-2">Комментарии</Label>
-                <textarea
-                  value={newUser.comments || ''}
-                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, comments: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
-                  rows={3}
-                  placeholder="Введите комментарии"
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Email *</Label>
+                <Input
+                  type="email"
+                  value={newUser.email || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, email: e.target.value }))}
+                  placeholder="Введите email"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Логин</Label>
+                <Input
+                  type="text"
+                  value={newUser.login || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, login: e.target.value }))}
+                  placeholder="Введите логин"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Пароль</Label>
+                <Input
+                  type="password"
+                  value={newUser.password || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, password: e.target.value }))}
+                  placeholder="Введите пароль"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Роль</Label>
+                <Select value={newUser.role || 'employee'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, role: value as any }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите роль" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="site-user">Пользователь сайта</SelectItem>
+                    <SelectItem value="client">Клиент Метрики</SelectItem>
+                    <SelectItem value="foreign-employee">Иностранный сотрудник</SelectItem>
+                    <SelectItem value="freelancer">Внештатный сотрудник</SelectItem>
+                    <SelectItem value="employee">Сотрудник</SelectItem>
+                    <SelectItem value="manager">Менеджер</SelectItem>
+                    <SelectItem value="admin">Администратор</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Статус</Label>
+                <Select value={newUser.status || 'pending'} onValueChange={(value) => setNewUser((prev: Partial<UserType>) => ({ ...prev, status: value as any }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите статус" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Активен</SelectItem>
+                    <SelectItem value="inactive">Неактивен</SelectItem>
+                    <SelectItem value="pending">Ожидает</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Дата рождения</Label>
+                <Input
+                  type="text"
+                  value={newUser.dateOfBirth || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, dateOfBirth: e.target.value }))}
+                  placeholder="ДД.ММ.ГГГГ"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Рабочий телефон</Label>
+                <Input
+                  type="text"
+                  value={newUser.phoneWork || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phoneWork: e.target.value }))}
+                  placeholder="+7 (999) 123-45-67"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Личный телефон</Label>
+                <Input
+                  type="text"
+                  value={newUser.phonePersonal || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, phonePersonal: e.target.value }))}
+                  placeholder="+7 (999) 123-45-67"
+                />
+              </div>
+              <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+                <Label className="block text-sm font-medium text-black mb-2">Адрес</Label>
+                <Input
+                  type="text"
+                  value={newUser.address || ''}
+                  onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, address: e.target.value }))}
+                  placeholder="Введите адрес"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
-              <Button
-                onClick={() => setIsCreatingUser(false)}
-                variant="outline"
-              >
-                Отменить
-              </Button>
-              <Button
-                onClick={createUser}
-                variant="default"
-              >
-                Создать пользователя
-              </Button>
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+              <label className="block text-sm font-medium text-black mb-2">Объекты пользователя</label>
+              <div className="w-full h-32 border border-gray-300 rounded-lg bg-gray-50 p-3 overflow-y-auto">
+                <div className="text-sm text-gray-500">Объекты не назначены (функционал в разработке)</div>
+              </div>
             </div>
+            
+            <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
+              <Label className="block text-sm font-medium text-black mb-2">Комментарии</Label>
+              <textarea
+                value={newUser.comments || ''}
+                onChange={(e) => setNewUser((prev: Partial<UserType>) => ({ ...prev, comments: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
+                rows={3}
+                placeholder="Введите комментарии"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="mt-6 pt-6 border-t border-gray-200">
+            <Button
+              onClick={() => setIsCreatingUser(false)}
+              variant="outline"
+            >
+              Отменить
+            </Button>
+            <Button
+              onClick={createUser}
+              style={{backgroundColor: '#fff60b'}}
+              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
+              onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            >
+              Создать пользователя
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
