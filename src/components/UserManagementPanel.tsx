@@ -1656,7 +1656,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           setSelectedUser(null)
         }
       }}>
-        <SheetContent className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
+        <SheetContent side="left" className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>Редактировать пользователя</SheetTitle>
             <SheetDescription>
@@ -2137,7 +2137,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
 
       {/* Sheet индивидуальных разрешений */}
       <Sheet open={isIndividualPermissionsModalOpen} onOpenChange={setIsIndividualPermissionsModalOpen}>
-        <SheetContent className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
+        <SheetContent side="left" className="w-[768px] sm:w-[768px] sm:max-w-[768px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>
               Индивидуальные разрешения: {selectedUserForPermissions?.name}
