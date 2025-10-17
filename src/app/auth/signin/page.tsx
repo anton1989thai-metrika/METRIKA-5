@@ -14,7 +14,8 @@ export default function LoginPage() {
         <img
           src="/images/login-bg.jpg"
           alt="МЕТРИКА - Авторизация"
-          className="absolute inset-x-0 top-[200px] bottom-[200px] h-auto w-full object-contain dark:brightness-[0.2] dark:grayscale"
+          className="absolute w-[800px] h-[530px] left-1/2 top-1/2 transform -translate-y-1/2"
+          style={{ left: '50%' }}
         />
       </div>
     </div>
