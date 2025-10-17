@@ -6,7 +6,7 @@ export default function LoginPage() {
       <div 
         className="flex items-center justify-center"
         style={{
-          width: '1260px',
+          width: '1060px',
           height: '900px',
           border: '3px solid #d1d5db',
           padding: '50px',
