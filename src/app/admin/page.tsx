@@ -46,6 +46,7 @@ import {
   Trash2,
   Globe
 } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import ContentEditor from "@/components/ContentEditor"
 import MediaManager from "@/components/MediaManager"
 import AnalyticsDashboard from "@/components/AnalyticsDashboard"
@@ -362,116 +363,86 @@ function AdminPageContent() {
           {activeTab !== 'hr' && (
             <div className="mb-8">
               <div className="flex flex-wrap gap-2">
-              <button
+              <Button
                 onClick={() => setActiveTab('dashboard')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'dashboard' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'dashboard' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <BarChart3 className="w-4 h-4 inline mr-2" />
+                <BarChart3 className="w-4 h-4 mr-2" />
                 Дашборд
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('email')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'email' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'email' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <Mail className="w-4 h-4 inline mr-2" />
+                <Mail className="w-4 h-4 mr-2" />
                 Email
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('content')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'content' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'content' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <FileText className="w-4 h-4 inline mr-2" />
+                <FileText className="w-4 h-4 mr-2" />
                 Контент
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('objects')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'objects' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'objects' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <Building2 className="w-4 h-4 inline mr-2" />
+                <Building2 className="w-4 h-4 mr-2" />
                 Объекты
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('users')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'users' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'users' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <Users className="w-4 h-4 inline mr-2" />
+                <Users className="w-4 h-4 mr-2" />
                 Пользователи
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('tasks')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'tasks' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'tasks' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <TaskSquare className="w-4 h-4 inline mr-2" />
+                <TaskSquare className="w-4 h-4 mr-2" />
                 Задачи
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('media')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'media' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'media' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <Image className="w-4 h-4 inline mr-2" />
+                <Image className="w-4 h-4 mr-2" />
                 Медиа
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('analytics')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'analytics' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'analytics' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <BarChart3 className="w-4 h-4 inline mr-2" />
+                <BarChart3 className="w-4 h-4 mr-2" />
                 Аналитика
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('hr')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'hr' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'hr' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <Calculator className="w-4 h-4 inline mr-2" />
+                <Calculator className="w-4 h-4 mr-2" />
                 Кадры и бухгалтерия
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setActiveTab('settings')}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  activeTab === 'settings' 
-                    ? 'bg-black text-white shadow-lg' 
-                    : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                }`}
+                variant={activeTab === 'settings' ? 'default' : 'outline'}
+                className="flex items-center"
               >
-                <Settings className="w-4 h-4 inline mr-2" />
+                <Settings className="w-4 h-4 mr-2" />
                 Настройки
-              </button>
+              </Button>
             </div>
             </div>
           )}
@@ -811,94 +782,70 @@ function AdminPageContent() {
               {/* Навигация */}
               <div className="mb-8">
                 <div className="flex flex-wrap gap-2">
-              <button 
+              <Button 
                     onClick={() => setHrActiveTab('dashboard')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'dashboard' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'dashboard' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <BarChart3 className="w-4 h-4 inline mr-2" />
+                    <BarChart3 className="w-4 h-4 mr-2" />
                     Дашборд
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('employees')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'employees' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'employees' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <Users className="w-4 h-4 inline mr-2" />
+                    <Users className="w-4 h-4 mr-2" />
                     Сотрудники
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('time')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'time' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'time' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <Clock className="w-4 h-4 inline mr-2" />
+                    <Clock className="w-4 h-4 mr-2" />
                     Рабочее время
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('salary')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'salary' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'salary' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <DollarSign className="w-4 h-4 inline mr-2" />
+                    <DollarSign className="w-4 h-4 mr-2" />
                     Зарплата
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('cash')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'cash' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'cash' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <Receipt className="w-4 h-4 inline mr-2" />
+                    <Receipt className="w-4 h-4 mr-2" />
                     Касса
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('penalties')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'penalties' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'penalties' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <Award className="w-4 h-4 inline mr-2" />
+                    <Award className="w-4 h-4 mr-2" />
                     Штрафы и премии
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('notifications')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'notifications' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'notifications' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <Bell className="w-4 h-4 inline mr-2" />
+                    <Bell className="w-4 h-4 mr-2" />
                     Уведомления
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setHrActiveTab('reports')}
-                    className={`px-4 py-2 rounded-full font-medium transition-all ${
-                      hrActiveTab === 'reports' 
-                        ? 'bg-black text-white shadow-lg' 
-                        : 'bg-white text-black border border-gray-300 shadow-lg hover:shadow-xl'
-                    }`}
+                    variant={hrActiveTab === 'reports' ? 'default' : 'outline'}
+                    className="flex items-center"
                   >
-                    <PieChart className="w-4 h-4 inline mr-2" />
+                    <PieChart className="w-4 h-4 mr-2" />
                     Отчёты
-                  </button>
+                  </Button>
                 </div>
               </div>
           
