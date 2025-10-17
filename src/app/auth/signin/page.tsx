@@ -10,12 +10,11 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="bg-muted relative hidden lg:block">
+      <div className="bg-white relative hidden lg:block flex items-center justify-center">
         <img
           src="/images/login-bg.jpg"
           alt="МЕТРИКА - Авторизация"
-          className="absolute w-[800px] h-[530px] left-1/2 top-1/2 transform -translate-y-1/2"
-          style={{ left: '50%' }}
+          className="absolute left-1/2 transform -translate-x-1/2 w-[800px] h-[530px] object-cover"
         />
       </div>
     </div>
