@@ -168,9 +168,6 @@ export function LoginForm({
           <p><strong>Сотрудник:</strong> stulina / employee123 (Стулина Елена)</p>
           <p><strong>Сотрудник:</strong> tambovtseva / employee123 (Тамбовцева Екатерина)</p>
         </div>
-        <div className="mt-2 text-xs text-gray-500">
-          <p>Можно входить как по email, так и по логину</p>
-        </div>
       </div>
     </form>
   )
