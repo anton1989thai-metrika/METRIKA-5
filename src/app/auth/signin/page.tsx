@@ -4,10 +4,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-svh bg-white flex items-center justify-center">
       <div 
-        className="flex items-center justify-center w-full gap-[100px]"
+        className="flex items-center justify-center gap-[100px] p-[50px]"
         style={{
-          border: '3px solid #d1d5db',
-          padding: '50px'
+          border: '3px solid #d1d5db'
         }}
       >
         {/* Форма авторизации - слева от центра */}
