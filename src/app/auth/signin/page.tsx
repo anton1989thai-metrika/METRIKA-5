@@ -2,27 +2,23 @@ import { LoginForm } from "@/components/login-form"
 
 export default function LoginPage() {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex flex-1 items-center justify-center">
+    <div className="min-h-svh bg-white flex items-center justify-center">
+      <div className="flex items-center justify-center w-full">
+        {/* Форма авторизации - слева от центра */}
+        <div className="flex items-center justify-end" style={{ width: 'calc(50% - 100px)' }}>
           <div className="w-full max-w-xs">
             <LoginForm />
           </div>
         </div>
-      </div>
-      <div className="bg-white relative hidden lg:block flex items-center justify-center">
-        <img
-          src="/images/login-bg.jpg"
-          alt="МЕТРИКА - Авторизация"
-          className="h-[800px] w-[530px] object-contain"
-          style={{
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            top: '50%',
-            marginTop: '-400px'
-          }}
-        />
+        
+        {/* Картинка - справа от центра */}
+        <div className="flex items-center justify-start" style={{ width: 'calc(50% - 100px)' }}>
+          <img
+            src="/images/login-bg.jpg"
+            alt="МЕТРИКА - Авторизация"
+            className="h-[800px] w-[530px] object-contain"
+          />
+        </div>
       </div>
     </div>
   )
