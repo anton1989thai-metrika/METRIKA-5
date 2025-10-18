@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import {
   Building2,
   Plus,
@@ -125,6 +126,14 @@ import {
   Video as VideoIcon,
   Music as MusicIcon,
 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import ObjectCreateForm from "./ObjectCreateForm"
 
 // Типы объектов недвижимости
@@ -300,6 +309,7 @@ const mockObjects: RealEstateObject[] = [
 ]
 
 export default function ObjectManagementPanel() {
+  const router = useRouter()
   const [objects, setObjects] = useState<RealEstateObject[]>(mockObjects)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
@@ -342,7 +352,7 @@ export default function ObjectManagementPanel() {
     })
 
   const handleCreateObject = () => {
-    setShowTemplates(true)
+    router.push('/admin/objects/add')
   }
 
   // Скачивание шаблона Excel
@@ -566,163 +576,179 @@ export default function ObjectManagementPanel() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-black">Управление объектами</h2>
         <div className="flex items-center space-x-4">
-          <button 
+          <Button 
             onClick={downloadExcelTemplate}
-            className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+            variant="outline"
           >
-            <Download className="w-4 h-4 inline mr-2" />
+            <Download className="w-4 h-4 mr-2" />
             Скачать шаблон
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={() => setShowBulkUpload(true)}
-            className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
+            variant="outline"
           >
-            <Upload className="w-4 h-4 inline mr-2" />
+            <Upload className="w-4 h-4 mr-2" />
             Массовая загрузка
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={handleCreateObject}
-            className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-            style={{backgroundColor: '#fff60b'}}
-            onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-            onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+            className="bg-[#fff60b] hover:bg-[#e6d90a] text-black"
           >
-            <Plus className="w-4 h-4 inline mr-2" />
+            <Plus className="w-4 h-4 mr-2" />
             Добавить объект
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Статистика */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-          <div className="flex items-center">
-            <Building2 className="w-8 h-8 text-gray-600 mr-3" />
-            <div>
-              <div className="text-2xl font-bold text-black">{objects.length}</div>
-              <div className="text-sm text-gray-600">Всего объектов</div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Building2 className="w-8 h-8 text-gray-600 mr-3" />
+              <div>
+                <div className="text-2xl font-bold text-black">{objects.length}</div>
+                <div className="text-sm text-gray-600">Всего объектов</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
         
-        <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-          <div className="flex items-center">
-            <CheckCircle className="w-8 h-8 text-gray-600 mr-3" />
-            <div>
-              <div className="text-2xl font-bold text-black">{objects.filter(obj => obj.status === 'published').length}</div>
-              <div className="text-sm text-gray-600">Опубликовано</div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <CheckCircle className="w-8 h-8 text-gray-600 mr-3" />
+              <div>
+                <div className="text-2xl font-bold text-black">{objects.filter(obj => obj.status === 'published').length}</div>
+                <div className="text-sm text-gray-600">Опубликовано</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
         
-        <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-          <div className="flex items-center">
-            <Clock className="w-8 h-8 text-gray-600 mr-3" />
-            <div>
-              <div className="text-2xl font-bold text-black">{objects.filter(obj => obj.status === 'draft').length}</div>
-              <div className="text-sm text-gray-600">Черновики</div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Clock className="w-8 h-8 text-gray-600 mr-3" />
+              <div>
+                <div className="text-2xl font-bold text-black">{objects.filter(obj => obj.status === 'draft').length}</div>
+                <div className="text-sm text-gray-600">Черновики</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
         
-        <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-          <div className="flex items-center">
-            <Archive className="w-8 h-8 text-gray-600 mr-3" />
-            <div>
-              <div className="text-2xl font-bold text-black">{objects.filter(obj => obj.status === 'archived').length}</div>
-              <div className="text-sm text-gray-600">В архиве</div>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center">
+              <Archive className="w-8 h-8 text-gray-600 mr-3" />
+              <div>
+                <div className="text-2xl font-bold text-black">{objects.filter(obj => obj.status === 'archived').length}</div>
+                <div className="text-sm text-gray-600">В архиве</div>
+              </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
+
+      <Separator />
 
       {/* Фильтры и поиск */}
-      <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Поиск объектов..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-black bg-white w-full"
-            />
+      <Card>
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Поиск объектов..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Все статусы" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все статусы</SelectItem>
+                <SelectItem value="published">Опубликовано</SelectItem>
+                <SelectItem value="draft">Черновики</SelectItem>
+                <SelectItem value="archived">Архив</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Все типы" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все типы</SelectItem>
+                {PROPERTY_TYPES.map(type => (
+                  <SelectItem key={type.id} value={type.id}>{type.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Select value={agentFilter} onValueChange={setAgentFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Все агенты" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все агенты</SelectItem>
+                {AGENTS.map(agent => (
+                  <SelectItem key={agent.id} value={agent.id}>{agent.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <div className="flex space-x-2">
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="flex-1">
+                  <SelectValue placeholder="Сортировка" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="createdAt">Дата создания</SelectItem>
+                  <SelectItem value="updatedAt">Дата обновления</SelectItem>
+                  <SelectItem value="title">Название</SelectItem>
+                  <SelectItem value="price">Цена</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                variant="outline"
+                size="icon"
+              >
+                {sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
+              </Button>
+            </div>
           </div>
-          
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="medusa-form-select"
-          >
-            <option value="all">Все статусы</option>
-            <option value="published">Опубликовано</option>
-            <option value="draft">Черновики</option>
-            <option value="archived">Архив</option>
-          </select>
-          
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="medusa-form-select"
-          >
-            <option value="all">Все типы</option>
-            {PROPERTY_TYPES.map(type => (
-              <option key={type.id} value={type.id}>{type.name}</option>
-            ))}
-          </select>
-          
-          <select
-            value={agentFilter}
-            onChange={(e) => setAgentFilter(e.target.value)}
-            className="medusa-form-select"
-          >
-            <option value="all">Все агенты</option>
-            {AGENTS.map(agent => (
-              <option key={agent.id} value={agent.id}>{agent.name}</option>
-            ))}
-          </select>
-          
-          <div className="flex space-x-2">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white flex-1"
-            >
-              <option value="createdAt">Дата создания</option>
-              <option value="updatedAt">Дата обновления</option>
-              <option value="title">Название</option>
-              <option value="price">Цена</option>
-            </select>
-            <button
-              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white hover:bg-gray-50"
-            >
-              {sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
-            </button>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
+
+      <Separator />
 
       {/* Список объектов */}
-      <div className="bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+      <Card>
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left py-3 px-4 font-medium text-black">Объект</th>
-                <th className="text-left py-3 px-4 font-medium text-black">Тип</th>
-                <th className="text-left py-3 px-4 font-medium text-black">Цена</th>
-                <th className="text-left py-3 px-4 font-medium text-black">Агент</th>
-                <th className="text-left py-3 px-4 font-medium text-black">Статус</th>
-                <th className="text-left py-3 px-4 font-medium text-black">Создан</th>
-                <th className="text-left py-3 px-4 font-medium text-black">Действия</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Объект</TableHead>
+                <TableHead>Тип</TableHead>
+                <TableHead>Цена</TableHead>
+                <TableHead>Агент</TableHead>
+                <TableHead>Статус</TableHead>
+                <TableHead>Создан</TableHead>
+                <TableHead>Действия</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {filteredObjects.map(obj => (
-                <tr key={obj.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-4">
+                <TableRow key={obj.id}>
+                  <TableCell>
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-gray-200 rounded-lg flex-shrink-0"></div>
                       <div>
@@ -730,112 +756,103 @@ export default function ObjectManagementPanel() {
                         <div className="text-sm text-gray-600">{obj.address}</div>
                       </div>
                     </div>
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">{getTypeName(obj.type)}</td>
-                  <td className="py-3 px-4 font-medium text-black">{obj.price}</td>
-                  <td className="py-3 px-4 text-gray-600">{getAgentName(obj.agent)}</td>
-                  <td className="py-3 px-4">
-                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(obj.status)}`}>
+                  </TableCell>
+                  <TableCell className="text-gray-600">{getTypeName(obj.type)}</TableCell>
+                  <TableCell className="font-medium text-black">{obj.price}</TableCell>
+                  <TableCell className="text-gray-600">{getAgentName(obj.agent)}</TableCell>
+                  <TableCell>
+                    <Badge variant={obj.status === 'published' ? 'default' : 'secondary'}>
                       {getStatusText(obj.status)}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-gray-600">
                     {new Date(obj.createdAt).toLocaleDateString('ru-RU')}
-                  </td>
-                  <td className="py-3 px-4">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex items-center space-x-2">
-                      <button 
+                      <Button 
                         onClick={() => window.open(`/objects/${obj.id}`, '_blank')}
-                        className="p-1 text-gray-600 hover:text-black"
+                        variant="ghost"
+                        size="icon"
                         title="Просмотр"
                       >
                         <Eye className="w-4 h-4" />
-                      </button>
-                      <button 
+                      </Button>
+                      <Button 
                         onClick={() => handleDuplicateObject(obj.id)}
-                        className="p-1 text-gray-600 hover:text-black"
+                        variant="ghost"
+                        size="icon"
                         title="Дублировать"
                       >
                         <Copy className="w-4 h-4" />
-                      </button>
-                      <button 
+                      </Button>
+                      <Button 
                         onClick={() => {/* Редактирование */}}
-                        className="p-1 text-gray-600 hover:text-black"
+                        variant="ghost"
+                        size="icon"
                         title="Редактировать"
                       >
                         <Edit className="w-4 h-4" />
-                      </button>
-                      <button 
+                      </Button>
+                      <Button 
                         onClick={() => {
                           if (confirm('Вы уверены, что хотите удалить этот объект?')) {
                             setObjects(prev => prev.filter(object => object.id !== obj.id))
                           }
                         }}
-                        className="p-1 text-gray-600 hover:text-gray-800"
+                        variant="ghost"
+                        size="icon"
                         title="Удалить"
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </Button>
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
-      </div>
+      </Card>
 
       {/* Модальное окно выбора шаблона */}
-      {showTemplates && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-black">Выберите тип объекта</h3>
-              <button 
-                onClick={() => setShowTemplates(false)}
-                className="p-1 text-gray-600 hover:text-black"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {PROPERTY_TYPES.map(type => {
-                const IconComponent = type.icon
-                return (
-                  <button
-                    key={type.id}
-                    onClick={() => handleTemplateSelect(type.id)}
-                    className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-left"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <IconComponent className={`w-6 h-6 ${type.color}`} />
-                      <span className="font-medium text-black">{type.name}</span>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
+      <Dialog open={showTemplates} onOpenChange={setShowTemplates}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Выберите тип объекта</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {PROPERTY_TYPES.map(type => {
+              const IconComponent = type.icon
+              return (
+                <Button
+                  key={type.id}
+                  onClick={() => handleTemplateSelect(type.id)}
+                  variant="outline"
+                  className="p-4 h-auto justify-start"
+                >
+                  <div className="flex items-center space-x-3">
+                    <IconComponent className={`w-6 h-6 ${type.color}`} />
+                    <span className="font-medium text-black">{type.name}</span>
+                  </div>
+                </Button>
+              )
+            })}
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
       {/* Модальное окно массовой загрузки */}
-      {showBulkUpload && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-black">Массовая загрузка объектов</h3>
-              <button 
-                onClick={() => setShowBulkUpload(false)}
-                className="p-1 text-gray-600 hover:text-black"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="space-y-6">
-              <div className="bg-gray-50 rounded-lg p-4">
+      <Dialog open={showBulkUpload} onOpenChange={setShowBulkUpload}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Массовая загрузка объектов</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            <Card>
+              <CardContent className="p-4">
                 <h4 className="font-medium text-black mb-2">Инструкция:</h4>
                 <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
                   <li>Скачайте шаблон Excel файла</li>
@@ -843,39 +860,38 @@ export default function ObjectManagementPanel() {
                   <li>Сохраните файл в формате CSV</li>
                   <li>Загрузите файл через форму ниже</li>
                 </ol>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-lg font-medium text-black mb-2">
-                  Перетащите CSV файл сюда или
-                </p>
-                <input
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      handleBulkUpload(e.target.files[0])
-                    }
-                  }}
-                  className="hidden"
-                  id="bulk-upload-input"
-                />
-                <label
-                  htmlFor="bulk-upload-input"
-                  className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium cursor-pointer inline-block"
-                  style={{backgroundColor: '#fff60b'}}
-                  onMouseEnter={(e) => (e.target as HTMLLabelElement).style.backgroundColor = '#e6d90a'}
-                  onMouseLeave={(e) => (e.target as HTMLLabelElement).style.backgroundColor = '#fff60b'}
-                >
-                  Выберите файл
-                </label>
-                <p className="text-sm text-gray-600 mt-2">
-                  Поддерживаются форматы: CSV, XLSX, XLS
-                </p>
-              </div>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-lg font-medium text-black mb-2">
+                Перетащите CSV файл сюда или
+              </p>
+              <input
+                type="file"
+                accept=".csv,.xlsx,.xls"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    handleBulkUpload(e.target.files[0])
+                  }
+                }}
+                className="hidden"
+                id="bulk-upload-input"
+              />
+              <label
+                htmlFor="bulk-upload-input"
+                className="px-4 py-2 bg-[#fff60b] hover:bg-[#e6d90a] text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium cursor-pointer inline-block"
+              >
+                Выберите файл
+              </label>
+              <p className="text-sm text-gray-600 mt-2">
+                Поддерживаются форматы: CSV, XLSX, XLS
+              </p>
+            </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <Card>
+              <CardContent className="p-4">
                 <div className="flex items-start">
                   <AlertTriangle className="w-5 h-5 text-gray-600 mr-2 mt-0.5" />
                   <div>
@@ -885,11 +901,11 @@ export default function ObjectManagementPanel() {
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
