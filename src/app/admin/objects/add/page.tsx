@@ -669,6 +669,136 @@ function AddObjectPageContent() {
   })
 
   const [infrastructureSelected, setInfrastructureSelected] = useState<string[]>([])
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [areaFieldsData, setAreaFieldsData] = useState<Record<string, string>>({})
+
+  // Валидация обязательных полей
+  const validateRequiredFields = () => {
+    const newErrors: Record<string, string> = {}
+    
+    if (!formData.country) newErrors.country = 'Страна обязательна для заполнения'
+    if (!formData.operation) newErrors.operation = 'Операция обязательна для заполнения'
+    if (!formData.type) newErrors.type = 'Тип объекта обязателен для заполнения'
+    if (!formData.address) newErrors.address = 'Адрес обязателен для заполнения'
+    if (!formData.price) newErrors.price = 'Цена обязательна для заполнения'
+    
+    // Валидация полей площади
+    const areaFields = getAreaFields(formData.type)
+    areaFields.forEach(field => {
+      if (!areaFieldsData[field.id]) {
+        newErrors[field.id] = `${field.label} обязательна для заполнения`
+      }
+    })
+    
+    // Валидация кадастровых номеров (если заполнены)
+    formData.cadastralNumbers.forEach((number, index) => {
+      if (number && number.trim().length < 10) {
+        newErrors[`cadastralNumber_${index}`] = 'Кадастровый номер должен содержать минимум 10 символов'
+      }
+    })
+    
+    // Валидация кадастровых стоимостей (если заполнены)
+    formData.cadastralCosts.forEach((cost, index) => {
+      if (cost && !isValidNumber(cost)) {
+        newErrors[`cadastralCost_${index}`] = 'Введите корректную стоимость'
+      }
+    })
+    
+    // Валидация даты ремонта
+    if (formData.renovationDate && !isValidDate(formData.renovationDate)) {
+      newErrors.renovationDate = 'Неверный формат даты. Используйте DD.MM.YYYY'
+    }
+    
+    // Валидация числовых полей
+    if (formData.ceilingHeight && !isValidNumber(formData.ceilingHeight)) {
+      newErrors.ceilingHeight = 'Введите корректное число'
+    }
+    
+    if (formData.peakPower && !isValidNumber(formData.peakPower)) {
+      newErrors.peakPower = 'Введите корректное число'
+    }
+    
+    if (formData.constructionYear && !isValidYear(formData.constructionYear)) {
+      newErrors.constructionYear = 'Введите корректный год (4 цифры)'
+    }
+    
+    if (formData.buildingFloors && !isValidNumber(formData.buildingFloors)) {
+      newErrors.buildingFloors = 'Введите корректное число'
+    }
+    
+    if (formData.apartmentsInHouse && !isValidNumber(formData.apartmentsInHouse)) {
+      newErrors.apartmentsInHouse = 'Введите корректное число'
+    }
+    
+    if (formData.apartmentFloor && !isValidNumber(formData.apartmentFloor)) {
+      newErrors.apartmentFloor = 'Введите корректное число'
+    }
+    
+    // Валидация расстояний инфраструктуры
+    Object.keys(formData.infrastructureDistances).forEach(key => {
+      const distance = formData.infrastructureDistances[key]
+      if (distance && !isValidNumber(distance)) {
+        newErrors[`infrastructure_${key}`] = 'Введите корректное расстояние'
+      }
+    })
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  // Валидация даты в формате DD.MM.YYYY
+  const isValidDate = (dateString: string): boolean => {
+    const dateRegex = /^(\d{2})\.(\d{2})\.(\d{4})$/
+    const match = dateString.match(dateRegex)
+    
+    if (!match) return false
+    
+    const day = parseInt(match[1], 10)
+    const month = parseInt(match[2], 10)
+    const year = parseInt(match[3], 10)
+    
+    if (day < 1 || day > 31) return false
+    if (month < 1 || month > 12) return false
+    if (year < 1900 || year > 2100) return false
+    
+    const date = new Date(year, month - 1, day)
+    return date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year
+  }
+
+  // Валидация числа
+  const isValidNumber = (value: string): boolean => {
+    const num = parseFloat(value)
+    return !isNaN(num) && isFinite(num) && num >= 0
+  }
+
+  // Валидация года
+  const isValidYear = (value: string): boolean => {
+    const year = parseInt(value, 10)
+    return !isNaN(year) && year >= 1900 && year <= new Date().getFullYear() + 10
+  }
+
+  // Форматирование даты при вводе
+  const formatDateInput = (value: string): string => {
+    // Удаляем все нецифровые символы
+    const numbers = value.replace(/\D/g, '')
+    
+    if (numbers.length <= 2) return numbers
+    if (numbers.length <= 4) return `${numbers.slice(0, 2)}.${numbers.slice(2)}`
+    return `${numbers.slice(0, 2)}.${numbers.slice(2, 4)}.${numbers.slice(4, 8)}`
+  }
+
+  // Обработка отправки формы
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (validateRequiredFields()) {
+      // Здесь будет логика отправки данных
+      console.log('Форма валидна:', { formData, areaFieldsData })
+      alert('Объект успешно создан!')
+    } else {
+      console.log('Ошибки валидации:', errors)
+    }
+  }
 
   const getAreaFields = (type: string) => {
     switch (type) {
@@ -969,10 +1099,15 @@ function AddObjectPageContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label className="text-sm font-medium text-gray-700 mb-2">
-                  Страна
+                  Страна *
                 </Label>
-                <Select value={formData.country} onValueChange={(value) => setFormData({...formData, country: value})}>
-                  <SelectTrigger>
+                <Select value={formData.country} onValueChange={(value) => {
+                  setFormData({...formData, country: value})
+                  if (errors.country) {
+                    setErrors({...errors, country: ''})
+                  }
+                }}>
+                  <SelectTrigger className={errors.country ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Выберите страну" />
                   </SelectTrigger>
                   <SelectContent>
@@ -983,14 +1118,20 @@ function AddObjectPageContent() {
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country}</p>}
               </div>
 
               <div>
                 <Label className="text-sm font-medium text-gray-700 mb-2">
-                  Операция
+                  Операция *
                 </Label>
-                <Select value={formData.operation} onValueChange={(value) => setFormData({...formData, operation: value})}>
-                  <SelectTrigger>
+                <Select value={formData.operation} onValueChange={(value) => {
+                  setFormData({...formData, operation: value})
+                  if (errors.operation) {
+                    setErrors({...errors, operation: ''})
+                  }
+                }}>
+                  <SelectTrigger className={errors.operation ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Выберите операцию" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1001,14 +1142,20 @@ function AddObjectPageContent() {
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.operation && <p className="text-red-500 text-sm mt-1">{errors.operation}</p>}
               </div>
 
               <div>
                 <Label className="text-sm font-medium text-gray-700 mb-2">
-                  Тип объекта
+                  Тип объекта *
                 </Label>
-                <Select value={formData.type} onValueChange={(value) => setFormData({...formData, type: value})}>
-                  <SelectTrigger>
+                <Select value={formData.type} onValueChange={(value) => {
+                  setFormData({...formData, type: value})
+                  if (errors.type) {
+                    setErrors({...errors, type: ''})
+                  }
+                }}>
+                  <SelectTrigger className={errors.type ? 'border-red-500' : ''}>
                     <SelectValue placeholder="Выберите тип объекта" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1019,17 +1166,25 @@ function AddObjectPageContent() {
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.type && <p className="text-red-500 text-sm mt-1">{errors.type}</p>}
               </div>
 
               <div>
                 <Label className="text-sm font-medium text-gray-700 mb-2">
-                  Адрес
+                  Адрес *
                 </Label>
                 <Input
                   value={formData.address}
-                  onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, address: e.target.value})
+                    if (errors.address) {
+                      setErrors({...errors, address: ''})
+                    }
+                  }}
                   placeholder="Введите адрес"
+                  className={errors.address ? 'border-red-500' : ''}
                 />
+                {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
               </div>
 
               <div>
@@ -1045,13 +1200,20 @@ function AddObjectPageContent() {
 
               <div>
                 <Label className="text-sm font-medium text-gray-700 mb-2">
-                  Цена
+                  Цена *
                 </Label>
                 <Input
                   value={formData.price}
-                  onChange={(e) => setFormData({...formData, price: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, price: e.target.value})
+                    if (errors.price) {
+                      setErrors({...errors, price: ''})
+                    }
+                  }}
                   placeholder="Введите цену"
+                  className={errors.price ? 'border-red-500' : ''}
                 />
+                {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
               </div>
             </div>
 
@@ -1063,11 +1225,20 @@ function AddObjectPageContent() {
                   {getAreaFields(formData.type).map((field) => (
                     <div key={field.id}>
                       <Label className="text-sm font-medium text-gray-700 mb-2">
-                        {field.label}
+                        {field.label} *
                       </Label>
                       <Input
+                        value={areaFieldsData[field.id] || ''}
+                        onChange={(e) => {
+                          setAreaFieldsData({...areaFieldsData, [field.id]: e.target.value})
+                          if (errors[field.id]) {
+                            setErrors({...errors, [field.id]: ''})
+                          }
+                        }}
                         placeholder={field.placeholder}
+                        className={errors[field.id] ? 'border-red-500' : ''}
                       />
+                      {errors[field.id] && <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>}
                     </div>
                   ))}
                 </div>
@@ -1198,9 +1369,16 @@ function AddObjectPageContent() {
                   </Label>
                   <Input
                     value={formData.ceilingHeight}
-                    onChange={(e) => setFormData({...formData, ceilingHeight: e.target.value})}
+                    onChange={(e) => {
+                      setFormData({...formData, ceilingHeight: e.target.value})
+                      if (errors.ceilingHeight) {
+                        setErrors({...errors, ceilingHeight: ''})
+                      }
+                    }}
                     placeholder="м"
+                    className={errors.ceilingHeight ? 'border-red-500' : ''}
                   />
+                  {errors.ceilingHeight && <p className="text-red-500 text-sm mt-1">{errors.ceilingHeight}</p>}
                 </div>
 
                 <div>
@@ -1255,9 +1433,17 @@ function AddObjectPageContent() {
                   </Label>
                   <Input
                     value={formData.renovationDate}
-                    onChange={(e) => setFormData({...formData, renovationDate: e.target.value})}
+                    onChange={(e) => {
+                      const formatted = formatDateInput(e.target.value)
+                      setFormData({...formData, renovationDate: formatted})
+                      if (errors.renovationDate) {
+                        setErrors({...errors, renovationDate: ''})
+                      }
+                    }}
                     placeholder="DD.MM.YYYY"
+                    className={errors.renovationDate ? 'border-red-500' : ''}
                   />
+                  {errors.renovationDate && <p className="text-red-500 text-sm mt-1">{errors.renovationDate}</p>}
                 </div>
 
                 <div>
@@ -1385,10 +1571,18 @@ function AddObjectPageContent() {
                               </Label>
                               <Input
                                 value={formData.infrastructureDistances[itemId] || ''}
-                                onChange={(e) => updateInfrastructureDistance(itemId, e.target.value)}
+                                onChange={(e) => {
+                                  updateInfrastructureDistance(itemId, e.target.value)
+                                  if (errors[`infrastructure_${itemId}`]) {
+                                    setErrors({...errors, [`infrastructure_${itemId}`]: ''})
+                                  }
+                                }}
                                 placeholder="км"
-                                className="w-20"
+                                className={`w-20 ${errors[`infrastructure_${itemId}`] ? 'border-red-500' : ''}`}
                               />
+                              {errors[`infrastructure_${itemId}`] && (
+                                <p className="text-red-500 text-xs mt-1">{errors[`infrastructure_${itemId}`]}</p>
+                              )}
                             </div>
                           )
                         })}
@@ -1411,22 +1605,32 @@ function AddObjectPageContent() {
                 </Label>
                 <div className="space-y-2">
                   {formData.cadastralNumbers.map((number, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={number}
-                        onChange={(e) => updateCadastralNumber(index, e.target.value)}
-                        placeholder="Введите кадастровый номер"
-                        className="flex-1"
-                      />
-                      {formData.cadastralNumbers.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeCadastralNumber(index)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
+                    <div key={index} className="space-y-1">
+                      <div className="flex gap-2">
+                        <Input
+                          value={number}
+                          onChange={(e) => {
+                            updateCadastralNumber(index, e.target.value)
+                            if (errors[`cadastralNumber_${index}`]) {
+                              setErrors({...errors, [`cadastralNumber_${index}`]: ''})
+                            }
+                          }}
+                          placeholder="Введите кадастровый номер"
+                          className={`flex-1 ${errors[`cadastralNumber_${index}`] ? 'border-red-500' : ''}`}
+                        />
+                        {formData.cadastralNumbers.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => removeCadastralNumber(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                      {errors[`cadastralNumber_${index}`] && (
+                        <p className="text-red-500 text-sm">{errors[`cadastralNumber_${index}`]}</p>
                       )}
                     </div>
                   ))}
@@ -1448,22 +1652,32 @@ function AddObjectPageContent() {
                 </Label>
                 <div className="space-y-2">
                   {formData.cadastralCosts.map((cost, index) => (
-                    <div key={index} className="flex gap-2">
-                      <Input
-                        value={cost}
-                        onChange={(e) => updateCadastralCost(index, e.target.value)}
-                        placeholder="Введите кадастровую стоимость"
-                        className="flex-1"
-                      />
-                      {formData.cadastralCosts.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={() => removeCadastralCost(index)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
+                    <div key={index} className="space-y-1">
+                      <div className="flex gap-2">
+                        <Input
+                          value={cost}
+                          onChange={(e) => {
+                            updateCadastralCost(index, e.target.value)
+                            if (errors[`cadastralCost_${index}`]) {
+                              setErrors({...errors, [`cadastralCost_${index}`]: ''})
+                            }
+                          }}
+                          placeholder="Введите кадастровую стоимость"
+                          className={`flex-1 ${errors[`cadastralCost_${index}`] ? 'border-red-500' : ''}`}
+                        />
+                        {formData.cadastralCosts.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => removeCadastralCost(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                      {errors[`cadastralCost_${index}`] && (
+                        <p className="text-red-500 text-sm">{errors[`cadastralCost_${index}`]}</p>
                       )}
                     </div>
                   ))}
@@ -1497,12 +1711,16 @@ function AddObjectPageContent() {
           {/* Кнопки действий */}
           <div className="flex justify-end gap-4">
             <Button
+              type="button"
               variant="outline"
               onClick={() => router.back()}
             >
               Отменить
             </Button>
-            <Button>
+            <Button
+              type="button"
+              onClick={handleSubmit}
+            >
               Создать объект
             </Button>
           </div>
