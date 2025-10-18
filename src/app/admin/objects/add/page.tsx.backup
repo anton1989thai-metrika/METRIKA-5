@@ -451,6 +451,36 @@ const HOUSE_TYPE_BUILDING_OPTIONS = [
   { id: 'new-building', name: 'Новостройка' }
 ]
 
+const INTERCOM_OPTIONS = [
+  { id: 'intercom', name: 'Домофон' },
+  { id: 'video-intercom', name: 'Видеодомофон' },
+  { id: 'none', name: 'Нет' }
+]
+
+const SECURITY_OPTIONS = [
+  { id: 'yes', name: 'Есть' },
+  { id: 'no', name: 'Нет' }
+]
+
+const VIDEO_SURVEILLANCE_OPTIONS = [
+  { id: 'yes', name: 'Есть' },
+  { id: 'no', name: 'Нет' }
+]
+
+const CONCIERGE_OPTIONS = [
+  { id: 'yes', name: 'Есть' },
+  { id: 'no', name: 'Нет' }
+]
+
+const PLAYGROUND_OPTIONS = [
+  { id: 'yes', name: 'Есть' },
+  { id: 'no', name: 'Нет' }
+]
+
+const WIRED_INTERNET_OPTIONS = [
+  { id: 'yes', name: 'Есть' },
+  { id: 'no', name: 'Нет' }
+]
 
 const BUILDING_TYPE_COMPLEX_OPTIONS = [
   { id: 'panel', name: 'Панельные' },
@@ -549,6 +579,33 @@ const WIRED_INTERNET_OPTIONS = [
   { id: 'no', name: 'Нет' }
 ]
 
+const BALCONY_OPTIONS = [
+  { id: 'yes', name: 'Есть' },
+  { id: 'no', name: 'Нет' }
+]
+
+const USE_TYPE_OPTIONS = [
+  { id: 'residential', name: 'Жилое' },
+  { id: 'commercial', name: 'Коммерческое' },
+  { id: 'mixed', name: 'Смешанное' },
+  { id: 'other', name: 'Другое' }
+]
+
+const WINDOWS_OPTIONS = [
+  { id: 'plastic', name: 'Пластиковые' },
+  { id: 'wooden', name: 'Деревянные' },
+  { id: 'aluminum', name: 'Алюминиевые' },
+  { id: 'other', name: 'Другое' }
+]
+
+const HOUSE_TYPE_BUILDING_OPTIONS = [
+  { id: 'brick', name: 'Кирпичный' },
+  { id: 'panel', name: 'Панельный' },
+  { id: 'monolith', name: 'Монолитный' },
+  { id: 'wood', name: 'Деревянный' },
+  { id: 'other', name: 'Другое' }
+]
+
 const TEMPERATURE_BY_SEASONS_OPTIONS = [
   { id: 'stable', name: 'Стабильная' },
   { id: 'variable', name: 'Переменная' },
@@ -571,6 +628,20 @@ const NOISE_LEVEL_OPTIONS = [
   { id: 'low', name: 'Низкий' },
   { id: 'medium', name: 'Средний' },
   { id: 'high', name: 'Высокий' }
+]
+
+const BUILDING_TYPE_COMPLEX_OPTIONS = [
+  { id: 'residential', name: 'Жилой комплекс' },
+  { id: 'commercial', name: 'Коммерческий комплекс' },
+  { id: 'mixed', name: 'Смешанный комплекс' },
+  { id: 'other', name: 'Другое' }
+]
+
+const DEPOSIT_SIZE_OPTIONS = [
+  { id: '1month', name: '1 месяц' },
+  { id: '2months', name: '2 месяца' },
+  { id: '3months', name: '3 месяца' },
+  { id: 'other', name: 'Другое' }
 ]
 
 export default function AddObjectPage() {
@@ -697,7 +768,11 @@ function AddObjectPageContent() {
     windows: '',
     windowsOther: '',
     houseTypeBuilding: '',
-    // Дополнительные характеристики
+    intercom: '',
+    security: '',
+    videoSurveillance: '',
+    concierge: '',
+    playground: '',
     temperatureBySeasons: '',
     airHumidity: '',
     airPollution: '',
@@ -707,12 +782,12 @@ function AddObjectPageContent() {
     formShapeOther: '',
     relief: '',
     reliefOther: '',
+    wiredInternet: '',
     buildingsCount: '',
     buildingTypeComplex: '',
     buildingTypeComplexOther: '',
     depositSize: '',
     depositSizeOther: '',
-    // Аренда
     unavailableDates: undefined as DateRange | undefined,
     pets: [] as string[],
     rentalPeriod: ''
