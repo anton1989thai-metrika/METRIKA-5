@@ -352,7 +352,7 @@ export default function ObjectManagementPanel() {
     })
 
   const handleCreateObject = () => {
-    router.push('/admin/objects/add')
+    router.push('/admin/objects/add-dynamic-form')
   }
 
   // Скачивание шаблона Excel

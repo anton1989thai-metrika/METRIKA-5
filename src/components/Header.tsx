@@ -38,8 +38,8 @@ export default function Header() {
       {/* Черная линия */}
       <div className="h-0.5 bg-black"></div>
       
-      {/* Фильтры - показываем только на странице объектов */}
-      {pathname === '/objects' && <HeaderFilters />}
+      {/* Фильтры - показываем на странице объектов и карты */}
+      {(pathname === '/objects' || pathname === '/map') && <HeaderFilters />}
     </header>
   )
 }
