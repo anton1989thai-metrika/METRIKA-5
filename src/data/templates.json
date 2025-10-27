@@ -1,0 +1,51 @@
+[
+  {
+    "id": "agency",
+    "name": "Агентский договор",
+    "category": "Клиентские",
+    "fields": [
+      { "key": "clientName", "label": "ФИО клиента", "type": "text", "required": true },
+      { "key": "clientPassport", "label": "Паспорт клиента", "type": "text", "required": true },
+      { "key": "objectAddress", "label": "Адрес объекта", "type": "text", "required": true },
+      { "key": "price", "label": "Цена сделки", "type": "number", "required": true },
+      { "key": "commission", "label": "Комиссия агентства (%)", "type": "number", "required": true },
+      { "key": "contractDate", "label": "Дата договора", "type": "date", "required": true }
+    ],
+    "template": "АГЕНТСКИЙ ДОГОВОР № {contractNumber}\n\nг. {contractCity}\n\n{contractDate}\n\nМы, {agentName} (агент), действующий от имени агентства недвижимости МЕТРИКА, и {clientName} (клиент), паспорт {clientPassport}, заключили настоящий агентский договор о нижеследующем:\n\n1. Предмет договора\nКлиент поручает агенту содействие в сделке купли-продажи недвижимости по адресу: {objectAddress}\n\n2. Цена и порядок расчетов\nСтоимость объекта: {price} руб.\nКомиссия агентства: {commission}%\n\n3. Обязательства сторон\nАгент обязуется оказать полный комплекс услуг по сопровождению сделки. Клиент обязуется выплатить комиссию в размере {commission}% от стоимости объекта.\n\nПодписи:\nАгент: ____________________\nКлиент: ____________________"
+  },
+  {
+    "id": "rent",
+    "name": "Договор аренды",
+    "category": "Аренда",
+    "fields": [
+      { "key": "landlordName", "label": "ФИО арендодателя", "type": "text", "required": true },
+      { "key": "landlordPassport", "label": "Паспорт арендодателя", "type": "text", "required": true },
+      { "key": "tenantName", "label": "ФИО арендатора", "type": "text", "required": true },
+      { "key": "tenantPassport", "label": "Паспорт арендатора", "type": "text", "required": true },
+      { "key": "objectAddress", "label": "Адрес объекта", "type": "text", "required": true },
+      { "key": "rentAmount", "label": "Стоимость аренды (руб/мес)", "type": "number", "required": true },
+      { "key": "deposit", "label": "Залог", "type": "number", "required": false },
+      { "key": "rentStartDate", "label": "Начало аренды", "type": "date", "required": true },
+      { "key": "rentEndDate", "label": "Окончание аренды", "type": "date", "required": true }
+    ],
+    "template": "ДОГОВОР АРЕНДЫ № {contractNumber}\n\nг. {contractCity}\n\n{contractDate}\n\nМы, {landlordName}, паспорт {landlordPassport} (арендодатель), и {tenantName}, паспорт {tenantPassport} (арендатор), заключили настоящий договор аренды:\n\n1. Предмет договора\nАрендодатель передает в аренду помещение по адресу: {objectAddress}\n\n2. Срок аренды\nС {rentStartDate} по {rentEndDate}\n\n3. Размер арендной платы\nАрендная плата составляет {rentAmount} рублей в месяц\n\n4. Залог\nЗалог составляет {deposit} рублей\n\n5. Обязательства сторон\nАрендодатель обязуется предоставить помещение в надлежащем состоянии. Арендатор обязуется своевременно вносить арендную плату.\n\nПодписи:\nАрендодатель: ____________________\nАрендатор: ____________________"
+  },
+  {
+    "id": "contractor",
+    "name": "Договор подряда",
+    "category": "Подряд",
+    "fields": [
+      { "key": "customerName", "label": "ФИО заказчика", "type": "text", "required": true },
+      { "key": "customerPassport", "label": "Паспорт заказчика", "type": "text", "required": true },
+      { "key": "contractorName", "label": "ФИО подрядчика", "type": "text", "required": true },
+      { "key": "contractorPassport", "label": "Паспорт подрядчика", "type": "text", "required": true },
+      { "key": "workDescription", "label": "Описание работ", "type": "textarea", "required": true },
+      { "key": "workAddress", "label": "Адрес выполнения работ", "type": "text", "required": true },
+      { "key": "workPrice", "label": "Стоимость работ", "type": "number", "required": true },
+      { "key": "workStartDate", "label": "Начало работ", "type": "date", "required": true },
+      { "key": "workEndDate", "label": "Окончание работ", "type": "date", "required": true }
+    ],
+    "template": "ДОГОВОР ПОДРЯДА № {contractNumber}\n\nг. {contractCity}\n\n{contractDate}\n\nМы, {customerName}, паспорт {customerPassport} (заказчик), и {contractorName}, паспорт {contractorPassport} (подрядчик), заключили настоящий договор подряда:\n\n1. Предмет договора\nПодрядчик обязуется выполнить следующие работы: {workDescription}\n\n2. Место выполнения работ\nАдрес: {workAddress}\n\n3. Сроки выполнения\nНачало работ: {workStartDate}\nОкончание работ: {workEndDate}\n\n4. Цена работ\nОбщая стоимость работ составляет {workPrice} рублей\n\n5. Обязательства сторон\nПодрядчик обязуется выполнить работы качественно и в срок. Заказчик обязуется предоставить доступ к объекту и произвести оплату.\n\nПодписи:\nЗаказчик: ____________________\nПодрядчик: ____________________"
+  }
+]
+

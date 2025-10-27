@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Task, TaskPriority, TaskStatus, TaskType } from '@/types/task';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { X } from 'lucide-react';
 
 interface TaskModalProps {
   task?: Task;

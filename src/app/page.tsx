@@ -26,15 +26,11 @@ export default function HomePage() {
         }}
       ></div>
       
-      {/* Затемняющий слой для лучшей читаемости текста - убираем, чтобы увидеть изображение */}
-      {/* <div className="fixed inset-0 bg-black bg-opacity-40 z-10"></div> */}
-      
       <Header />
       <BurgerMenu />
       
       <main className="pt-32 px-4 relative z-20">
         <div className="max-w-4xl mx-auto">
-          {/* Контент главной страницы будет добавлен позже */}
         </div>
       </main>
     </div>

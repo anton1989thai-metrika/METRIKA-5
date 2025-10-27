@@ -25,7 +25,10 @@ import {
   Smartphone,
   Monitor,
   Save,
-  X
+  X,
+  Receipt,
+  Trash2,
+  Volume2
 } from "lucide-react"
 
 interface Notification {

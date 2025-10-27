@@ -60,6 +60,8 @@ import CashManagementPanel from "@/components/CashManagementPanel"
 import SalaryCalculationPanel from "@/components/SalaryCalculationPanel"
 import HRNotificationsPanel from "@/components/HRNotificationsPanel"
 import HRReportingPanel from "@/components/HRReportingPanel"
+import ContractBuilder from "@/components/contracts/ContractBuilder"
+import ContractList from "@/components/contracts/ContractList"
 
 export default function AdminPage() {
   return (
@@ -81,6 +83,7 @@ function AdminPageContent() {
   const [contentCategory, setContentCategory] = useState('all')
   const [contentStatus, setContentStatus] = useState('all')
   const [showMediaManager, setShowMediaManager] = useState(false)
+  const [contractsTab, setContractsTab] = useState('builder')
   
   // Mock data
   const stats = {
@@ -374,7 +377,7 @@ function AdminPageContent() {
                 variant={activeTab === 'content' ? 'default' : 'outline'}
                 className="flex-1"
               >
-                Контент
+                Конструктор договоров
               </Button>
               <Button
                 onClick={() => setActiveTab('objects')}
@@ -398,11 +401,14 @@ function AdminPageContent() {
                 Задачи
               </Button>
               <Button
-                onClick={() => setActiveTab('media')}
+                onClick={() => {
+                  setActiveTab('media')
+                  window.open('/chat', '_blank')
+                }}
                 variant={activeTab === 'media' ? 'default' : 'outline'}
                 className="flex-1"
               >
-                Медиа
+                Метрика GPT
               </Button>
               <Button
                 onClick={() => setActiveTab('analytics')}
@@ -992,196 +998,30 @@ function AdminPageContent() {
             </div>
           )}
 
-          {/* Контент */}
+          {/* Конструктор договоров */}
           {activeTab === 'content' && (
             <div className="space-y-6">
-              {/* Статистика контента */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <FileText className="w-8 h-8 text-gray-600 mr-3" />
-                  <div>
-                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'blog').length}</div>
-                      <div className="text-sm text-gray-600">Статьи блога</div>
-                  </div>
-                </div>
-              </div>
-              
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <Bell className="w-8 h-8 text-gray-600 mr-3" />
-              <div>
-                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'news').length}</div>
-                      <div className="text-sm text-gray-600">Новости</div>
-                    </div>
-                  </div>
-                  </div>
-                  
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <Database className="w-8 h-8 text-gray-600 mr-3" />
-                  <div>
-                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'knowledge').length}</div>
-                      <div className="text-sm text-gray-600">База знаний</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                  <div className="flex items-center">
-                    <Shield className="w-8 h-8 text-gray-600 mr-3" />
-                    <div>
-                      <div className="text-2xl font-bold text-black">{contentItems.filter(c => c.category === 'faq').length}</div>
-                      <div className="text-sm text-gray-600">FAQ</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Панель управления */}
-              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold text-black">Управление контентом</h2>
-                  <button 
-                    onClick={handleCreateContent}
-                    className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                    style={{backgroundColor: '#fff60b'}}
-                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+              <div className="mb-6">
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => setContractsTab('builder')}
+                    variant={contractsTab === 'builder' ? 'default' : 'outline'}
+                    className="flex-1"
                   >
-                    <Plus className="w-4 h-4 inline mr-2" />
-                    Создать контент
-                  </button>
-                </div>
-          
-                {/* Поиск и фильтры */}
-                <div className="flex flex-col lg:flex-row gap-4 mb-6">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-4 h-4" />
-                    <input
-                      type="text"
-                        placeholder="Поиск контента..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <select
-                      value={contentCategory}
-                      onChange={(e) => setContentCategory(e.target.value)}
-                      className="px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
-                    >
-                      <option value="all">Все категории</option>
-                      <option value="blog">Статьи блога</option>
-                      <option value="news">Новости</option>
-                      <option value="knowledge">База знаний</option>
-                      <option value="faq">FAQ</option>
-                      <option value="policies">Политики</option>
-                    </select>
-                    
-                    <select
-                      value={contentStatus}
-                      onChange={(e) => setContentStatus(e.target.value)}
-                      className="px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300 bg-white text-black border border-gray-300"
-                    >
-                      <option value="all">Все статусы</option>
-                      <option value="published">Опубликовано</option>
-                      <option value="draft">Черновик</option>
-                      <option value="scheduled">Запланировано</option>
-                      <option value="archived">Архив</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Список контента */}
-                <div className="space-y-4">
-                  {filteredContent.map(item => (
-                    <div key={item.id} className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-lg font-semibold text-black">{item.title}</h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
-                              {getStatusText(item.status)}
-                            </span>
-                            <span className="px-2 py-1 bg-white border border-gray-300 text-black text-xs font-medium rounded-full shadow-sm">
-                              {getCategoryText(item.category)}
-                            </span>
-                          </div>
-                          <p className="text-gray-600 mb-3">{item.excerpt}</p>
-                          
-                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                            <span className="flex items-center">
-                              <Eye className="w-4 h-4 mr-1" />
-                              {item.views} просмотров
-                            </span>
-                            <span className="flex items-center">
-                              <Calendar className="w-4 h-4 mr-1" />
-                              {new Date(item.createdAt).toLocaleDateString('ru-RU')}
-                            </span>
-                            <span className="flex items-center">
-                              <Globe className="w-4 h-4 mr-1" />
-                              {item.language.toUpperCase()}
-                            </span>
-                          </div>
-                          
-                          <div className="flex flex-wrap gap-2">
-                            {item.tags.map(tag => (
-                              <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleEditContent(item)}
-                            className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
-                          >
-                            <Edit className="w-4 h-4 inline mr-1" />
-                            Редактировать
-                          </button>
-                          
-                          <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                            <Eye className="w-4 h-4 inline mr-1" />
-                            Просмотр
-                          </button>
-                          
-                          <button className="px-3 py-1 bg-white border border-gray-300 text-black text-sm rounded-lg shadow-sm hover:shadow-md transition-all">
-                            <Copy className="w-4 h-4 inline mr-1" />
-                            Копировать
-                    </button>
-                  </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleDeleteContent(item.id)}
-                            className="px-3 py-1 bg-white border border-gray-300 text-gray-600 text-sm rounded-lg shadow-sm hover:shadow-md transition-all"
-                          >
-                            <Trash2 className="w-4 h-4 inline mr-1" />
-                            Удалить
-                          </button>
+                    Создать договор
+                  </Button>
+                  <Button
+                    onClick={() => setContractsTab('list')}
+                    variant={contractsTab === 'list' ? 'default' : 'outline'}
+                    className="flex-1"
+                  >
+                    Список договоров
+                  </Button>
                 </div>
               </div>
-            </div>
-                  ))}
-                  
-                  {filteredContent.length === 0 && (
-                    <div className="text-center py-12">
-                      <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">Контент не найден</h3>
-                      <p className="text-gray-500">Попробуйте изменить параметры поиска или создайте новый контент</p>
-                    </div>
-                  )}
-                </div>
-              </div>
+
+              {contractsTab === 'builder' && <ContractBuilder />}
+              {contractsTab === 'list' && <ContractList />}
             </div>
           )}
 
@@ -1200,171 +1040,114 @@ function AdminPageContent() {
 
           {activeTab === 'media' && (
             <div className="space-y-6">
-              {/* Статистика медиафайлов */}
+              <h2 className="text-2xl font-bold text-black">Метрика GPT — статистика использования</h2>
+              
+              {/* Статистика использования нейросети */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <File className="w-8 h-8 text-gray-600 mr-3" />
+                    <CheckSquare className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">{mediaStats.totalFiles}</div>
-                      <div className="text-sm text-gray-600">Всего файлов</div>
+                      <div className="text-2xl font-bold text-black">156</div>
+                      <div className="text-sm text-gray-600">Всего запросов</div>
                     </div>
                   </div>
                 </div>
                 
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <Image className="w-8 h-8 text-gray-600 mr-3" />
+                    <Users className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">{mediaStats.images}</div>
-                      <div className="text-sm text-gray-600">Изображения</div>
+                      <div className="text-2xl font-bold text-black">12</div>
+                      <div className="text-sm text-gray-600">Активных пользователей</div>
                     </div>
                   </div>
                 </div>
                 
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <Video className="w-8 h-8 text-gray-600 mr-3" />
+                    <BarChart3 className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">{mediaStats.videos}</div>
-                      <div className="text-sm text-gray-600">Видео</div>
+                      <div className="text-2xl font-bold text-black">1.2k</div>
+                      <div className="text-sm text-gray-600">Обработано символов</div>
                     </div>
                   </div>
                 </div>
                 
                 <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
                   <div className="flex items-center">
-                    <FileText className="w-8 h-8 text-gray-600 mr-3" />
+                    <Clock className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">{mediaStats.documents}</div>
-                      <div className="text-sm text-gray-600">Документы</div>
+                      <div className="text-2xl font-bold text-black">3.5с</div>
+                      <div className="text-sm text-gray-600">Среднее время ответа</div>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              {/* Панель управления медиа */}
+
+              {/* График использования по дням */}
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold text-black">Медиа библиотека</h2>
-              <button 
-                    onClick={() => setShowMediaManager(true)}
-                    className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                style={{backgroundColor: '#fff60b'}}
-                onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
-              >
-                    <Upload className="w-4 h-4 inline mr-2" />
-                    Управление медиа
-              </button>
-            </div>
-
-                {/* Общая информация */}
-                <div className="grid md:grid-cols-3 gap-6 mb-6">
-                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <div className="flex items-center justify-between">
-              <div>
-                        <div className="font-semibold text-black">Общий размер</div>
-                        <div className="text-sm text-gray-600">{formatFileSize(mediaStats.totalSize)}</div>
-          </div>
-                      <Database className="w-8 h-8 text-gray-400" />
-                    </div>
+                <h3 className="text-lg font-semibold text-black mb-4">Использование по дням</h3>
+                <div className="bg-gray-50 border border-gray-300 rounded-lg p-6 flex items-center justify-center">
+                  <div className="text-center text-gray-500">
+                    <BarChart3 className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                    <p>График использования будет здесь</p>
                   </div>
-                  
-                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-black">Последняя загрузка</div>
-                        <div className="text-sm text-gray-600">
-                          {new Date(Math.max(...mediaFiles.map(f => new Date(f.uploadedAt).getTime()))).toLocaleDateString('ru-RU')}
-                        </div>
-                      </div>
-                      <Calendar className="w-8 h-8 text-gray-400" />
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-black">Папки</div>
-                        <div className="text-sm text-gray-600">
-                          {new Set(mediaFiles.map(f => f.folder)).size} папок
-                        </div>
-                      </div>
-                      <Folder className="w-8 h-8 text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Быстрые действия */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-black mb-4">Быстрые действия</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <Image className="w-6 h-6 text-gray-500 mx-auto mb-2" />
-                      <div className="text-sm font-medium text-black">Загрузить изображения</div>
-                    </button>
-                    
-                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <Video className="w-6 h-6 text-gray-500 mx-auto mb-2" />
-                      <div className="text-sm font-medium text-black">Загрузить видео</div>
-                    </button>
-                    
-                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <FileText className="w-6 h-6 text-gray-500 mx-auto mb-2" />
-                      <div className="text-sm font-medium text-black">Загрузить документы</div>
-                    </button>
-                    
-                    <button className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-sm hover:shadow-md transition-all">
-                      <Archive className="w-6 h-6 text-gray-500 mx-auto mb-2" />
-                      <div className="text-sm font-medium text-black">Загрузить архивы</div>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Последние загруженные файлы */}
-                <div>
-                  <h3 className="text-lg font-semibold text-black mb-4">Последние загруженные файлы</h3>
-                  <div className="space-y-3">
-                    {mediaFiles
-                      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
-                      .slice(0, 5)
-                      .map(file => (
-                        <div key={file.id} className="flex items-center justify-between p-3 bg-white border border-gray-300 rounded-lg shadow-sm">
-                          <div className="flex items-center">
-                            <div className="w-10 h-10 flex items-center justify-center mr-3">
-                              {file.thumbnail ? (
-                                <img
-                                  src={file.thumbnail}
-                                  alt={file.alt || file.name}
-                                  className="w-full h-full object-cover rounded"
-                                />
-                              ) : (
-                                getFileIcon(file.type)
-                              )}
-                            </div>
-                            <div>
-                              <div className="font-medium text-black">{file.name}</div>
-                              <div className="text-sm text-gray-600">
-                                {formatFileSize(file.size)} • {file.folder} • {new Date(file.uploadedAt).toLocaleDateString('ru-RU')}
                 </div>
               </div>
-            </div>
-            
-                          <div className="flex items-center gap-2">
-                            <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
-                              <Eye className="w-3 h-3" />
-                            </button>
-                            <button className="px-2 py-1 bg-white border border-gray-300 text-black text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
-                              <Download className="w-3 h-3" />
-                            </button>
-                            <button className="px-2 py-1 bg-white border border-gray-300 text-gray-600 text-xs rounded-lg shadow-sm hover:shadow-md transition-all">
-                              <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-                      ))}
-                  </div>
+
+              {/* Топ пользователей */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold text-black mb-4">Топ пользователей по запросам</h3>
+                <div className="space-y-3">
+                  {[
+                    { name: 'Иван Сидоров', requests: 45, role: 'Менеджер' },
+                    { name: 'Анна Петрова', requests: 38, role: 'Юрист' },
+                    { name: 'Мария Козлова', requests: 32, role: 'Менеджер' },
+                    { name: 'Алексей Смирнов', requests: 28, role: 'Администратор' },
+                    { name: 'Елена Новикова', requests: 13, role: 'Менеджер' }
+                  ].map((user, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 rounded-full bg-gray-300 mr-3 flex items-center justify-center font-semibold text-black">
+                          {user.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div>
+                          <div className="font-medium text-black">{user.name}</div>
+                          <div className="text-sm text-gray-600">{user.role}</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold text-black">{user.requests}</div>
+                        <div className="text-xs text-gray-600">запросов</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Популярные функции */}
+              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold text-black mb-4">Популярные функции</h3>
+                <div className="space-y-3">
+                  {[
+                    { name: 'Составить договор', count: 89, percentage: 57 },
+                    { name: 'Проверить договор', count: 45, percentage: 29 },
+                    { name: 'Сравнить объекты', count: 22, percentage: 14 }
+                  ].map((func, index) => (
+                    <div key={index}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-black">{func.name}</span>
+                        <span className="text-sm text-gray-600">{func.count} раз</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-black h-2 rounded-full transition-all"
+                          style={{ width: `${func.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1401,3 +1184,4 @@ function AdminPageContent() {
     </div>
   )
 }
+

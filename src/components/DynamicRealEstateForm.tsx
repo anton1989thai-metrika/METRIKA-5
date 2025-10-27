@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { MultiSelect } from '@/components/MultiSelect';
 import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
+import { Save } from 'lucide-react';
 
 interface FieldRendererProps {
   field: FieldRow;
@@ -208,6 +209,14 @@ export function DynamicForm({ fields, formData, onFormDataChange, onSubmit, onRe
       <div className="flex gap-4 pt-6 justify-end">
         <Button type="button" variant="outline" onClick={onReset}>
           Сбросить
+        </Button>
+        <Button 
+          type="submit"
+          className="flex items-center gap-2"
+          disabled={Object.keys(formData).length === 0}
+        >
+          <Save className="w-4 h-4" />
+          Сохранить объект
         </Button>
       </div>
     </form>

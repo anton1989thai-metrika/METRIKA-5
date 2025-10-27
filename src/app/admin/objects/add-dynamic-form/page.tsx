@@ -307,17 +307,6 @@ export default function DynamicRealEstateFormPage() {
                   onSubmit={handleSubmit}
                   onReset={handleReset}
                 />
-                
-                <div className="flex justify-end">
-                  <Button 
-                    onClick={() => handleSubmit(formData)}
-                    className="flex items-center gap-2"
-                    disabled={Object.keys(formData).length === 0}
-                  >
-                    <Save className="w-4 h-4" />
-                    Сохранить объект
-                  </Button>
-                </div>
               </TabsContent>
               
               <TabsContent value="media" className="space-y-6 mt-6">
@@ -330,17 +319,23 @@ export default function DynamicRealEstateFormPage() {
                     maxSize={50}
                   />
                   
-                </div>
-                
-                <div className="flex justify-end">
-                  <Button 
-                    onClick={() => handleSubmit(formData)}
-                    className="flex items-center gap-2"
-                    disabled={Object.keys(formData).length === 0}
-                  >
-                    <Save className="w-4 h-4" />
-                    Сохранить объект
-                  </Button>
+                  <div className="flex gap-4 pt-6 justify-end">
+                    <Button 
+                      onClick={handleReset}
+                      variant="outline"
+                      className="flex items-center gap-2"
+                    >
+                      Сбросить
+                    </Button>
+                    <Button 
+                      onClick={() => handleSubmit(formData)}
+                      className="flex items-center gap-2"
+                      disabled={Object.keys(formData).length === 0}
+                    >
+                      <Save className="w-4 h-4" />
+                      Сохранить объект
+                    </Button>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>

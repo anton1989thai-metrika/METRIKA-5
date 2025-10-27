@@ -1156,6 +1156,7 @@ export default function SiteSettingsPanel() {
     { id: 'analytics', label: 'Аналитика', icon: <BarChart className="w-4 h-4" /> },
     { id: 'email', label: 'Почта', icon: <Mail className="w-4 h-4" /> },
     { id: 'integrations', label: 'Интеграции', icon: <Link className="w-4 h-4" /> },
+    { id: 'contracts', label: 'Конструктор договоров', icon: <FileText className="w-4 h-4" /> },
     { id: 'hr', label: 'Кадры и бухгалтерия', icon: <Users className="w-4 h-4" /> }
   ]
 
@@ -8750,6 +8751,152 @@ export default function SiteSettingsPanel() {
                         <option value="admin">Администратор</option>
                       </select>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Конструктор договоров */}
+          {activeTab === 'contracts' && (
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-black">Настройки конструктора договоров</h3>
+              
+              {/* Доступные шаблоны */}
+              <div className="space-y-4">
+                <h4 className="text-md font-semibold text-black">Доступные шаблоны договоров</h4>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Шаблон 1: Агентский договор */}
+                    <div className="border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-2">
+                        <FileText className="w-5 h-5 text-gray-600" />
+                        <button className="text-xs text-blue-600 hover:text-blue-800">Редактировать</button>
+                      </div>
+                      <h5 className="font-semibold text-black mb-1">Агентский договор</h5>
+                      <p className="text-sm text-gray-600">Для сделок с недвижимостью</p>
+                      <div className="mt-3 text-xs text-gray-500">
+                        6 полей • Категория: Клиентские
+                      </div>
+                    </div>
+
+                    {/* Шаблон 2: Договор аренды */}
+                    <div className="border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-2">
+                        <FileText className="w-5 h-5 text-gray-600" />
+                        <button className="text-xs text-blue-600 hover:text-blue-800">Редактировать</button>
+                      </div>
+                      <h5 className="font-semibold text-black mb-1">Договор аренды</h5>
+                      <p className="text-sm text-gray-600">Аренда жилой/коммерческой недвижимости</p>
+                      <div className="mt-3 text-xs text-gray-500">
+                        9 полей • Категория: Аренда
+                      </div>
+                    </div>
+
+                    {/* Шаблон 3: Договор подряда */}
+                    <div className="border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-2">
+                        <FileText className="w-5 h-5 text-gray-600" />
+                        <button className="text-xs text-blue-600 hover:text-blue-800">Редактировать</button>
+                      </div>
+                      <h5 className="font-semibold text-black mb-1">Договор подряда</h5>
+                      <p className="text-sm text-gray-600">Подрядные работы</p>
+                      <div className="mt-3 text-xs text-gray-500">
+                        9 полей • Категория: Подряд
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Добавление нового шаблона */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-md font-semibold text-black">Добавить новый шаблон</h4>
+                  <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                    <Plus className="w-4 h-4 inline mr-2" />
+                    Добавить шаблон
+                  </button>
+                </div>
+                <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-sm">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Название шаблона
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Например: Договор купли-продажи"
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Категория
+                      </label>
+                      <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Выберите категорию</option>
+                        <option value="client">Клиентские</option>
+                        <option value="rent">Аренда</option>
+                        <option value="contractor">Подряд</option>
+                        <option value="sale">Продажа</option>
+                        <option value="other">Другое</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Загрузить файл шаблона (DOCX/PDF)
+                      </label>
+                      <div className="flex items-center gap-4">
+                        <button className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all">
+                          <Upload className="w-4 h-4 inline mr-2" />
+                          Выбрать файл
+                        </button>
+                        <span className="text-sm text-gray-500">Файл не выбран</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Статистика */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center">
+                    <FileText className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">3</div>
+                      <div className="text-sm text-gray-600">Шаблонов</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center">
+                    <Database className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">0</div>
+                      <div className="text-sm text-gray-600">Созданных договоров</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center">
+                    <BarChart className="w-8 h-8 text-gray-600 mr-3" />
+                    <div>
+                      <div className="text-2xl font-bold text-black">0</div>
+                      <div className="text-sm text-gray-600">За текущий месяц</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Информация */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start">
+                  <Info className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-blue-800">
+                    <strong>Совет:</strong> Вы можете создать новые шаблоны договоров или редактировать существующие. 
+                    После сохранения шаблона он будет доступен в разделе "Конструктор договоров" админ-панели.
                   </div>
                 </div>
               </div>
