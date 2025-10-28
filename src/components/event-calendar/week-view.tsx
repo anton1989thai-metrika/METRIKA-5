@@ -17,6 +17,7 @@ import {
   startOfDay,
   startOfWeek,
 } from "date-fns"
+import { ru } from "date-fns/locale"
 
 import { cn } from "@/lib/utils"
 import {
@@ -230,7 +231,7 @@ export function WeekView({
             <span className="sm:hidden" aria-hidden="true">
               {format(day, "E")[0]} {format(day, "d")}
             </span>
-            <span className="max-sm:hidden">{format(day, "EEE dd")}</span>
+            <span className="max-sm:hidden">{format(day, "EEE dd", { locale: ru })}</span>
           </div>
         ))}
       </div>

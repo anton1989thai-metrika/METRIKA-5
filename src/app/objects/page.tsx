@@ -99,6 +99,11 @@ export default function ObjectsPage() {
                       {(() => {
                         const fullText = `${object.address} • ${object.area}`;
                         
+                        // Проверка на наличие window (клиентская сторона)
+                        if (typeof window === 'undefined') {
+                          return fullText;
+                        }
+                        
                         // Создаем временный элемент для измерения ширины текста
                         const measureElement = document.createElement('span');
                         measureElement.style.visibility = 'hidden';

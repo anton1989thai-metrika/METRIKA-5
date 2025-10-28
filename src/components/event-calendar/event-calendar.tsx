@@ -14,6 +14,7 @@ import {
   subMonths,
   subWeeks,
 } from "date-fns"
+import { ru } from "date-fns/locale"
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -174,8 +175,8 @@ export function EventCalendar({
     if (event.id) {
       onEventUpdate?.(event)
       // Show toast notification when an event is updated
-      toast(`Event "${event.title}" updated`, {
-        description: format(new Date(event.start), "MMM d, yyyy"),
+      toast(`Событие "${event.title}" обновлено`, {
+        description: format(new Date(event.start), "d MMM yyyy", { locale: ru }),
         position: "bottom-left",
       })
     } else {
@@ -184,8 +185,8 @@ export function EventCalendar({
         id: Math.random().toString(36).substring(2, 11),
       })
       // Show toast notification when an event is added
-      toast(`Event "${event.title}" added`, {
-        description: format(new Date(event.start), "MMM d, yyyy"),
+      toast(`Событие "${event.title}" добавлено`, {
+        description: format(new Date(event.start), "d MMM yyyy", { locale: ru }),
         position: "bottom-left",
       })
     }
@@ -201,8 +202,8 @@ export function EventCalendar({
 
     // Show toast notification when an event is deleted
     if (deletedEvent) {
-      toast(`Event "${deletedEvent.title}" deleted`, {
-        description: format(new Date(deletedEvent.start), "MMM d, yyyy"),
+      toast(`Событие "${deletedEvent.title}" удалено`, {
+        description: format(new Date(deletedEvent.start), "d MMM yyyy", { locale: ru }),
         position: "bottom-left",
       })
     }
@@ -212,34 +213,34 @@ export function EventCalendar({
     onEventUpdate?.(updatedEvent)
 
     // Show toast notification when an event is updated via drag and drop
-    toast(`Event "${updatedEvent.title}" moved`, {
-      description: format(new Date(updatedEvent.start), "MMM d, yyyy"),
+    toast(`Событие "${updatedEvent.title}" перенесено`, {
+      description: format(new Date(updatedEvent.start), "d MMM yyyy", { locale: ru }),
       position: "bottom-left",
     })
   }
 
   const viewTitle = useMemo(() => {
     if (view === "month") {
-      return format(currentDate, "MMMM yyyy")
+      return format(currentDate, "MMMM yyyy", { locale: ru })
     } else if (view === "week") {
       const start = startOfWeek(currentDate, { weekStartsOn: 0 })
       const end = endOfWeek(currentDate, { weekStartsOn: 0 })
       if (isSameMonth(start, end)) {
-        return format(start, "MMMM yyyy")
+        return format(start, "MMMM yyyy", { locale: ru })
       } else {
-        return `${format(start, "MMM")} - ${format(end, "MMM yyyy")}`
+        return `${format(start, "MMM", { locale: ru })} - ${format(end, "MMM yyyy", { locale: ru })}`
       }
     } else if (view === "day") {
       return (
         <>
           <span className="min-[480px]:hidden" aria-hidden="true">
-            {format(currentDate, "MMM d, yyyy")}
+            {format(currentDate, "d MMM yyyy", { locale: ru })}
           </span>
           <span className="max-[479px]:hidden min-md:hidden" aria-hidden="true">
-            {format(currentDate, "MMMM d, yyyy")}
+            {format(currentDate, "d MMMM yyyy", { locale: ru })}
           </span>
           <span className="max-md:hidden">
-            {format(currentDate, "EEE MMMM d, yyyy")}
+            {format(currentDate, "EEE, d MMMM yyyy", { locale: ru })}
           </span>
         </>
       )
@@ -249,12 +250,12 @@ export function EventCalendar({
       const end = addDays(currentDate, AgendaDaysToShow - 1)
 
       if (isSameMonth(start, end)) {
-        return format(start, "MMMM yyyy")
+        return format(start, "MMMM yyyy", { locale: ru })
       } else {
-        return `${format(start, "MMM")} - ${format(end, "MMM yyyy")}`
+        return `${format(start, "MMM", { locale: ru })} - ${format(end, "MMM yyyy", { locale: ru })}`
       }
     } else {
-      return format(currentDate, "MMMM yyyy")
+      return format(currentDate, "MMMM yyyy", { locale: ru })
     }
   }, [currentDate, view])
 
@@ -287,7 +288,7 @@ export function EventCalendar({
                 size={16}
                 aria-hidden="true"
               />
-              <span className="max-[479px]:sr-only">Today</span>
+              <span className="max-[479px]:sr-only">Сегодня</span>
             </Button>
             <div className="flex items-center sm:gap-2">
               <Button
@@ -332,16 +333,16 @@ export function EventCalendar({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-32">
                 <DropdownMenuItem onClick={() => setView("month")}>
-                  Month <DropdownMenuShortcut>M</DropdownMenuShortcut>
+                  Месяц <DropdownMenuShortcut>M</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setView("week")}>
-                  Week <DropdownMenuShortcut>W</DropdownMenuShortcut>
+                  Неделя <DropdownMenuShortcut>W</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setView("day")}>
-                  Day <DropdownMenuShortcut>D</DropdownMenuShortcut>
+                  День <DropdownMenuShortcut>D</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setView("agenda")}>
-                  Agenda <DropdownMenuShortcut>A</DropdownMenuShortcut>
+                  Список <DropdownMenuShortcut>A</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -357,7 +358,7 @@ export function EventCalendar({
                 size={16}
                 aria-hidden="true"
               />
-              <span className="max-sm:sr-only">New event</span>
+              <span className="max-sm:sr-only">Новое событие</span>
             </Button>
           </div>
         </div>
