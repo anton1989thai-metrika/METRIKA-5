@@ -6,6 +6,8 @@ import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { EventCalendar, type CalendarEvent } from "@/components/event-calendar";
+import { addDays, setHours, setMinutes, subDays } from "date-fns";
 
 // Типы для состояний
 interface TaskFormData {
@@ -1171,7 +1173,7 @@ export default function TasksPage() {
                   onClick={() => setShowStatistics(true)}
                   className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
-                  Статистика
+                  Переговорка
                 </button>
                 <button 
                   onClick={() => checkUpcomingDeadlines()}
@@ -1347,12 +1349,12 @@ export default function TasksPage() {
             </div>
           )}
 
-          {/* Модальное окно статистики */}
+          {/* Модальное окно Переговорка */}
           {showStatistics && (
-            <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-              <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 p-6 mb-8 border-2 border-black">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-black">Статистика и аналитика</h2>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 h-[90vh] overflow-hidden">
+                <div className="flex items-center justify-between border-b p-4">
+                  <h2 className="text-xl font-semibold text-black">Переговорка</h2>
                   <button
                     onClick={() => setShowStatistics(false)}
                     className="text-gray-500 hover:text-gray-700"
@@ -1362,108 +1364,32 @@ export default function TasksPage() {
                     </svg>
                   </button>
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  {/* Общая статистика */}
-                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                    <h3 className="text-lg font-semibold text-blue-800 mb-2">Всего задач</h3>
-                    <p className="text-3xl font-bold text-gray-600">{statistics.total}</p>
-                  </div>
-                  
-                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                    <h3 className="text-lg font-semibold text-green-800 mb-2">Выполнено</h3>
-                    <p className="text-3xl font-bold text-green-600">{statistics.completed}</p>
-                  </div>
-                  
-                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-                    <h3 className="text-lg font-semibold text-yellow-800 mb-2">В работе</h3>
-                    <p className="text-3xl font-bold text-yellow-600">{statistics.inProgress}</p>
-                  </div>
-                  
-                  <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-                    <h3 className="text-lg font-semibold text-red-800 mb-2">Просрочено</h3>
-                    <p className="text-3xl font-bold text-red-600">{statistics.overdue}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Статистика по приоритетам */}
-                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                    <h3 className="text-lg font-semibold text-black mb-4">По приоритетам</h3>
-              <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                          <span className="text-sm text-gray-700">Срочные</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{statistics.priorityStats.high}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-                          <span className="text-sm text-gray-700">Важные</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{statistics.priorityStats.medium}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                          <span className="text-sm text-gray-700">Обычные</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{statistics.priorityStats.low}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                          <span className="text-sm text-gray-700">От руководителя</span>
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">{statistics.priorityStats.boss}</span>
-                      </div>
-                  </div>
-                </div>
-                
-                  {/* Статистика по статусам */}
-                  <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-                    <h3 className="text-lg font-semibold text-black mb-4">По статусам</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Новые</span>
-                        <span className="text-sm font-medium text-gray-900">{statistics.statusStats.new}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">В работе</span>
-                        <span className="text-sm font-medium text-gray-900">{statistics.statusStats.in_progress}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">На проверке</span>
-                        <span className="text-sm font-medium text-gray-900">{statistics.statusStats.on_review}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Выполнены</span>
-                        <span className="text-sm font-medium text-gray-900">{statistics.statusStats.completed}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Отложены</span>
-                        <span className="text-sm font-medium text-gray-900">{statistics.statusStats.deferred}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Отменены</span>
-                        <span className="text-sm font-medium text-gray-900">{statistics.statusStats.canceled}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Процент выполнения */}
-                <div className="mt-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <h3 className="text-lg font-semibold text-black mb-4">Процент выполнения</h3>
-                  <div className="w-full bg-gray-200 rounded-full h-4">
-                    <div 
-                      className="bg-green-500 h-4 rounded-full transition-all duration-300"
-                      style={{ width: `${statistics.completionRate}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-2">{statistics.completionRate}% задач выполнено</p>
+                <div className="p-6 h-[calc(90vh-80px)] overflow-y-auto">
+                  <EventCalendar
+                    events={[
+                      {
+                        id: "1",
+                        title: "Встреча команды",
+                        description: "Еженедельный синхронизация",
+                        start: setMinutes(setHours(new Date(), 10), 0),
+                        end: setMinutes(setHours(new Date(), 11), 0),
+                        color: "sky",
+                        location: "Переговорная 1",
+                      },
+                      {
+                        id: "2",
+                        title: "Презентация клиенту",
+                        description: "Обсуждение проекта",
+                        start: setMinutes(setHours(addDays(new Date(), 1), 14), 0),
+                        end: setMinutes(setHours(addDays(new Date(), 1), 15), 30),
+                        color: "amber",
+                        location: "Переговорная 2",
+                      },
+                    ]}
+                    onEventAdd={(event) => console.log('Add:', event)}
+                    onEventUpdate={(event) => console.log('Update:', event)}
+                    onEventDelete={(id) => console.log('Delete:', id)}
+                  />
                 </div>
               </div>
             </div>

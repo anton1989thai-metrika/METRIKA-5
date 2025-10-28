@@ -2,6 +2,7 @@
 
 import LanguageSelector from "./LanguageSelector"
 import HeaderFilters from "./HeaderFilters"
+import { AnimatedShinyButton } from "./ui/animated-shiny-button"
 import { useLanguage } from "@/contexts/LanguageContext"
 import Image from "next/image"
 import Link from "next/link"
@@ -14,7 +15,10 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
       {/* Кнопка смены языка - позиционирована в правом верхнем углу основного хедера */}
-      <div className="absolute right-4 top-5 z-50">
+      <div className="absolute right-4 top-[19px] z-50 flex items-center gap-[10px]">
+        <AnimatedShinyButton url="/chat">
+          МЕТРИКА GPT
+        </AnimatedShinyButton>
         <LanguageSelector />
       </div>
       
