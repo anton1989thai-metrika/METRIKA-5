@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
-import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
 import { 
   BookOpen, 
   Play, 
@@ -93,7 +91,6 @@ interface Achievement {
 }
 
 export default function AcademyPage() {
-  const { data: session, status } = useSession()
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')

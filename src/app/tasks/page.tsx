@@ -214,10 +214,8 @@ export default function TasksPage() {
       }
     };
 
-    if (session) {
-      fetchUserData();
-    }
-  }, [session]);
+    fetchUserData();
+  }, []);
 
   // Авторизация отключена - все могут создавать скрытые задачи
   const canCreateHiddenTasks = () => {

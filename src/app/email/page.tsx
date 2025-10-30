@@ -164,19 +164,6 @@ export default function EmailPage() {
     setAllEmails(mockEmails)
   }, [])
 
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-600" />
-          <p className="text-gray-600">Загрузка почты...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Авторизация отключена - доступ открыт для всех
-
   const handleCreateBlock = () => {
     // TODO: Implement block creation
     console.log('Create new block')
