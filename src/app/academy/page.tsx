@@ -317,14 +317,6 @@ export default function AcademyPage() {
     setShowTestModal(true)
   }
   
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-lg text-gray-600">Загрузка...</div>
-      </div>
-    )
-  }
-  
   // Авторизация отключена - доступ открыт для всех
 
   const getStatusColor = (status: string) => {
