@@ -1,23 +1,9 @@
 "use client"
 
-import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import BurgerMenu from "@/components/BurgerMenu";
 
 export default function KnowledgeBasePage() {
-  const { data: session, status } = useSession();
-  
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-lg text-gray-600">Загрузка...</div>
-      </div>
-    );
-  }
-  
-  // Авторизация отключена - доступ открыт для всех
-
   return (
     <div className="min-h-screen bg-white">
       <Header />

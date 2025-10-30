@@ -1,6 +1,5 @@
 "use client"
 
-import { useSession } from "next-auth/react"
 import { useState } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
@@ -67,8 +66,6 @@ export default function AdminPage() {
 }
 
 function AdminPageContent() {
-  const { data: session } = useSession()
-  
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)

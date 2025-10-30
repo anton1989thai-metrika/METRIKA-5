@@ -3,8 +3,6 @@
 import { useState } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
-import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
 import { 
   Users, 
   Calculator,
@@ -19,7 +17,8 @@ import {
   Shield,
   Edit,
   Eye,
-  UserPlus
+  UserPlus,
+  BarChart3
 } from "lucide-react"
 import TimeTrackingCalendar from "@/components/TimeTrackingCalendar"
 import PenaltiesBonusesPanel from "@/components/PenaltiesBonusesPanel"
@@ -30,16 +29,6 @@ import HRReportingPanel from "@/components/HRReportingPanel"
 import HRPermissionsPanel from "@/components/HRPermissionsPanel"
 
 export default function HRPage() {
-  const { data: session, status } = useSession()
-  
-  if (status === "loading") {
-    return <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-black"></div>
-    </div>
-  }
-
-  // Авторизация отключена - доступ открыт для всех
-
   const [activeTab, setActiveTab] = useState('dashboard')
 
   // Mock данные для кадров

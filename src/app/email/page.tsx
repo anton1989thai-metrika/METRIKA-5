@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import BurgerMenu from '@/components/BurgerMenu'
 import { 
@@ -20,7 +19,8 @@ import {
   MoreVertical,
   Paperclip,
   RefreshCw,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from 'lucide-react'
 
 interface Email {
@@ -55,7 +55,6 @@ interface EmailBlock {
 }
 
 export default function EmailPage() {
-  const { data: session, status } = useSession()
   const [activeView, setActiveView] = useState<'blocks' | 'list' | 'folders'>('blocks')
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null)
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)

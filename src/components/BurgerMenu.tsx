@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useSession, signOut } from "next-auth/react"
 import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/LanguageContext"
@@ -12,88 +11,28 @@ interface MenuItem {
   icon: React.ReactNode
 }
 
-
 export default function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
-  const { data: session } = useSession()
   const { t } = useLanguage()
   
   // Авторизация отключена - показываем все пункты меню без фильтрации
   const menuItemsWithTranslations: MenuItem[] = [
-    {
-      href: "/",
-      label: t('menu.home'),
-      icon: <Home className="w-5 h-5" />
-    },
-    {
-      href: "/objects",
-      label: t('menu.objects'),
-      icon: <Building className="w-5 h-5" />
-    },
-    {
-      href: "/map",
-      label: t('menu.map'),
-      icon: <Map className="w-5 h-5" />
-    },
-    {
-      href: "/about",
-      label: t('menu.about'),
-      icon: <Info className="w-5 h-5" />
-    },
-    {
-      href: "/contacts",
-      label: t('menu.contacts'),
-      icon: <Phone className="w-5 h-5" />
-    },
-    {
-      href: "/blog",
-      label: t('menu.blog'),
-      icon: <BookOpen className="w-5 h-5" />
-    },
-    {
-      href: "/profile",
-      label: t('menu.profile'),
-      icon: <User className="w-5 h-5" />
-    },
-    {
-      href: "/my-objects",
-      label: t('menu.myObjects'),
-      icon: <Heart className="w-5 h-5" />
-    },
-    {
-      href: "/email",
-      label: "Email",
-      icon: <Mail className="w-5 h-5" />
-    },
-    {
-      href: "/academy",
-      label: t('menu.academy'),
-      icon: <GraduationCap className="w-5 h-5" />
-    },
-    {
-      href: "/knowledge-base",
-      label: t('menu.knowledgeBase'),
-      icon: <Book className="w-5 h-5" />
-    },
-    {
-      href: "/tasks",
-      label: t('menu.tasks'),
-      icon: <CheckSquare className="w-5 h-5" />
-    },
-    {
-      href: "/admin",
-      label: t('menu.admin'),
-      icon: <Settings className="w-5 h-5" />
-    }
+    { href: "/", label: t('menu.home'), icon: <Home className="w-5 h-5" /> },
+    { href: "/objects", label: t('menu.objects'), icon: <Building className="w-5 h-5" /> },
+    { href: "/map", label: t('menu.map'), icon: <Map className="w-5 h-5" /> },
+    { href: "/about", label: t('menu.about'), icon: <Info className="w-5 h-5" /> },
+    { href: "/contacts", label: t('menu.contacts'), icon: <Phone className="w-5 h-5" /> },
+    { href: "/blog", label: t('menu.blog'), icon: <BookOpen className="w-5 h-5" /> },
+    { href: "/profile", label: t('menu.profile'), icon: <User className="w-5 h-5" /> },
+    { href: "/my-objects", label: t('menu.myObjects'), icon: <Heart className="w-5 h-5" /> },
+    { href: "/email", label: "Email", icon: <Mail className="w-5 h-5" /> },
+    { href: "/academy", label: t('menu.academy'), icon: <GraduationCap className="w-5 h-5" /> },
+    { href: "/knowledge-base", label: t('menu.knowledgeBase'), icon: <Book className="w-5 h-5" /> },
+    { href: "/tasks", label: t('menu.tasks'), icon: <CheckSquare className="w-5 h-5" /> },
+    { href: "/admin", label: t('menu.admin'), icon: <Settings className="w-5 h-5" /> }
   ]
   
-  // Показываем все пункты меню без фильтрации
   const filteredMenuItems = menuItemsWithTranslations
-
-  const handleSignOut = () => {
-    signOut()
-    setIsOpen(false)
-  }
 
   return (
     <>
@@ -122,8 +61,8 @@ export default function BurgerMenu() {
         }`}
       >
         {/* Заголовок меню */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-black">{t('header.title')}</h2>
+        <div className="flex items:center justify-between p-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text:black">{t('header.title')}</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="p-1 hover:bg-gray-100 rounded-md transition-colors"
@@ -152,37 +91,6 @@ export default function BurgerMenu() {
             </ul>
           </div>
         </nav>
-
-        {/* Футер с информацией о пользователе */}
-        <div className="border-t border-gray-200 p-4">
-          {session ? (
-            <div className="space-y-3">
-              <div className="text-sm text-gray-600">
-                <p className="font-medium">{session.user?.name}</p>
-                <p className="capitalize">{session.user?.role}</p>
-              </div>
-              <button
-                onClick={handleSignOut}
-                className="w-full px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors"
-              >
-                {t('menu.logout')}
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <Link
-                href="/auth/signin"
-                onClick={() => setIsOpen(false)}
-                className="block w-full px-4 py-2 text-center text-black rounded-md transition-colors"
-                style={{ backgroundColor: '#fff60b', '--hover-color': '#e6d90a' } as React.CSSProperties}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6d90a'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff60b'}
-              >
-                {t('menu.login')}
-              </Link>
-            </div>
-          )}
-        </div>
       </div>
     </>
   )

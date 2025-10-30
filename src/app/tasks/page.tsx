@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
@@ -60,7 +60,8 @@ interface ChecklistFormData {
 }
 
 export default function TasksPage() {
-  const { data: session } = useSession();
+  // removed useSession; auth is disabled
+  // const { data: session } = useSession();
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [formData, setFormData] = useState<TaskFormData>({
     title: '',
