@@ -1,161 +1,94 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator } from "lucide-react"
 import Link from "next/link"
-import { UserRole } from "@/types/auth"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { hasPermission } from "@/lib/permissions"
-import { User as UserType } from "@/data/users"
 
 interface MenuItem {
   href: string
   label: string
   icon: React.ReactNode
-  roles: UserRole[]
 }
 
 
 export default function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<UserType | null>(null)
   const { data: session } = useSession()
   const { t } = useLanguage()
   
-  const userRole: UserRole = (session?.user?.role as UserRole) || "guest"
-  
-  // Загружаем данные пользователя для проверки разрешений
-  useEffect(() => {
-    const loadUserData = async () => {
-      if (session?.user?.email) {
-        try {
-          const response = await fetch('/api/user', {
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          if (response.ok) {
-            const user = await response.json()
-            console.log('Загружен пользователь:', user)
-            setCurrentUser(user)
-          } else {
-            console.error('Ошибка загрузки данных пользователя:', response.statusText)
-          }
-        } catch (error) {
-          console.error('Ошибка загрузки данных пользователя:', error)
-        }
-      }
-    }
-    
-    loadUserData()
-  }, [session])
-  
+  // Авторизация отключена - показываем все пункты меню без фильтрации
   const menuItemsWithTranslations: MenuItem[] = [
     {
       href: "/",
       label: t('menu.home'),
-      icon: <Home className="w-5 h-5" />,
-      roles: ["guest", "client", "employee", "admin"]
+      icon: <Home className="w-5 h-5" />
     },
     {
       href: "/objects",
       label: t('menu.objects'),
-      icon: <Building className="w-5 h-5" />,
-      roles: ["guest", "client", "employee", "admin"]
+      icon: <Building className="w-5 h-5" />
     },
     {
       href: "/map",
       label: t('menu.map'),
-      icon: <Map className="w-5 h-5" />,
-      roles: ["guest", "client", "employee", "admin"]
+      icon: <Map className="w-5 h-5" />
     },
     {
       href: "/about",
       label: t('menu.about'),
-      icon: <Info className="w-5 h-5" />,
-      roles: ["guest", "client", "employee", "admin"]
+      icon: <Info className="w-5 h-5" />
     },
     {
       href: "/contacts",
       label: t('menu.contacts'),
-      icon: <Phone className="w-5 h-5" />,
-      roles: ["guest", "client", "employee", "admin"]
+      icon: <Phone className="w-5 h-5" />
     },
     {
       href: "/blog",
       label: t('menu.blog'),
-      icon: <BookOpen className="w-5 h-5" />,
-      roles: ["guest", "client", "employee", "admin"]
+      icon: <BookOpen className="w-5 h-5" />
     },
     {
       href: "/profile",
       label: t('menu.profile'),
-      icon: <User className="w-5 h-5" />,
-      roles: ["client", "employee", "admin"]
+      icon: <User className="w-5 h-5" />
     },
     {
       href: "/my-objects",
       label: t('menu.myObjects'),
-      icon: <Heart className="w-5 h-5" />,
-      roles: ["client", "employee", "admin"]
+      icon: <Heart className="w-5 h-5" />
     },
     {
       href: "/email",
       label: "Email",
-      icon: <Mail className="w-5 h-5" />,
-      roles: ["employee", "admin"]
+      icon: <Mail className="w-5 h-5" />
     },
     {
       href: "/academy",
       label: t('menu.academy'),
-      icon: <GraduationCap className="w-5 h-5" />,
-      roles: ["employee", "admin"]
+      icon: <GraduationCap className="w-5 h-5" />
     },
     {
       href: "/knowledge-base",
       label: t('menu.knowledgeBase'),
-      icon: <Book className="w-5 h-5" />,
-      roles: ["employee", "admin"]
+      icon: <Book className="w-5 h-5" />
     },
     {
       href: "/tasks",
       label: t('menu.tasks'),
-      icon: <CheckSquare className="w-5 h-5" />,
-      roles: ["employee", "admin"]
+      icon: <CheckSquare className="w-5 h-5" />
     },
     {
       href: "/admin",
       label: t('menu.admin'),
-      icon: <Settings className="w-5 h-5" />,
-      roles: ["admin"]
+      icon: <Settings className="w-5 h-5" />
     }
   ]
   
-  // Функция для проверки доступа к разделу
-  const canAccessSection = (href: string): boolean => {
-    // Публичные разделы всегда доступны
-    const publicSections = ['/', '/objects', '/map', '/about', '/contacts', '/blog']
-    if (publicSections.includes(href)) {
-      return true
-    }
-    
-    // Для авторизованных пользователей проверяем разрешения
-    if (session && currentUser) {
-      const section = href.replace('/', '') || 'home'
-      const hasAccess = hasPermission(currentUser, section)
-      console.log(`Проверка доступа к ${section}:`, hasAccess, currentUser.detailedPermissions)
-      return hasAccess
-    }
-    
-    // Для неавторизованных пользователей доступны только публичные разделы
-    return false
-  }
-  
-  const filteredMenuItems = menuItemsWithTranslations.filter(item => 
-    canAccessSection(item.href)
-  )
+  // Показываем все пункты меню без фильтрации
+  const filteredMenuItems = menuItemsWithTranslations
 
   const handleSignOut = () => {
     signOut()
