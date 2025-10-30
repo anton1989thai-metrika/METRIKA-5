@@ -218,9 +218,9 @@ export default function TasksPage() {
     }
   }, [session]);
 
-  // Функция для проверки разрешения на создание скрытых задач
+  // Авторизация отключена - все могут создавать скрытые задачи
   const canCreateHiddenTasks = () => {
-    return userPermissions?.otherPermissions?.canCreateHiddenTasks || false;
+    return true;
   };
 
   // Функции навигации календаря
@@ -369,28 +369,13 @@ export default function TasksPage() {
     setAllTasks(prev => prev.filter(task => task.id !== taskId));
   };
 
-  // Функции для работы с правами доступа
+  // Авторизация отключена - все пользователи могут всё
   const canReassignExecutor = (task) => {
-    const userRole = currentUser.role;
-    const isCreator = task.createdBy === currentUser.id;
-    
-    return userRole === 'admin' || userRole === 'manager' || isCreator;
+    return true; // Все могут переназначать исполнителей
   };
 
   const canChangeStatus = (task, newStatus) => {
-    const userRole = currentUser.role;
-    const isExecutor = task.executors.includes(currentUser.id);
-    const isCurator = task.curators.includes(currentUser.id);
-    
-    if (newStatus === 'in_progress') {
-      return isExecutor;
-    }
-    
-    if (newStatus === 'completed') {
-      return isExecutor && isTaskFullyApproved(task);
-    }
-    
-    return userRole === 'admin' || userRole === 'manager';
+    return true; // Все могут менять статус задач
   };
 
   const isTaskFullyApproved = (task) => {
@@ -1010,7 +995,7 @@ export default function TasksPage() {
     { id: 8, name: "Сергей Лебедев", role: "employee", email: "sergey@metrika.ru" }
   ];
 
-  // Права доступа по ролям
+  // Авторизация отключена - все пользователи имеют все права
   const rolePermissions = {
     admin: {
       canCreate: true,
@@ -1031,26 +1016,34 @@ export default function TasksPage() {
     employee: {
       canCreate: true,
       canEdit: true,
-      canAssign: false,
-      canReassign: false,
-      canApprove: false,
-      canViewAll: false
+      canAssign: true,
+      canReassign: true,
+      canApprove: true,
+      canViewAll: true
     },
     freelancer: {
       canCreate: true,
       canEdit: true,
-      canAssign: false,
-      canReassign: false,
-      canApprove: false,
-      canViewAll: false
+      canAssign: true,
+      canReassign: true,
+      canApprove: true,
+      canViewAll: true
     },
     client: {
-      canCreate: false,
-      canEdit: false,
-      canAssign: false,
-      canReassign: false,
-      canApprove: false,
-      canViewAll: false
+      canCreate: true,
+      canEdit: true,
+      canAssign: true,
+      canReassign: true,
+      canApprove: true,
+      canViewAll: true
+    },
+    guest: {
+      canCreate: true,
+      canEdit: true,
+      canAssign: true,
+      canReassign: true,
+      canApprove: true,
+      canViewAll: true
     }
   };
 

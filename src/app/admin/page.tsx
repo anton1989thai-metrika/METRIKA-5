@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react"
 import { useState } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
-import ProtectedRoute from "@/components/ProtectedRoute"
 import { 
   Users, 
   Building2, 
@@ -64,11 +63,7 @@ import ContractBuilder from "@/components/contracts/ContractBuilder"
 import ContractList from "@/components/contracts/ContractList"
 
 export default function AdminPage() {
-  return (
-    <ProtectedRoute requiredPermission="admin">
-      <AdminPageContent />
-    </ProtectedRoute>
-  )
+  return <AdminPageContent />
 }
 
 function AdminPageContent() {
