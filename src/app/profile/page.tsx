@@ -2,14 +2,12 @@
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ProfilePage() {
   return (
-    <ProtectedRoute requiredPermission="profile">
-      <div className="min-h-screen bg-white">
-        <Header />
-        <BurgerMenu />
+    <div className="min-h-screen bg-white">
+      <Header />
+      <BurgerMenu />
         
         <main className="pt-32 px-4">
           <div className="max-w-4xl mx-auto">
@@ -103,6 +101,5 @@ export default function ProfilePage() {
           </div>
         </main>
       </div>
-    </ProtectedRoute>
   );
 }

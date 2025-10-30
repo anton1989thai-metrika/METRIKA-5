@@ -403,23 +403,17 @@ export default function CommentsModal({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  // Проверка прав доступа
+  // Авторизация отключена - все могут всё
   const canEdit = (comment: Comment) => {
-    return comment.author.id === currentUser.id || 
-           currentUser.role === 'admin' || 
-           (currentUser.role === 'manager' && comment.visibility !== 'admins')
+    return true; // Все могут редактировать
   }
 
   const canDelete = (comment: Comment) => {
-    return comment.author.id === currentUser.id || currentUser.role === 'admin'
+    return true; // Все могут удалять
   }
 
   const canView = (comment: Comment) => {
-    if (comment.visibility === 'all') return true
-    if (comment.visibility === 'managers' && ['admin', 'manager'].includes(currentUser.role)) return true
-    if (comment.visibility === 'agents' && ['admin', 'manager', 'agent'].includes(currentUser.role)) return true
-    if (comment.visibility === 'admins' && currentUser.role === 'admin') return true
-    return false
+    return true; // Все могут просматривать
   }
 
   // Сохранение
