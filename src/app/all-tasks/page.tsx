@@ -259,33 +259,9 @@ export default function AllTasksPage() {
     return user ? user.name : 'Неизвестный пользователь';
   };
 
-  // Функция для получения пользователей, которые должны отображаться в фильтре задач
+  // Авторизация отключена - показываем всех пользователей
   const getVisibleUsers = () => {
-    return users.filter(user => {
-      // Если у пользователя есть индивидуальные разрешения с hideInTasks = true, скрываем его
-      if (user.detailedPermissions?.otherPermissions?.hideInTasks) {
-        return false;
-      }
-      
-      // Проверяем настройки роли для скрытия в задачах
-      // Для демонстрации используем базовую логику
-      const roleHideSettings: Record<string, boolean> = {
-        'site-user': true,    // По умолчанию скрываем
-        'client': false,      // Показываем клиентов
-        'foreign-employee': false, // Показываем иностранных сотрудников
-        'freelancer': false,  // Показываем внештатных сотрудников
-        'employee': false,    // Показываем сотрудников
-        'manager': false,     // Показываем менеджеров
-        'admin': false        // Показываем администраторов
-      };
-      
-      // Если роль настроена на скрытие, скрываем пользователя
-      if (roleHideSettings[user.role]) {
-        return false;
-      }
-      
-      return true;
-    });
+    return users; // Все пользователи видны
   };
 
   // Функция для получения роли пользователя в задаче

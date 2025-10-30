@@ -54,84 +54,15 @@ const getRolePermissions = (role: string): Record<string, boolean> => {
   return permissions
 }
 
-// Функция для проверки доступа пользователя к разделу
+// Авторизация отключена - все разделы доступны всем
 export const hasPermission = (user: User | null, section: string): boolean => {
-  if (!user) {
-    return false
-  }
-
-  // Публичные разделы всегда доступны
-  const publicSections = ['home', 'objects', 'map', 'about', 'contacts', 'blog']
-  if (publicSections.includes(section)) {
-    return true
-  }
-
-  // Администратор видит всё
-  if (user.role === 'admin') {
-    return true
-  }
-
-  // Получаем базовые разрешения роли
-  const rolePermissions = getRolePermissions(user.role)
-
-  // Если есть индивидуальные разрешения, они имеют приоритет
-  if (user.detailedPermissions) {
-    switch (section) {
-      case 'profile':
-        return user.detailedPermissions.personalCabinet?.enabled ?? rolePermissions['profile']
-      case 'my-objects':
-        return user.detailedPermissions.myObjects?.enabled ?? rolePermissions['my-objects']
-      case 'email':
-        return user.detailedPermissions.email?.enabled ?? rolePermissions['email']
-      case 'academy':
-        return user.detailedPermissions.academy?.enabled ?? rolePermissions['academy']
-      case 'knowledge-base':
-        return user.detailedPermissions.knowledgeBase?.enabled ?? rolePermissions['knowledge-base']
-      case 'tasks':
-        return user.detailedPermissions.taskManager?.enabled ?? rolePermissions['tasks']
-      case 'admin':
-        return user.detailedPermissions.adminPanel?.enabled ?? rolePermissions['admin']
-      default:
-        return false
-    }
-  }
-
-  // Если нет индивидуальных разрешений, используем ролевые
-  return rolePermissions[section] || false
+  return true; // Все могут видеть всё
 }
 
-// Функция для получения всех доступных разделов для пользователя
+// Авторизация отключена - все разделы доступны всем
 export const getAvailableSections = (user: User | null): string[] => {
-  if (!user) {
-    return ['home', 'objects', 'map', 'about', 'contacts', 'blog'] // Только публичные разделы
-  }
-
-  const availableSections: string[] = ['home', 'objects', 'map', 'about', 'contacts', 'blog'] // Публичные разделы
-
-  // Добавляем настраиваемые разделы на основе разрешений
-  if (hasPermission(user, 'profile')) {
-    availableSections.push('profile')
-  }
-  if (hasPermission(user, 'my-objects')) {
-    availableSections.push('my-objects')
-  }
-  if (hasPermission(user, 'email')) {
-    availableSections.push('email')
-  }
-  if (hasPermission(user, 'academy')) {
-    availableSections.push('academy')
-  }
-  if (hasPermission(user, 'knowledge-base')) {
-    availableSections.push('knowledge-base')
-  }
-  if (hasPermission(user, 'tasks')) {
-    availableSections.push('tasks')
-  }
-  if (hasPermission(user, 'admin')) {
-    availableSections.push('admin')
-  }
-
-  return availableSections
+  // Все разделы доступны всем
+  return ['home', 'objects', 'map', 'about', 'contacts', 'blog', 'profile', 'my-objects', 'email', 'academy', 'knowledge-base', 'tasks', 'admin']
 }
 
 // Функция для проверки, являются ли права стандартными или нестандартными
