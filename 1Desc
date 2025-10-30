@@ -1,0 +1,16 @@
+Vercel CLI 48.6.7
+Vercel CLI 48.6.7
+Retrieving project…
+Retrieving project…
+Fetching deployments in antons-projects-a708fae0
+Fetching deployments in antons-projects-a708fae0
+> Deployments for antons-projects-a708fae0/metrika-5 [347ms]
+> Deployments for antons-projects-a708fae0/metrika-5 [347ms]
+
+  Age     Deployment                                                          Status      Environment     Duration     Username               
+  3m      https://metrika-5-mvcw6f9pr-antons-projects-a708fae0.vercel.app     ● Error     Production      1m           anton1989thai-1517     
+
+
+  Age     Deployment                                                          Status      Environment     Duration     Username               
+  3m      https://metrika-5-mvcw6f9pr-antons-projects-a708fae0.vercel.app     ● Error     Production      1m           anton1989thai-1517     
+
