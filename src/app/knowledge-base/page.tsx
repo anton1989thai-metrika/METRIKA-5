@@ -16,9 +16,7 @@ export default function KnowledgeBasePage() {
     );
   }
   
-  if (!session || (session.user?.role !== "employee" && session.user?.role !== "admin")) {
-    redirect("/auth/signin");
-  }
+  // Авторизация отключена - доступ открыт для всех
 
   return (
     <div className="min-h-screen bg-white">

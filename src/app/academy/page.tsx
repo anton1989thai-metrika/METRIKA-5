@@ -328,9 +328,7 @@ export default function AcademyPage() {
     )
   }
   
-  if (!session || (session.user?.role !== "employee" && session.user?.role !== "admin")) {
-    redirect("/auth/signin")
-  }
+  // Авторизация отключена - доступ открыт для всех
 
   const getStatusColor = (status: string) => {
     switch (status) {

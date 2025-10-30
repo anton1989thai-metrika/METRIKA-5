@@ -16,9 +16,7 @@ export default function MyObjectsPage() {
     );
   }
   
-  if (!session) {
-    redirect("/auth/signin");
-  }
+  // Авторизация отключена - доступ открыт для всех
 
   return (
     <div className="min-h-screen bg-white">

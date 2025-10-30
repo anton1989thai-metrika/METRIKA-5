@@ -176,9 +176,7 @@ export default function EmailPage() {
     )
   }
 
-  if (!session) {
-    redirect('/auth/signin')
-  }
+  // Авторизация отключена - доступ открыт для всех
 
   const handleCreateBlock = () => {
     // TODO: Implement block creation
