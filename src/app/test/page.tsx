@@ -1504,7 +1504,7 @@ export default function TasksPage() {
       {/* Модальное окно создания задачи */}
       {isCreateTaskModalOpen && (
         <div className="fixed inset-0 flex items-start justify-center z-50 overflow-y-auto pt-[130px]">
-          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 p-6 mb-8 border-2 border-black">
+          <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 p-6 mb-8 border-2 border-black">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-black">Создать задачу</h2>
               <button
@@ -2044,7 +2044,10 @@ export default function TasksPage() {
                       )}
                       {showExecutorsDropdown && (
                         <div className="medusa-dropdown">
-                          {users.filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role)).map(user => (
+                          {users
+                            .filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role))
+                            .filter(user => !formData.curators.includes(user.id))
+                            .map(user => (
                             <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
@@ -2086,7 +2089,9 @@ export default function TasksPage() {
                       </button>
                       {showCuratorsDropdown && (
                         <div className="medusa-dropdown">
-                          {users.map(user => (
+                          {users
+                            .filter(user => !formData.executors.includes(user.id))
+                            .map(user => (
                             <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
@@ -3080,7 +3085,10 @@ export default function TasksPage() {
                       )}
                       {showExecutorsDropdown && (
                         <div className="medusa-dropdown">
-                          {users.filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role)).map(user => (
+                          {users
+                            .filter(user => ['admin', 'manager', 'employee', 'freelancer'].includes(user.role))
+                            .filter(user => !subtaskFormData.curators.includes(user.id))
+                            .map(user => (
                             <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
@@ -3122,7 +3130,9 @@ export default function TasksPage() {
                       </button>
                       {showCuratorsDropdown && (
                         <div className="medusa-dropdown">
-                          {users.map(user => (
+                          {users
+                            .filter(user => !subtaskFormData.executors.includes(user.id))
+                            .map(user => (
                             <label key={user.id} className="medusa-dropdown-item">
                               <input
                                 type="checkbox"
