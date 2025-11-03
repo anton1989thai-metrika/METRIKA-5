@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator } from "lucide-react"
+import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator, LogIn } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/LanguageContext"
 
@@ -89,6 +89,25 @@ export default function BurgerMenu() {
                 </li>
               ))}
             </ul>
+            
+            {/* Кнопка Войти */}
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <Link
+                href="/auth/signin"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center space-x-2 p-3 rounded-md transition-all font-medium"
+                style={{ backgroundColor: '#fff60b', color: '#000' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e6d80a';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#fff60b';
+                }}
+              >
+                <LogIn className="w-5 h-5" />
+                <span>Войти</span>
+              </Link>
+            </div>
           </div>
         </nav>
       </div>

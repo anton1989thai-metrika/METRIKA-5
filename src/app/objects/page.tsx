@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
 import Link from "next/link";
 import {
@@ -18,7 +18,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export default function ObjectsPage() {
+function ObjectsContent() {
   const { t } = useLanguage()
   const { filters } = useFilters()
   const searchParams = useSearchParams()
@@ -66,10 +66,7 @@ export default function ObjectsPage() {
   const filteredObjects = getFilteredObjects()
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <BurgerMenu />
-      
+    <>
       {/* Основной контент с объектами */}
       <main className="pt-36 sm:pt-40 lg:pt-44">
         <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
@@ -229,6 +226,18 @@ export default function ObjectsPage() {
           </div>
         </div>
       </main>
+    </>
+  );
+}
+
+export default function ObjectsPage() {
+  return (
+    <div className="min-h-screen bg-white">
+      <Header />
+      <BurgerMenu />
+      <Suspense fallback={<div className="pt-36 text-center">Загрузка...</div>}>
+        <ObjectsContent />
+      </Suspense>
     </div>
   );
 }
