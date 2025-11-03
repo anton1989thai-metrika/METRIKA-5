@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "deploy": "./deploy.sh",
-    "sync": "./sync.sh"
+    "sync": "./sync.sh",
+    "knip": "knip",
+    "tsprune": "ts-prune",
+    "depcheck": "depcheck"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -72,9 +75,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "depcheck": "^1.4.7",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "knip": "^5.67.1",
     "tailwindcss": "^4",
+    "ts-prune": "^0.11.3",
     "typescript": "^5"
   }
 }
