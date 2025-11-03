@@ -18,8 +18,7 @@ if [ -n "$(git status --porcelain)" ]; then
     git push origin main
     
     echo "✅ Изменения отправлены на GitHub"
-    echo "🔄 GitHub Actions автоматически деплоят на Vercel"
-    echo "🌐 Проверьте статус деплоя: https://github.com/anton1989thai-metrika/METRIKA-5/actions"
+    echo "📊 Проверьте статус коммитов: https://github.com/anton1989thai-metrika/METRIKA-5/actions"
 else
     echo "ℹ️  Нет изменений для деплоя"
 fi

@@ -27,15 +27,15 @@ http://127.的近.1:4040
 npm run ngrok
 ```
 
-### Вариант 2: Ngrok к версии с GitHub (Vercel)
+### Вариант 2: Ngrok к production серверу
 ```bash
 npm run ngrok:github
 ```
 
 Этот вариант:
-- Создаёт прокси к Vercel
-- Показывает production версию с GitHub
-- Не требует локального dev-сервера
+- Создаёт прокси к production серверу
+- Показывает production версию
+- Требует настройки production URL
 
 ---
 
