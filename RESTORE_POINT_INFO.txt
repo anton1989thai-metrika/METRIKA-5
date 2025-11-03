@@ -1,0 +1,55 @@
+# Точка восстановления проекта METRIKA-5
+
+**Дата создания:** 2025-11-03 22:08:15
+**Тег:** checkpoint-remove-vercel-2025-11-03-2208
+**Коммит:** f7c00fda4dee2b3bebb9db7d48b074afba6f12fe
+
+## Статус
+✅ **Точка восстановления создана и сохранена:**
+- ✅ Коммит создан локально
+- ✅ Тег создан локально
+- ✅ Тег отправлен на GitHub: checkpoint-remove-vercel-2025-11-03-2208
+
+## Описание
+Точка восстановления после полного удаления всех зависимостей и упоминаний Vercel из проекта METRIKA-5.
+
+## Что было удалено:
+- Файлы конфигурации Vercel (vercel.json, .vercel-deploy-trigger)
+- Скрипты деплоя Vercel (vercel-deploy.sh, vercel-cli-deploy.sh, start-ngrok-vercel.sh)
+- Документация Vercel (VERCEL_DEPLOY_GUIDE.md, VERCEL_DEPLOY_SUCCESS.md, AUTO_DEPLOY_SETUP.md и др.)
+- Упоминания Vercel из всех README и документации
+- Обновлены скрипты синхронизации (sync.sh, auto-deploy.sh)
+
+## Восстановление
+
+### Посмотреть все теги:
+```bash
+git tag -l
+```
+
+### Восстановить из тега (detached HEAD):
+```bash
+git checkout checkpoint-remove-vercel-2025-11-03-2208
+```
+
+### Восстановить и создать новую ветку:
+```bash
+git checkout -b restore-from-checkpoint checkpoint-remove-vercel-2025-11-03-2208
+```
+
+### Посмотреть информацию о теге:
+```bash
+git show checkpoint-remove-vercel-2025-11-03-2208
+```
+
+### Получить тег с GitHub:
+```bash
+git fetch origin tag checkpoint-remove-vercel-2025-11-03-2208
+```
+
+## GitHub
+Тег доступен на GitHub:
+https://github.com/anton1989thai-metrika/METRIKA-5/releases/tag/checkpoint-remove-vercel-2025-11-03-2208
+
+---
+Создано: 2025-11-03 22:08:15
