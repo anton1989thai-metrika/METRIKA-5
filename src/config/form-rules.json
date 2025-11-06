@@ -1,0 +1,1331 @@
+{
+  "fields": [
+    {
+      "id": "country",
+      "type": "select",
+      "label": "Страна",
+      "options": [
+        { "id": "russia", "name": "Россия" },
+        { "id": "thailand", "name": "Таиланд" },
+        { "id": "china", "name": "Китай" },
+        { "id": "south-korea", "name": "Южная Корея" }
+      ],
+      "validation": { "required": true }
+    },
+    {
+      "id": "operation",
+      "type": "select",
+      "label": "Операция",
+      "options": [
+        { "id": "sale", "name": "Продажа" },
+        { "id": "rent", "name": "Аренда" },
+        { "id": "exchange", "name": "Обмен" }
+      ],
+      "validation": { "required": true }
+    },
+    {
+      "id": "type",
+      "type": "select",
+      "label": "Тип объекта",
+      "options": [
+        { "id": "apartment", "name": "Квартира" },
+        { "id": "house", "name": "Частный дом" },
+        { "id": "land", "name": "Земельный участок" },
+        { "id": "commercial", "name": "Коммерческое помещение" },
+        { "id": "building", "name": "Здание" },
+        { "id": "complex", "name": "Имущественный комплекс" },
+        { "id": "non-capital", "name": "Некапитальный объект" },
+        { "id": "share", "name": "Доля в праве" }
+      ],
+      "validation": { "required": true }
+    },
+    {
+      "id": "address",
+      "type": "input",
+      "label": "Адрес",
+      "placeholder": "Введите адрес",
+      "validation": { "required": true }
+    },
+    {
+      "id": "district",
+      "type": "select",
+      "label": "Район",
+      "validation": { "required": true }
+    },
+    {
+      "id": "price",
+      "type": "number",
+      "label": "Цена",
+      "placeholder": "Введите цену",
+      "validation": { "required": true }
+    },
+    {
+      "id": "roomType",
+      "type": "select",
+      "label": "Тип помещения",
+      "options": [
+        { "id": "studio", "name": "Студия" },
+        { "id": "1-room", "name": "1-комнатная" },
+        { "id": "2-room", "name": "2-комнатная" },
+        { "id": "3-room", "name": "3-комнатная" },
+        { "id": "4-room", "name": "4-комнатная" },
+        { "id": "5-room", "name": "5-комнатная" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "rooms",
+      "type": "input",
+      "label": "Комнат",
+      "placeholder": "Количество комнат"
+    },
+    {
+      "id": "bedrooms",
+      "type": "input",
+      "label": "Спален",
+      "placeholder": "Количество спален"
+    },
+    {
+      "id": "bathrooms",
+      "type": "input",
+      "label": "Санузлов",
+      "placeholder": "Количество санузлов"
+    },
+    {
+      "id": "ceilingHeight",
+      "type": "number",
+      "label": "Высота потолков",
+      "placeholder": "м"
+    },
+    {
+      "id": "layout",
+      "type": "select",
+      "label": "Планировка",
+      "options": [
+        { "id": "studio", "name": "Студия" },
+        { "id": "open", "name": "Открытая" },
+        { "id": "closed", "name": "Закрытая" },
+        { "id": "mixed", "name": "Смешанная" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "renovation",
+      "type": "select",
+      "label": "Ремонт",
+      "options": [
+        { "id": "none", "name": "Без ремонта" },
+        { "id": "cosmetic", "name": "Косметический" },
+        { "id": "euro", "name": "Евроремонт" },
+        { "id": "designer", "name": "Дизайнерский" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "renovationDate",
+      "type": "input",
+      "label": "Дата завершения ремонта",
+      "placeholder": "DD.MM.YYYY"
+    },
+    {
+      "id": "windowSide",
+      "type": "multiselect",
+      "label": "Сторона окон",
+      "options": [
+        { "id": "north", "name": "Север" },
+        { "id": "south", "name": "Юг" },
+        { "id": "east", "name": "Восток" },
+        { "id": "west", "name": "Запад" },
+        { "id": "northeast", "name": "Северо-восток" },
+        { "id": "northwest", "name": "Северо-запад" },
+        { "id": "southeast", "name": "Юго-восток" },
+        { "id": "southwest", "name": "Юго-запад" }
+      ]
+    },
+    {
+      "id": "view",
+      "type": "multiselect",
+      "label": "Вид из окон",
+      "options": [
+        { "id": "street", "name": "На улицу" },
+        { "id": "yard", "name": "Во двор" },
+        { "id": "park", "name": "В парк" },
+        { "id": "sea", "name": "На море" },
+        { "id": "mountains", "name": "На горы" },
+        { "id": "city", "name": "На город" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "elevator",
+      "type": "multiselect",
+      "label": "Наличие лифта",
+      "options": [
+        { "id": "passenger", "name": "Пассажирский" },
+        { "id": "cargo", "name": "Грузовой" },
+        { "id": "none", "name": "Отсутствует" }
+      ]
+    },
+    {
+      "id": "facade",
+      "type": "select",
+      "label": "Фасад",
+      "options": [
+        { "id": "brick", "name": "Кирпичный" },
+        { "id": "panel", "name": "Панельный" },
+        { "id": "monolithic", "name": "Монолитный" },
+        { "id": "block", "name": "Блочный" },
+        { "id": "wood", "name": "Деревянный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "readiness",
+      "type": "select",
+      "label": "Готовность объекта",
+      "options": [
+        { "id": "ready", "name": "Готов" },
+        { "id": "construction", "name": "В строительстве" },
+        { "id": "planning", "name": "В проекте" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "houseType",
+      "type": "select",
+      "label": "Тип дома",
+      "options": [
+        { "id": "panel", "name": "Панельный" },
+        { "id": "brick", "name": "Кирпичный" },
+        { "id": "monolithic", "name": "Монолитный" },
+        { "id": "block", "name": "Блочный" },
+        { "id": "wood", "name": "Деревянный" },
+        { "id": "combined", "name": "Комбинированный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "foundation",
+      "type": "select",
+      "label": "Тип фундамента",
+      "options": [
+        { "id": "strip", "name": "Ленточный" },
+        { "id": "slab", "name": "Плитный" },
+        { "id": "pile", "name": "Свайный" },
+        { "id": "column", "name": "Столбчатый" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "constructionYear",
+      "type": "number",
+      "label": "Год постройки здания",
+      "placeholder": "YYYY"
+    },
+    {
+      "id": "buildingFloors",
+      "type": "number",
+      "label": "Этажность здания",
+      "placeholder": "Количество этажей"
+    },
+    {
+      "id": "apartmentsInHouse",
+      "type": "number",
+      "label": "Количество квартир в доме",
+      "placeholder": "Количество квартир"
+    },
+    {
+      "id": "apartmentFloor",
+      "type": "number",
+      "label": "Этаж квартиры / помещения",
+      "placeholder": "Номер этажа"
+    },
+    {
+      "id": "basement",
+      "type": "select",
+      "label": "Подвал",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" },
+        { "id": "partial", "name": "Частично" }
+      ]
+    },
+    {
+      "id": "attic",
+      "type": "select",
+      "label": "Мансарда",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" },
+        { "id": "partial", "name": "Частично" }
+      ]
+    },
+    {
+      "id": "additionalBuildings",
+      "type": "multiselect",
+      "label": "Дополнительные постройки",
+      "options": [
+        { "id": "garage", "name": "Гараж" },
+        { "id": "shed", "name": "Сарай" },
+        { "id": "bathhouse", "name": "Баня" },
+        { "id": "greenhouse", "name": "Теплица" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "electricity",
+      "type": "multiselect",
+      "label": "Электропитание",
+      "options": [
+        { "id": "220v", "name": "220В" },
+        { "id": "380v", "name": "380В" },
+        { "id": "three-phase", "name": "Трехфазное" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "peakPower",
+      "type": "number",
+      "label": "Пиковая мощность (кВт)",
+      "placeholder": "кВт"
+    },
+    {
+      "id": "heatingType",
+      "type": "multiselect",
+      "label": "Тип отопления",
+      "options": [
+        { "id": "central", "name": "Центральное" },
+        { "id": "individual", "name": "Индивидуальное" },
+        { "id": "gas", "name": "Газовое" },
+        { "id": "electric", "name": "Электрическое" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "heatingDevices",
+      "type": "multiselect",
+      "label": "Отопительные приборы",
+      "options": [
+        { "id": "radiators", "name": "Радиаторы" },
+        { "id": "convectors", "name": "Конвекторы" },
+        { "id": "warm-floor", "name": "Теплый пол" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "coldWater",
+      "type": "select",
+      "label": "Холодная вода",
+      "options": [
+        { "id": "central", "name": "Центральная" },
+        { "id": "well", "name": "Скважина" },
+        { "id": "none", "name": "Отсутствует" }
+      ]
+    },
+    {
+      "id": "hotWater",
+      "type": "multiselect",
+      "label": "Горячая вода",
+      "options": [
+        { "id": "central", "name": "Центральная" },
+        { "id": "boiler", "name": "Бойлер" },
+        { "id": "gas-heater", "name": "Газовый нагреватель" },
+        { "id": "none", "name": "Отсутствует" }
+      ]
+    },
+    {
+      "id": "sewerage",
+      "type": "select",
+      "label": "Тип канализации",
+      "options": [
+        { "id": "central", "name": "Центральная" },
+        { "id": "septic", "name": "Септик" },
+        { "id": "none", "name": "Отсутствует" }
+      ]
+    },
+    {
+      "id": "airConditioning",
+      "type": "select",
+      "label": "Кондиционер",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "smartHome",
+      "type": "select",
+      "label": "Система «умный дом»",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "officeZone",
+      "type": "select",
+      "label": "Офисная зона",
+      "options": [
+        { "id": "allocated", "name": "Выделена" },
+        { "id": "not-allocated", "name": "Не выделена" }
+      ]
+    },
+    {
+      "id": "temperatureMode",
+      "type": "select",
+      "label": "Температурный режим помещения",
+      "options": [
+        { "id": "normal", "name": "Обычный" },
+        { "id": "cold", "name": "Холодный" },
+        { "id": "warm", "name": "Теплый" }
+      ]
+    },
+    {
+      "id": "smoking",
+      "type": "select",
+      "label": "Курение",
+      "options": [
+        { "id": "allowed", "name": "Разрешено" },
+        { "id": "forbidden", "name": "Запрещено" }
+      ]
+    },
+    {
+      "id": "furniture",
+      "type": "multiselect",
+      "label": "Мебель",
+      "options": [
+        { "id": "kitchen", "name": "Кухонная" },
+        { "id": "bedroom", "name": "Спальная" },
+        { "id": "living", "name": "Гостиная" },
+        { "id": "office", "name": "Офисная" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "appliances",
+      "type": "multiselect",
+      "label": "Бытовая техника",
+      "options": [
+        { "id": "refrigerator", "name": "Холодильник" },
+        { "id": "washing-machine", "name": "Стиральная машина" },
+        { "id": "dishwasher", "name": "Посудомоечная машина" },
+        { "id": "microwave", "name": "Микроволновка" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "landscape",
+      "type": "select",
+      "label": "Ландшафт",
+      "options": [
+        { "id": "flat", "name": "Ровный" },
+        { "id": "hilly", "name": "Холмистый" },
+        { "id": "mountainous", "name": "Горный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "fenceType",
+      "type": "select",
+      "label": "Тип забора",
+      "options": [
+        { "id": "brick", "name": "Кирпичный" },
+        { "id": "metal", "name": "Металлический" },
+        { "id": "wood", "name": "Деревянный" },
+        { "id": "concrete", "name": "Бетонный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "greenPlantings",
+      "type": "select",
+      "label": "Зелёные насаждения",
+      "options": [
+        { "id": "trees", "name": "Деревья" },
+        { "id": "shrubs", "name": "Кустарники" },
+        { "id": "lawn", "name": "Газон" },
+        { "id": "garden", "name": "Сад" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "infrastructure",
+      "type": "multiselect",
+      "label": "Инфраструктура",
+      "options": [
+        { "id": "school", "name": "Школа" },
+        { "id": "kindergarten", "name": "Детский сад" },
+        { "id": "hospital", "name": "Больница" },
+        { "id": "shop", "name": "Магазин" },
+        { "id": "pharmacy", "name": "Аптека" },
+        { "id": "bank", "name": "Банк" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "parking",
+      "type": "multiselect",
+      "label": "Парковка",
+      "options": [
+        { "id": "garage", "name": "Гараж" },
+        { "id": "open", "name": "Открытая" },
+        { "id": "covered", "name": "Крытая" },
+        { "id": "underground", "name": "Подземная" },
+        { "id": "none", "name": "Отсутствует" }
+      ]
+    },
+    {
+      "id": "accessRoads",
+      "type": "select",
+      "label": "Подъездные пути",
+      "options": [
+        { "id": "asphalt", "name": "Асфальт" },
+        { "id": "concrete", "name": "Бетон" },
+        { "id": "gravel", "name": "Гравий" },
+        { "id": "dirt", "name": "Грунтовая" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "surroundingType",
+      "type": "select",
+      "label": "Тип окружения",
+      "options": [
+        { "id": "residential", "name": "Жилой" },
+        { "id": "commercial", "name": "Коммерческий" },
+        { "id": "industrial", "name": "Промышленный" },
+        { "id": "recreational", "name": "Рекреационный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "centerDistance",
+      "type": "number",
+      "label": "Удалённость от центра",
+      "placeholder": "км"
+    },
+    {
+      "id": "pedestrianTraffic",
+      "type": "select",
+      "label": "Пешеходный трафик",
+      "options": [
+        { "id": "high", "name": "Высокий" },
+        { "id": "medium", "name": "Средний" },
+        { "id": "low", "name": "Низкий" }
+      ]
+    },
+    {
+      "id": "carTraffic",
+      "type": "select",
+      "label": "Автомобильный трафик",
+      "options": [
+        { "id": "high", "name": "Высокий" },
+        { "id": "medium", "name": "Средний" },
+        { "id": "low", "name": "Низкий" }
+      ]
+    },
+    {
+      "id": "vr",
+      "type": "select",
+      "label": "VR",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "cadastralNumbers",
+      "type": "input",
+      "label": "Кадастровый номер",
+      "placeholder": "Введите кадастровый номер"
+    },
+    {
+      "id": "cadastralCosts",
+      "type": "number",
+      "label": "Кадастровая стоимость",
+      "placeholder": "Введите стоимость"
+    },
+    {
+      "id": "territorialZone",
+      "type": "select",
+      "label": "Территориальная зона",
+      "options": [
+        { "id": "residential", "name": "Жилая" },
+        { "id": "commercial", "name": "Коммерческая" },
+        { "id": "industrial", "name": "Промышленная" },
+        { "id": "agricultural", "name": "Сельскохозяйственная" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "rightType",
+      "type": "select",
+      "label": "Вид права",
+      "options": [
+        { "id": "ownership", "name": "Собственность" },
+        { "id": "lease", "name": "Аренда" },
+        { "id": "use", "name": "Пользование" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "developer",
+      "type": "select",
+      "label": "Застройщик",
+      "options": [
+        { "id": "known", "name": "Известный" },
+        { "id": "unknown", "name": "Неизвестный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "ddu",
+      "type": "select",
+      "label": "ДДУ",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "mortgage",
+      "type": "multiselect",
+      "label": "Ипотека",
+      "options": [
+        { "id": "available", "name": "Доступна" },
+        { "id": "not-available", "name": "Недоступна" },
+        { "id": "military", "name": "Военная" },
+        { "id": "maternal", "name": "Материнская" }
+      ]
+    },
+    {
+      "id": "utilities",
+      "type": "input",
+      "label": "Коммунальные платежи",
+      "placeholder": "Введите сумму"
+    },
+    {
+      "id": "tax",
+      "type": "input",
+      "label": "Налог",
+      "placeholder": "Введите сумму"
+    },
+    {
+      "id": "pricePerSqm",
+      "type": "number",
+      "label": "Стоимость квадратного метра",
+      "placeholder": "₽/м²"
+    },
+    {
+      "id": "rentPerSqm",
+      "type": "number",
+      "label": "Арендная плата за кв.м",
+      "placeholder": "₽/м²"
+    },
+    {
+      "id": "subsidies",
+      "type": "select",
+      "label": "Субсидии",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "additionalPayment",
+      "type": "input",
+      "label": "Дополнительно оплачивается",
+      "placeholder": "Введите сумму"
+    },
+    {
+      "id": "bargaining",
+      "type": "select",
+      "label": "Торг",
+      "options": [
+        { "id": "possible", "name": "Возможен" },
+        { "id": "not-possible", "name": "Невозможен" }
+      ]
+    },
+    {
+      "id": "commission",
+      "type": "select",
+      "label": "Комиссия",
+      "options": [
+        { "id": "percentage", "name": "Процент" },
+        { "id": "fixed", "name": "Фиксированная" },
+        { "id": "none", "name": "Отсутствует" }
+      ]
+    },
+    {
+      "id": "commissionCustom",
+      "type": "input",
+      "label": "Размер комиссии",
+      "placeholder": "Введите размер"
+    },
+    {
+      "id": "ownersCount",
+      "type": "number",
+      "label": "Количество собственников",
+      "placeholder": "Количество"
+    },
+    {
+      "id": "encumbrances",
+      "type": "select",
+      "label": "Обременения",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "balcony",
+      "type": "multiselect",
+      "label": "Балкон",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" },
+        { "id": "loggia", "name": "Лоджия" },
+        { "id": "terrace", "name": "Терраса" }
+      ]
+    },
+    {
+      "id": "balconyArea",
+      "type": "number",
+      "label": "Площадь балкона",
+      "placeholder": "м²"
+    },
+    {
+      "id": "useType",
+      "type": "multiselect",
+      "label": "Вид использования",
+      "options": [
+        { "id": "residential", "name": "Жилое" },
+        { "id": "commercial", "name": "Коммерческое" },
+        { "id": "industrial", "name": "Промышленное" },
+        { "id": "agricultural", "name": "Сельскохозяйственное" },
+        { "id": "recreational", "name": "Рекреационное" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "windows",
+      "type": "select",
+      "label": "Окна",
+      "options": [
+        { "id": "plastic", "name": "Пластиковые" },
+        { "id": "wood", "name": "Деревянные" },
+        { "id": "aluminum", "name": "Алюминиевые" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "houseTypeBuilding",
+      "type": "select",
+      "label": "Вид дома",
+      "options": [
+        { "id": "secondary", "name": "Вторичное жильё" },
+        { "id": "new-building", "name": "Новостройка" }
+      ]
+    },
+    {
+      "id": "intercom",
+      "type": "select",
+      "label": "Домофон",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "security",
+      "type": "select",
+      "label": "Охрана",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "videoSurveillance",
+      "type": "select",
+      "label": "Наружное видеонаблюдение",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "concierge",
+      "type": "select",
+      "label": "Консьерж",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "playground",
+      "type": "select",
+      "label": "Детская площадка",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "temperatureBySeasons",
+      "type": "select",
+      "label": "Температура по сезонам",
+      "options": [
+        { "id": "stable", "name": "Стабильная" },
+        { "id": "variable", "name": "Переменная" }
+      ]
+    },
+    {
+      "id": "airHumidity",
+      "type": "select",
+      "label": "Влажность воздуха",
+      "options": [
+        { "id": "low", "name": "Низкая" },
+        { "id": "normal", "name": "Нормальная" },
+        { "id": "high", "name": "Высокая" }
+      ]
+    },
+    {
+      "id": "airPollution",
+      "type": "select",
+      "label": "Загрязнение воздуха",
+      "options": [
+        { "id": "low", "name": "Низкое" },
+        { "id": "medium", "name": "Среднее" },
+        { "id": "high", "name": "Высокое" }
+      ]
+    },
+    {
+      "id": "noiseLevel",
+      "type": "select",
+      "label": "Шумовой фон",
+      "options": [
+        { "id": "low", "name": "Низкий" },
+        { "id": "medium", "name": "Средний" },
+        { "id": "high", "name": "Высокий" }
+      ]
+    },
+    {
+      "id": "coordinates",
+      "type": "input",
+      "label": "Координаты",
+      "placeholder": "Широта, долгота"
+    },
+    {
+      "id": "formShape",
+      "type": "select",
+      "label": "Форма участка",
+      "options": [
+        { "id": "rectangular", "name": "Прямоугольная" },
+        { "id": "square", "name": "Квадратная" },
+        { "id": "triangular", "name": "Треугольная" },
+        { "id": "irregular", "name": "Неправильная" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "relief",
+      "type": "select",
+      "label": "Рельеф участка",
+      "options": [
+        { "id": "flat", "name": "Ровный" },
+        { "id": "hilly", "name": "Холмистый" },
+        { "id": "mountainous", "name": "Горный" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "wiredInternet",
+      "type": "select",
+      "label": "Проводной интернет",
+      "options": [
+        { "id": "yes", "name": "Есть" },
+        { "id": "no", "name": "Нет" }
+      ]
+    },
+    {
+      "id": "buildingsCount",
+      "type": "number",
+      "label": "Количество зданий",
+      "placeholder": "Количество"
+    },
+    {
+      "id": "buildingTypeComplex",
+      "type": "select",
+      "label": "Тип зданий в комплексе",
+      "options": [
+        { "id": "residential", "name": "Жилые" },
+        { "id": "commercial", "name": "Коммерческие" },
+        { "id": "mixed", "name": "Смешанные" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "depositSize",
+      "type": "select",
+      "label": "Размер депозита",
+      "options": [
+        { "id": "monthly", "name": "Месячная аренда" },
+        { "id": "quarterly", "name": "Квартальная аренда" },
+        { "id": "half-year", "name": "Полугодовая аренда" },
+        { "id": "yearly", "name": "Годовая аренда" },
+        { "id": "custom", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "depositSizeCustom",
+      "type": "input",
+      "label": "Размер депозита",
+      "placeholder": "Введите размер"
+    },
+    {
+      "id": "unavailableDates",
+      "type": "calendar",
+      "label": "Недоступные даты"
+    },
+    {
+      "id": "petsAllowed",
+      "type": "multiselect",
+      "label": "Аренда с питомцами",
+      "options": [
+        { "id": "cats", "name": "Кошки" },
+        { "id": "dogs", "name": "Собаки" },
+        { "id": "birds", "name": "Птицы" },
+        { "id": "fish", "name": "Рыбы" },
+        { "id": "other", "name": "Другое" }
+      ]
+    },
+    {
+      "id": "rentalPeriod",
+      "type": "multiselect",
+      "label": "Срок аренды",
+      "options": [
+        { "id": "daily", "name": "Посуточно" },
+        { "id": "weekly", "name": "Понедельно" },
+        { "id": "monthly", "name": "Помесячно" },
+        { "id": "quarterly", "name": "Поквартально" },
+        { "id": "yearly", "name": "Погодно" },
+        { "id": "long-term", "name": "Долгосрочно" }
+      ]
+    },
+    {
+      "id": "seaDistance",
+      "type": "number",
+      "label": "Удалённость от моря",
+      "placeholder": "км"
+    }
+  ],
+  "rules": [
+    {
+      "fieldId": "roomType",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "rooms",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "bedrooms",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "bathrooms",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "layout",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "renovation",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "renovationDate",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "windowSide",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "view",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "ceilingHeight",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "elevator",
+      "visibleIf": {
+        "type": ["apartment", "commercial", "building", "share"]
+      }
+    },
+    {
+      "fieldId": "facade",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "readiness",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "houseType",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "foundation",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "constructionYear",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "buildingFloors",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "apartmentsInHouse",
+      "visibleIf": {
+        "type": "apartment"
+      }
+    },
+    {
+      "fieldId": "apartmentFloor",
+      "visibleIf": {
+        "type": ["apartment", "commercial"]
+      }
+    },
+    {
+      "fieldId": "basement",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "share"]
+      }
+    },
+    {
+      "fieldId": "attic",
+      "visibleIf": {
+        "type": ["apartment", "house", "building"]
+      }
+    },
+    {
+      "fieldId": "additionalBuildings",
+      "visibleIf": {
+        "type": "house"
+      }
+    },
+    {
+      "fieldId": "heatingType",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "heatingDevices",
+      "visibleIf": {
+        "type": ["apartment", "house", "commercial", "building", "complex", "non-capital", "share"]
+      }
+    },
+    {
+      "fieldId": "officeZone",
+      "visibleIf": {
+        "type": ["commercial", "building", "complex", "non-capital"]
+      }
+    },
+    {
+      "fieldId": "temperatureMode",
+      "visibleIf": {
+        "type": ["commercial", "building", "complex", "non-capital"]
+      }
+    },
+    {
+      "fieldId": "smoking",
+      "visibleIf": {
+        "type": ["apartment", "commercial", "share"]
+      }
+    },
+    {
+      "fieldId": "furniture",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "appliances",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "landscape",
+      "visibleIf": {
+        "type": "land"
+      }
+    },
+    {
+      "fieldId": "fenceType",
+      "visibleIf": {
+        "type": ["house", "complex", "non-capital", "land"]
+      }
+    },
+    {
+      "fieldId": "greenPlantings",
+      "visibleIf": {
+        "type": ["house", "land"]
+      }
+    },
+    {
+      "fieldId": "territorialZone",
+      "visibleIf": {
+        "type": ["house", "building", "complex", "non-capital", "land"]
+      }
+    },
+    {
+      "fieldId": "useType",
+      "visibleIf": {
+        "type": ["house", "building", "complex", "non-capital", "land"]
+      }
+    },
+    {
+      "fieldId": "developer",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "ddu",
+      "visibleIf": {
+        "type": "apartment"
+      }
+    },
+    {
+      "fieldId": "mortgage",
+      "visibleIf": {
+        "type": ["apartment", "house", "land"]
+      }
+    },
+    {
+      "fieldId": "subsidies",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "additionalPayment",
+      "visibleIf": {
+        "operation": "rent"
+      }
+    },
+    {
+      "fieldId": "ownersCount",
+      "visibleIf": {
+        "type": "share"
+      }
+    },
+    {
+      "fieldId": "balcony",
+      "visibleIf": {
+        "type": "apartment"
+      }
+    },
+    {
+      "fieldId": "balconyArea",
+      "visibleIf": {
+        "type": "apartment",
+        "balcony": ["yes"]
+      }
+    },
+    {
+      "fieldId": "windows",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "houseTypeBuilding",
+      "visibleIf": {
+        "type": ["apartment", "house", "building"]
+      }
+    },
+    {
+      "fieldId": "videoSurveillance",
+      "visibleIf": {
+        "type": ["apartment", "house", "building", "complex"]
+      }
+    },
+    {
+      "fieldId": "concierge",
+      "visibleIf": {
+        "type": "apartment"
+      }
+    },
+    {
+      "fieldId": "playground",
+      "visibleIf": {
+        "type": "apartment"
+      }
+    },
+    {
+      "fieldId": "temperatureBySeasons",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "airHumidity",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "airPollution",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "noiseLevel",
+      "visibleIf": {
+        "type": ["apartment", "house"]
+      }
+    },
+    {
+      "fieldId": "formShape",
+      "visibleIf": {
+        "type": ["house", "building", "complex", "non-capital", "land"]
+      }
+    },
+    {
+      "fieldId": "relief",
+      "visibleIf": {
+        "type": "land"
+      }
+    },
+    {
+      "fieldId": "buildingsCount",
+      "visibleIf": {
+        "type": "complex"
+      }
+    },
+    {
+      "fieldId": "buildingTypeComplex",
+      "visibleIf": {
+        "type": "complex"
+      }
+    },
+    {
+      "fieldId": "depositSize",
+      "visibleIf": {
+        "operation": "rent"
+      }
+    },
+    {
+      "fieldId": "depositSizeCustom",
+      "visibleIf": {
+        "operation": "rent",
+        "depositSize": "custom"
+      }
+    },
+    {
+      "fieldId": "unavailableDates",
+      "visibleIf": {
+        "operation": "rent"
+      }
+    },
+    {
+      "fieldId": "petsAllowed",
+      "visibleIf": {
+        "operation": "rent"
+      }
+    },
+    {
+      "fieldId": "rentalPeriod",
+      "visibleIf": {
+        "operation": "rent"
+      }
+    },
+    {
+      "fieldId": "seaDistance",
+      "visibleIf": {
+        "country": "thailand"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "basic-info",
+      "title": "Основная информация",
+      "fields": ["country", "operation", "type", "address", "district", "price"]
+    },
+    {
+      "id": "characteristics",
+      "title": "Основные характеристики",
+      "fields": ["roomType", "rooms", "bedrooms", "bathrooms", "ceilingHeight", "layout", "renovation", "renovationDate", "windowSide", "view"]
+    },
+    {
+      "id": "building-info",
+      "title": "Информация о здании",
+      "fields": ["elevator", "facade", "readiness", "houseType", "foundation", "constructionYear", "buildingFloors", "apartmentsInHouse", "apartmentFloor", "basement", "attic", "additionalBuildings"]
+    },
+    {
+      "id": "utilities",
+      "title": "Коммуникации",
+      "fields": ["electricity", "peakPower", "heatingType", "heatingDevices", "coldWater", "hotWater", "sewerage", "airConditioning", "smartHome", "officeZone", "temperatureMode", "smoking"]
+    },
+    {
+      "id": "additional-features",
+      "title": "Дополнительные характеристики",
+      "fields": ["furniture", "appliances", "landscape", "fenceType", "greenPlantings", "infrastructure", "parking", "accessRoads", "surroundingType", "centerDistance", "pedestrianTraffic", "carTraffic", "vr"]
+    },
+    {
+      "id": "cadastral",
+      "title": "Кадастровые данные",
+      "fields": ["cadastralNumbers", "cadastralCosts", "territorialZone", "rightType", "developer", "ddu", "mortgage", "utilities", "tax", "pricePerSqm", "rentPerSqm", "subsidies", "additionalPayment", "bargaining", "commission", "commissionCustom", "ownersCount", "encumbrances"]
+    },
+    {
+      "id": "rental-info",
+      "title": "Информация об аренде",
+      "fields": ["depositSize", "depositSizeCustom", "unavailableDates", "petsAllowed", "rentalPeriod"]
+    }
+  ]
+}

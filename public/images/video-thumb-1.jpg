@@ -1,0 +1,7 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#1f2937"/>
+  <polygon points="120,80 120,120 160,100" fill="#ffffff"/>
+  <text x="150" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#9ca3af">
+    Video Thumbnail
+  </text>
+</svg>
