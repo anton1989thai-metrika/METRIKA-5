@@ -1,5 +1,7 @@
 "use client"
 
+'use client';
+
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
@@ -750,7 +752,7 @@ export default function TasksPage() {
       id: 5,
       name: "Оценка объекта",
       title: "Провести оценку недвижимости",
-      description: "Анализ рыночной стоимости объекта",
+      description: "Анализ рыночной сто��мости объекта",
       priority: "medium",
       deadline: "",
       deadlineTime: "15:00"
@@ -2467,7 +2469,7 @@ export default function TasksPage() {
                           ? 'border-red-500 focus:ring-red-500' 
                           : 'border-gray-300 focus:ring-gray-500'
                       }`}
-                      placeholder="Введите название подзадачи"
+                      placeholder="Введите название подзад��чи"
                       required
                     />
                     {subtaskFormErrors.title && (
@@ -2919,7 +2921,7 @@ export default function TasksPage() {
                 </div>
               </div>
 
-              {/* Блок 2: Исполнители и кураторы */}
+              {/* Блок 2: Ис��олнители и кураторы */}
               <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
                 <h3 className="text-lg font-semibold text-black mb-4">Исполнители и кураторы</h3>
                 <div className="grid grid-cols-2 gap-4">
@@ -3324,7 +3326,7 @@ export default function TasksPage() {
                 </div>
               </div>
 
-              {/* Новое замечание */}
+              {/* Ново�� замечание */}
               <div>
                 <h3 className="text-lg font-semibold text-black mb-3">Добавить замечание</h3>
                 <textarea
