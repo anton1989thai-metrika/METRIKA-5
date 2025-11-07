@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         headers: [
           { key: 'X-Frame-Options', value: 'ALLOWALL' },
           { key: 'Content-Security-Policy', value: "frame-ancestors 'self' *.builder.io *.builder.codes *.fly.dev" },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS,POST,PUT,DELETE,PATCH' },
+          { key: 'Access-Control-Allow-Headers', value: 'Origin, X-Requested-With, Content-Type, Accept, Authorization' },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
         ],
       },
     ];
