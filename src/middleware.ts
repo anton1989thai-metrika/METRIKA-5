@@ -9,12 +9,11 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
+     * Match all request paths except for:
+     * - api routes
+     * - any Next.js internals (_next/* including webpack-hmr, static, image, data)
+     * - favicon and common static assets
      */
-    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
+    '/((?!api|_next/.*|favicon.ico|.*\\.(png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|json|woff2?|ttf)$).*)',
   ],
 }
