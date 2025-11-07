@@ -1,5 +1,7 @@
 "use client"
 
+'use client';
+
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { BlurInText } from "@/components/ui/blur-in-text";
