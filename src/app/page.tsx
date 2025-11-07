@@ -18,8 +18,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white relative">
       {/* Фоновое изображение */}
-      <div 
-        className="fixed inset-0 w-full h-full bg-gray-300"
+      <div
+        className="fixed inset-0 w-full h-full bg-gray-300 pointer-events-none"
         style={{
           backgroundImage: baseUrl ? `url(${baseUrl}/images/hero-bg.jpg)` : 'none',
           backgroundSize: 'cover',
@@ -30,7 +30,7 @@ export default function HomePage() {
       ></div>
       
       {/* Затемняющий слой 25% */}
-      <div className="fixed inset-0 bg-black opacity-25 z-1"></div>
+      <div className="fixed inset-0 bg-black/25 z-[10] pointer-events-none" aria-hidden="true"></div>
       
       <Header />
       <BurgerMenu />
