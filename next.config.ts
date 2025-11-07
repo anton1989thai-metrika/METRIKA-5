@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Разрешаем кросс-доменные запросы к dev-серверу из fly.dev прокси
+  allowedDevOrigins: ['*.fly.dev'],
   images: {
     remotePatterns: [
       {
