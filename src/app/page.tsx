@@ -19,19 +19,18 @@ export default function HomePage() {
     <div className="min-h-screen bg-white relative">
       {/* Фоновое изображение */}
       <div
-        className="fixed inset-0 w-full h-full bg-gray-300 pointer-events-none"
+        className="fixed inset-0 -z-20 w-full h-full bg-gray-300 pointer-events-none"
         style={{
           backgroundImage: baseUrl ? `url(${baseUrl}/images/hero-bg.jpg)` : 'none',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          zIndex: 1
+          backgroundRepeat: 'no-repeat'
         }}
       ></div>
-      
+
       {/* Затемняющий слой 25% */}
-      <div className="fixed inset-0 bg-black/25 z-[10] pointer-events-none" aria-hidden="true"></div>
-      
+      <div className="fixed inset-0 -z-10 bg-black/25 pointer-events-none" aria-hidden="true"></div>
+
       <Header />
       <BurgerMenu />
       
