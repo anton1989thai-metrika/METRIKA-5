@@ -1,5 +1,7 @@
 "use client";
 
+'use client';
+
 import { useState, useRef, useEffect, useId } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -108,7 +110,7 @@ export default function MultiStepFormPage() {
         return;
       }
       if (formData.executors.length === 0) {
-        alert("Пожалуйста, выберите хотя бы одного исполнителя");
+        alert("Пожалуйста, выберите хо��я бы одного исполнителя");
         return;
       }
     }
@@ -766,7 +768,7 @@ export default function MultiStepFormPage() {
                                 <Input
                                   id="subtask-completion-time"
                                   type="text"
-                                  placeholder="ЧЧ:ММ или количество часов"
+                                  placeholder="��Ч:ММ или количество часов"
                                   value={subtasks[0]?.completionTime || ""}
                                   onChange={(e) => {
                                     const newSubtasks = [...subtasks];
