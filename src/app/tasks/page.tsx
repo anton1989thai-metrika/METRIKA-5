@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { EventCalendar, type CalendarEvent } from "@/components/event-calendar";
+import Calendar from "@/components/calendar-2/Calendar";
 import { addDays, setHours, setMinutes, subDays } from "date-fns";
 
 // Типы для состояний
@@ -1357,146 +1358,14 @@ export default function TasksPage() {
                   </button>
                 </div>
                 <div className="p-6 h-[calc(90vh-80px)] overflow-y-auto">
-                  <EventCalendar
-                    events={[
-                      {
-                        id: "1",
-                        title: "Встреча команды",
-                        description: "Еженедельный синхронизация",
-                        start: setMinutes(setHours(new Date(), 10), 0),
-                        end: setMinutes(setHours(new Date(), 11), 0),
-                        color: "sky",
-                        location: "Переговорная 1",
-                      },
-                      {
-                        id: "2",
-                        title: "Презентация клиенту",
-                        description: "Обсуждение проекта",
-                        start: setMinutes(setHours(addDays(new Date(), 1), 14), 0),
-                        end: setMinutes(setHours(addDays(new Date(), 1), 15), 30),
-                        color: "amber",
-                        location: "Переговорная 2",
-                      },
-                    ]}
-                    onEventAdd={(event) => console.log('Add:', event)}
-                    onEventUpdate={(event) => console.log('Update:', event)}
-                    onEventDelete={(id) => console.log('Delete:', id)}
-                  />
+                  <Calendar />
                 </div>
               </div>
             </div>
           )}
 
-          {/* Интерактивный календарь на два месяца */}
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-            {/* Навигация календаря */}
-            <div className="flex items-center justify-between mb-6">
-              <button
-                onClick={goToPreviousMonth}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
-              >
-                ← Предыдущий
-              </button>
-              
-              <div className="text-center">
-                <button
-                  onClick={goToToday}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
-                >
-                  Сегодня
-                </button>
-              </div>
-              
-              <button
-                onClick={goToNextMonth}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
-              >
-                Следующий →
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-8">
-              {/* Первый месяц */}
-              <div>
-                <h4 className="text-lg font-medium text-black mb-4 text-center">
-                  {getMonthName(currentMonth.getMonth())} {currentMonth.getFullYear()}
-                </h4>
-                <div className="grid grid-cols-7 gap-1 text-xs">
-                  <div className="p-2 text-center font-medium text-gray-500">Пн</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Вт</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Ср</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Чт</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Пт</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Сб</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Вс</div>
-                  
-                  {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth()).map((day, index) => {
-                    const currentDate = new Date();
-                    const isToday = day === currentDate.getDate() && 
-                                   currentMonth.getMonth() === currentDate.getMonth() && 
-                                   currentMonth.getFullYear() === currentDate.getFullYear();
-                    
-                    const tasksForDay = day ? getTasksForDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)) : [];
-                    const hasHighPriorityTask = tasksForDay.some(task => task.priority === 'high' || task.priority === 'boss');
-                    
-                    return (
-                      <div 
-                        key={index} 
-                        className={`p-2 text-center ${
-                          day ? (isToday ? 'bg-blue-100 text-blue-800 rounded font-semibold' : 'text-gray-900') : 'text-gray-400'
-                        } ${hasHighPriorityTask ? 'relative' : ''}`}
-                      >
-                        {day}
-                        {hasHighPriorityTask && (
-                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Второй месяц */}
-              <div>
-                <h4 className="text-lg font-medium text-black mb-4 text-center">
-                  {getMonthName(currentMonth.getMonth() + 1)} {currentMonth.getFullYear()}
-                </h4>
-                <div className="grid grid-cols-7 gap-1 text-xs">
-                  <div className="p-2 text-center font-medium text-gray-500">Пн</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Вт</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Ср</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Чт</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Пт</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Сб</div>
-                  <div className="p-2 text-center font-medium text-gray-500">Вс</div>
-                  
-                  {getCalendarDays(currentMonth.getFullYear(), currentMonth.getMonth() + 1).map((day, index) => {
-                    const currentDate = new Date();
-                    const isToday = day === currentDate.getDate() && 
-                                   (currentMonth.getMonth() + 1) === currentDate.getMonth() && 
-                                   currentMonth.getFullYear() === currentDate.getFullYear();
-                    
-                    const tasksForDay = day ? getTasksForDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, day)) : [];
-                    const hasHighPriorityTask = tasksForDay.some(task => task.priority === 'high' || task.priority === 'boss');
-                    
-                    return (
-                      <div 
-                        key={index} 
-                        className={`p-2 text-center ${
-                          day ? (isToday ? 'bg-blue-100 text-blue-800 rounded font-semibold' : 'text-gray-900') : 'text-gray-400'
-                        } ${hasHighPriorityTask ? 'relative' : ''}`}
-                      >
-                        {day}
-                        {hasHighPriorityTask && (
-                          <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Календарь */}
+          <Calendar />
         </div>
       </main>
 
