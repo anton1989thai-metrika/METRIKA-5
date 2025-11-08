@@ -233,11 +233,13 @@ function ObjectsContent() {
 export default function ObjectsPage() {
   return (
     <div className="min-h-screen bg-white">
+      <div id="preview-container">
       <Header />
       <BurgerMenu />
       <Suspense fallback={<div className="pt-36 text-center">Загрузка...</div>}>
         <ObjectsContent />
       </Suspense>
+      </div>
     </div>
   );
 }

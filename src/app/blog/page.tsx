@@ -23,6 +23,7 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <div id="preview-container">
       <Header />
       <BurgerMenu />
       
@@ -87,6 +88,7 @@ export default function BlogPage() {
           )}
         </div>
       </main>
+      </div>
     </div>
   )
 }

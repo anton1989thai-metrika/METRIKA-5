@@ -5,23 +5,16 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { BlurInText } from "@/components/ui/blur-in-text";
-import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const [baseUrl, setBaseUrl] = useState('')
-
-  useEffect(() => {
-    // Получаем текущий URL для динамического определения базового пути
-    setBaseUrl(window.location.origin)
-  }, [])
-
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen relative">
+      <div id="preview-container" className="min-h-screen">
       {/* Фоновое изображение */}
       <div
         className="fixed inset-0 -z-20 w-full h-full bg-gray-300 pointer-events-none"
         style={{
-          backgroundImage: baseUrl ? `url(${baseUrl}/images/hero-bg.jpg)` : 'none',
+          backgroundImage: 'url(/images/hero-bg.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
@@ -59,6 +52,7 @@ export default function HomePage() {
           />
         </div>
       </main>
+      </div>
     </div>
   );
 }

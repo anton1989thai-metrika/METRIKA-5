@@ -111,6 +111,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+      <div id="preview-container">
       <Header />
       <BurgerMenu />
       
@@ -375,6 +376,7 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
+      </div>
     </div>
   )
 }
