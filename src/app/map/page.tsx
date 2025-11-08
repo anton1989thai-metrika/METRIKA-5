@@ -44,6 +44,7 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <div id="preview-container">
       <Header />
       <BurgerMenu />
       
@@ -65,6 +66,7 @@ export default function MapPage() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }

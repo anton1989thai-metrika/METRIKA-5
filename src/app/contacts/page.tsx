@@ -9,6 +9,7 @@ export default function ContactsPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <div id="preview-container">
       <Header />
       <BurgerMenu />
       
@@ -90,6 +91,7 @@ export default function ContactsPage() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }
