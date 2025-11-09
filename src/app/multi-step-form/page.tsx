@@ -378,13 +378,14 @@ export default function MultiStepFormPage() {
                     </div>
                     <div className="space-y-6">
                       {/* Приоритет и Скрытая задача */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex flex-col md:flex-row md:gap-[70px] gap-4">
                         {/* Приоритет */}
                         <MetrikaSelect
                           label="Приоритет"
                           id={priorityId}
                           value={formData.priority}
                           onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                          className="w-auto max-w-max"
                         >
                           <option value="low">🟢 Обычная</option>
                           <option value="medium">🟠 Важная</option>
@@ -393,30 +394,30 @@ export default function MultiStepFormPage() {
                         </MetrikaSelect>
 
                         {/* Скрытая задача */}
-                        <div className="space-y-2">
-                          <div className="flex flex-col items-start gap-2">
+                        <div className="w-auto max-w-max h-auto space-y-2">
+                          <div className="flex flex-col-reverse items-start gap-2 w-auto h-auto">
                             <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium">
                               <Switch
                                 id={hiddenTaskId}
                                 checked={formData.isHiddenTask}
                                 onCheckedChange={(checked) => setFormData({ ...formData, isHiddenTask: checked })}
-                                className="peer absolute inset-0 h-[inherit] w-auto rounded-md 
+                                className="peer absolute inset-0 h-[inherit] w-auto rounded-md
                                   data-[state=unchecked]:bg-input/50
-                                  [&_span]:z-10 [&_span]:h-full [&_span]:w-1/2 [&_span]:rounded-sm 
-                                  [&_span]:transition-transform [&_span]:duration-300 
-                                  [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)] 
-                                  [&_span]:data-[state=checked]:translate-x-full 
+                                  [&_span]:z-10 [&_span]:h-full [&_span]:w-1/2 [&_span]:rounded-sm
+                                  [&_span]:transition-transform [&_span]:duration-300
+                                  [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)]
+                                  [&_span]:data-[state=checked]:translate-x-full
                                   [&_span]:data-[state=checked]:rtl:-translate-x-full"
                               />
-                              <span className="pointer-events-none relative ms-0.5 flex items-center justify-center px-2 text-center 
-                                transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] 
-                                peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full 
+                              <span className="pointer-events-none relative ms-0.5 flex items-center justify-center px-2 text-center
+                                transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full
                                 peer-data-[state=unchecked]:rtl:-translate-x-full">
                                 <span className="text-[10px] font-medium uppercase">Выкл</span>
                               </span>
-                              <span className="pointer-events-none relative me-0.5 flex items-center justify-center px-2 text-center 
-                                transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] 
-                                peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background 
+                              <span className="pointer-events-none relative me-0.5 flex items-center justify-center px-2 text-center
+                                transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background
                                 peer-data-[state=unchecked]:invisible peer-data-[state=checked]:rtl:translate-x-full">
                                 <span className="text-[10px] font-medium uppercase">Вкл</span>
                               </span>
@@ -425,6 +426,53 @@ export default function MultiStepFormPage() {
                               Скрытая задача
                             </Label>
                           </div>
+                        </div>
+
+                        {/* Блокирующая задача */}
+                        <div className="w-auto max-w-max h-auto space-y-2">
+                          <div className="flex flex-col-reverse items-start gap-2 w-auto h-auto">
+                            <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium">
+                              <Switch
+                                id={blockingTaskId}
+                                checked={formData.isBlocking}
+                                onCheckedChange={(checked) => {
+                                  if (checked && !window.confirm("Вы уверены, что хотите заблокировать этого исполнителя?")) {
+                                    return;
+                                  }
+                                  setFormData({ ...formData, isBlocking: checked });
+                                }}
+                                className="peer absolute inset-0 h-[inherit] w-auto rounded-md
+                                  data-[state=unchecked]:bg-input/50
+                                  [&_span]:z-10 [&_span]:h-full [&_span]:w-1/2 [&_span]:rounded-sm
+                                  [&_span]:transition-transform [&_span]:duration-300
+                                  [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)]
+                                  [&_span]:data-[state=checked]:translate-x-full
+                                  [&_span]:data-[state=checked]:rtl:-translate-x-full"
+                              />
+                              <span className="pointer-events-none relative ms-0.5 flex items-center justify-center px-2 text-center
+                                transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full
+                                peer-data-[state=unchecked]:rtl:-translate-x-full">
+                                <span className="text-[10px] font-medium uppercase">Выкл</span>
+                              </span>
+                              <span className="pointer-events-none relative me-0.5 flex items-center justify-center px-2 text-center
+                                transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background
+                                peer-data-[state=unchecked]:invisible peer-data-[state=checked]:rtl:translate-x-full">
+                                <span className="text-[10px] font-medium uppercase">Вкл</span>
+                              </span>
+                            </div>
+                            <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground">
+                              Блокирующая задача
+                            </Label>
+                          </div>
+                          {formData.isBlocking && (
+                            <div className="space-y-3 pt-2">
+                              <p className="text-sm text-muted-foreground">
+                                Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -587,52 +635,6 @@ export default function MultiStepFormPage() {
                         </AccordionItem>
                       </Accordion>
 
-                      {/* Блокирующая задача */}
-                      <div className="space-y-2">
-                        <div className="flex flex-col items-start gap-2">
-                          <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium">
-                            <Switch
-                              id={blockingTaskId}
-                              checked={formData.isBlocking}
-                              onCheckedChange={(checked) => {
-                                if (checked && !window.confirm("Вы уверены, что хотите заблокировать этого исполнителя?")) {
-                                  return;
-                                }
-                                setFormData({ ...formData, isBlocking: checked });
-                              }}
-                              className="peer absolute inset-0 h-[inherit] w-auto rounded-md 
-                                data-[state=unchecked]:bg-input/50
-                                [&_span]:z-10 [&_span]:h-full [&_span]:w-1/2 [&_span]:rounded-sm 
-                                [&_span]:transition-transform [&_span]:duration-300 
-                                [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)] 
-                                [&_span]:data-[state=checked]:translate-x-full 
-                                [&_span]:data-[state=checked]:rtl:-translate-x-full"
-                            />
-                            <span className="pointer-events-none relative ms-0.5 flex items-center justify-center px-2 text-center 
-                              transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] 
-                              peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full 
-                              peer-data-[state=unchecked]:rtl:-translate-x-full">
-                              <span className="text-[10px] font-medium uppercase">Выкл</span>
-                            </span>
-                            <span className="pointer-events-none relative me-0.5 flex items-center justify-center px-2 text-center 
-                              transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] 
-                              peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background 
-                              peer-data-[state=unchecked]:invisible peer-data-[state=checked]:rtl:translate-x-full">
-                              <span className="text-[10px] font-medium uppercase">Вкл</span>
-                            </span>
-                          </div>
-                          <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground">
-                            Блокирующая задача
-                          </Label>
-                        </div>
-                        {formData.isBlocking && (
-                          <div className="space-y-3 pt-2">
-                            <p className="text-sm text-muted-foreground">
-                              Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
-                            </p>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   </div>
                 )}
@@ -655,7 +657,7 @@ export default function MultiStepFormPage() {
                           </AccordionTrigger>
                           <AccordionContent className="pb-2">
                             <div className="space-y-4 pt-2">
-                              {/* Название задачи */}
+                              {/* Назв��ние задачи */}
                               <div className="space-y-2">
                                 <Label htmlFor="subtask-title" className="text-sm font-medium">
                                   Название задачи
