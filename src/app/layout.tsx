@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import BuilderEditorBridge from "@/components/BuilderEditorBridge";
+import PlasmicRootProviderWrapper from "@/components/PlasmicRootProviderWrapper";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -30,11 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-black`}
       >
-        <Providers>
-          {children}
-          <Toaster />
-        </Providers>
-        <BuilderEditorBridge />
+        <PlasmicRootProviderWrapper>
+          <Providers>
+            {children}
+            <Toaster />
+          </Providers>
+          <BuilderEditorBridge />
+        </PlasmicRootProviderWrapper>
       </body>
     </html>
   );

@@ -20,10 +20,10 @@ export default function HomePage() {
           backgroundRepeat: 'no-repeat'
         }}
       ></div>
-
+      
       {/* Затемняющий слой 25% */}
       <div className="fixed inset-0 -z-10 bg-black/25 pointer-events-none" aria-hidden="true"></div>
-
+      
       <Header />
       <BurgerMenu />
       
