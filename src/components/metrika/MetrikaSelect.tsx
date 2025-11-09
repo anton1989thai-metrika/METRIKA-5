@@ -35,7 +35,7 @@ const MetrikaSelect = React.forwardRef<HTMLSelectElement, MetrikaSelectProps>(
           >
             {children}
           </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 h-4 w-4 text-muted-foreground -translate-y-1/2 pointer-events-none z-10" />
+          <ChevronDown className="flex items-center justify-center absolute right-2.5 top-1/2 h-4 w-4 text-muted-foreground -translate-y-1/2 pointer-events-none z-10" />
         </div>
       </div>
     );
@@ -45,4 +45,3 @@ const MetrikaSelect = React.forwardRef<HTMLSelectElement, MetrikaSelectProps>(
 MetrikaSelect.displayName = "MetrikaSelect";
 
 export default MetrikaSelect;
-
