@@ -378,7 +378,7 @@ export default function MultiStepFormPage() {
                     </div>
                     <div className="space-y-6">
                       {/* Приоритет и Скрытая задача */}
-                      <div className="flex flex-col md:flex-row md:gap-[70px] gap-4">
+                      <div className="flex flex-col md:flex-row md:gap-[68px] gap-4 pr-0.5">
                         {/* Приоритет */}
                         <MetrikaSelect
                           label="Приоритет"
@@ -429,7 +429,7 @@ export default function MultiStepFormPage() {
                         </div>
 
                         {/* Блокирующая задача */}
-                        <div className="w-auto max-w-max h-auto space-y-2">
+                        <div className="w-auto max-w-max h-auto space-y-2 ml-[3px]">
                           <div className="flex flex-col-reverse items-start gap-2 w-auto h-auto">
                             <div className="relative inline-grid h-9 grid-cols-[1fr_1fr] items-center text-sm font-medium">
                               <Switch
@@ -829,7 +829,7 @@ export default function MultiStepFormPage() {
                           </AccordionContent>
                         </AccordionItem>
 
-                        {/* Автоматизация */}
+                        {/* Автоматиза��ия */}
                         <AccordionItem value="automation" className="py-2 border-border">
                           <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             Автоматизация
