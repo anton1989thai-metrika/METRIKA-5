@@ -28,14 +28,14 @@ const MetrikaSelect = React.forwardRef<HTMLSelectElement, MetrikaSelectProps>(
             ref={ref}
             id={selectId}
             className={cn(
-              "appearance-none h-9 w-full rounded-md border border-border bg-background px-3 pr-8 text-sm text-foreground shadow-sm outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200",
+              "appearance-none h-9 w-full rounded-md border border-border bg-background px-3 pr-10 text-sm text-foreground shadow-sm outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200",
               className
             )}
             {...props}
           >
             {children}
           </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 h-4 w-4 text-muted-foreground -translate-y-1/2 pointer-events-none" />
+          <ChevronDown className="absolute right-2.5 top-1/2 h-4 w-4 text-muted-foreground -translate-y-1/2 pointer-events-none z-10" />
         </div>
       </div>
     );

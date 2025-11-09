@@ -1,16 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Разрешаем кросс-доменные запросы к dev-серверу из прокси и интерфейса Builder
-  allowedDevOrigins: ['*.fly.dev', '*.builder.io', '*.builder.codes'],
-  // Разрешаем встраивание сайта в редактор (iframe) — важно для Design Mode
+  // Разрешаем кросс-доменные запросы к dev-серверу из прокси и интерфейса Builder и Plasmic
+  allowedDevOrigins: ['*.fly.dev', '*.builder.io', '*.builder.codes', '*.plasmic.app', '*.plasmic.run'],
+  // Разрешаем встраивание сайта в редактор (iframe) — важно для Design Mode и Plasmic Canvas
   async headers() {
     return [
       {
         source: '/:path*',
         headers: [
           { key: 'X-Frame-Options', value: 'ALLOWALL' },
-          { key: 'Content-Security-Policy', value: "frame-ancestors 'self' *.builder.io *.builder.codes *.fly.dev" },
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'self' *.builder.io *.builder.codes *.fly.dev *.plasmic.app *.plasmic.run http://localhost:* https://localhost:*" },
           { key: 'Access-Control-Allow-Origin', value: '*' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS,POST,PUT,DELETE,PATCH' },
           { key: 'Access-Control-Allow-Headers', value: 'Origin, X-Requested-With, Content-Type, Accept, Authorization' },
