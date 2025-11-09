@@ -378,7 +378,7 @@ export default function MultiStepFormPage() {
                     </div>
                     <div className="space-y-6">
                       {/* Приоритет и Скрытая задача */}
-                      <div className="flex flex-col md:flex-row md:gap-[68px] gap-4 pr-0.5">
+                      <div className="flex flex-col md:flex-row md:gap-[25px] gap-4 pr-0.5">
                         {/* Приоритет */}
                         <MetrikaSelect
                           label="Приоритет"
@@ -394,16 +394,16 @@ export default function MultiStepFormPage() {
                         </MetrikaSelect>
 
                         {/* Скрытая задача */}
-                        <div className="w-auto max-w-max space-y-2 ml-0.5">
+                        <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
                           <div className="flex flex-col-reverse items-start gap-2">
                             <div className="relative inline-grid h-9 w-[72px] grid-cols-2 items-center text-sm font-medium">
                               <Switch
                                 id={hiddenTaskId}
                                 checked={formData.isHiddenTask}
                                 onCheckedChange={(checked) => setFormData({ ...formData, isHiddenTask: checked })}
-                                className="peer absolute inset-0 h-full w-full rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
+                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
                               />
-                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center px-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
+                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
                                 <span className="text-[10px] font-medium uppercase">Выкл</span>
                               </span>
                               <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background peer-data-[state=unchecked]:invisible">
@@ -417,7 +417,7 @@ export default function MultiStepFormPage() {
                         </div>
 
                         {/* Блокирующая задача */}
-                        <div className="w-auto max-w-max space-y-2 ml-0.5">
+                        <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
                           <div className="flex flex-col-reverse items-start gap-2">
                             <div className="relative inline-grid h-9 w-[72px] grid-cols-2 items-center text-sm font-medium">
                               <Switch
@@ -429,9 +429,9 @@ export default function MultiStepFormPage() {
                                   }
                                   setFormData({ ...formData, isBlocking: checked });
                                 }}
-                                className="peer absolute inset-0 h-full w-full rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
+                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
                               />
-                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center px-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
+                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
                                 <span className="text-[10px] font-medium uppercase">Выкл</span>
                               </span>
                               <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background peer-data-[state=unchecked]:invisible">
@@ -469,7 +469,7 @@ export default function MultiStepFormPage() {
                                     type="date"
                                     value={formData.deadline}
                                     onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                                    className="flex-1 md:flex-none md:w-40"
+                                    className="w-[231px] mt-2 pl-[47px]"
                                   />
                                   <Button
                                     type="button"
@@ -481,21 +481,21 @@ export default function MultiStepFormPage() {
                                       const formattedDate = tomorrow.toISOString().split('T')[0];
                                       setFormData({ ...formData, deadline: formattedDate });
                                     }}
-                                    className="whitespace-nowrap"
+                                    className="h-[37px] whitespace-nowrap -mt-9 -mb-px ml-[556px]"
                                   >
                                     Завтра
                                   </Button>
                                 </div>
                               </div>
                               <div className="space-y-2">
-                                <Label htmlFor="deadline-time">Время</Label>
+                                <Label htmlFor="deadline-time" className="ml-[271px]">Время</Label>
                                 <div className="flex gap-2">
                                   <Input
                                     id="deadline-time"
                                     type="time"
                                     value={formData.deadlineTime}
                                     onChange={(e) => setFormData({ ...formData, deadlineTime: e.target.value })}
-                                    className="flex-1"
+                                    className="w-[150px] max-w-[150px] -mt-9 ml-[303px] pl-[37px]"
                                   />
                                   <Button
                                     type="button"
@@ -504,7 +504,7 @@ export default function MultiStepFormPage() {
                                     onClick={() => {
                                       setFormData({ ...formData, deadlineTime: "" });
                                     }}
-                                    className="whitespace-nowrap"
+                                    className="h-9 whitespace-nowrap -mt-9 ml-[457px]"
                                   >
                                     Весь день
                                   </Button>
