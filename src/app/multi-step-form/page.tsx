@@ -307,7 +307,7 @@ export default function MultiStepFormPage() {
                         {/* Исполнители */}
                         <div className="space-y-2" ref={executorsRef}>
                           <Label htmlFor="executors">
-                            Исполнители <span className="text-destructive">*</span>
+                            Испол��ители <span className="text-destructive">*</span>
                           </Label>
                           <div className="relative">
                             <button
@@ -412,7 +412,7 @@ export default function MultiStepFormPage() {
                     </div>
                     <div className="space-y-6">
                       {/* Приоритет и Скрытая задача */}
-                      <div className="flex flex-col md:flex-row md:gap-[25px] gap-4 pr-0.5">
+                      <div className="flex flex-col md:flex-row md:gap-[64px] gap-4 pr-0.5">
                         {/* Приоритет */}
                         <MetrikaSelect
                           label="Приоритет"
@@ -869,7 +869,7 @@ export default function MultiStepFormPage() {
                       <div className="space-y-3 pb-4 border-b">
                         <div>
                           <div className="text-sm text-muted-foreground mb-1">Название задачи</div>
-                          <div className="font-semibold">{formData.title || "Не указано"}</div>
+                          <div className="font-semibold">{formData.title || "��е указано"}</div>
                           <button
                             onClick={() => setCurrentStep(1)}
                             className="text-sm text-muted-foreground hover:text-primary underline mt-1"
