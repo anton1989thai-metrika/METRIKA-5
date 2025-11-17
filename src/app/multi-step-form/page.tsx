@@ -40,7 +40,7 @@ interface User {
 }
 
 const steps = [
-  { number: 1, title: "Основная информация", subtitle: "Название и описание" },
+  { number: 1, title: "Основная информация", subtitle: "Название и описан��е" },
   { number: 2, title: "Дополнительные параметры", subtitle: "Приоритет и сроки" },
   { number: 3, title: "Дополнительные настройки", subtitle: "Подзадачи и вложения" },
   { number: 4, title: "Итоги", subtitle: "Проверка данных" },
@@ -435,7 +435,7 @@ export default function MultiStepFormPage() {
                                 id={hiddenTaskId}
                                 checked={formData.isHiddenTask}
                                 onCheckedChange={(checked) => setFormData({ ...formData, isHiddenTask: checked })}
-                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
+                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full flex justify-start"
                               />
                               <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
                                 <span className="text-[10px] font-medium uppercase">Выкл</span>
@@ -458,7 +458,7 @@ export default function MultiStepFormPage() {
                                 id={blockingTaskId}
                                 checked={blockingSwitchChecked}
                                 onCheckedChange={(checked) => handleBlockingToggle(!!checked)}
-                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
+                                className="peer absolute inset-0 w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full flex flex-row justify-start items-center"
                               />
                               <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
                                 <span className="text-[10px] font-medium uppercase">Выкл</span>
@@ -510,7 +510,7 @@ export default function MultiStepFormPage() {
                                       const formattedDate = tomorrow.toISOString().split('T')[0];
                                       setFormData({ ...formData, deadline: formattedDate });
                                     }}
-                                    className="h-[37px] whitespace-nowrap -mt-9 -mb-px ml-[556px]"
+                                    className="h-[37px] whitespace-nowrap -mt-[18px] mb-[7px] ml-[168px]"
                                   >
                                     Завтра
                                   </Button>
@@ -533,7 +533,7 @@ export default function MultiStepFormPage() {
                                     onClick={() => {
                                       setFormData({ ...formData, deadlineTime: "" });
                                     }}
-                                    className="h-9 whitespace-nowrap -mt-9 ml-[457px]"
+                                    className="h-9 whitespace-nowrap -mt-9 ml-[4px]"
                                   >
                                     Весь день
                                   </Button>
