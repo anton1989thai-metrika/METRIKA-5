@@ -11,24 +11,38 @@ export interface MetrikaSelectProps
   className?: string;
 }
 
+const hasWidthClass = (className?: string) => {
+  if (!className) return false;
+  return className
+    .split(/\s+/)
+    .some((cls) => /^(?:w|min-w|max-w)-/.test(cls));
+};
+
 const MetrikaSelect = React.forwardRef<HTMLSelectElement, MetrikaSelectProps>(
   ({ label, className, children, id, ...props }, ref) => {
     const generatedId = React.useId();
     const selectId = id || generatedId;
+    const customWidth = hasWidthClass(className);
 
     return (
-      <div className="flex flex-col space-y-2 w-full relative">
+      <div
+        className={cn(
+          "flex flex-col space-y-2 relative",
+          customWidth ? "w-fit" : "w-full"
+        )}
+      >
         {label && (
           <Label htmlFor={selectId} className="text-sm font-medium text-foreground">
             {label}
           </Label>
         )}
-        <div className="relative">
+        <div className={cn("relative", customWidth && "inline-flex")}>
           <select
             ref={ref}
             id={selectId}
             className={cn(
-              "appearance-none h-9 w-full rounded-md border border-border bg-background px-3 pr-10 text-sm text-foreground shadow-sm outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200",
+              "appearance-none h-9 rounded-md border border-border bg-background px-3 pr-10 text-sm text-foreground shadow-sm outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200",
+              customWidth ? "" : "w-full",
               className
             )}
             {...props}
