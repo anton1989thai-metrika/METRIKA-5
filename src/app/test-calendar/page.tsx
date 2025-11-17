@@ -248,7 +248,7 @@ export default function TestCalendarStepTwoPage() {
                         <option value="low">🟢 Обычная</option>
                         <option value="medium">🟠 Важная</option>
                         <option value="high">🔴 Срочная</option>
-                        <option value="boss">🟡 Задача от руководителя</option>
+                        <option value="boss">🟡 Задача ��т руководителя</option>
                       </MetrikaSelect>
 
                       <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
@@ -443,7 +443,7 @@ export default function TestCalendarStepTwoPage() {
                                 </div>
                               </div>
                               <div className="relative w-full md:w-44">
-                                <div className="absolute inset-0 py-4 md:border-l">
+                                <div className="absolute inset-0 pt-[27px] pb-4 md:border-l">
                                   <div className="relative h-full">
                                     <div className="size-full rounded-[inherit] overflow-hidden">
                                       <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
