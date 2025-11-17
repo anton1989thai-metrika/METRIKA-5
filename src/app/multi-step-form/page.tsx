@@ -1,7 +1,5 @@
 "use client";
 
-'use client';
-
 import { useState, useRef, useEffect, useId } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +22,16 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import BurgerMenu from "@/components/BurgerMenu";
 import { ChevronDown } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface User {
   id: string;
@@ -82,6 +90,8 @@ export default function MultiStepFormPage() {
   const hiddenTaskId = useId();
   const blockingTaskId = useId();
   const priorityId = useId();
+  const [showBlockingDialog, setShowBlockingDialog] = useState(false);
+  const [blockingSwitchChecked, setBlockingSwitchChecked] = useState(formData.isBlocking);
 
   // Закрытие dropdown при клике вне
   useEffect(() => {
@@ -101,6 +111,10 @@ export default function MultiStepFormPage() {
       };
     }
   }, [showExecutorsDropdown, showCuratorsDropdown]);
+
+  useEffect(() => {
+    setBlockingSwitchChecked(formData.isBlocking);
+  }, [formData.isBlocking]);
 
   const nextStep = () => {
     // Валидация перед переходом на следующий шаг
@@ -128,6 +142,26 @@ export default function MultiStepFormPage() {
 
   const handleSubmit = () => {
     alert("Форма отправлена успешно!");
+  };
+
+  const handleBlockingToggle = (checked: boolean) => {
+    if (checked) {
+      setBlockingSwitchChecked(true);
+      setShowBlockingDialog(true);
+      return;
+    }
+    setBlockingSwitchChecked(false);
+    setFormData((prev) => ({ ...prev, isBlocking: false }));
+  };
+
+  const confirmBlockingToggle = () => {
+    setFormData((prev) => ({ ...prev, isBlocking: true }));
+    setShowBlockingDialog(false);
+  };
+
+  const cancelBlockingToggle = () => {
+    setBlockingSwitchChecked(formData.isBlocking);
+    setShowBlockingDialog(false);
   };
 
   const handleExecutorToggle = (userId: string) => {
@@ -422,13 +456,8 @@ export default function MultiStepFormPage() {
                             <div className="relative inline-grid h-9 w-[72px] grid-cols-2 items-center text-sm font-medium">
                               <Switch
                                 id={blockingTaskId}
-                                checked={formData.isBlocking}
-                                onCheckedChange={(checked) => {
-                                  if (checked && !window.confirm("Вы уверены, что хотите заблокировать этого исполнителя?")) {
-                                    return;
-                                  }
-                                  setFormData({ ...formData, isBlocking: checked });
-                                }}
+                                checked={blockingSwitchChecked}
+                                onCheckedChange={(checked) => handleBlockingToggle(!!checked)}
                                 className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
                               />
                               <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
@@ -442,7 +471,7 @@ export default function MultiStepFormPage() {
                               Блокирующая задача
                             </Label>
                           </div>
-                          {formData.isBlocking && (
+                          {blockingSwitchChecked && (
                             <div className="space-y-3 pt-2">
                               <p className="text-sm text-muted-foreground">
                                 Внимание. Постановка других задач для этого исполнителя блокируется, до момента закрытия этой задачи. Пока эта задача не будет завершена, этому исполнителю нельзя поставить другие задачи.
@@ -945,6 +974,20 @@ export default function MultiStepFormPage() {
           </div>
         </div>
       </main>
+      <AlertDialog open={showBlockingDialog} onOpenChange={setShowBlockingDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Подтвердите действие</AlertDialogTitle>
+            <AlertDialogDescription>
+              Вы уверены, что хотите сделать задачу блокирующей? Пока она не будет завершена, исполнителю нельзя поставить другие задачи.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={cancelBlockingToggle}>Отмена</AlertDialogCancel>
+          <AlertDialogAction onClick={confirmBlockingToggle}>Подтвердить</AlertDialogAction>
+        </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
