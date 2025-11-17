@@ -603,10 +603,10 @@ export default function MultiStepFormPage() {
                           <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             Срок выполнения
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4 pb-2">
+                          <AccordionContent className="pb-[17px]">
                             <div className="w-full overflow-x-auto">
                               <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
-                                <div className="border-border p-2 md:border-r">
+                                <div className="border-border p-2 md:border-r w-[450px]">
                                   <div className="relative flex flex-col gap-4">
                                     <div className="w-full">
                                       <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
@@ -686,7 +686,7 @@ export default function MultiStepFormPage() {
                                   </div>
                                 </div>
                                 <div className="relative w-full md:w-44">
-                                  <div className="absolute inset-0 py-4 md:border-l">
+                                  <div className="absolute inset-0 pt-[27px] pb-4 md:border-l">
                                     <div className="relative h-full">
                                       <div className="size-full rounded-[inherit] overflow-hidden">
                                         <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
@@ -752,10 +752,10 @@ export default function MultiStepFormPage() {
                           <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             Начало выполнения
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4 pb-2">
+                          <AccordionContent className="pb-[17px]">
                             <div className="w-full overflow-x-auto">
                               <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
-                                <div className="border-border p-2 md:border-r">
+                                <div className="border-border p-2 md:border-r w-[450px]">
                                   <div className="relative flex flex-col gap-4">
                                     <div className="w-full">
                                       <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
@@ -835,7 +835,7 @@ export default function MultiStepFormPage() {
                                   </div>
                                 </div>
                                 <div className="relative w-full md:w-44">
-                                  <div className="absolute inset-0 py-4 md:border-l">
+                                  <div className="absolute inset-0 pt-[27px] pb-4 md:border-l">
                                     <div className="relative h-full">
                                       <div className="size-full rounded-[inherit] overflow-hidden">
                                         <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
