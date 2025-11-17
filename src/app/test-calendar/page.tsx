@@ -321,7 +321,7 @@ export default function TestCalendarStepTwoPage() {
                                 )}
                               />
                               <span className="sr-only">
-                                {blockingSwitchChecked ? "Включено" : "Выключено"}
+                                {blockingSwitchChecked ? "��ключено" : "Выключено"}
                               </span>
                             </button>
                             <span className="pointer-events-none relative ml-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
@@ -346,7 +346,7 @@ export default function TestCalendarStepTwoPage() {
                         {blockingSwitchChecked && (
                           <div className="space-y-3 pt-2">
                             <p className="text-sm text-muted-foreground">
-                              Внимание. Постановка других задач для этого исполнителя блокируется, до момента
+                              Внимание. Постановка др��гих задач для этого исполнителя блокируется, до момента
                               закрытия этой задачи. Пока эта задача не будет завершена, этому исполнителю нельзя
                               поставить другие задачи.
                             </p>
@@ -360,10 +360,10 @@ export default function TestCalendarStepTwoPage() {
                         <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                           Срок выполнения
                         </AccordionTrigger>
-                        <AccordionContent className="pt-4 pb-2">
+                        <AccordionContent className="pb-[17px]">
                           <div className="w-full overflow-x-auto">
                             <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
-                              <div className="border-border p-2 md:border-r">
+                              <div className="border-border p-2 md:border-r w-[450px]">
                                 <div className="relative flex flex-col gap-4">
                                   <div className="w-full">
                                     <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
@@ -443,7 +443,7 @@ export default function TestCalendarStepTwoPage() {
                                 </div>
                               </div>
                               <div className="relative w-full md:w-44">
-                                <div className="absolute inset-0 py-4 md:border-l">
+                                <div className="absolute inset-0 pt-[27px] pb-4 md:border-l">
                                   <div className="relative h-full">
                                     <div className="size-full rounded-[inherit] overflow-hidden">
                                       <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
@@ -508,10 +508,10 @@ export default function TestCalendarStepTwoPage() {
                         <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                           Начало выполнения
                         </AccordionTrigger>
-                        <AccordionContent className="pt-4 pb-2">
+                        <AccordionContent className="pb-[17px]">
                           <div className="w-full overflow-x-auto">
                             <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
-                              <div className="border-border p-2 md:border-r">
+                              <div className="border-border p-2 md:border-r w-[450px]">
                                 <div className="relative flex flex-col gap-4">
                                   <div className="w-full">
                                     <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
@@ -591,7 +591,7 @@ export default function TestCalendarStepTwoPage() {
                                 </div>
                               </div>
                               <div className="relative w-full md:w-44">
-                                <div className="absolute inset-0 py-4 md:border-l">
+                                <div className="absolute inset-0 pt-[27px] pb-4 md:border-l">
                                   <div className="relative h-full">
                                     <div className="size-full rounded-[inherit] overflow-hidden">
                                       <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
