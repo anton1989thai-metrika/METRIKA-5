@@ -248,7 +248,7 @@ export default function TestCalendarStepTwoPage() {
                         <option value="low">🟢 Обычная</option>
                         <option value="medium">🟠 Важная</option>
                         <option value="high">🔴 Срочная</option>
-                        <option value="boss">🟡 Задача ��т руководителя</option>
+                        <option value="boss">🟡 Задача от руководителя</option>
                       </MetrikaSelect>
 
                       <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
@@ -321,7 +321,7 @@ export default function TestCalendarStepTwoPage() {
                                 )}
                               />
                               <span className="sr-only">
-                                {blockingSwitchChecked ? "Включено" : "Выключено"}
+                                {blockingSwitchChecked ? "��ключено" : "Выключено"}
                               </span>
                             </button>
                             <span className="pointer-events-none relative ml-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
@@ -508,10 +508,10 @@ export default function TestCalendarStepTwoPage() {
                         <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                           Начало выполнения
                         </AccordionTrigger>
-                        <AccordionContent className="pt-4 pb-2">
+                        <AccordionContent className="pb-[17px]">
                           <div className="w-full overflow-x-auto">
                             <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
-                              <div className="border-border p-2 md:border-r">
+                              <div className="border-border p-2 md:border-r w-[450px]">
                                 <div className="relative flex flex-col gap-4">
                                   <div className="w-full">
                                     <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
