@@ -21,7 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import BurgerMenu from "@/components/BurgerMenu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,6 +32,32 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  addDays,
+  addMonths,
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  getDay,
+  isBefore,
+  isSameDay,
+  isSameMonth,
+  startOfDay,
+  startOfMonth,
+  subDays,
+  subMonths,
+} from "date-fns";
+import { ru } from "date-fns/locale";
+
+const CALENDAR_WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const TIME_SLOTS = Array.from({ length: ((19 - 10) * 60) / 15 + 1 }, (_, idx) => {
+  const minutesFromStart = idx * 15;
+  const totalMinutes = 10 * 60 + minutesFromStart;
+  const hour = Math.floor(totalMinutes / 60);
+  const minute = totalMinutes % 60;
+  const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+  return { time, available: true };
+});
 
 interface User {
   id: string;
@@ -92,6 +118,95 @@ export default function MultiStepFormPage() {
   const priorityId = useId();
   const [showBlockingDialog, setShowBlockingDialog] = useState(false);
   const [blockingSwitchChecked, setBlockingSwitchChecked] = useState(formData.isBlocking);
+  const calendarTodayRef = useRef<Date | null>(null);
+  if (!calendarTodayRef.current) {
+    calendarTodayRef.current = new Date();
+  }
+  const calendarToday = calendarTodayRef.current;
+  const todayStart = startOfDay(calendarToday);
+  const [calendarDate, setCalendarDate] = useState<Date>(calendarToday);
+  const [calendarTime, setCalendarTime] = useState<string | null>(null);
+  const [currentMonth, setCurrentMonth] = useState<Date>(calendarToday);
+  const [startCalendarDate, setStartCalendarDate] = useState<Date>(
+    formData.startDate ? new Date(formData.startDate) : calendarToday
+  );
+  const [startCalendarTime, setStartCalendarTime] = useState<string | null>(
+    formData.startTime ? formData.startTime : null
+  );
+  const [startCurrentMonth, setStartCurrentMonth] = useState<Date>(
+    formData.startDate ? new Date(formData.startDate) : calendarToday
+  );
+  const monthStart = startOfMonth(currentMonth);
+  const monthEnd = endOfMonth(currentMonth);
+  const weekdayStart = (getDay(monthStart) + 6) % 7;
+  const weekdayEnd = (getDay(monthEnd) + 6) % 7;
+  const calendarRangeStart = startOfDay(subDays(monthStart, weekdayStart));
+  const calendarRangeEnd = addDays(monthEnd, 6 - weekdayEnd);
+  const calendarDays = eachDayOfInterval({ start: calendarRangeStart, end: calendarRangeEnd });
+  const calendarMonthRaw = format(currentMonth, "LLLL yyyy", { locale: ru });
+  const calendarMonthTitle = calendarMonthRaw.charAt(0).toUpperCase() + calendarMonthRaw.slice(1);
+
+  const handleCalendarDateSelect = (day: Date) => {
+    if (isBefore(day, todayStart)) return;
+    setCalendarDate(day);
+    setCalendarTime(null);
+  };
+
+  const previousMonth = () => {
+    setCurrentMonth((prev) => subMonths(prev, 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentMonth((prev) => addMonths(prev, 1));
+  };
+
+  useEffect(() => {
+    const formatted = format(calendarDate, "yyyy-MM-dd");
+    setFormData((prev) => (prev.deadline === formatted ? prev : { ...prev, deadline: formatted }));
+  }, [calendarDate, setFormData]);
+
+  useEffect(() => {
+    const nextTime = !calendarTime || calendarTime === "Весь день" ? "" : calendarTime;
+    setFormData((prev) => (prev.deadlineTime === nextTime ? prev : { ...prev, deadlineTime: nextTime }));
+  }, [calendarTime, setFormData]);
+
+  const startMonthStart = startOfMonth(startCurrentMonth);
+  const startMonthEnd = endOfMonth(startCurrentMonth);
+  const startWeekdayStart = (getDay(startMonthStart) + 6) % 7;
+  const startWeekdayEnd = (getDay(startMonthEnd) + 6) % 7;
+  const startCalendarRangeStart = startOfDay(subDays(startMonthStart, startWeekdayStart));
+  const startCalendarRangeEnd = addDays(startMonthEnd, 6 - startWeekdayEnd);
+  const startCalendarDays = eachDayOfInterval({
+    start: startCalendarRangeStart,
+    end: startCalendarRangeEnd,
+  });
+  const startCalendarMonthRaw = format(startCurrentMonth, "LLLL yyyy", { locale: ru });
+  const startCalendarMonthTitle =
+    startCalendarMonthRaw.charAt(0).toUpperCase() + startCalendarMonthRaw.slice(1);
+
+  const handleStartCalendarDateSelect = (day: Date) => {
+    if (isBefore(day, todayStart)) return;
+    setStartCalendarDate(day);
+    setStartCalendarTime(null);
+  };
+
+  const previousStartMonth = () => {
+    setStartCurrentMonth((prev) => subMonths(prev, 1));
+  };
+
+  const nextStartMonth = () => {
+    setStartCurrentMonth((prev) => addMonths(prev, 1));
+  };
+
+  useEffect(() => {
+    const formatted = format(startCalendarDate, "yyyy-MM-dd");
+    setFormData((prev) => (prev.startDate === formatted ? prev : { ...prev, startDate: formatted }));
+  }, [startCalendarDate, setFormData]);
+
+  useEffect(() => {
+    const nextTime = !startCalendarTime || startCalendarTime === "Весь день" ? "" : startCalendarTime;
+    setFormData((prev) => (prev.startTime === nextTime ? prev : { ...prev, startTime: nextTime }));
+  }, [startCalendarTime, setFormData]);
 
   // Закрытие dropdown при клике вне
   useEffect(() => {
@@ -430,18 +545,18 @@ export default function MultiStepFormPage() {
                         {/* Скрытая задача */}
                         <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
                           <div className="flex flex-col-reverse items-start gap-2">
-                            <div className="relative inline-grid h-9 w-[72px] grid-cols-2 items-center text-sm font-medium">
+                            <div className="relative inline-grid h-9 w-[110px] grid-cols-[1fr_1fr] items-center text-sm font-medium">
                               <Switch
                                 id={hiddenTaskId}
                                 checked={formData.isHiddenTask}
                                 onCheckedChange={(checked) => setFormData({ ...formData, isHiddenTask: checked })}
-                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
+                                className="peer absolute inset-0 h-[inherit] w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&_span]:z-10 [&_span]:h-full [&_span]:w-1/2 [&_span]:rounded-sm [&_span]:transition-transform [&_span]:duration-300 [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&_span]:data-[state=checked]:translate-x-full [&_span]:data-[state=checked]:rtl:-translate-x-full"
                               />
-                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
-                                <span className="text-[10px] font-medium uppercase">Выкл</span>
+                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full peer-data-[state=unchecked]:rtl:-translate-x-full">
+                                <span className="text-[10px] font-medium uppercase text-foreground">Выкл</span>
                               </span>
-                              <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background peer-data-[state=unchecked]:invisible">
-                                <span className="text-[10px] font-medium uppercase">Вкл</span>
+                              <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=unchecked]:invisible peer-data-[state=checked]:rtl:translate-x-full">
+                                <span className="text-[10px] font-medium uppercase text-foreground">Вкл</span>
                               </span>
                             </div>
                             <Label htmlFor={hiddenTaskId} className="text-sm text-muted-foreground whitespace-nowrap">
@@ -453,18 +568,18 @@ export default function MultiStepFormPage() {
                         {/* Блокирующая задача */}
                         <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
                           <div className="flex flex-col-reverse items-start gap-2">
-                            <div className="relative inline-grid h-9 w-[72px] grid-cols-2 items-center text-sm font-medium">
+                            <div className="relative inline-grid h-9 w-[110px] grid-cols-[1fr_1fr] items-center text-sm font-medium">
                               <Switch
                                 id={blockingTaskId}
                                 checked={blockingSwitchChecked}
                                 onCheckedChange={(checked) => handleBlockingToggle(!!checked)}
-                                className="peer absolute inset-0 h-full w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&>span]:z-10 [&>span]:h-full [&>span]:w-1/2 [&>span]:rounded-sm [&>span]:transition-transform [&>span]:duration-300 [&>span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&>span]:data-[state=checked]:translate-x-full"
+                                className="peer absolute inset-0 h-[inherit] w-[110px] rounded-md data-[state=unchecked]:bg-input/50 [&_span]:z-10 [&_span]:h-full [&_span]:w-1/2 [&_span]:rounded-sm [&_span]:transition-transform [&_span]:duration-300 [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&_span]:data-[state=checked]:translate-x-full [&_span]:data-[state=checked]:rtl:-translate-x-full"
                               />
-                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center pl-9 pr-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full">
-                                <span className="text-[10px] font-medium uppercase">Выкл</span>
+                              <span className="pointer-events-none relative ml-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:invisible peer-data-[state=unchecked]:translate-x-full peer-data-[state=unchecked]:rtl:-translate-x-full">
+                                <span className="text-[10px] font-medium uppercase text-foreground">Выкл</span>
                               </span>
-                              <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=checked]:text-background peer-data-[state=unchecked]:invisible">
-                                <span className="text-[10px] font-medium uppercase">Вкл</span>
+                              <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=unchecked]:invisible peer-data-[state=checked]:rtl:translate-x-full">
+                                <span className="text-[10px] font-medium uppercase text-foreground">Вкл</span>
                               </span>
                             </div>
                             <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground whitespace-nowrap">
@@ -488,55 +603,144 @@ export default function MultiStepFormPage() {
                           <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             Срок выполнения
                           </AccordionTrigger>
-                          <AccordionContent className="pb-2">
-                            <div className="space-y-3 pt-2">
-                              <div className="space-y-2">
-                                <Label htmlFor="deadline-date">Дата</Label>
-                                <div className="flex gap-2 items-end">
-                                  <Input
-                                    id="deadline-date"
-                                    type="date"
-                                    value={formData.deadline}
-                                    onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                                    className="w-[231px] mt-2 pl-[47px]"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      const tomorrow = new Date();
-                                      tomorrow.setDate(tomorrow.getDate() + 1);
-                                      const formattedDate = tomorrow.toISOString().split('T')[0];
-                                      setFormData({ ...formData, deadline: formattedDate });
-                                    }}
-                                    className="h-[37px] whitespace-nowrap -mt-9 -mb-px ml-[556px]"
-                                  >
-                                    Завтра
-                                  </Button>
+                          <AccordionContent className="pt-4 pb-2">
+                            <div className="w-full overflow-x-auto">
+                              <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
+                                <div className="border-border p-2 md:border-r">
+                                  <div className="relative flex flex-col gap-4">
+                                    <div className="w-full">
+                                      <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
+                                        <div className="text-sm font-medium">{calendarMonthTitle}</div>
+                                        <div className="absolute top-0 flex w-full justify-between">
+                                          <button
+                                            onClick={previousMonth}
+                                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 size-9 p-0 text-muted-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground"
+                                            type="button"
+                                          >
+                                            <ChevronLeftIcon size={16} aria-hidden="true" />
+                                          </button>
+                                          <button
+                                            onClick={nextMonth}
+                                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 size-9 p-0 text-muted-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground"
+                                            type="button"
+                                          >
+                                            <ChevronRightIcon size={16} aria-hidden="true" />
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <div className="grid grid-cols-7 gap-0">
+                                        {CALENDAR_WEEKDAYS.map((weekday) => (
+                                          <div
+                                            key={weekday}
+                                            className="size-9 p-0 text-xs font-medium text-muted-foreground/80 flex items-center justify-center"
+                                          >
+                                            {weekday}
+                                          </div>
+                                        ))}
+                                      </div>
+                                      <div className="grid grid-cols-7 gap-0 mt-0">
+                                        {calendarDays.map((day, idx) => {
+                                          const isCurrentMonth = isSameMonth(day, currentMonth);
+                                          const isSelected = isSameDay(day, calendarDate);
+                                          const isDisabled = isBefore(day, todayStart);
+                                          const isToday = isSameDay(day, calendarToday);
+
+                                          return (
+                                            <div key={idx} className="group size-9 px-0 py-px text-sm">
+                                              <button
+                                                onClick={() => handleCalendarDateSelect(day)}
+                                                disabled={isDisabled}
+                                                className={`
+                                                  relative flex size-9 items-center justify-center whitespace-nowrap rounded-md p-0 text-foreground
+                                                  transition-[color,background-color,border-radius,box-shadow] duration-150
+                                                  focus-visible:z-10 outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]
+                                                  ${isDisabled ? "pointer-events-none text-foreground/30 line-through" : ""}
+                                                  ${!isCurrentMonth ? "text-foreground/30" : ""}
+                                                  ${isSelected && isCurrentMonth ? "bg-primary text-primary-foreground" : ""}
+                                                  ${!isSelected && !isDisabled && isCurrentMonth ? "hover:bg-accent" : ""}
+                                                  ${
+                                                    isToday && !isSelected
+                                                      ? "after:pointer-events-none after:absolute after:bottom-1 after:start-1/2 after:z-10 after:size-[3px] after:-translate-x-1/2 after:rounded-full after:bg-primary after:transition-colors"
+                                                      : ""
+                                                  }
+                                                  ${
+                                                    isToday && isSelected
+                                                      ? "after:pointer-events-none after:absolute after:bottom-1 after:start-1/2 after:z-10 after:size-[3px] after:-translate-x-1/2 after:rounded-full after:bg-background after:transition-colors"
+                                                      : ""
+                                                  }
+                                                  ${
+                                                    isToday && isDisabled
+                                                      ? "after:pointer-events-none after:absolute after:bottom-1 after:start-1/2 after:z-10 after:size-[3px] after:-translate-x-1/2 after:rounded-full after:bg-foreground/30 after:transition-colors"
+                                                      : ""
+                                                  }
+                                                `}
+                                                type="button"
+                                              >
+                                                {format(day, "d")}
+                                              </button>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="deadline-time" className="ml-[271px]">Время</Label>
-                                <div className="flex gap-2">
-                                  <Input
-                                    id="deadline-time"
-                                    type="time"
-                                    value={formData.deadlineTime}
-                                    onChange={(e) => setFormData({ ...formData, deadlineTime: e.target.value })}
-                                    className="w-[150px] max-w-[150px] -mt-9 ml-[303px] pl-[37px]"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      setFormData({ ...formData, deadlineTime: "" });
-                                    }}
-                                    className="h-9 whitespace-nowrap -mt-9 ml-[457px]"
-                                  >
-                                    Весь день
-                                  </Button>
+                                <div className="relative w-full md:w-44">
+                                  <div className="absolute inset-0 py-4 md:border-l">
+                                    <div className="relative h-full">
+                                      <div className="size-full rounded-[inherit] overflow-hidden">
+                                        <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+                                          <div className="space-y-3">
+                                            <div className="px-5">
+                                              <button
+                                                onClick={() => setCalendarTime("Весь день")}
+                                                className={`
+                                                  inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap
+                                                  transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px]
+                                                  focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50
+                                                  h-8 rounded-md px-3 text-xs w-full
+                                                  ${
+                                                    calendarTime === "Весь день"
+                                                      ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                                                      : "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
+                                                  }
+                                                `}
+                                                type="button"
+                                              >
+                                                Весь день
+                                              </button>
+                                            </div>
+                                            <div className="grid gap-1.5 px-5 max-sm:grid-cols-2">
+                                              {TIME_SLOTS.map(({ time: slotTime, available }) => (
+                                                <button
+                                                  key={slotTime}
+                                                  onClick={() => available && setCalendarTime(slotTime)}
+                                                  disabled={!available}
+                                                  className={`
+                                                    inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap
+                                                    transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px]
+                                                    focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50
+                                                    h-8 rounded-md px-3 text-xs w-full
+                                                    ${
+                                                      calendarTime === slotTime
+                                                        ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                                                        : "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
+                                                    }
+                                                  `}
+                                                  type="button"
+                                                >
+                                                  {slotTime}
+                                                </button>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="pointer-events-none absolute top-0 right-0 flex h-full w-2.5 select-none border-l border-l-transparent p-px">
+                                        <div className="relative flex-1 rounded-full bg-border opacity-0" style={{ minHeight: "10px" }} />
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -548,55 +752,144 @@ export default function MultiStepFormPage() {
                           <AccordionTrigger className="py-2 text-[15px] leading-6 hover:no-underline">
                             Начало выполнения
                           </AccordionTrigger>
-                          <AccordionContent className="pb-2">
-                            <div className="space-y-3 pt-2">
-                              <div className="space-y-2">
-                                <Label htmlFor="start-date">Дата</Label>
-                                <div className="flex gap-2 items-end">
-                                  <Input
-                                    id="start-date"
-                                    type="date"
-                                    value={formData.startDate}
-                                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                                    className="flex-1 md:flex-none md:w-40"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      const tomorrow = new Date();
-                                      tomorrow.setDate(tomorrow.getDate() + 1);
-                                      const formattedDate = tomorrow.toISOString().split('T')[0];
-                                      setFormData({ ...formData, startDate: formattedDate });
-                                    }}
-                                    className="whitespace-nowrap"
-                                  >
-                                    Завтра
-                                  </Button>
+                          <AccordionContent className="pt-4 pb-2">
+                            <div className="w-full overflow-x-auto">
+                              <div className="inline-flex flex-col rounded-md border bg-background shadow-sm md:flex-row">
+                                <div className="border-border p-2 md:border-r">
+                                  <div className="relative flex flex-col gap-4">
+                                    <div className="w-full">
+                                      <div className="relative mx-10 mb-1 flex h-9 items-center justify-center">
+                                        <div className="text-sm font-medium">{startCalendarMonthTitle}</div>
+                                        <div className="absolute top-0 flex w-full justify-between">
+                                          <button
+                                            onClick={previousStartMonth}
+                                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 size-9 p-0 text-muted-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground"
+                                            type="button"
+                                          >
+                                            <ChevronLeftIcon size={16} aria-hidden="true" />
+                                          </button>
+                                          <button
+                                            onClick={nextStartMonth}
+                                            className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 size-9 p-0 text-muted-foreground/80 hover:text-foreground hover:bg-accent hover:text-accent-foreground"
+                                            type="button"
+                                          >
+                                            <ChevronRightIcon size={16} aria-hidden="true" />
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <div className="grid grid-cols-7 gap-0">
+                                        {CALENDAR_WEEKDAYS.map((weekday) => (
+                                          <div
+                                            key={weekday}
+                                            className="size-9 p-0 text-xs font-medium text-muted-foreground/80 flex items-center justify-center"
+                                          >
+                                            {weekday}
+                                          </div>
+                                        ))}
+                                      </div>
+                                      <div className="grid grid-cols-7 gap-0 mt-0">
+                                        {startCalendarDays.map((day, idx) => {
+                                          const isCurrentMonth = isSameMonth(day, startCurrentMonth);
+                                          const isSelected = isSameDay(day, startCalendarDate);
+                                          const isDisabled = isBefore(day, todayStart);
+                                          const isToday = isSameDay(day, calendarToday);
+
+                                          return (
+                                            <div key={idx} className="group size-9 px-0 py-px text-sm">
+                                              <button
+                                                onClick={() => handleStartCalendarDateSelect(day)}
+                                                disabled={isDisabled}
+                                                className={`
+                                                  relative flex size-9 items-center justify-center whitespace-nowrap rounded-md p-0 text-foreground
+                                                  transition-[color,background-color,border-radius,box-shadow] duration-150
+                                                  focus-visible:z-10 outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]
+                                                  ${isDisabled ? "pointer-events-none text-foreground/30 line-through" : ""}
+                                                  ${!isCurrentMonth ? "text-foreground/30" : ""}
+                                                  ${isSelected && isCurrentMonth ? "bg-primary text-primary-foreground" : ""}
+                                                  ${!isSelected && !isDisabled && isCurrentMonth ? "hover:bg-accent" : ""}
+                                                  ${
+                                                    isToday && !isSelected
+                                                      ? "after:pointer-events-none after:absolute after:bottom-1 after:start-1/2 after:z-10 after:size-[3px] after:-translate-x-1/2 after:rounded-full after:bg-primary after:transition-colors"
+                                                      : ""
+                                                  }
+                                                  ${
+                                                    isToday && isSelected
+                                                      ? "after:pointer-events-none after:absolute after:bottom-1 after:start-1/2 after:z-10 after:size-[3px] after:-translate-x-1/2 after:rounded-full after:bg-background after:transition-colors"
+                                                      : ""
+                                                  }
+                                                  ${
+                                                    isToday && isDisabled
+                                                      ? "after:pointer-events-none after:absolute after:bottom-1 after:start-1/2 after:z-10 after:size-[3px] after:-translate-x-1/2 after:rounded-full after:bg-foreground/30 after:transition-colors"
+                                                      : ""
+                                                  }
+                                                `}
+                                                type="button"
+                                              >
+                                                {format(day, "d")}
+                                              </button>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="start-time">Время</Label>
-                                <div className="flex gap-2">
-                                  <Input
-                                    id="start-time"
-                                    type="time"
-                                    value={formData.startTime}
-                                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                                    className="flex-1"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      setFormData({ ...formData, startTime: "" });
-                                    }}
-                                    className="whitespace-nowrap"
-                                  >
-                                    Весь день
-                                  </Button>
+                                <div className="relative w-full md:w-44">
+                                  <div className="absolute inset-0 py-4 md:border-l">
+                                    <div className="relative h-full">
+                                      <div className="size-full rounded-[inherit] overflow-hidden">
+                                        <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
+                                          <div className="space-y-3">
+                                            <div className="px-5">
+                                              <button
+                                                onClick={() => setStartCalendarTime("Весь день")}
+                                                className={`
+                                                  inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap
+                                                  transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px]
+                                                  focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50
+                                                  h-8 rounded-md px-3 text-xs w-full
+                                                  ${
+                                                    startCalendarTime === "Весь день"
+                                                      ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                                                      : "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
+                                                  }
+                                                `}
+                                                type="button"
+                                              >
+                                                Весь день
+                                              </button>
+                                            </div>
+                                            <div className="grid gap-1.5 px-5 max-sm:grid-cols-2">
+                                              {TIME_SLOTS.map(({ time: slotTime, available }) => (
+                                                <button
+                                                  key={slotTime}
+                                                  onClick={() => available && setStartCalendarTime(slotTime)}
+                                                  disabled={!available}
+                                                  className={`
+                                                    inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap
+                                                    transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px]
+                                                    focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50
+                                                    h-8 rounded-md px-3 text-xs w-full
+                                                    ${
+                                                      startCalendarTime === slotTime
+                                                        ? "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                                                        : "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
+                                                    }
+                                                  `}
+                                                  type="button"
+                                                >
+                                                  {slotTime}
+                                                </button>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="pointer-events-none absolute top-0 right-0 flex h-full w-2.5 select-none border-l border-l-transparent p-px">
+                                        <div className="relative flex-1 rounded-full bg-border opacity-0" style={{ minHeight: "10px" }} />
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
