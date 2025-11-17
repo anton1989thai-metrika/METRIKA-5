@@ -42,7 +42,7 @@ interface User {
 const steps = [
   { number: 1, title: "Основная информация", subtitle: "Название и описан��е" },
   { number: 2, title: "Дополнительные параметры", subtitle: "Приоритет и сроки" },
-  { number: 3, title: "Дополнительные настройки", subtitle: "Подзадачи и вложения" },
+  { number: 3, title: "Дополнитель��ые настройки", subtitle: "Подзадачи и вложения" },
   { number: 4, title: "Итоги", subtitle: "Проверка данных" },
 ];
 
@@ -199,7 +199,7 @@ export default function MultiStepFormPage() {
   const getPriorityLabel = (priority: string) => {
     const labels: Record<string, string> = {
       low: "🟢 Обычная",
-      medium: "🟠 Важная",
+      medium: "🟠 Важ��ая",
       high: "🔴 Срочная",
       boss: "🟡 Задача от руководителя",
     };
@@ -444,7 +444,7 @@ export default function MultiStepFormPage() {
                                 <span className="text-[10px] font-medium uppercase">Вкл</span>
                               </span>
                             </div>
-                            <Label htmlFor={hiddenTaskId} className="text-sm text-muted-foreground">
+                            <Label htmlFor={hiddenTaskId} className="text-sm text-foreground">
                               Скрытая задача
                             </Label>
                           </div>
@@ -467,7 +467,7 @@ export default function MultiStepFormPage() {
                                 <span className="text-[10px] font-medium uppercase">Вкл</span>
                               </span>
                             </div>
-                            <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground">
+                            <Label htmlFor={blockingTaskId} className="text-sm text-foreground">
                               Блокирующая задача
                             </Label>
                           </div>
@@ -489,57 +489,6 @@ export default function MultiStepFormPage() {
                             Срок выполнения
                           </AccordionTrigger>
                           <AccordionContent className="pb-2">
-                            <div className="space-y-3 pt-2">
-                              <div className="space-y-2">
-                                <Label htmlFor="deadline-date">Дата</Label>
-                                <div className="flex gap-2 items-end">
-                                  <Input
-                                    id="deadline-date"
-                                    type="date"
-                                    value={formData.deadline}
-                                    onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-                                    className="w-[231px] mt-2 pl-[47px]"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      const tomorrow = new Date();
-                                      tomorrow.setDate(tomorrow.getDate() + 1);
-                                      const formattedDate = tomorrow.toISOString().split('T')[0];
-                                      setFormData({ ...formData, deadline: formattedDate });
-                                    }}
-                                    className="h-[37px] whitespace-nowrap -mt-[18px] mb-[7px] ml-[168px]"
-                                  >
-                                    Завтра
-                                  </Button>
-                                </div>
-                              </div>
-                              <div className="space-y-2">
-                                <Label htmlFor="deadline-time" className="ml-[271px]">Время</Label>
-                                <div className="flex gap-2">
-                                  <Input
-                                    id="deadline-time"
-                                    type="time"
-                                    value={formData.deadlineTime}
-                                    onChange={(e) => setFormData({ ...formData, deadlineTime: e.target.value })}
-                                    className="w-[150px] max-w-[150px] -mt-9 ml-[303px] pl-[37px]"
-                                  />
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      setFormData({ ...formData, deadlineTime: "" });
-                                    }}
-                                    className="h-9 whitespace-nowrap -mt-9 ml-[4px]"
-                                  >
-                                    Весь день
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
                           </AccordionContent>
                         </AccordionItem>
 
