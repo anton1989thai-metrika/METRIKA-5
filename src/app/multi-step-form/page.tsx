@@ -412,7 +412,7 @@ export default function MultiStepFormPage() {
                     </div>
                     <div className="space-y-6">
                       {/* Приоритет и Скрытая задача */}
-                      <div className="flex flex-col md:flex-row md:gap-[64px] gap-4 pr-0.5">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-[64px] gap-4 pr-0.5">
                         {/* Приоритет */}
                         <MetrikaSelect
                           label="Приоритет"
@@ -444,7 +444,7 @@ export default function MultiStepFormPage() {
                                 <span className="text-[10px] font-medium uppercase">Вкл</span>
                               </span>
                             </div>
-                            <Label htmlFor={hiddenTaskId} className="text-sm text-muted-foreground">
+                            <Label htmlFor={hiddenTaskId} className="text-sm text-muted-foreground whitespace-nowrap">
                               Скрытая задача
                             </Label>
                           </div>
@@ -467,7 +467,7 @@ export default function MultiStepFormPage() {
                                 <span className="text-[10px] font-medium uppercase">Вкл</span>
                               </span>
                             </div>
-                            <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground">
+                            <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground whitespace-nowrap">
                               Блокирующая задача
                             </Label>
                           </div>
