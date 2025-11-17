@@ -591,7 +591,7 @@ export default function TestCalendarStepTwoPage() {
                                 </div>
                               </div>
                               <div className="relative w-full md:w-44">
-                                <div className="absolute inset-0 pt-[27px] pb-4 md:border-l">
+                                <div className="absolute inset-0 pt-[25px] pb-4 md:border-l">
                                   <div className="relative h-full">
                                     <div className="size-full rounded-[inherit] overflow-hidden">
                                       <div className="h-full overflow-y-auto" style={{ scrollbarWidth: "thin" }}>
