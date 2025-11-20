@@ -495,7 +495,7 @@ export default function MultiStepFormPage() {
       <BurgerMenu />
       <main className="pt-32 px-4 pb-8 relative z-10">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4" style={{ width: "777px", marginLeft: "113px" }}>
             {/* Степпер слева */}
             <div className="hidden md:block">
               <div className="inline-flex flex-col gap-4 text-sm">
@@ -554,7 +554,7 @@ export default function MultiStepFormPage() {
                 {currentStep === 1 && (
                   <div className="space-y-6">
                     <div>
-                      <h1 className="text-3xl font-bold mb-2">Основная информация</h1>
+                      <h1 className="text-3xl font-bold mb-2">Основная инф��рмация</h1>
                       <p className="text-muted-foreground">
                         Укажите название задачи, описание и выберите исполнителей и кураторов.
                       </p>
@@ -746,7 +746,7 @@ export default function MultiStepFormPage() {
                                 <span className="text-[10px] font-medium uppercase text-foreground">Выкл</span>
                               </span>
                               <span className="pointer-events-none relative mr-0.5 flex items-center justify-center px-2 text-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] peer-data-[state=checked]:-translate-x-full peer-data-[state=unchecked]:invisible peer-data-[state=checked]:rtl:translate-x-full">
-                                <span className="text-[10px] font-medium uppercase text-foreground">Вкл</span>
+                                <span className="text-[10px] font-medium uppercase text-foreground">В��л</span>
                               </span>
                             </div>
                             <Label htmlFor={blockingTaskId} className="text-sm text-muted-foreground whitespace-nowrap">
@@ -1133,7 +1133,7 @@ export default function MultiStepFormPage() {
                     <div>
                       <h1 className="text-3xl font-bold mb-2">Дополнительные настройки</h1>
                       <p className="text-muted-foreground">
-                        Добавьте подзадачи, чеклист, вложения и настройте автоматизацию.
+                        Добавьте подзадачи, чеклист, вложения и ��астройте автоматизацию.
                       </p>
                     </div>
                     <div className="space-y-4">
@@ -1797,7 +1797,7 @@ export default function MultiStepFormPage() {
                     <div>
                       <h1 className="text-3xl font-bold mb-2">Итоги</h1>
                       <p className="text-muted-foreground">
-                        Дважды проверьте, всё ли в порядке, прежде чем подтвердить.
+                        Дважды про��ерьте, всё ли в порядке, прежде чем подтвердить.
                       </p>
                     </div>
                     <div className="bg-muted rounded-lg p-6 space-y-4">
