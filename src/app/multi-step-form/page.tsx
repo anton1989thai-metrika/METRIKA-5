@@ -470,7 +470,7 @@ export default function MultiStepFormPage() {
     ["admin", "manager", "employee", "freelancer"].includes(user.role)
   );
 
-  // Получение имен выбранных пользователей
+  // Получение имен выб��анных пользователей
   const getSelectedUserNames = (userIds: string[]) => {
     return userIds
       .map((id) => users.find((u) => u.id === id)?.name)
@@ -499,7 +499,7 @@ export default function MultiStepFormPage() {
             {/* Степпер слева */}
             <div className="hidden md:block">
               <div className="inline-flex flex-col gap-4 text-sm">
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 mt-[130px]">
                   {[1, 2, 3, 4].map((step) => {
                     const isActive = step === currentStep;
                     const isCompleted = step < currentStep;
