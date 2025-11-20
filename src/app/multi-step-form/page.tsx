@@ -693,7 +693,7 @@ export default function MultiStepFormPage() {
                 {currentStep === 2 && (
                   <div className="space-y-6">
                     <div>
-                      <h1 className="text-3xl font-bold mb-2">Дополнительные параметры</h1>
+                      <h1 className="text-3xl font-bold mb-2">Дополнительные параметр��</h1>
                       <p className="text-muted-foreground">
                         Укажите приоритет, сроки выполнения и другие параметры задачи.
                       </p>
@@ -708,7 +708,7 @@ export default function MultiStepFormPage() {
                             value={formData.priority}
                             onValueChange={(value) => setFormData({ ...formData, priority: value })}
                           >
-                            <SelectTrigger id={priorityId}>
+                            <SelectTrigger id={priorityId} className="w-[256px]">
                               <SelectValue placeholder="Выберите приоритет" />
                             </SelectTrigger>
                             <SelectContent>
