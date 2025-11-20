@@ -8,7 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
-import MetrikaSelect from "@/components/metrika/MetrikaSelect";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Checklist from "@/components/metrika/Checklist";
 import FileUploader from "@/components/metrika/FileUploader";
 import InputList from "@/components/metrika/InputList";
@@ -494,8 +500,8 @@ export default function MultiStepFormPage() {
       <Header />
       <BurgerMenu />
       <main className="pt-32 px-4 pb-8 relative z-10">
-        <div className="mx-auto" style={{ maxWidth: "797px" }}>
-          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4" style={{ width: "777px", marginLeft: "113px" }}>
+        <div className="mx-auto w-full" style={{ maxWidth: "797px" }}>
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             {/* Степпер слева */}
             <div className="hidden md:block">
               <div className="inline-flex flex-col gap-4 text-sm">
@@ -548,13 +554,13 @@ export default function MultiStepFormPage() {
             </div>
 
             {/* Основной контент формы */}
-            <Card className="bg-card shadow-lg border-0">
+            <Card className="bg-card shadow-lg border-0 w-full">
               <CardContent className="p-8">
                 {/* Шаг 1: Основная информация */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
                     <div>
-                      <h1 className="text-3xl font-bold mb-2">Основная инф��рмация</h1>
+                      <h1 className="text-3xl font-bold mb-2">Основная информация</h1>
                       <p className="text-muted-foreground">
                         Укажите название задачи, описание и выберите исполнителей и кураторов.
                       </p>
@@ -696,18 +702,23 @@ export default function MultiStepFormPage() {
                       {/* Приоритет и Скрытая задача */}
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-[64px] gap-4 pr-0.5">
                         {/* Приоритет */}
-                        <MetrikaSelect
-                          label="Приоритет"
-                          id={priorityId}
-                          value={formData.priority}
-                          onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                          className="w-auto max-w-max"
-                        >
-                          <option value="low">🟢 Обычная</option>
-                          <option value="medium">🟠 Важная</option>
-                          <option value="high">🔴 Срочная</option>
-                          <option value="boss">🟡 Задача от руководителя</option>
-                        </MetrikaSelect>
+                        <div className="*:not-first:mt-2 w-auto max-w-max">
+                          <Label htmlFor={priorityId}>Приоритет</Label>
+                          <Select
+                            value={formData.priority}
+                            onValueChange={(value) => setFormData({ ...formData, priority: value })}
+                          >
+                            <SelectTrigger id={priorityId}>
+                              <SelectValue placeholder="Выберите приоритет" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="low">🟢 Обычная</SelectItem>
+                              <SelectItem value="medium">🟠 Важная</SelectItem>
+                              <SelectItem value="high">🔴 Срочная</SelectItem>
+                              <SelectItem value="boss">🟡 Задача от руководителя</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
 
                         {/* Скрытая задача */}
                         <div className="w-auto max-w-max space-y-2 ml-0.5 w-[150px]">
@@ -1133,7 +1144,7 @@ export default function MultiStepFormPage() {
                     <div>
                       <h1 className="text-3xl font-bold mb-2">Дополнительные настройки</h1>
                       <p className="text-muted-foreground">
-                        Добавьте подзадачи, чеклист, вложения и ��астройте автоматизацию.
+                        Добавьте подзадачи, чеклист, вложения и настройте автоматизацию.
                       </p>
                     </div>
                     <div className="space-y-4">
