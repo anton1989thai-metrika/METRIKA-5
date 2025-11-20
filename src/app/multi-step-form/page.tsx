@@ -494,7 +494,7 @@ export default function MultiStepFormPage() {
       <Header />
       <BurgerMenu />
       <main className="pt-32 px-4 pb-8 relative z-10">
-        <div className="max-w-5xl mx-auto">
+        <div className="mx-auto" style={{ maxWidth: "797px" }}>
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4" style={{ width: "777px", marginLeft: "113px" }}>
             {/* Степпер слева */}
             <div className="hidden md:block">
@@ -1815,7 +1815,7 @@ export default function MultiStepFormPage() {
                         </div>
                         {formData.description && (
                           <div>
-                            <div className="text-sm text-muted-foreground mb-1">Описание</div>
+                            <div className="text-sm text-muted-foreground mb-1">О��исание</div>
                             <div className="text-sm">{formData.description}</div>
                           </div>
                         )}
