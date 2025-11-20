@@ -41,7 +41,7 @@ const MetrikaSelect = React.forwardRef<HTMLSelectElement, MetrikaSelectProps>(
             ref={ref}
             id={selectId}
             className={cn(
-              "appearance-none h-9 rounded-md border border-border bg-background px-3 pr-10 text-sm text-foreground shadow-sm outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200",
+              "appearance-none h-9 rounded-md border border-border bg-background px-3 pr-10 text-sm text-foreground shadow-sm outline-none transition-colors duration-200",
               customWidth ? "" : "w-full",
               className
             )}
