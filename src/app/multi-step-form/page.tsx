@@ -693,7 +693,7 @@ export default function MultiStepFormPage() {
                 {currentStep === 2 && (
                   <div className="space-y-6">
                     <div>
-                      <h1 className="text-3xl font-bold mb-2">Дополнительные параметр��</h1>
+                      <h1 className="text-3xl font-bold mb-2">Дополнительные параметры</h1>
                       <p className="text-muted-foreground">
                         Укажите приоритет, сроки выполнения и другие параметры задачи.
                       </p>
@@ -1118,14 +1118,14 @@ export default function MultiStepFormPage() {
                                     {label}
                                   </Button>
                                 ))}
-                                <div>
+                                <div className="w-full">
                                   <Input
                                     id="completion-time-input"
                                     type="text"
                                     placeholder="ЧЧ:ММ"
                                     value={formData.completionTime}
                                     onChange={(e) => setFormData({ ...formData, completionTime: e.target.value })}
-                                    className="w-24 text-center"
+                                    className="w-full text-center"
                                   />
                                 </div>
                               </div>
@@ -1628,7 +1628,7 @@ export default function MultiStepFormPage() {
                                               {label}
                                             </Button>
                                           ))}
-                                          <div>
+                                          <div className="w-full">
                                             <Input
                                               id="subtask-completion-time-input"
                                               type="text"
@@ -1654,7 +1654,7 @@ export default function MultiStepFormPage() {
                                                   return newSubtasks;
                                                 });
                                               }}
-                                              className="w-24 text-center"
+                                              className="w-full text-center"
                                             />
                                           </div>
                                         </div>
