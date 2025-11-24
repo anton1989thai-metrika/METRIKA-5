@@ -67,14 +67,11 @@ export default function StepTestPage() {
                     </div>
                     <div className="space-y-0.5 px-2">
                       <p className="text-sm font-semibold text-foreground">{title}</p>
-                      <p className="max-sm:hidden text-xs uppercase text-muted-foreground">
-                        {description}
-                      </p>
                     </div>
                   </button>
                   {!isLast && (
                     <div
-                      className={`hidden md:block absolute top-3 left-[calc(50%+0.75rem+0.125rem)] -translate-y-1/2 h-0.5 w-[calc(100%-1.5rem-0.25rem)] ${
+                      className={`hidden md:block absolute top-3 left-[117px] -translate-y-1/2 h-0.5 w-[calc(100%-1.5rem-0.25rem)] ${
                         isCompleted ? "bg-foreground" : "bg-border"
                       }`}
                     />
@@ -83,9 +80,6 @@ export default function StepTestPage() {
               );
             })}
           </div>
-          <p className="mt-2 text-xs text-muted-foreground" role="region" aria-live="polite">
-            Stepper with titles and descriptions
-          </p>
         </div>
       </main>
     </div>
