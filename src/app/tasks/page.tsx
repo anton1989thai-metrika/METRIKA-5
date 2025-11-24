@@ -1144,7 +1144,7 @@ export default function TasksPage() {
                   onClick={() => window.location.href = '/multi-step-form'}
                   className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
-                  Создать задачу
+                  Проекты
                 </button>
                 <button 
                   onClick={() => window.location.href = '/my-tasks'}

@@ -25,6 +25,12 @@ export default function BurgerMenu() {
 
   // Проверяем наличие открытых диалогов/модальных окон
   useEffect(() => {
+    // Не проверяем диалоги на сервере
+    if (typeof window === 'undefined') return
+
+    let observer: MutationObserver | null = null
+    let interval: NodeJS.Timeout | null = null
+
     const checkForOpenDialogs = () => {
       // Если бургер-меню открыто, не проверяем диалоги (чтобы не конфликтовать с собственным overlay)
       if (isOpen) {
@@ -42,19 +48,21 @@ export default function BurgerMenu() {
         // Проверяем что это overlay или content диалога
         const isDialogOverlay = el.getAttribute('data-radix-dialog-overlay') !== null ||
                                el.getAttribute('data-radix-alert-dialog-overlay') !== null ||
-                               el.classList.contains('fixed') && 
-                               (el.classList.contains('inset-0') || el.classList.contains('z-50'))
+                               (el.classList.contains('fixed') && 
+                               (el.classList.contains('inset-0') || el.classList.contains('z-50')))
         
         return isDialogOverlay
       })
       
       // Проверяем модальные окна с z-50 (обычные модальные окна)
-      // Исключаем overlay бургер-меню (z-[45])
+      // Исключаем overlay бургер-меню (z-[45]) и Header (z-50)
       const modalOverlays = Array.from(document.querySelectorAll('.fixed.inset-0')).filter(el => {
         const styles = window.getComputedStyle(el)
         const zIndex = parseInt(styles.zIndex) || 0
-        // Исключаем overlay бургер-меню (z-45) и проверяем только z-50 и выше
-        return zIndex >= 50 && !el.closest('[class*="burger"]') && !el.closest('[class*="Burger"]')
+        const isBurgerMenu = el.closest('[class*="burger"]') || el.closest('[class*="Burger"]')
+        const isHeader = el.closest('header')
+        // Исключаем overlay бургер-меню (z-45), Header (z-50) и проверяем только z-50+ модальные окна
+        return zIndex > 50 && !isBurgerMenu && !isHeader
       })
       
       // Проверяем модальные окна с backdrop/overlay
@@ -62,16 +70,17 @@ export default function BurgerMenu() {
         const styles = window.getComputedStyle(el)
         const zIndex = parseInt(styles.zIndex) || 0
         const position = styles.position
+        const isBurgerMenu = el.closest('[class*="burger"]') || el.closest('[class*="Burger"]')
+        const isHeader = el.closest('header')
         const hasBackdrop = (el.classList.contains('bg-black') || 
                             el.classList.contains('backdrop-blur') ||
-                            styles.backgroundColor.includes('rgba') ||
-                            styles.backgroundColor.includes('rgb')) &&
-                            !el.closest('[class*="burger"]') &&
-                            !el.closest('[class*="Burger"]')
+                            (styles.backgroundColor && (styles.backgroundColor.includes('rgba') || styles.backgroundColor.includes('rgb'))))
         
         return position === 'fixed' && 
-               zIndex >= 50 &&
+               zIndex > 50 &&
                hasBackdrop &&
+               !isBurgerMenu &&
+               !isHeader &&
                el.offsetWidth > 0 &&
                el.offsetHeight > 0
       })
@@ -80,29 +89,41 @@ export default function BurgerMenu() {
                        modalOverlays.length > 0 || 
                        modalBackdrops.length > 0
       
+      // Временно логируем для отладки
+      if (hasDialog) {
+        console.log('Dialog detected:', { radixDialogs: radixDialogs.length, modalOverlays: modalOverlays.length, modalBackdrops: modalBackdrops.length })
+      }
+      
       setHasOpenDialog(hasDialog)
     }
 
-    // Проверяем сразу
-    checkForOpenDialogs()
+    // Задержка для инициализации после загрузки DOM
+    const timeout = setTimeout(() => {
+      checkForOpenDialogs()
 
-    // Создаем MutationObserver для отслеживания изменений в DOM
-    const observer = new MutationObserver(checkForOpenDialogs)
-    
-    // Наблюдаем за изменениями в body
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['data-state', 'class', 'style']
-    })
+      // Создаем MutationObserver для отслеживания изменений в DOM
+      observer = new MutationObserver(checkForOpenDialogs)
+      
+      // Наблюдаем за изменениями в body
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['data-state', 'class', 'style']
+      })
 
-    // Также проверяем периодически (на случай если MutationObserver пропустит)
-    const interval = setInterval(checkForOpenDialogs, 100)
+      // Также проверяем периодически (на случай если MutationObserver пропустит)
+      interval = setInterval(checkForOpenDialogs, 200)
+    }, 100)
 
     return () => {
-      observer.disconnect()
-      clearInterval(interval)
+      clearTimeout(timeout)
+      if (observer) {
+        observer.disconnect()
+      }
+      if (interval) {
+        clearInterval(interval)
+      }
     }
   }, [isOpen])
   
@@ -128,12 +149,17 @@ export default function BurgerMenu() {
   return (
     <>
       {/* Кнопка бургер-меню */}
-      {!isOpen && !hasOpenDialog && (
+      {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed top-[19px] left-4 z-[60] bg-white border border-gray-300 rounded-md shadow-md transition-colors flex flex-col items-center justify-center p-2 hover:bg-gray-50"
-          style={{ height: '40px', width: '40px' }}
+          className="fixed top-[19px] left-4 z-[60] bg-white border border-gray-300 rounded-md shadow-md transition-all flex flex-col items-center justify-center p-2 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ 
+            height: '40px', 
+            width: '40px',
+            zIndex: 60
+          }}
           aria-label="Открыть меню"
+          disabled={hasOpenDialog}
         >
           <Menu className="w-6 h-6 text-black flex flex-col items-center justify-center" />
         </button>

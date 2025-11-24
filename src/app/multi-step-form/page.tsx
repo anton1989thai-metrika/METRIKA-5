@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useId } from "react";
+import { useState, useRef, useEffect, useId, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,6 +59,8 @@ import {
   subMonths,
 } from "date-fns";
 import { ru } from "date-fns/locale";
+import { MultipleSelector, type Option as MultiSelectOption } from "@/components/ui/multiselect";
+import { realEstateObjects } from "@/data/realEstateObjects";
 
 const CALENDAR_WEEKDAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 const TIME_SLOTS = Array.from({ length: ((19 - 10) * 60) / 15 + 1 }, (_, idx) => {
@@ -94,6 +96,7 @@ export default function MultiStepFormPage() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    selectedObjects: [] as string[],
     executors: [] as string[],
     curators: [] as string[],
     priority: "low",
@@ -128,6 +131,7 @@ export default function MultiStepFormPage() {
   const blockingTaskId = useId();
   const priorityId = useId();
   const [showBlockingDialog, setShowBlockingDialog] = useState(false);
+  const [isTitleManuallyEdited, setIsTitleManuallyEdited] = useState(false);
   const [blockingSwitchChecked, setBlockingSwitchChecked] = useState(formData.isBlocking);
   const calendarTodayRef = useRef<Date | null>(null);
   if (!calendarTodayRef.current) {
@@ -158,6 +162,59 @@ export default function MultiStepFormPage() {
   const calendarDays = eachDayOfInterval({ start: calendarRangeStart, end: calendarRangeEnd });
   const calendarMonthRaw = format(currentMonth, "LLLL yyyy", { locale: ru });
   const calendarMonthTitle = calendarMonthRaw.charAt(0).toUpperCase() + calendarMonthRaw.slice(1);
+
+  const objectOptions = useMemo<MultiSelectOption[]>(
+    () =>
+      realEstateObjects.map((obj) => ({
+        value: obj.id.toString(),
+        label: `${obj.title} • ${obj.address}`,
+      })),
+    []
+  );
+
+  const selectedObjectOptions = useMemo(
+    () => objectOptions.filter((option) => formData.selectedObjects.includes(option.value)),
+    [objectOptions, formData.selectedObjects]
+  );
+
+  useEffect(() => {
+    if (formData.selectedObjects.length === 0) {
+      setFormData((prev) => {
+        if (prev.title.startsWith("Задача по объекту №")) {
+          return { ...prev, title: "" };
+        }
+        if (prev.title.startsWith("Задача по объектам №")) {
+          return { ...prev, title: "" };
+        }
+        return prev;
+      });
+      return;
+    }
+
+    const autoTitlePrefix =
+      formData.selectedObjects.length > 1 ? "Задача по объектам №" : "Задача по объекту №";
+    const autoTitle = `${autoTitlePrefix}${formData.selectedObjects.join(", ")}`;
+    let updated = false;
+
+    setFormData((prev) => {
+      const isCurrentAuto =
+        prev.title.startsWith("Задача по объекту №") || prev.title.startsWith("Задача по объектам №");
+      if (isTitleManuallyEdited && !isCurrentAuto) {
+        return prev;
+      }
+
+      if (prev.title === autoTitle) {
+        return prev;
+      }
+
+      updated = true;
+      return { ...prev, title: autoTitle };
+    });
+
+    if (updated) {
+      setIsTitleManuallyEdited(false);
+    }
+  }, [formData.selectedObjects, isTitleManuallyEdited]);
 
   const handleCalendarDateSelect = (day: Date) => {
     if (isBefore(day, todayStart)) return;
@@ -504,8 +561,8 @@ export default function MultiStepFormPage() {
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             {/* Степпер слева */}
             <div className="hidden md:block">
-              <div className="inline-flex flex-col gap-4 text-sm">
-                <div className="flex flex-col gap-4 mt-[130px]">
+              <div className="inline-flex flex-col gap-4 text-sm mt-[26px]">
+                <div className="flex flex-col gap-2 mt-[130px]">
                   {[1, 2, 3, 4].map((step) => {
                     const isActive = step === currentStep;
                     const isCompleted = step < currentStep;
@@ -526,7 +583,11 @@ export default function MultiStepFormPage() {
 
                     return (
                       <div key={step} className="flex items-start gap-4">
-                        <div className="flex flex-col items-center">
+                        <div
+                          className={`flex flex-col items-center ${
+                            step === 3 ? "gap-[9px]" : "gap-2"
+                          }`}
+                        >
                           <div className={indicatorClass}>
                             {isCompleted ? (
                               <svg
@@ -566,19 +627,43 @@ export default function MultiStepFormPage() {
                       </p>
                     </div>
                     <div className="space-y-6">
-                      {/* Название задачи */}
-                      <div className="space-y-2">
-                        <Label htmlFor="title">
-                          Название задачи <span className="text-destructive">*</span>
-                        </Label>
-                        <Input
-                          id="title"
-                          type="text"
-                          placeholder="Введите название задачи"
-                          value={formData.title}
-                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                          required
-                        />
+                      {/* Название задачи и Выбор объекта */}
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="title">
+                            Название задачи <span className="text-destructive">*</span>
+                          </Label>
+                          <Input
+                            id="title"
+                            type="text"
+                            placeholder="Введите название задачи"
+                            value={formData.title}
+                            onChange={(e) => {
+                              setIsTitleManuallyEdited(true);
+                              setFormData({ ...formData, title: e.target.value });
+                            }}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Выбрать объект</Label>
+                          <MultipleSelector
+                            defaultOptions={objectOptions}
+                            value={selectedObjectOptions}
+                            onValueChange={(options) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                selectedObjects: options.map((option) => option.value),
+                              }))
+                            }
+                            placeholder="Начните вводить номер или адрес"
+                            emptyIndicator={
+                              <p className="text-center text-sm text-muted-foreground py-2">
+                                Ничего не найдено
+                              </p>
+                            }
+                          />
+                        </div>
                       </div>
 
                       {/* Описание задачи */}
