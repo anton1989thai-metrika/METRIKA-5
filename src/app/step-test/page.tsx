@@ -67,9 +67,6 @@ export default function StepTestPage() {
                     </div>
                     <div className="space-y-0.5 px-2">
                       <p className="text-sm font-semibold text-foreground">{title}</p>
-                      <p className="max-sm:hidden text-xs uppercase text-muted-foreground">
-                        {description}
-                      </p>
                     </div>
                   </button>
                   {!isLast && (
