@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
-      {/* Кнопка смены языка - позиционирована в правом верхнем углу основного хедера */}
+      {/* Кнопка смены языка - позиционирована в прав��м верхнем углу основного хедера */}
       <div className="absolute right-4 top-[19px] z-50 flex items-center gap-[10px]">
         <AnimatedShinyButton url="/chat">
           МЕТРИКА GPT
@@ -22,7 +22,7 @@ export default function Header() {
         <LanguageSelector />
       </div>
       
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-[200px] mx-auto px-4">
         <div className="flex items-center justify-center h-20">
           {/* Центральная часть - логотип */}
           <div className="flex-1 text-center flex flex-col justify-center">
