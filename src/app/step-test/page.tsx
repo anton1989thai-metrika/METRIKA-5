@@ -71,7 +71,7 @@ export default function StepTestPage() {
                   </button>
                   {!isLast && (
                     <div
-                      className={`hidden md:block absolute top-3 left-[calc(50%+0.75rem+0.125rem)] -translate-y-1/2 h-0.5 w-[calc(100%-1.5rem-0.25rem)] ${
+                      className={`hidden md:block absolute top-3 left-[117px] -translate-y-1/2 h-0.5 w-[calc(100%-1.5rem-0.25rem)] ${
                         isCompleted ? "bg-foreground" : "bg-border"
                       }`}
                     />
