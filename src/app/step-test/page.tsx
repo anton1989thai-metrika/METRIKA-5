@@ -80,9 +80,6 @@ export default function StepTestPage() {
               );
             })}
           </div>
-          <p className="mt-2 text-xs text-muted-foreground" role="region" aria-live="polite">
-            Stepper with titles and descriptions
-          </p>
         </div>
       </main>
     </div>
