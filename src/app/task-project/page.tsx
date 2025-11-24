@@ -63,11 +63,11 @@ export default function TaskProjectPage() {
       <BurgerMenu />
       <main className="pt-24 pb-10 px-4">
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-card shadow-lg border-0">
+          <Card className="bg-card shadow-lg border-0" style={{ width: "700px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", margin: "35px 0 0 100px" }}>
             <CardHeader>
               <CardTitle className="text-3xl font-bold">Создание проекта</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-10">
+            <CardContent className="space-y-10" style={{ marginRight: "200px", width: "676px", padding: "0 1px 24px 24px" }}>
               <div className="space-y-4">
                 {steps.map((step) => {
                   const canRemove = steps.length > 3;
@@ -89,13 +89,6 @@ export default function TaskProjectPage() {
                         <Button variant="outline" onClick={() => handleDetailClick(step.id)}>
                           Детально
                         </Button>
-                        <Button
-                          variant="ghost"
-                          disabled={!canRemove}
-                          onClick={() => handleRemoveStep(step.id)}
-                        >
-                          Удалить
-                        </Button>
                       </div>
                     </div>
                   );
@@ -109,7 +102,7 @@ export default function TaskProjectPage() {
           </Card>
 
           <div className="mt-10 space-y-8 text-center">
-            <div className="flex flex-col gap-6 md:flex-row md:items-start">
+            <div className="flex flex-col gap-6 md:flex-row md:items-start" style={{ padding: "224px 0 97px" }}>
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
                 const ordinalWords = [
@@ -143,7 +136,7 @@ export default function TaskProjectPage() {
                       className="flex flex-col items-center gap-3 rounded focus:outline-none"
                     >
                       <div
-                        className={`flex h-6 w-6 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors ${
+                        className={`flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors ${
                           isActive || isCompleted
                             ? "border-primary bg-primary text-primary-foreground"
                             : "border-border text-foreground"
@@ -155,20 +148,15 @@ export default function TaskProjectPage() {
                         <p className="text-sm font-semibold text-foreground">
                           {step.title.trim() ? step.title : `Step ${word}`}
                         </p>
-                        <p className="max-sm:hidden text-xs uppercase text-muted-foreground">
-                          {step.title.trim()
-                            ? "Desc for custom step"
-                            : `Desc for step ${descriptionWord}`}
-                        </p>
                       </div>
                     </button>
                     {!isLast && (
                       <div
                         className="hidden md:block absolute -z-10 h-0.5 bg-border"
                         style={{
-                          top: "0.75rem",
-                          left: "calc(50% + 0.75rem + 0.125rem)",
-                          width: "calc(100% - 1.5rem - 0.25rem)",
+                          top: "25px",
+                          left: "180px",
+                          width: "230px",
                           transform: "translateY(-50%)",
                         }}
                       />
@@ -177,13 +165,6 @@ export default function TaskProjectPage() {
                 );
               })}
             </div>
-            <p
-              className="mt-2 text-xs text-muted-foreground"
-              role="region"
-              aria-live="polite"
-            >
-              Stepper with titles and descriptions
-            </p>
           </div>
         </div>
       </main>
@@ -210,4 +191,3 @@ export default function TaskProjectPage() {
     </div>
   );
 }
-
