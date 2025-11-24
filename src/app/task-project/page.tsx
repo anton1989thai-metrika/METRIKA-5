@@ -112,26 +112,18 @@ export default function TaskProjectPage() {
             <div className="flex flex-col gap-6 md:flex-row md:items-start">
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
-                const ordinalWords = [
-                  "One",
-                  "Two",
-                  "Three",
-                  "Four",
-                  "Five",
-                  "Six",
-                  "Seven",
-                  "Eight",
-                  "Nine",
-                  "Ten",
-                ];
-                const word = ordinalWords[index] ?? `${stepNumber}`;
-                const descriptionWord = ordinalWords[index]
-                  ? ordinalWords[index].toLowerCase()
-                  : `${stepNumber}`;
                 const activeStep = steps.length >= 2 ? 2 : 1;
                 const isActive = stepNumber === activeStep;
                 const isCompleted = stepNumber < activeStep;
                 const isLast = index === steps.length - 1;
+                const indicatorClass = [
+                  "flex h-6 w-6 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors",
+                  isCompleted
+                    ? "border-foreground bg-foreground text-background"
+                    : isActive
+                    ? "border-foreground text-foreground"
+                    : "border-border text-muted-foreground",
+                ].join(" ");
 
                 return (
                   <div
@@ -142,46 +134,27 @@ export default function TaskProjectPage() {
                       type="button"
                       className="flex flex-col items-center gap-3 rounded focus:outline-none"
                     >
-                      <div
-                        className={`flex h-6 w-6 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors ${
-                          isActive || isCompleted
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border text-foreground"
-                        }`}
-                      >
+                      <div className={indicatorClass}>
                         {isCompleted ? "✓" : stepNumber}
                       </div>
-                      <div className="space-y-0.5 px-2">
+                      <div className="px-2">
                         <p className="text-sm font-semibold text-foreground">
-                          {step.title.trim() ? step.title : `Step ${word}`}
-                        </p>
-                        <p className="max-sm:hidden text-xs uppercase text-muted-foreground">
-                          {step.title.trim()
-                            ? "Desc for custom step"
-                            : `Desc for step ${descriptionWord}`}
+                          {step.title.trim() ? step.title : `Step ${stepNumber}`}
                         </p>
                       </div>
                     </button>
                     {!isLast && (
                       <div
-                        className="hidden md:block absolute -z-10 h-0.5 bg-border"
-                        style={{
-                          top: "0.75rem",
-                          left: "calc(50% + 0.75rem + 0.125rem)",
-                          width: "calc(100% - 1.5rem - 0.25rem)",
-                          transform: "translateY(-50%)",
-                        }}
+                        className={`hidden md:block absolute top-3 left-[calc(50%+0.75rem+0.125rem)] -translate-y-1/2 h-0.5 w-[calc(100%-1.5rem-0.25rem)] ${
+                          isCompleted ? "bg-foreground" : "bg-border"
+                        }`}
                       />
                     )}
                   </div>
                 );
               })}
             </div>
-            <p
-              className="mt-2 text-xs text-muted-foreground"
-              role="region"
-              aria-live="polite"
-            >
+            <p className="mt-2 text-xs text-muted-foreground" role="region" aria-live="polite">
               Stepper with titles and descriptions
             </p>
           </div>
