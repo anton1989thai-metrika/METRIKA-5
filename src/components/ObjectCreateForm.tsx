@@ -1224,6 +1224,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
           type: formData.type,
           images: uploadedFiles.map(file => file.preview)
         }}
+      />
       {/* AnalyticsModal */}
       <AnalyticsModal
         isOpen={showAnalyticsModal}

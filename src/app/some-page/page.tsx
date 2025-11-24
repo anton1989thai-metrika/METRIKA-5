@@ -1,23 +1,13 @@
-import { PlasmicComponent } from '@plasmicapp/loader-nextjs';
-import { PLASMIC } from '../../plasmic-init';
-import PlasmicClientRootProvider from '../../plasmic-init-client';
-
-// Be sure to also fetch data for `NavHeader`
 export default async function SomePage({ 
   searchParams 
 }: { 
   searchParams?: Record<string, string | string[]>;
 }) {
-  // Fetch Plasmic component data for SomePage and NavHeader
-  const plasmicData = await PLASMIC.fetchComponentData('SomePage', 'NavHeader');
-
   return (
-    <PlasmicClientRootProvider
-      prefetchedData={plasmicData}
-      pageQuery={searchParams}
-    >
-      <PlasmicComponent component="SomePage" />
-    </PlasmicClientRootProvider>
+    <div className="container mx-auto p-8">
+      <h1 className="text-3xl font-bold mb-4">Some Page</h1>
+      <p>This is a placeholder page.</p>
+    </div>
   );
 }
 

@@ -35,15 +35,13 @@ export default function Calendar() {
   };
 
   const handleCreateTaskForSelf = () => {
-    // TODO: Реализовать создание задачи себе
-    console.log("Создать задачу себе на", selectedDate);
+    window.location.href = '/task-myself';
     setIsOpen(false);
     setSelectedDate(null);
   };
 
   const handleCreateTask = () => {
-    // TODO: Реализовать создание задачи
-    console.log("Создать задачу на", selectedDate);
+    window.location.href = '/multi-step-form';
     setIsOpen(false);
     setSelectedDate(null);
   };

@@ -1141,7 +1141,7 @@ export default function TasksPage() {
             <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
               <div className="space-y-3">
                 <button 
-                  onClick={() => setIsCreateTaskModalOpen(true)}
+                  onClick={() => window.location.href = '/multi-step-form'}
                   className="w-full bg-white text-black py-3 px-4 rounded hover:bg-gray-50 transition-colors shadow-md"
                 >
                   Создать задачу

@@ -342,8 +342,7 @@ export default function TaskManagementPanel() {
   }
 
   const handleCreateTask = () => {
-    setSelectedTask(null)
-    setShowTaskModal(true)
+    window.location.href = '/multi-step-form'
   }
 
   const handleEditTask = (task: Task) => {

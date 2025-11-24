@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, Calculator, LogIn } from "lucide-react"
+import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, LogIn } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { usePathname } from "next/navigation"
@@ -14,6 +14,7 @@ interface MenuItem {
 
 export default function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false)
+  const [hasOpenDialog, setHasOpenDialog] = useState(false)
   const { t } = useLanguage()
   const pathname = usePathname()
   
@@ -21,6 +22,89 @@ export default function BurgerMenu() {
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
+
+  // Проверяем наличие открытых диалогов/модальных окон
+  useEffect(() => {
+    const checkForOpenDialogs = () => {
+      // Если бургер-меню открыто, не проверяем диалоги (чтобы не конфликтовать с собственным overlay)
+      if (isOpen) {
+        setHasOpenDialog(false)
+        return
+      }
+
+      // Проверяем Radix UI Dialog (data-state="open")
+      // Исключаем элементы бургер-меню
+      const radixDialogs = Array.from(document.querySelectorAll('[data-state="open"]')).filter(el => {
+        // Исключаем элементы бургер-меню
+        const isBurgerMenu = el.closest('[class*="burger"]') || el.closest('[class*="Burger"]')
+        if (isBurgerMenu) return false
+        
+        // Проверяем что это overlay или content диалога
+        const isDialogOverlay = el.getAttribute('data-radix-dialog-overlay') !== null ||
+                               el.getAttribute('data-radix-alert-dialog-overlay') !== null ||
+                               el.classList.contains('fixed') && 
+                               (el.classList.contains('inset-0') || el.classList.contains('z-50'))
+        
+        return isDialogOverlay
+      })
+      
+      // Проверяем модальные окна с z-50 (обычные модальные окна)
+      // Исключаем overlay бургер-меню (z-[45])
+      const modalOverlays = Array.from(document.querySelectorAll('.fixed.inset-0')).filter(el => {
+        const styles = window.getComputedStyle(el)
+        const zIndex = parseInt(styles.zIndex) || 0
+        // Исключаем overlay бургер-меню (z-45) и проверяем только z-50 и выше
+        return zIndex >= 50 && !el.closest('[class*="burger"]') && !el.closest('[class*="Burger"]')
+      })
+      
+      // Проверяем модальные окна с backdrop/overlay
+      const modalBackdrops = Array.from(document.querySelectorAll('div')).filter(el => {
+        const styles = window.getComputedStyle(el)
+        const zIndex = parseInt(styles.zIndex) || 0
+        const position = styles.position
+        const hasBackdrop = (el.classList.contains('bg-black') || 
+                            el.classList.contains('backdrop-blur') ||
+                            styles.backgroundColor.includes('rgba') ||
+                            styles.backgroundColor.includes('rgb')) &&
+                            !el.closest('[class*="burger"]') &&
+                            !el.closest('[class*="Burger"]')
+        
+        return position === 'fixed' && 
+               zIndex >= 50 &&
+               hasBackdrop &&
+               el.offsetWidth > 0 &&
+               el.offsetHeight > 0
+      })
+
+      const hasDialog = radixDialogs.length > 0 || 
+                       modalOverlays.length > 0 || 
+                       modalBackdrops.length > 0
+      
+      setHasOpenDialog(hasDialog)
+    }
+
+    // Проверяем сразу
+    checkForOpenDialogs()
+
+    // Создаем MutationObserver для отслеживания изменений в DOM
+    const observer = new MutationObserver(checkForOpenDialogs)
+    
+    // Наблюдаем за изменениями в body
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-state', 'class', 'style']
+    })
+
+    // Также проверяем периодически (на случай если MutationObserver пропустит)
+    const interval = setInterval(checkForOpenDialogs, 100)
+
+    return () => {
+      observer.disconnect()
+      clearInterval(interval)
+    }
+  }, [isOpen])
   
   // Авторизация отключена - показываем все пункты меню без фильтрации
   const menuItemsWithTranslations: MenuItem[] = [
@@ -44,14 +128,16 @@ export default function BurgerMenu() {
   return (
     <>
       {/* Кнопка бургер-меню */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed top-[19px] left-4 z-[60] bg-white border border-gray-300 rounded-md shadow-md transition-colors flex flex-col items-center justify-center p-2 hover:bg-gray-50"
-        style={{ height: '40px', width: '40px' }}
-        aria-label="Открыть меню"
-      >
-        <Menu className="w-6 h-6 text-black flex flex-col items-center justify-center" />
-      </button>
+      {!isOpen && !hasOpenDialog && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed top-[19px] left-4 z-[60] bg-white border border-gray-300 rounded-md shadow-md transition-colors flex flex-col items-center justify-center p-2 hover:bg-gray-50"
+          style={{ height: '40px', width: '40px' }}
+          aria-label="Открыть меню"
+        >
+          <Menu className="w-6 h-6 text-black flex flex-col items-center justify-center" />
+        </button>
+      )}
 
       {/* Оверлей */}
       {isOpen && (

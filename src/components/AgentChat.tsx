@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X, Send, Phone, Mail, MessageCircle } from "lucide-react"
+import { X, Send, Phone, Mail, MessageCircle, Calendar } from "lucide-react"
 
 interface AgentChatProps {
   isOpen: boolean

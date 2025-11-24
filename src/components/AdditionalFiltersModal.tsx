@@ -305,17 +305,6 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                         (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
                       }
                     }}
-                    style={filters.view.includes(option) ? {backgroundColor: '#fff60b'} : {}}
-                    onMouseEnter={(e) => {
-                      if (filters.view.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filters.view.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
-                      }
-                    }}
                   >
                     {option}
                   </button>
@@ -394,17 +383,6 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                         (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
                       }
                     }}
-                    style={filters.apartmentType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
-                    onMouseEnter={(e) => {
-                      if (filters.apartmentType.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filters.apartmentType.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
-                      }
-                    }}
                   >
                     {option}
                   </button>
@@ -425,17 +403,6 @@ export default function AdditionalFiltersModal({ isOpen, onClose }: AdditionalFi
                         ? 'text-black border border-gray-300 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
                     }`}
-                    style={filters.houseType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
-                    onMouseEnter={(e) => {
-                      if (filters.houseType.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filters.houseType.includes(option)) {
-                        (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b';
-                      }
-                    }}
                     style={filters.houseType.includes(option) ? {backgroundColor: '#fff60b'} : {}}
                     onMouseEnter={(e) => {
                       if (filters.houseType.includes(option)) {
