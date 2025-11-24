@@ -158,9 +158,9 @@ export default function TaskMyselfPage() {
       <Header />
       <BurgerMenu />
       <main className="pt-20 px-4 pb-8">
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-card shadow-lg border-0 w-full">
-            <CardContent className="p-8">
+        <div className="mx-auto" style={{ maxWidth: "694px" }}>
+          <Card className="bg-card shadow-lg border-0" style={{ width: "692px", marginTop: "115px" }}>
+            <CardContent className="p-8" style={{ marginTop: "-66px" }}>
               <div className="space-y-6">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Создать задачу себе</h1>
@@ -430,7 +430,7 @@ export default function TaskMyselfPage() {
                           >
                             {formData.automationSelectedDate
                               ? format(formData.automationSelectedDate, "d MMMM", { locale: ru })
-                              : "Выбрать дату"}
+                              : "Выбрать д��ту"}
                           </button>
                         </div>
                       </div>
@@ -520,4 +520,3 @@ export default function TaskMyselfPage() {
     </div>
   );
 }
-
