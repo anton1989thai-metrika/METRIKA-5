@@ -92,8 +92,8 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
-                        width: "110px",
-                        minWidth: "110px",
+                        width: "90px",
+                        minWidth: "90px",
                         textAlign: "center",
                       }}
                     >
@@ -143,8 +143,8 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
-                        width: "110px",
-                        minWidth: "110px",
+                        width: "90px",
+                        minWidth: "90px",
                         textAlign: "center",
                       }}
                     >
@@ -194,8 +194,8 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
-                        width: "110px",
-                        minWidth: "110px",
+                        width: "90px",
+                        minWidth: "90px",
                         textAlign: "center",
                       }}
                     >
@@ -245,8 +245,8 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
-                        width: "110px",
-                        minWidth: "110px",
+                        width: "90px",
+                        minWidth: "90px",
                         textAlign: "center",
                       }}
                     >
@@ -296,8 +296,8 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
-                        width: "110px",
-                        minWidth: "110px",
+                        width: "90px",
+                        minWidth: "90px",
                         textAlign: "center",
                       }}
                     >
