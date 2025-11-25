@@ -46,7 +46,7 @@ export default function TableTestPage() {
                   fontSize: "14px",
                   fontWeight: "400",
                   lineHeight: "20px",
-                  width: "253px",
+                  width: "237px",
                 }}
               >
                 <tbody
