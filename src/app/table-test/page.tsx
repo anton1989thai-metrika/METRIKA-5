@@ -93,9 +93,12 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
+                        width: "110px",
+                        minWidth: "110px",
+                        textAlign: "center",
                       }}
                     >
-                      David Kim
+                      21.10.2025
                     </div>
                   </tr>
                   <tr
@@ -140,9 +143,12 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
+                        width: "110px",
+                        minWidth: "110px",
+                        textAlign: "center",
                       }}
                     >
-                      d.kim@company.com
+                      22.10.2025
                     </div>
                   </tr>
                   <tr
@@ -187,9 +193,12 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
+                        width: "110px",
+                        minWidth: "110px",
+                        textAlign: "center",
                       }}
                     >
-                      Seoul, KR
+                      23.10.2025
                     </div>
                   </tr>
                   <tr
@@ -234,9 +243,12 @@ export default function TableTestPage() {
                         fontWeight: "400",
                         verticalAlign: "middle",
                         padding: "8px",
+                        width: "110px",
+                        minWidth: "110px",
+                        textAlign: "center",
                       }}
                     >
-                      Active
+                      24.10.2025
                     </div>
                   </tr>
                   <tr
@@ -271,6 +283,22 @@ export default function TableTestPage() {
                       }}
                     >
                       Balance
+                    </div>
+                    <div
+                      style={{
+                        display: "table-cell",
+                        borderCollapse: "collapse",
+                        borderSpacing: "2px",
+                        captionSide: "bottom",
+                        fontWeight: "400",
+                        verticalAlign: "middle",
+                        padding: "8px",
+                        width: "110px",
+                        minWidth: "110px",
+                        textAlign: "center",
+                      }}
+                    >
+                      25.10.2025
                     </div>
                   </tr>
                 </tbody>
