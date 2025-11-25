@@ -98,7 +98,7 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      <div style={{ textAlign: "center", width: "100%" }}>
+                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                         21.10.2025
                       </div>
                     </div>
@@ -150,7 +150,7 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      <div style={{ textAlign: "center", width: "100%" }}>
+                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                         22.10.2025
                       </div>
                     </div>
@@ -202,7 +202,7 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      <div style={{ textAlign: "center", width: "100%" }}>
+                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                         23.10.2025
                       </div>
                     </div>
@@ -254,7 +254,7 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      <div style={{ textAlign: "center", width: "100%" }}>
+                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                         24.10.2025
                       </div>
                     </div>
@@ -306,7 +306,7 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      <div style={{ textAlign: "center", width: "100%" }}>
+                      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                         25.10.2025
                       </div>
                     </div>
