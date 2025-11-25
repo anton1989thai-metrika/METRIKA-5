@@ -91,6 +91,7 @@ export default function TaskProjectPage() {
                         onChange={(e) => handleTitleChange(step.id, e.target.value)}
                         placeholder="Введите название шага"
                         className="flex-1"
+                        maxLength={35}
                       />
                       <div className="flex gap-2 md:w-auto items-center">
                         <Button variant="outline" onClick={() => handleDetailClick(step.id)}>
