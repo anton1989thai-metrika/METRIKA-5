@@ -2,14 +2,6 @@
 
 import Header from "@/components/Header";
 import BurgerMenu from "@/components/BurgerMenu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 export default function TableTestPage() {
   return (
