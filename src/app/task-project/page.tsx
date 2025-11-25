@@ -46,18 +46,18 @@ export default function TaskProjectPage() {
     });
   };
 
-  const handleRemoveStep = (stepId: number) => {
-    setSteps((prev) => {
-      if (prev.length <= 3) {
-        return prev; // Минимум 3 шага
-      }
-      return prev.filter((step) => step.id !== stepId);
-    });
-  };
-
   const handleDetailClick = (stepId: number) => {
     setDetailStepId(stepId);
     setIsDetailDialogOpen(true);
+  };
+
+  const handleRemoveStep = (stepId: number) => {
+    setSteps((prev) => {
+      if (prev.length <= 3) {
+        return prev;
+      }
+      return prev.filter((step) => step.id !== stepId);
+    });
   };
 
   return (
@@ -66,26 +66,14 @@ export default function TaskProjectPage() {
       <BurgerMenu />
       <main className="pt-24 pb-10 px-4">
         <div className="max-w-4xl mx-auto">
-          <Card
-            className="bg-card shadow-lg border-0"
-            style={{
-              width: "700px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              margin: "35px 0 0 100px",
-            }}
-          >
+          <Card className="bg-card shadow-lg border-0" style={{ width: "700px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", margin: "35px 0 0 100px" }}>
             <CardHeader>
               <CardTitle className="text-3xl font-bold">Создание проекта</CardTitle>
             </CardHeader>
-            <CardContent
-              className="space-y-10"
-              style={{ marginRight: "200px", width: "676px", padding: "0 1px 24px 24px" }}
-            >
+            <CardContent className="space-y-10" style={{ marginRight: "200px", width: "676px", padding: "0 1px 24px 24px" }}>
               <div className="space-y-4">
                 {steps.map((step) => {
+                  const canRemove = steps.length > 3;
                   return (
                     <div
                       key={step.id}
@@ -108,7 +96,7 @@ export default function TaskProjectPage() {
                           onClick={() => handleRemoveStep(step.id)}
                           className="text-destructive hover:text-destructive/80 text-lg font-medium transition"
                           title="Удалить шаг"
-                          disabled={steps.length <= 3}
+                          disabled={!canRemove}
                         >
                           ×
                         </button>
@@ -126,48 +114,60 @@ export default function TaskProjectPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-10 text-center" style={{ padding: "224px 0 97px" }}>
-            <div className="flex flex-col gap-6 md:flex-row md:items-start">
+          <div className="space-y-8 text-center" style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "224px 0 97px" }}>
+            <div className="flex flex-col gap-6 md:flex-row md:items-start" style={{ marginRight: "19px", paddingRight: "1px" }}>
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
+                const ordinalWords = [
+                  "One",
+                  "Two",
+                  "Three",
+                  "Four",
+                  "Five",
+                  "Six",
+                  "Seven",
+                  "Eight",
+                  "Nine",
+                  "Ten",
+                ];
+                const word = ordinalWords[index] ?? `${stepNumber}`;
                 const activeStep = steps.length >= 2 ? 2 : 1;
                 const isActive = stepNumber === activeStep;
                 const isCompleted = stepNumber < activeStep;
                 const isLast = index === steps.length - 1;
-                const indicatorClass = [
-                  "flex h-[50px] w-[50px] items-center justify-center rounded-full border-2 text-base font-medium transition-colors",
-                  isCompleted
-                    ? "border-foreground bg-foreground text-background"
-                    : isActive
-                    ? "border-foreground text-foreground"
-                    : "border-border text-muted-foreground",
-                ].join(" ");
 
                 return (
                   <div
                     key={step.id}
-                    className="relative flex flex-1 flex-col items-center gap-3"
+                    className="relative flex flex-1 flex-col items-center"
                   >
                     <button
                       type="button"
                       className="flex flex-col items-center gap-3 rounded focus:outline-none"
                     >
-                      <div className={indicatorClass}>{isCompleted ? "✓" : stepNumber}</div>
+                      <div
+                        className={`flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors ${
+                          isActive || isCompleted
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-foreground"
+                        }`}
+                      >
+                        {isCompleted ? "✓" : stepNumber}
+                      </div>
                       <div className="space-y-0.5 px-2">
                         <p className="text-sm font-semibold text-foreground">
-                          {step.title.trim() ? step.title : `Step ${stepNumber}`}
+                          {step.title.trim() ? step.title : `Step ${word}`}
                         </p>
                       </div>
                     </button>
                     {!isLast && (
                       <div
-                        className={`hidden md:block absolute -translate-y-1/2 h-0.5 ${
-                          isCompleted ? "bg-foreground" : "bg-border"
-                        }`}
+                        className="hidden md:block absolute -z-10 h-0.5 bg-border"
                         style={{
                           top: "25px",
-                          left: "calc(50% + 25px + 8px)",
-                          width: "calc(100% - 42px)",
+                          left: "180px",
+                          width: "230px",
+                          transform: "translateY(-50%)",
                         }}
                       />
                     )}
