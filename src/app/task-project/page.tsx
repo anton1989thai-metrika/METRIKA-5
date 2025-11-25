@@ -59,7 +59,6 @@ export default function TaskProjectPage() {
       return prev.filter((step) => step.id !== stepId);
     });
   };
-
   return (
     <div className="min-h-screen bg-white">
       <Header />
