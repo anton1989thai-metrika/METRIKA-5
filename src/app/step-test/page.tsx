@@ -76,8 +76,8 @@ export default function StepTestPage() {
                       }`}
                       style={{
                         top: "25px",
-                        left: "calc(50% + 25px + 0.125rem)",
-                        width: "calc(100% - 50px - 0.25rem)",
+                        left: "calc(50% + 25px + 8px)",
+                        width: "calc(100% - 42px)",
                       }}
                     />
                   )}

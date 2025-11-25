@@ -38,8 +38,20 @@ export default function TaskProjectPage() {
 
   const handleAddStep = () => {
     setSteps((prev) => {
+      if (prev.length >= 10) {
+        return prev; // Максимум 10 шагов
+      }
       const nextId = prev.length > 0 ? prev[prev.length - 1].id + 1 : 1;
       return [...prev, { id: nextId, title: "" }];
+    });
+  };
+
+  const handleRemoveStep = (stepId: number) => {
+    setSteps((prev) => {
+      if (prev.length <= 3) {
+        return prev; // Минимум 3 шага
+      }
+      return prev.filter((step) => step.id !== stepId);
     });
   };
 
@@ -88,10 +100,18 @@ export default function TaskProjectPage() {
                         placeholder="Введите название шага"
                         className="flex-1"
                       />
-                      <div className="flex gap-2 md:w-auto">
+                      <div className="flex gap-2 md:w-auto items-center">
                         <Button variant="outline" onClick={() => handleDetailClick(step.id)}>
                           Детально
                         </Button>
+                        <button
+                          onClick={() => handleRemoveStep(step.id)}
+                          className="text-destructive hover:text-destructive/80 text-lg font-medium transition"
+                          title="Удалить шаг"
+                          disabled={steps.length <= 3}
+                        >
+                          ×
+                        </button>
                       </div>
                     </div>
                   );
@@ -99,7 +119,9 @@ export default function TaskProjectPage() {
               </div>
 
               <div className="flex justify-start">
-                <Button onClick={handleAddStep}>Добавить шаг</Button>
+                <Button onClick={handleAddStep} disabled={steps.length >= 10}>
+                  Добавить шаг
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -113,7 +135,7 @@ export default function TaskProjectPage() {
                 const isCompleted = stepNumber < activeStep;
                 const isLast = index === steps.length - 1;
                 const indicatorClass = [
-                  "flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors",
+                  "flex h-[50px] w-[50px] items-center justify-center rounded-full border-2 text-base font-medium transition-colors",
                   isCompleted
                     ? "border-foreground bg-foreground text-background"
                     : isActive
@@ -126,15 +148,27 @@ export default function TaskProjectPage() {
                     key={step.id}
                     className="relative flex flex-1 flex-col items-center gap-3"
                   >
-                    <div className={indicatorClass}>{isCompleted ? "✓" : stepNumber}</div>
-                    <p className="text-sm font-semibold text-foreground">
-                      {step.title.trim() ? step.title : `Step ${stepNumber}`}
-                    </p>
+                    <button
+                      type="button"
+                      className="flex flex-col items-center gap-3 rounded focus:outline-none"
+                    >
+                      <div className={indicatorClass}>{isCompleted ? "✓" : stepNumber}</div>
+                      <div className="space-y-0.5 px-2">
+                        <p className="text-sm font-semibold text-foreground">
+                          {step.title.trim() ? step.title : `Step ${stepNumber}`}
+                        </p>
+                      </div>
+                    </button>
                     {!isLast && (
                       <div
-                        className={`hidden md:block absolute top-1/2 left-full ml-6 h-0.5 w-24 ${
+                        className={`hidden md:block absolute -translate-y-1/2 h-0.5 ${
                           isCompleted ? "bg-foreground" : "bg-border"
                         }`}
+                        style={{
+                          top: "25px",
+                          left: "calc(50% + 25px + 8px)",
+                          width: "calc(100% - 42px)",
+                        }}
                       />
                     )}
                   </div>
