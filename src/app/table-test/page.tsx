@@ -98,7 +98,9 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      21.10.2025
+                      <div style={{ textAlign: "center", width: "100%" }}>
+                        21.10.2025
+                      </div>
                     </div>
                   </tr>
                   <tr
@@ -148,7 +150,9 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      22.10.2025
+                      <div style={{ textAlign: "center", width: "100%" }}>
+                        22.10.2025
+                      </div>
                     </div>
                   </tr>
                   <tr
@@ -198,7 +202,9 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      23.10.2025
+                      <div style={{ textAlign: "center", width: "100%" }}>
+                        23.10.2025
+                      </div>
                     </div>
                   </tr>
                   <tr
@@ -248,7 +254,9 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      24.10.2025
+                      <div style={{ textAlign: "center", width: "100%" }}>
+                        24.10.2025
+                      </div>
                     </div>
                   </tr>
                   <tr
@@ -298,7 +306,9 @@ export default function TableTestPage() {
                         textAlign: "center",
                       }}
                     >
-                      25.10.2025
+                      <div style={{ textAlign: "center", width: "100%" }}>
+                        25.10.2025
+                      </div>
                     </div>
                   </tr>
                 </tbody>
