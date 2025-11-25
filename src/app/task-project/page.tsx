@@ -41,8 +41,11 @@ export default function TaskProjectPage() {
       if (prev.length >= 10) {
         return prev; // Максимум 10 шагов
       }
-      const nextId = prev.length > 0 ? prev[prev.length - 1].id + 1 : 1;
-      return [...prev, { id: nextId, title: "" }];
+      // ID всегда равен следующему номеру по порядку
+      const nextId = prev.length + 1;
+      const newSteps = [...prev, { id: nextId, title: "" }];
+      // Пересчитываем все ID чтобы они шли по порядку 1, 2, 3...
+      return newSteps.map((step, index) => ({ ...step, id: index + 1 }));
     });
   };
 
@@ -56,7 +59,9 @@ export default function TaskProjectPage() {
       if (prev.length <= 3) {
         return prev;
       }
-      return prev.filter((step) => step.id !== stepId);
+      const filtered = prev.filter((step) => step.id !== stepId);
+      // Пересчитываем все ID чтобы они шли по порядку 1, 2, 3...
+      return filtered.map((step, index) => ({ ...step, id: index + 1 }));
     });
   };
   return (
