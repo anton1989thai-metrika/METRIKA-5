@@ -54,6 +54,7 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -83,11 +84,25 @@ export default function TableTestPage() {
                     >
                       Name
                     </div>
+                    <div
+                      style={{
+                        display: "table-cell",
+                        borderCollapse: "collapse",
+                        borderSpacing: "2px",
+                        captionSide: "bottom",
+                        fontWeight: "400",
+                        verticalAlign: "middle",
+                        padding: "8px",
+                      }}
+                    >
+                      David Kim
+                    </div>
                   </tr>
                   <tr
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -103,7 +118,7 @@ export default function TableTestPage() {
                     <div
                       style={{
                         display: "table-cell",
-                        backgroundColor: "rgba(255, 255, 255, 1)",
+                        backgroundColor: "oklab(0.97 0 0 / 0.5)",
                         borderCollapse: "collapse",
                         borderColor: "oklch(0.922 0 0)",
                         borderRightWidth: "1px",
@@ -116,11 +131,25 @@ export default function TableTestPage() {
                     >
                       Email
                     </div>
+                    <div
+                      style={{
+                        display: "table-cell",
+                        borderCollapse: "collapse",
+                        borderSpacing: "2px",
+                        captionSide: "bottom",
+                        fontWeight: "400",
+                        verticalAlign: "middle",
+                        padding: "8px",
+                      }}
+                    >
+                      d.kim@company.com
+                    </div>
                   </tr>
                   <tr
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -149,11 +178,25 @@ export default function TableTestPage() {
                     >
                       Location
                     </div>
+                    <div
+                      style={{
+                        display: "table-cell",
+                        borderCollapse: "collapse",
+                        borderSpacing: "2px",
+                        captionSide: "bottom",
+                        fontWeight: "400",
+                        verticalAlign: "middle",
+                        padding: "8px",
+                      }}
+                    >
+                      Seoul, KR
+                    </div>
                   </tr>
                   <tr
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -200,6 +243,7 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
