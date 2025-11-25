@@ -101,7 +101,7 @@ export default function TaskProjectPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-10 space-y-8 text-center">
+          <div className="mt-10 space-y-8 text-center" style={{ marginTop: "-188px" }}>
             <div className="flex flex-col gap-6 md:flex-row md:items-start" style={{ padding: "224px 0 97px" }}>
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
