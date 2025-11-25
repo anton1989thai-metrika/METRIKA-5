@@ -149,8 +149,9 @@ export default function TaskProjectPage() {
                         }`}
                         style={{
                           top: "25px",
-                          left: "calc(50% + 25px + 8px)",
-                          width: "calc(100% - 42px)",
+                          left: "180px",
+                          width: "230px",
+                          transform: "translateY(-50%)",
                         }}
                       />
                     )}
