@@ -148,7 +148,7 @@ export default function TaskProjectPage() {
                       <div className={indicatorClass}>{isCompleted ? "✓" : stepNumber}</div>
                       <div className="space-y-0.5 px-2">
                         <p className="text-sm font-semibold text-foreground">
-                          {step.title.trim() ? step.title : `Step ${stepNumber}`}
+                          {step.title.trim() ? step.title : `Шаг ${stepNumber}`}
                         </p>
                       </div>
                     </button>
