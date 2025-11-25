@@ -6,13 +6,6 @@ import BurgerMenu from "@/components/BurgerMenu";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 interface ProjectStep {
   id: number;
@@ -27,8 +20,6 @@ const initialSteps: ProjectStep[] = [
 
 export default function TaskProjectPage() {
   const [steps, setSteps] = useState<ProjectStep[]>(initialSteps);
-  const [detailStepId, setDetailStepId] = useState<number | null>(null);
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
   const handleTitleChange = (id: number, value: string) => {
     setSteps((prev) =>
@@ -50,8 +41,7 @@ export default function TaskProjectPage() {
   };
 
   const handleDetailClick = (stepId: number) => {
-    setDetailStepId(stepId);
-    setIsDetailDialogOpen(true);
+    window.location.href = `/project-multi-step-form?stepId=${stepId}`;
   };
 
   const handleRemoveStep = (stepId: number) => {
@@ -171,26 +161,6 @@ export default function TaskProjectPage() {
           </div>
         </div>
       </main>
-
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Добавить задачи в Шаг {detailStepId ?? ""}
-            </DialogTitle>
-            <DialogDescription>
-              Здесь появится настройка задач для выбранного шага. (TODO)
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 text-sm text-muted-foreground">
-            <p>В дальнейшем здесь можно будет выбрать существующие задачи или создать новые.</p>
-            <p>Сейчас это заглушка для будущего функционала.</p>
-          </div>
-          <div className="flex justify-end pt-4">
-            <Button onClick={() => setIsDetailDialogOpen(false)}>Закрыть</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
