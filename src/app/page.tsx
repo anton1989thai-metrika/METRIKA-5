@@ -1,6 +1,4 @@
-"use client"
-
-'use client';
+"use client";
 
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";

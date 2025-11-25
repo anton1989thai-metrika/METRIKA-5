@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Разрешаем кросс-доменные запросы к dev-серверу из прокси и интерфейса Builder
-  allowedDevOrigins: ['*.fly.dev', '*.builder.io', '*.builder.codes'],
   // Разрешаем встраивание сайта в редактор (iframe) — важно для Design Mode
   async headers() {
     return [
@@ -31,7 +29,7 @@ const nextConfig: NextConfig = {
   // Убеждаемся, что статические файлы обслуживаются правильно
   trailingSlash: false,
   assetPrefix: '',
-  // Отключаем проверку ESLint во время сборки, чтобы сайт работал
+  // Отключаем проверку ESLint во время сборки, чтобы сайт раб��тал
   eslint: {
     ignoreDuringBuilds: true,
   },
