@@ -38,7 +38,7 @@ export default function TableTestPage() {
                   fontSize: "14px",
                   fontWeight: "400",
                   lineHeight: "20px",
-                  width: "253px",
+                  width: "237px",
                 }}
               >
                 <tbody
@@ -54,7 +54,6 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
-                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -107,7 +106,6 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
-                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -159,7 +157,6 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
-                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -211,7 +208,6 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
-                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
@@ -227,7 +223,7 @@ export default function TableTestPage() {
                     <div
                       style={{
                         display: "table-cell",
-                        backgroundColor: "rgba(255, 255, 255, 1)",
+                        backgroundColor: "oklab(0.97 0 0 / 0.5)",
                         borderCollapse: "collapse",
                         borderColor: "oklch(0.922 0 0)",
                         borderRightWidth: "1px",
@@ -263,7 +259,6 @@ export default function TableTestPage() {
                     style={{
                       display: "table-row",
                       borderBottomWidth: "1px",
-                      borderBottomStyle: "solid",
                       borderCollapse: "collapse",
                       borderColor: "oklch(0.922 0 0)",
                       borderSpacing: "2px",
