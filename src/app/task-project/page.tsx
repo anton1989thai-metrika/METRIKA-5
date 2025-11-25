@@ -101,8 +101,8 @@ export default function TaskProjectPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-10 space-y-8 text-center" style={{ marginTop: "-188px" }}>
-            <div className="flex flex-col gap-6 md:flex-row md:items-start" style={{ padding: "224px 0 97px" }}>
+          <div className="space-y-8 text-center" style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "224px 0 97px" }}>
+            <div className="flex flex-col gap-6 md:flex-row md:items-start" style={{ marginRight: "19px", paddingRight: "1px" }}>
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
                 const ordinalWords = [
