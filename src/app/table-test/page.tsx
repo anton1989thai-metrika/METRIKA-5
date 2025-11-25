@@ -95,7 +95,7 @@ export default function TableTestPage() {
                         width: "90px",
                         minWidth: "90px",
                         textAlign: "center",
-                        backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                        backgroundColor: "rgba(255, 255, 255, 1)",
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
@@ -174,7 +174,7 @@ export default function TableTestPage() {
                     <div
                       style={{
                         display: "table-cell",
-                        backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                        backgroundColor: "rgba(255, 255, 255, 1)",
                         borderCollapse: "collapse",
                         borderColor: "oklch(0.922 0 0)",
                         borderRightWidth: "1px",
