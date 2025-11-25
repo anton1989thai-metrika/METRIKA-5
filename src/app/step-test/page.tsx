@@ -45,7 +45,7 @@ export default function StepTestPage() {
               const isLast = index === steps.length - 1;
 
               const indicatorClass = [
-                "flex h-6 w-6 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors",
+                "flex h-[50px] w-[50px] items-center justify-center rounded-full border-2 text-base font-medium transition-colors",
                 isCompleted
                   ? "border-foreground bg-foreground text-background"
                   : isActive
@@ -71,9 +71,14 @@ export default function StepTestPage() {
                   </button>
                   {!isLast && (
                     <div
-                      className={`hidden md:block absolute top-3 left-[117px] -translate-y-1/2 h-0.5 w-[calc(100%-1.5rem-0.25rem)] ${
+                      className={`hidden md:block absolute -translate-y-1/2 h-0.5 ${
                         isCompleted ? "bg-foreground" : "bg-border"
                       }`}
+                      style={{
+                        top: "25px",
+                        left: "calc(50% + 25px + 8px)",
+                        width: "calc(100% - 42px)",
+                      }}
                     />
                   )}
                 </div>
