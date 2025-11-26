@@ -113,10 +113,320 @@ export default function TaskProjectPage() {
 
           <div
             className="space-y-8 text-center"
-            style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "250px 0 97px", position: "relative", overflow: "visible" }}
+            style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "250px 0 400px", position: "relative", overflow: "visible" }}
           >
             {/* Table above Step 1 circle */}
             <div style={{ position: "absolute", top: "-250px", left: "50%", width: "100%", display: "flex", justifyContent: "center", zIndex: 10, transform: `translateX(calc(-50% + ${columnWidth / 2}px))` }}>
+              <div
+                style={{
+                  backgroundColor: "oklch(1 0 0)",
+                  borderColor: "oklch(0.922 0 0)",
+                  borderRadius: "8px",
+                  borderWidth: "1px",
+                  fontWeight: "400",
+                  overflowX: "hidden",
+                  overflowY: "hidden",
+                  width: "239px",
+                  margin: "305px 782px 0 0",
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: "400",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    position: "relative",
+                    width: "238px",
+                  }}
+                >
+                  <table
+                    style={{
+                      display: "table",
+                      captionSide: "bottom",
+                      fontSize: "14px",
+                      fontWeight: "400",
+                      lineHeight: "20px",
+                      width: "237px",
+                    }}
+                  >
+                    <tbody
+                      style={{
+                        display: "table-row-group",
+                        borderCollapse: "collapse",
+                        borderSpacing: "2px",
+                        captionSide: "bottom",
+                        fontWeight: "400",
+                      }}
+                    >
+                      <tr
+                        style={{
+                          display: "table-row",
+                          borderBottomWidth: "1px",
+                          borderCollapse: "collapse",
+                          borderColor: "oklch(0.922 0 0)",
+                          borderSpacing: "2px",
+                          captionSide: "bottom",
+                          fontWeight: "400",
+                          transitionDuration: "0.15s",
+                          transitionProperty:
+                            "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "table-cell",
+                            backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                            borderCollapse: "collapse",
+                            borderColor: "oklch(0.922 0 0)",
+                            borderRightWidth: "1px",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "500",
+                            verticalAlign: "middle",
+                            width: "180px",
+                            padding: "8px",
+                          }}
+                        >
+                          Name
+                        </div>
+                        <div
+                          style={{
+                            display: "table-cell",
+                            borderCollapse: "collapse",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "400",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                            width: "90px",
+                            minWidth: "90px",
+                            textAlign: "center",
+                            backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                            21.10.2025
+                          </div>
+                        </div>
+                      </tr>
+                      <tr
+                        style={{
+                          display: "table-row",
+                          borderBottomWidth: "1px",
+                          borderCollapse: "collapse",
+                          borderColor: "oklch(0.922 0 0)",
+                          borderSpacing: "2px",
+                          captionSide: "bottom",
+                          fontWeight: "400",
+                          transitionDuration: "0.15s",
+                          transitionProperty:
+                            "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "table-cell",
+                            backgroundColor: "rgba(255, 255, 255, 1)",
+                            borderCollapse: "collapse",
+                            borderColor: "oklch(0.922 0 0)",
+                            borderRightWidth: "1px",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "500",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                          }}
+                        >
+                          Email
+                        </div>
+                        <div
+                          style={{
+                            display: "table-cell",
+                            borderCollapse: "collapse",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "400",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                            width: "90px",
+                            minWidth: "90px",
+                            textAlign: "center",
+                            backgroundColor: "rgba(255, 255, 255, 1)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                            22.10.2025
+                          </div>
+                        </div>
+                      </tr>
+                      <tr
+                        style={{
+                          display: "table-row",
+                          borderBottomWidth: "1px",
+                          borderCollapse: "collapse",
+                          borderColor: "oklch(0.922 0 0)",
+                          borderSpacing: "2px",
+                          captionSide: "bottom",
+                          fontWeight: "400",
+                          transitionDuration: "0.15s",
+                          transitionProperty:
+                            "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "table-cell",
+                            backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                            borderCollapse: "collapse",
+                            borderColor: "oklch(0.922 0 0)",
+                            borderRightWidth: "1px",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "500",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                          }}
+                        >
+                          Location
+                        </div>
+                        <div
+                          style={{
+                            display: "table-cell",
+                            borderCollapse: "collapse",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "400",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                            width: "90px",
+                            minWidth: "90px",
+                            textAlign: "center",
+                            backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                            23.10.2025
+                          </div>
+                        </div>
+                      </tr>
+                      <tr
+                        style={{
+                          display: "table-row",
+                          borderBottomWidth: "1px",
+                          borderCollapse: "collapse",
+                          borderColor: "oklch(0.922 0 0)",
+                          borderSpacing: "2px",
+                          captionSide: "bottom",
+                          fontWeight: "400",
+                          transitionDuration: "0.15s",
+                          transitionProperty:
+                            "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "table-cell",
+                            backgroundColor: "rgba(255, 255, 255, 1)",
+                            borderCollapse: "collapse",
+                            borderColor: "oklch(0.922 0 0)",
+                            borderRightWidth: "1px",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "500",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                          }}
+                        >
+                          Status
+                        </div>
+                        <div
+                          style={{
+                            display: "table-cell",
+                            borderCollapse: "collapse",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "400",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                            width: "90px",
+                            minWidth: "90px",
+                            textAlign: "center",
+                            backgroundColor: "rgba(255, 255, 255, 1)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                            24.10.2025
+                          </div>
+                        </div>
+                      </tr>
+                      <tr
+                        style={{
+                          display: "table-row",
+                          borderBottomWidth: "1px",
+                          borderCollapse: "collapse",
+                          borderColor: "oklch(0.922 0 0)",
+                          borderSpacing: "2px",
+                          captionSide: "bottom",
+                          fontWeight: "400",
+                          transitionDuration: "0.15s",
+                          transitionProperty:
+                            "color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to",
+                          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "table-cell",
+                            backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                            borderCollapse: "collapse",
+                            borderColor: "oklch(0.922 0 0)",
+                            borderRightWidth: "1px",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "500",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                          }}
+                        >
+                          Balance
+                        </div>
+                        <div
+                          style={{
+                            display: "table-cell",
+                            borderCollapse: "collapse",
+                            borderSpacing: "2px",
+                            captionSide: "bottom",
+                            fontWeight: "400",
+                            verticalAlign: "middle",
+                            padding: "8px",
+                            width: "90px",
+                            minWidth: "90px",
+                            textAlign: "center",
+                            backgroundColor: "oklab(0.97 0 0 / 0.5)",
+                          }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                            25.10.2025
+                          </div>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* Table below Step 2 circle */}
+            <div style={{ position: "absolute", top: "150px", left: "50%", width: "100%", display: "flex", justifyContent: "center", zIndex: 10, transform: `translateX(calc(-50% + ${columnWidth / 2}px + ${columnWidth}px))` }}>
               <div
                 style={{
                   backgroundColor: "oklch(1 0 0)",
