@@ -127,6 +127,7 @@ export default function TaskProjectPage() {
                   overflowX: "hidden",
                   overflowY: "hidden",
                   width: "239px",
+                  margin: "305px 782px 0 0",
                 }}
               >
                 <div
