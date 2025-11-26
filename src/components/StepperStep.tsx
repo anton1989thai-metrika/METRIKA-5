@@ -3,7 +3,9 @@ interface StepperStepProps {
   title: string;
   isActive: boolean;
   isCompleted: boolean;
+  showLeftLine?: boolean;
   showLine?: boolean;
+  leftLineCompleted?: boolean;
   totalSteps?: number;
 }
 
@@ -12,9 +14,14 @@ export default function StepperStep({
   title,
   isActive,
   isCompleted,
+  showLeftLine = false,
   showLine = false,
+  leftLineCompleted = false,
   totalSteps = 3,
 }: StepperStepProps) {
+  const columnWidth = Math.max(50, 250 - (totalSteps - 3) * 10);
+  const rightLineWidth = Math.max(0, columnWidth - 50 - 16);
+  const leftLineWidth = Math.max(0, columnWidth - 50);
   const indicatorClass = [
     "flex h-[50px] w-[50px] items-center justify-center rounded-full border-2 text-base font-medium transition-colors",
     isCompleted
@@ -39,6 +46,19 @@ export default function StepperStep({
       >
         <div className={`relative ${indicatorClass}`} style={{ width: "50px", height: "50px", boxSizing: "border-box" }}>
           {isCompleted ? "✓" : stepNumber}
+          {showLeftLine && (
+            <div
+              className={`hidden md:block absolute h-0.5 ${
+                leftLineCompleted ? "bg-foreground" : "bg-border"
+              }`}
+              style={{
+                top: "50%",
+                right: "calc(100% + 8px)",
+                width: `${leftLineWidth}px`,
+                transform: "translateY(-50%)",
+              }}
+            />
+          )}
           {showLine && (
             <div
               className={`hidden md:block absolute h-0.5 ${
@@ -47,7 +67,7 @@ export default function StepperStep({
               style={{
                 top: "50%",
                 left: "calc(100% + 8px)",
-                width: `${lineWidth}px`,
+                width: `${rightLineWidth}px`,
                 transform: "translateY(-50%)",
               }}
             />

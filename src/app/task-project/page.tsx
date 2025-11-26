@@ -115,7 +115,7 @@ export default function TaskProjectPage() {
             style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "224px 0 97px" }}
           >
             <div 
-              className="flex flex-col gap-6 md:grid md:grid-flow-col md:items-center md:justify-center" 
+              className="flex flex-col gap-6 md:grid md:grid-flow-col md:items-center md:justify-center md:gap-0" 
               style={{ 
                 marginRight: "19px", 
                 paddingRight: "1px",
@@ -128,6 +128,8 @@ export default function TaskProjectPage() {
                 const isActive = stepNumber === activeStep;
                 const isCompleted = stepNumber < activeStep;
                 const isLast = index === steps.length - 1;
+                const showLeftLine = index > 0;
+                const leftLineCompleted = stepNumber - 1 < activeStep;
 
                 return (
                   <div
@@ -142,7 +144,9 @@ export default function TaskProjectPage() {
                       title={step.title}
                       isActive={isActive}
                       isCompleted={isCompleted}
-                      showLine={!isLast}
+                      showLeftLine={showLeftLine}
+                      leftLineCompleted={leftLineCompleted}
+                      showLine={false}
                       totalSteps={steps.length}
                     />
                   </div>
@@ -155,4 +159,3 @@ export default function TaskProjectPage() {
     </div>
   );
 }
-
