@@ -19,7 +19,7 @@ export default function StepperStep({
   leftLineCompleted = false,
   totalSteps = 3,
 }: StepperStepProps) {
-  const columnWidth = Math.max(50, 250 - (totalSteps - 3) * 10);
+  const columnWidth = Math.max(50, 238 - (totalSteps - 3) * 10);
   const rightLineWidth = Math.max(0, columnWidth - 50 - 16);
   const leftLineWidth = Math.max(0, columnWidth - 50);
   const indicatorClass = [
