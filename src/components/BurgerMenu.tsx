@@ -150,19 +150,19 @@ export default function BurgerMenu() {
     <>
       {/* Кнопка бургер-меню */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
+      <button
+        onClick={() => setIsOpen(true)}
           className="fixed top-[19px] left-4 z-[60] bg-white border border-gray-300 rounded-md shadow-md transition-all flex flex-col items-center justify-center p-2 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ 
             height: '40px', 
             width: '40px',
             zIndex: 60
           }}
-          aria-label="Открыть меню"
+        aria-label="Открыть меню"
           disabled={hasOpenDialog}
-        >
-          <Menu className="w-6 h-6 text-black flex flex-col items-center justify-center" />
-        </button>
+      >
+        <Menu className="w-6 h-6 text-black flex flex-col items-center justify-center" />
+      </button>
       )}
 
       {/* Оверлей */}

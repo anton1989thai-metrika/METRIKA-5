@@ -1,27 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { CSSProperties } from "react";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import BuilderEditorBridge from "@/components/BuilderEditorBridge";
 import { Toaster } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-  fallback: ["system-ui", "arial"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-  fallback: ["monospace"],
-});
-
 export const metadata: Metadata = {
   title: "МЕТРИКА - Агентство недвижимости",
   description: "Портал агентства недвижимости МЕТРИКА",
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
+const fontVariables: CSSProperties = {
+  ["--font-geist-sans" as string]:
+    "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  ["--font-geist-mono" as string]:
+    "'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 };
 
 export default function RootLayout({
@@ -31,9 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased text-black`}
-      >
+      <body className="antialiased text-black" style={fontVariables}>
         <Providers>
           {children}
           <Toaster />
