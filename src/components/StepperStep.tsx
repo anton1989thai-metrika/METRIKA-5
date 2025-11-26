@@ -38,7 +38,7 @@ export default function StepperStep({
               style={{
                 top: "50%",
                 left: "calc(100% + 8px)",
-                width: "184px",
+                width: "212px",
                 transform: "translateY(-50%)",
               }}
             />
@@ -53,4 +53,3 @@ export default function StepperStep({
     </div>
   );
 }
-
