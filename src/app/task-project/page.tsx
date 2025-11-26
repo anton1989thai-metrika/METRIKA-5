@@ -119,7 +119,7 @@ export default function TaskProjectPage() {
               style={{ 
                 marginRight: "19px", 
                 paddingRight: "1px",
-                gridTemplateColumns: `repeat(${steps.length}, 250px)`,
+                gridTemplateColumns: `repeat(${steps.length}, ${Math.max(50, 250 - (steps.length - 3) * 10)}px)`,
               }}
             >
               {steps.map((step, index) => {
@@ -143,6 +143,7 @@ export default function TaskProjectPage() {
                       isActive={isActive}
                       isCompleted={isCompleted}
                       showLine={!isLast}
+                      totalSteps={steps.length}
                     />
                   </div>
                 );
