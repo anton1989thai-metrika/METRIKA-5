@@ -6,6 +6,7 @@ import BurgerMenu from "@/components/BurgerMenu";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import StepperStep from "@/components/StepperStep";
 
 interface ProjectStep {
   id: number;
@@ -109,52 +110,40 @@ export default function TaskProjectPage() {
             </CardContent>
           </Card>
 
-          <div className="space-y-8 text-center" style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "224px 0 97px" }}>
-            <div className="flex flex-col gap-6 md:flex-row md:items-start" style={{ marginRight: "19px", paddingRight: "1px" }}>
+          <div
+            className="space-y-8 text-center"
+            style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "224px 0 97px" }}
+          >
+            <div 
+              className="flex flex-col gap-6 md:grid md:grid-flow-col md:items-center md:justify-center" 
+              style={{ 
+                marginRight: "19px", 
+                paddingRight: "1px",
+                gridTemplateColumns: `repeat(${steps.length}, 250px)`,
+              }}
+            >
               {steps.map((step, index) => {
                 const stepNumber = index + 1;
                 const activeStep = steps.length >= 2 ? 2 : 1;
                 const isActive = stepNumber === activeStep;
                 const isCompleted = stepNumber < activeStep;
                 const isLast = index === steps.length - 1;
-                const indicatorClass = [
-                  "flex h-[50px] w-[50px] items-center justify-center rounded-full border-2 text-base font-medium transition-colors",
-                  isCompleted
-                    ? "border-foreground bg-foreground text-background"
-                    : isActive
-                    ? "border-foreground text-foreground"
-                    : "border-border text-muted-foreground",
-                ].join(" ");
 
                 return (
                   <div
                     key={step.id}
-                    className="relative flex flex-1 flex-col items-center gap-3"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
                   >
-                    <button
-                      type="button"
-                      className="flex flex-col items-center gap-3 rounded focus:outline-none"
-                    >
-                      <div className={indicatorClass}>{isCompleted ? "✓" : stepNumber}</div>
-                      <div className="space-y-0.5 px-2">
-                        <p className="text-sm font-semibold text-foreground">
-                          {step.title.trim() ? step.title : `Шаг ${stepNumber}`}
-                        </p>
-                      </div>
-                    </button>
-                    {!isLast && (
-                      <div
-                        className={`hidden md:block absolute -translate-y-1/2 h-0.5 ${
-                          isCompleted ? "bg-foreground" : "bg-border"
-                        }`}
-                        style={{
-                          top: "25px",
-                          left: "180px",
-                          width: "230px",
-                          transform: "translateY(-50%)",
-                        }}
-                      />
-                    )}
+                    <StepperStep
+                      stepNumber={stepNumber}
+                      title={step.title}
+                      isActive={isActive}
+                      isCompleted={isCompleted}
+                      showLine={!isLast}
+                    />
                   </div>
                 );
               })}

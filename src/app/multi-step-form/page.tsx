@@ -629,21 +629,21 @@ export default function MultiStepFormPage() {
                     <div className="space-y-6">
                       {/* Название задачи и Выбор объекта */}
                       <div className="grid gap-4 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="title">
-                            Название задачи <span className="text-destructive">*</span>
-                          </Label>
-                          <Input
-                            id="title"
-                            type="text"
-                            placeholder="Введите название задачи"
-                            value={formData.title}
+                      <div className="space-y-2">
+                        <Label htmlFor="title">
+                          Название задачи <span className="text-destructive">*</span>
+                        </Label>
+                        <Input
+                          id="title"
+                          type="text"
+                          placeholder="Введите название задачи"
+                          value={formData.title}
                             onChange={(e) => {
                               setIsTitleManuallyEdited(true);
                               setFormData({ ...formData, title: e.target.value });
                             }}
-                            required
-                          />
+                          required
+                        />
                         </div>
                         <div className="space-y-2">
                           <Label>Выбрать объект</Label>
