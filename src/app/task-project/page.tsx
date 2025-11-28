@@ -269,20 +269,21 @@ export default function TaskProjectPage() {
                 const showLeftLine = index > 0;
                 const leftLineCompleted = stepNumber - 1 < activeStep;
                 const showRightLine = index < steps.length - 1; // Показываем правую линию для всех шагов кроме последнего
+                const tableBelow = stepNumber % 2 === 0; // четные шаги — таблица снизу
+                const tableGap = 10;
+                const tableOffset = 210; // вертикальное смещение таблицы относительно центра степпера
 
                 return (
                   <div
                     key={step.id}
                     style={{
                       display: "flex",
-                      flexDirection: "column",
                       alignItems: "center",
-                      justifyContent: "flex-start",
-                      gap: "10px", // Расстояние между таблицей и кружком
+                      justifyContent: "center",
                       position: "relative",
+                      minHeight: "430px", // резерв высоты, чтобы таблицы не сдвигали степпер
                     }}
                   >
-                    {renderTable(index)}
                     <StepperStep
                       stepNumber={stepNumber}
                       title={step.title}
@@ -293,6 +294,17 @@ export default function TaskProjectPage() {
                       showLine={showRightLine}
                       totalSteps={steps.length}
                     />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: `translate(-50%, ${tableBelow ? tableOffset + tableGap : -tableOffset - tableGap}px)`,
+                        pointerEvents: "auto",
+                      }}
+                    >
+                      {renderTable(index)}
+                    </div>
                   </div>
                 );
               })}
