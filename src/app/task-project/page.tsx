@@ -82,6 +82,9 @@ export default function TaskProjectPage() {
     const rows = step?.rows ?? [];
     const dateColWidth = Math.max(70, Math.min(90, tableWidth * 0.35));
     const labelWidth = Math.max(80, tableWidth - dateColWidth);
+    const stepNumber = stepIndex + 1;
+    const tableBelow = stepNumber % 2 === 0;
+    const marginTop = tableBelow ? "-171px" : "-20px";
 
     return (
       <div key={`table-${stepIndex}`}>
@@ -96,6 +99,7 @@ export default function TaskProjectPage() {
             overflowY: "hidden",
             width: `${tableWidth}px`,
             pointerEvents: "auto",
+            marginTop: marginTop,
           }}
         >
           <div
