@@ -8,18 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StepperStep from "@/components/StepperStep";
 
+interface TableRow {
+  label: string;
+  date: string;
+}
+
 interface ProjectStep {
   id: number;
   title: string;
+  rows: TableRow[];
 }
 
-const initialSteps: ProjectStep[] = [
-  { id: 1, title: "" },
-  { id: 2, title: "" },
-  { id: 3, title: "" },
-];
-
-const tableRows = [
+const createDefaultRows = (): TableRow[] => [
   { label: "Name", date: "21.10.2025" },
   { label: "Email", date: "22.10.2025" },
   { label: "Location", date: "23.10.2025" },
@@ -27,9 +27,20 @@ const tableRows = [
   { label: "Balance", date: "25.10.2025" },
 ];
 
+const initialSteps: ProjectStep[] = [
+  { id: 1, title: "", rows: createDefaultRows() },
+  { id: 2, title: "", rows: createDefaultRows() },
+  { id: 3, title: "", rows: createDefaultRows() },
+];
+
 export default function TaskProjectPage() {
   const [steps, setSteps] = useState<ProjectStep[]>(initialSteps);
   const columnWidth = useMemo(() => Math.max(50, 250 - (steps.length - 3) * 10), [steps.length]);
+  const tableWidth = useMemo(() => Math.max(140, 239 - (steps.length - 3) * 10), [steps.length]);
+  const gridTemplateColumns = useMemo(
+    () => `repeat(${steps.length}, ${columnWidth}px)`,
+    [steps.length, columnWidth]
+  );
 
   const handleTitleChange = (id: number, value: string) => {
     setSteps((prev) =>
@@ -44,7 +55,7 @@ export default function TaskProjectPage() {
       }
       // ID всегда равен следующему номеру по порядку
       const nextId = prev.length + 1;
-      const newSteps = [...prev, { id: nextId, title: "" }];
+      const newSteps = [...prev, { id: nextId, title: "", rows: createDefaultRows() }];
       // Пересчитываем все ID чтобы они шли по порядку 1, 2, 3...
       return newSteps.map((step, index) => ({ ...step, id: index + 1 }));
     });
@@ -65,35 +76,15 @@ export default function TaskProjectPage() {
     });
   };
 
-  const renderTable = (stepIndex: number, colWidth: number, totalSteps: number) => {
-    const isTop = stepIndex % 2 === 0;
-    const topPosition = isTop ? "-250px" : "150px";
-    const marginTop = isTop ? "305px" : "189px";
-    // Ширина таблицы уменьшается на 10px за каждый шаг после третьего, минимум 140px
-    const tableWidth = Math.max(140, 239 - (totalSteps - 3) * 10);
-    // Ширина колонки с датой фиксирована в разумных границах
+  const renderTable = (stepIndex: number) => {
+    // Таблица для шага без позиционирования: позицию контролируем в месте рендера
+    const step = steps[stepIndex];
+    const rows = step?.rows ?? [];
     const dateColWidth = Math.max(70, Math.min(90, tableWidth * 0.35));
-    const totalGridWidth = colWidth * totalSteps;
-    // Grid контейнер центрирован через justify-center
-    // Центр каждого круга находится в центре своей колонки grid
-    // От центра родителя: -totalGridWidth/2 (начало grid) + colWidth/2 (центр первой колонки) + colWidth * stepIndex (смещение для текущего шага)
-    const circleCenterX = -totalGridWidth / 2 + colWidth / 2 + colWidth * stepIndex;
-    // Центрируем таблицу относительно центра круга: вычитаем половину ширины таблицы
-    const tableCenterOffset = circleCenterX - tableWidth / 2;
     const labelWidth = Math.max(80, tableWidth - dateColWidth);
 
     return (
-      <div
-        key={`table-${stepIndex}`}
-        style={{
-          position: "absolute",
-          top: topPosition,
-          left: `calc(50% + ${tableCenterOffset}px)`,
-          transform: "translateX(-50%)",
-          zIndex: 15,
-          pointerEvents: "none",
-        }}
-      >
+      <div key={`table-${stepIndex}`}>
         <div
           style={{
             backgroundColor: "oklch(1 0 0)",
@@ -104,7 +95,7 @@ export default function TaskProjectPage() {
             overflowX: "hidden",
             overflowY: "hidden",
             width: `${tableWidth}px`,
-            marginTop: marginTop,
+            pointerEvents: "auto",
           }}
         >
           <div
@@ -135,10 +126,10 @@ export default function TaskProjectPage() {
                   fontWeight: "400",
                 }}
               >
-                {tableRows.map((row, idx) => {
+                {rows.map((row, idx) => {
                   const zebra = idx % 2 === 0;
                   const bg = zebra ? "oklab(0.97 0 0 / 0.5)" : "rgba(255, 255, 255, 1)";
-                  const isLast = idx === tableRows.length - 1;
+                  const isLast = idx === rows.length - 1;
                   return (
                     <tr
                       key={`${stepIndex}-${row.label}`}
@@ -260,17 +251,14 @@ export default function TaskProjectPage() {
 
           <div
             className="space-y-8 text-center"
-            style={{ width: "2000px", margin: "50px 0 0 -526px", padding: "250px 0 400px", position: "relative", overflow: "visible" }}
+            style={{ width: "100%", margin: "80px auto 0", padding: "140px 0 220px", position: "relative", overflow: "visible" }}
           >
-            {/* Dynamic tables for all steps */}
-            {steps.map((step, index) => renderTable(index, columnWidth, steps.length))}
-
             <div 
               className="flex flex-col gap-6 md:grid md:grid-flow-col md:items-center md:justify-center md:gap-0" 
               style={{ 
                 marginRight: "19px", 
                 paddingRight: "1px",
-                gridTemplateColumns: `repeat(${steps.length}, ${columnWidth}px)`,
+                gridTemplateColumns: gridTemplateColumns,
               }}
             >
               {steps.map((step, index) => {
@@ -287,9 +275,14 @@ export default function TaskProjectPage() {
                     key={step.id}
                     style={{
                       display: "flex",
-                      justifyContent: "center",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      gap: "10px", // Расстояние между таблицей и кружком
+                      position: "relative",
                     }}
                   >
+                    {renderTable(index)}
                     <StepperStep
                       stepNumber={stepNumber}
                       title={step.title}
