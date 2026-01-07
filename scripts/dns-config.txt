@@ -1,0 +1,65 @@
+DNS записи для настройки почтового сервера
+===========================================
+
+Добавьте следующие записи в настройках DNS для домена metrika.direct:
+
+1. A запись (для почтового сервера):
+   Тип: A
+   Имя: mail
+   Значение: [IP_АДРЕС_ВАШЕГО_СЕРВЕРА]
+   TTL: 3600
+
+2. MX запись (указывает на почтовый сервер):
+   Тип: MX
+   Имя: @ (или metrika.direct)
+   Значение: mail.metrika.direct
+   Приоритет: 10
+   TTL: 3600
+
+3. SPF запись (защита от спама):
+   Тип: TXT
+   Имя: @
+   Значение: v=spf1 mx a:mail.metrika.direct ~all
+   TTL: 3600
+
+4. DKIM запись (подпись писем):
+   Тип: TXT
+   Имя: mail._domainkey
+   Значение: [СГЕНЕРИРУЕТСЯ_НА_СЕРВЕРЕ]
+   TTL: 3600
+   
+   Для генерации DKIM ключа выполните на сервере:
+   opendkim-genkey -t -s mail -d metrika.direct
+   cat /etc/opendkim/keys/metrika.direct/mail.txt
+
+5. DMARC запись:
+   Тип: TXT
+   Имя: _dmarc
+   Значение: v=DMARC1; p=none; rua=mailto:dmarc@metrika.direct; ruf=mailto:dmarc@metrika.direct
+   TTL: 3600
+
+6. Обратная запись PTR (важно для доставки):
+   Настройте на стороне вашего хостинг-провайдера
+   IP → mail.metrika.direct
+
+Проверка DNS записей:
+---------------------
+После добавления записей проверьте их:
+
+# Проверка MX записи
+dig MX metrika.direct
+
+# Проверка A записи
+dig A mail.metrika.direct
+
+# Проверка SPF
+dig TXT metrika.direct | grep spf
+
+# Проверка DKIM
+dig TXT mail._domainkey.metrika.direct
+
+# Проверка DMARC
+dig TXT _dmarc.metrika.direct
+
+Время распространения DNS: 5 минут - 48 часов (обычно 1-2 часа)
+

@@ -1,0 +1,54 @@
+#!/usr/bin/expect -f
+
+# Скрипт для деплоя изменений на VPS
+# Использование: ./scripts/deploy-vps.expect
+
+set timeout 60
+set password "SikaAnt7Hostinger7+"
+set server "root@72.62.72.196"
+set vps_path "/var/www/metrika5"
+
+# Загружаем login-form.tsx
+spawn scp -o StrictHostKeyChecking=no src/components/login-form.tsx $server:$vps_path/src/components/
+expect {
+    "password:" {
+        send "$password\r"
+        exp_continue
+    }
+    "yes/no" {
+        send "yes\r"
+        exp_continue
+    }
+    eof
+}
+
+# Загружаем UserManagementPanel.tsx
+spawn scp -o StrictHostKeyChecking=no src/components/UserManagementPanel.tsx $server:$vps_path/src/components/
+expect {
+    "password:" {
+        send "$password\r"
+        exp_continue
+    }
+    "yes/no" {
+        send "yes\r"
+        exp_continue
+    }
+    eof
+}
+
+# Подключаемся и перезапускаем сервис
+spawn ssh -o StrictHostKeyChecking=no $server "systemctl restart metrika5"
+expect {
+    "password:" {
+        send "$password\r"
+        exp_continue
+    }
+    "yes/no" {
+        send "yes\r"
+        exp_continue
+    }
+    eof
+}
+
+puts "\n✅ Деплой завершен!"
+

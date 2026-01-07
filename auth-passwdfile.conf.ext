@@ -1,0 +1,18 @@
+# Authentication for passwd-file users.
+# Virtual users stored in /etc/dovecot/passwd
+
+passdb passwd-file {
+  auth_username_format = %{user|lower}
+  passwd_file_path = /etc/dovecot/passwd
+  default_password_scheme = SHA512-CRYPT
+}
+
+# Map all virtual users to vmail uid and 'mail' group, Maildir under /var/mail/vhosts/<domain>/<user>
+userdb static {
+  fields {
+    uid = 5000
+    gid = 8
+    home = /var/mail/vhosts/%{user | domain}/%{user | username}
+    mail = maildir:/var/mail/vhosts/%{user | domain}/%{user | username}
+  }
+}

@@ -1,0 +1,10 @@
+# Authentication configuration для системных пользователей
+auth_mechanisms = plain login
+
+# Password database - используем PAM для системных пользователей
+passdb pam {
+}
+
+# User database - используем passwd для системных пользователей
+userdb passwd {
+}

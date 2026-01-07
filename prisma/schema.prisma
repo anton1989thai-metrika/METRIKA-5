@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  site_user @map("site-user")
+  client
+  foreign_employee @map("foreign-employee")
+  freelancer
+  admin
+  manager
+  employee
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  login     String?  @unique
+  name      String?
+  avatar    String?
+  role      UserRole @default(site_user)
+  passwordHash String @default("")
+  detailedPermissions Json?
+  status    String   @default("active") // active | inactive | pending (UI)
+  lastLogin DateTime?
+  dateOfBirth String?
+  phoneWork String?
+  phonePersonal String?
+  address   String?
+  comments  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  emails    Email[]  @relation("UserEmails")
+  folders   Folder[]
+  sessions  Session[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Folder {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emails      Email[]
+  threads     Thread[]
+  
+  @@unique([userId, slug])
+  @@index([userId])
+}
+
+model Thread {
+  id        String   @id @default(cuid())
+  subject   String
+  userId    String
+  folderId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  folder    Folder?  @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  emails    Email[]
+  
+  @@index([userId])
+  @@index([folderId])
+}
+
+model Email {
+  id          String   @id @default(cuid())
+  messageId   String   @unique
+  threadId    String?
+  folderId    String?
+  userId      String
+  
+  from        String
+  to          String
+  cc          String?
+  bcc         String?
+  subject     String
+  text        String?
+  html        String?
+  date        DateTime
+  
+  isRead      Boolean  @default(false)
+  isStarred   Boolean  @default(false)
+  isDeleted   Boolean  @default(false)
+  
+  attachments Json?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation("UserEmails", fields: [userId], references: [id], onDelete: Cascade)
+  thread      Thread?  @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  folder      Folder?  @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([threadId])
+  @@index([folderId])
+  @@index([messageId])
+  @@index([date])
+}

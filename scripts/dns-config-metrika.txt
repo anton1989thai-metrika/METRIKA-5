@@ -1,0 +1,88 @@
+DNS записи для настройки почтового сервера metrika.direct
+==========================================================
+
+ВАЖНО: Эти записи нужно добавить в настройках DNS для домена metrika.direct
+Управление DNS: https://nic.ru (RU-CENTER)
+
+1. A запись (для почтового сервера):
+   Тип: A
+   Имя: mail
+   Значение: 72.62.72.196
+   TTL: 3600
+
+2. MX запись (указывает на почтовый сервер):
+   Тип: MX
+   Имя: @ (или metrika.direct)
+   Значение: mail.metrika.direct
+   Приоритет: 10
+   TTL: 3600
+
+3. SPF запись (защита от спама):
+   Тип: TXT
+   Имя: @
+   Значение: v=spf1 mx a:mail.metrika.direct ip4:72.62.72.196 ~all
+   TTL: 3600
+
+4. DKIM запись (подпись писем):
+   Тип: TXT
+   Имя: mail._domainkey
+   Значение: [СГЕНЕРИРУЕТСЯ_НА_СЕРВЕРЕ - см. ниже]
+   TTL: 3600
+   
+   Для получения DKIM ключа выполните на сервере:
+   cat /etc/opendkim/keys/metrika.direct/mail.txt
+   
+   Скопируйте содержимое из кавычек и вставьте в DNS запись
+
+5. DMARC запись:
+   Тип: TXT
+   Имя: _dmarc
+   Значение: v=DMARC1; p=none; rua=mailto:dmarc@metrika.direct; ruf=mailto:dmarc@metrika.direct
+   TTL: 3600
+
+6. Обратная запись PTR (важно для доставки):
+   Настройте на стороне Hostinger (VPS панель)
+   IP 72.62.72.196 → mail.metrika.direct
+   
+   Обычно это делается через тикет в поддержку хостинг-провайдера
+
+Проверка DNS записей:
+---------------------
+После добавления записей проверьте их (подождите 5-60 минут для распространения):
+
+# Проверка MX записи
+dig MX metrika.direct
+
+# Проверка A записи
+dig A mail.metrika.direct
+
+# Проверка SPF
+dig TXT metrika.direct | grep spf
+
+# Проверка DKIM
+dig TXT mail._domainkey.metrika.direct
+
+# Проверка DMARC
+dig TXT _dmarc.metrika.direct
+
+Онлайн проверка:
+- https://mxtoolbox.com/SuperTool.aspx?action=mx%3ametrika.direct
+- https://mxtoolbox.com/spf.aspx
+- https://mxtoolbox.com/dkim.aspx
+
+Время распространения DNS: 5 минут - 48 часов (обычно 1-2 часа)
+
+Почтовые ящики:
+---------------
+После установки будут созданы следующие ящики:
+- derik@metrika.direct
+- savluk@metrika.direct
+- ionin@metrika.direct
+- manager@metrika.direct
+- smm@metrika.direct
+- info@metrika.direct
+- reg@metrika.direct
+- kadastr@metrika.direct
+- lawyer@metrika.direct
+- kan@metrika.direct
+

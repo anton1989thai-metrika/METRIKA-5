@@ -1,0 +1,489 @@
+{
+  "project": "METRIKA-5",
+  "task": "Миграция почты с Яндекс 360 на собственный почтовый сервер",
+  "domain": "metrika.direct",
+  "website": "метрика.сайт",
+  "vps": {
+    "ip": "72.62.72.196",
+    "hostname": "srv1206890.hstgr.cloud",
+    "os": "Ubuntu 25.10",
+    "provider": "Hostinger",
+    "location": "Malaysia - Kuala Lumpur"
+  },
+  "mailboxes": [
+    "derik@metrika.direct",
+    "savluk@metrika.direct",
+    "ionin@metrika.direct",
+    "manager@metrika.direct",
+    "smm@metrika.direct",
+    "info@metrika.direct",
+    "reg@metrika.direct",
+    "kadastr@metrika.direct",
+    "lawyer@metrika.direct",
+    "kan@metrika.direct"
+  ],
+  "completed_work": {
+    "code_changes": {
+      "files_created": [
+        {
+          "path": "src/lib/auth-email.ts",
+          "description": "Вспомогательные функции для авторизации и работы с почтовыми ящиками",
+          "functions": [
+            "getCurrentUserEmail() - получение email текущего пользователя",
+            "isAdmin() - проверка прав администратора",
+            "getAllMailboxes() - список всех почтовых ящиков",
+            "getEmailUserId() - получение ID пользователя для работы с БД"
+          ]
+        }
+      ],
+      "files_modified": [
+        {
+          "path": "src/app/email/page.tsx",
+          "changes": [
+            "Добавлен селектор почтовых ящиков для админа",
+            "Отображение текущего email пользователя",
+            "Поддержка просмотра чужих ящиков для админа",
+            "Автоматическая загрузка данных пользователя"
+          ]
+        },
+        {
+          "path": "src/app/api/emails/route.ts",
+          "changes": [
+            "Интеграция с auth-email.ts для получения текущего пользователя",
+            "Поддержка параметра viewEmail для админа",
+            "Возврат списка всех ящиков для админа"
+          ]
+        },
+        {
+          "path": "src/app/api/emails/send/route.ts",
+          "changes": [
+            "Включена отправка писем через SMTP (было закомментировано)",
+            "Использование email текущего пользователя как отправителя",
+            "Сохранение отправленных писем в папку 'sent'"
+          ]
+        },
+        {
+          "path": "src/app/api/emails/[id]/route.ts",
+          "changes": [
+            "Использование getEmailUserId() вместо хардкода"
+          ]
+        },
+        {
+          "path": "src/app/api/emails/[id]/star/route.ts",
+          "changes": [
+            "Использование getEmailUserId() вместо хардкода"
+          ]
+        },
+        {
+          "path": "src/app/api/emails/[id]/delete/route.ts",
+          "changes": [
+            "Использование getEmailUserId() вместо хардкода"
+          ]
+        },
+        {
+          "path": "src/lib/init-email.ts",
+          "changes": [
+            "Добавлены папки: 'Важные' (starred) и 'Спам' (spam)"
+          ]
+        },
+        {
+          "path": "src/lib/email.ts",
+          "changes": [
+            "Добавлена поддержка папок: drafts, spam, archive",
+            "Улучшена логика фильтрации по папкам"
+          ]
+        },
+        {
+          "path": "src/lib/imap-sync.ts",
+          "changes": [
+            "Обновлена функция syncAllEmails() для синхронизации всех 10 ящиков",
+            "Список ящиков теперь берется из кода, а не только из .env"
+          ]
+        },
+        {
+          "path": "src/components/email/Sidebar.tsx",
+          "changes": [
+            "Добавлены иконки для новых папок",
+            "Добавлены ссылки на папки: Черновики, Важные, Спам"
+          ]
+        }
+      ]
+    },
+    "scripts_created": [
+      {
+        "path": "scripts/setup-mail-server-metrika.sh",
+        "description": "Автоматический скрипт установки почтового сервера",
+        "features": [
+          "Установка Postfix + Dovecot + OpenDKIM",
+          "Автоматическое создание всех 10 почтовых ящиков",
+          "Настройка виртуальных почтовых ящиков",
+          "Генерация DKIM ключей",
+          "Настройка SSL/TLS",
+          "Создание папок для каждого ящика (cur, new, tmp)"
+        ],
+        "usage": "sudo ./scripts/setup-mail-server-metrika.sh"
+      }
+    ],
+    "documentation_created": [
+      {
+        "path": "scripts/dns-config-metrika.txt",
+        "description": "Инструкция по настройке DNS записей для metrika.direct",
+        "contains": [
+          "A запись для mail.metrika.direct",
+          "MX запись",
+          "SPF запись",
+          "DKIM запись",
+          "DMARC запись",
+          "Инструкции по проверке DNS"
+        ]
+      },
+      {
+        "path": "ПОЛНАЯ_ИНСТРУКЦИЯ_ПО_НАСТРОЙКЕ_ПОЧТЫ.md",
+        "description": "Подробная пошаговая инструкция для пользователя",
+        "sections": [
+          "Подготовка VPS",
+          "Установка почтового сервера",
+          "Настройка DNS",
+          "Обновление .env",
+          "Тестирование",
+          "Устранение проблем"
+        ]
+      },
+      {
+        "path": "MIGRATION_GUIDE.md",
+        "description": "Руководство по миграции с Яндекс 360"
+      },
+      {
+        "path": "env.example.txt",
+        "description": "Пример конфигурации .env файла"
+      }
+    ]
+  },
+  "user_tasks": {
+    "step_1_install_mail_server": {
+      "title": "Установка почтового сервера на VPS",
+      "description": "Нужно подключиться к VPS и запустить скрипт установки",
+      "commands": [
+        "ssh root@72.62.72.196",
+        "cd /root",
+        "chmod +x setup-mail-server-metrika.sh",
+        "sudo ./setup-mail-server-metrika.sh"
+      ],
+      "inputs_required": [
+        {
+          "prompt": "IP адрес сервера",
+          "default": "72.62.72.196",
+          "action": "Нажать Enter для значения по умолчанию"
+        },
+        {
+          "prompt": "Пароль для derik@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для savluk@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для ionin@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для manager@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для smm@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для info@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для reg@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для kadastr@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для lawyer@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        },
+        {
+          "prompt": "Пароль для kan@metrika.direct",
+          "action": "Ввести пароль (записать!)"
+        }
+      ],
+      "post_install": {
+        "command": "cat /etc/opendkim/keys/metrika.direct/mail.txt",
+        "description": "Получить DKIM ключ для DNS записи",
+        "action": "Скопировать содержимое из кавычек"
+      }
+    },
+    "step_2_upload_scripts": {
+      "title": "Загрузка скриптов на сервер",
+      "description": "Нужно загрузить скрипты на VPS",
+      "options": [
+        {
+          "method": "SCP",
+          "commands": [
+            "cd ~/Desktop/METRIKA-5-main",
+            "scp scripts/setup-mail-server-metrika.sh root@72.62.72.196:/root/",
+            "scp scripts/dns-config-metrika.txt root@72.62.72.196:/root/"
+          ]
+        },
+        {
+          "method": "Git",
+          "commands": [
+            "ssh root@72.62.72.196",
+            "cd /root",
+            "git clone [repository_url]",
+            "cd METRIKA-5-main"
+          ]
+        },
+        {
+          "method": "Hostinger File Manager",
+          "description": "Через веб-интерфейс Hostinger загрузить файлы в /root/"
+        }
+      ]
+    },
+    "step_3_configure_dns": {
+      "title": "Настройка DNS записей в nic.ru",
+      "description": "Нужно добавить 5 DNS записей для домена metrika.direct",
+      "dns_records": [
+        {
+          "type": "A",
+          "name": "mail",
+          "value": "72.62.72.196",
+          "ttl": 3600,
+          "description": "Запись для почтового сервера"
+        },
+        {
+          "type": "MX",
+          "name": "@",
+          "value": "mail.metrika.direct",
+          "priority": 10,
+          "ttl": 3600,
+          "description": "Указывает на почтовый сервер"
+        },
+        {
+          "type": "TXT",
+          "name": "@",
+          "value": "v=spf1 mx a:mail.metrika.direct ip4:72.62.72.196 ~all",
+          "ttl": 3600,
+          "description": "SPF запись для защиты от спама"
+        },
+        {
+          "type": "TXT",
+          "name": "mail._domainkey",
+          "value": "[из шага 1, команда cat /etc/opendkim/keys/metrika.direct/mail.txt]",
+          "ttl": 3600,
+          "description": "DKIM ключ для подписи писем"
+        },
+        {
+          "type": "TXT",
+          "name": "_dmarc",
+          "value": "v=DMARC1; p=none; rua=mailto:dmarc@metrika.direct; ruf=mailto:dmarc@metrika.direct",
+          "ttl": 3600,
+          "description": "DMARC политика"
+        }
+      ],
+      "ptr_record": {
+        "description": "Обратная DNS запись (PTR)",
+        "action": "Запросить через поддержку Hostinger",
+        "ip": "72.62.72.196",
+        "domain": "mail.metrika.direct"
+      }
+    },
+    "step_4_update_env": {
+      "title": "Обновление .env файла",
+      "description": "Нужно создать/обновить .env файл с настройками почты",
+      "file_path": ".env",
+      "required_variables": {
+        "IMAP_HOST": "mail.metrika.direct",
+        "IMAP_PORT": "993",
+        "IMAP_USER": "info@metrika.direct (или любой другой ящик)",
+        "IMAP_PASS": "[пароль из шага 1]",
+        "SMTP_HOST": "mail.metrika.direct",
+        "SMTP_PORT": "587",
+        "SMTP_USER": "info@metrika.direct (или любой другой ящик)",
+        "SMTP_PASS": "[пароль из шага 1]",
+        "SMTP_FROM": "info@metrika.direct"
+      },
+      "optional_variables": {
+        "SYNC_EMAILS": "Список ящиков для синхронизации через запятую (если не указано, синхронизируются все)"
+      },
+      "example_file": "env.example.txt"
+    },
+    "step_5_wait_dns": {
+      "title": "Ожидание распространения DNS",
+      "description": "После добавления DNS записей нужно подождать 5-60 минут",
+      "check_command": "dig MX metrika.direct",
+      "expected_result": "Должна быть видна запись mail.metrika.direct"
+    },
+    "step_6_test": {
+      "title": "Тестирование",
+      "description": "Проверить работу почтовой системы",
+      "tests": [
+        {
+          "name": "Проверка портов на сервере",
+          "commands": [
+            "netstat -tlnp | grep 25",
+            "netstat -tlnp | grep 993"
+          ],
+          "expected": "Порты должны быть открыты"
+        },
+        {
+          "name": "Отправка тестового письма",
+          "commands": [
+            "apt-get install -y mailutils",
+            "echo 'Тест' | mail -s 'Тест' info@metrika.direct"
+          ]
+        },
+        {
+          "name": "Синхронизация на сайте",
+          "action": "Открыть http://localhost:3000/email и нажать 'Синхронизировать'"
+        }
+      ]
+    }
+  },
+  "technical_details": {
+    "mail_server": {
+      "software": "Postfix + Dovecot + OpenDKIM",
+      "protocols": {
+        "smtp": {
+          "port": 25,
+          "submission": 587,
+          "ssl": 465
+        },
+        "imap": {
+          "port": 143,
+          "ssl": 993
+        },
+        "pop3": {
+          "port": 110,
+          "ssl": 995
+        }
+      },
+      "mail_location": "/var/mail/vhosts/metrika.direct",
+      "user": "vmail",
+      "group": "mail"
+    },
+    "database": {
+      "type": "SQLite",
+      "schema": "Prisma",
+      "models": ["User", "Email", "Thread", "Folder"]
+    },
+    "authentication": {
+      "current_status": "Заглушка (возвращает админа)",
+      "integration": "Готово к интеграции с реальной авторизацией",
+      "admin_detection": "По роли 'admin' в users.ts"
+    },
+    "email_folders": [
+      {
+        "slug": "inbox",
+        "name": "Входящие",
+        "special": true
+      },
+      {
+        "slug": "sent",
+        "name": "Отправленные",
+        "special": true
+      },
+      {
+        "slug": "drafts",
+        "name": "Черновики",
+        "special": false
+      },
+      {
+        "slug": "starred",
+        "name": "Важные",
+        "special": true,
+        "filter": "isStarred = true"
+      },
+      {
+        "slug": "spam",
+        "name": "Спам",
+        "special": false
+      },
+      {
+        "slug": "archive",
+        "name": "Архив",
+        "special": false
+      },
+      {
+        "slug": "trash",
+        "name": "Корзина",
+        "special": true,
+        "filter": "isDeleted = true"
+      }
+    ]
+  },
+  "file_structure": {
+    "scripts": [
+      "setup-mail-server-metrika.sh - главный скрипт установки",
+      "dns-config-metrika.txt - инструкция по DNS"
+    ],
+    "src/lib": [
+      "auth-email.ts - функции авторизации",
+      "email.ts - работа с письмами",
+      "imap-sync.ts - синхронизация через IMAP",
+      "init-email.ts - инициализация папок"
+    ],
+    "src/app/api/emails": [
+      "route.ts - получение списка писем",
+      "send/route.ts - отправка писем",
+      "sync/route.ts - синхронизация",
+      "[id]/route.ts - получение письма",
+      "[id]/star/route.ts - пометка важным",
+      "[id]/delete/route.ts - удаление"
+    ],
+    "src/components/email": [
+      "Sidebar.tsx - боковая панель с папками",
+      "EmailList.tsx - список писем",
+      "ComposeEmail.tsx - форма отправки"
+    ]
+  },
+  "important_notes": {
+    "passwords": "Все пароли от почтовых ящиков нужно записать! Они понадобятся для .env файла.",
+    "dkim_key": "DKIM ключ нужно получить после установки и добавить в DNS",
+    "dns_propagation": "DNS записи распространяются 5-60 минут, иногда до 2 часов",
+    "ptr_record": "Обратная DNS (PTR) настраивается через поддержку Hostinger",
+    "firewall": "Нужно открыть порты 25, 587, 993, 995 в панели Hostinger",
+    "memory_usage": "VPS использует 91% памяти (4GB) - может потребоваться оптимизация"
+  },
+  "troubleshooting": {
+    "emails_not_arriving": [
+      "Проверить MX записи: dig MX metrika.direct",
+      "Проверить логи: tail -f /var/log/mail.log",
+      "Проверить firewall порты"
+    ],
+    "emails_going_to_spam": [
+      "Проверить SPF: dig TXT metrika.direct | grep spf",
+      "Проверить DKIM: dig TXT mail._domainkey.metrika.direct",
+      "Настроить PTR запись"
+    ],
+    "imap_connection_error": [
+      "Проверить .env настройки",
+      "Проверить статус Dovecot: systemctl status dovecot",
+      "Проверить логи: tail -f /var/log/dovecot.log",
+      "Проверить пароль"
+    ]
+  },
+  "next_steps_after_setup": [
+    "Настроить автоматическую синхронизацию через cron",
+    "Настроить резервное копирование",
+    "Интегрировать с реальной системой авторизации",
+    "Добавить мониторинг почтового сервера"
+  ],
+  "current_status": {
+    "code": "Готово",
+    "server": "Требует установки",
+    "dns": "Требует настройки",
+    "env": "Требует обновления",
+    "testing": "Не выполнено"
+  }
+}
+
