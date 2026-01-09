@@ -82,15 +82,20 @@ export default function BurgerMenu() {
         const position = styles.position
         
         // Явно исключаем overlay бургер-меню: z-index 45 или элементы с z-[45] в Tailwind
-        if (zIndex === 45 || styles.zIndex === '45') return false
+        // Проверяем разные варианты, как может вычисляться z-index во внутреннем браузере
+        if (zIndex === 45 || 
+            styles.zIndex === '45' || 
+            styles.zIndex === '45px' ||
+            (zIndex >= 44 && zIndex <= 46)) return false
         
         const isBurgerMenu = el.closest('[class*="burger"]') || el.closest('[class*="Burger"]')
         const isHeader = el.closest('header')
         
-        // Проверяем наличие атрибутов Radix UI - это более надежный способ определения диалогов
+        // Проверяем наличие атрибутов Radix UI - ВАЖНО: проверяем только "open", не просто наличие атрибута!
+        const dataState = el.getAttribute('data-state')
         const hasRadixAttributes = el.getAttribute('data-radix-dialog-overlay') !== null ||
                                    el.getAttribute('data-radix-alert-dialog-overlay') !== null ||
-                                   el.hasAttribute('data-state')
+                                   (dataState !== null && dataState === 'open') // Только открытые диалоги!
         
         const hasBackdrop = (el.classList.contains('bg-black') || 
                             el.classList.contains('backdrop-blur') ||
@@ -99,7 +104,7 @@ export default function BurgerMenu() {
         return position === 'fixed' && 
                zIndex > 50 &&
                hasBackdrop &&
-               (hasRadixAttributes || zIndex >= 50) && // Только элементы с явными признаками диалогов
+               hasRadixAttributes && // Только элементы с явными признаками ОТКРЫТЫХ диалогов
                !isBurgerMenu &&
                !isHeader &&
                el.offsetWidth > 0 &&
