@@ -70,16 +70,28 @@ export default function BurgerMenu() {
         const isBurgerMenu = el.closest('[class*="burger"]') || el.closest('[class*="Burger"]')
         const isHeader = el.closest('header')
         // Исключаем overlay бургер-меню (z-45), Header (z-50) и проверяем только z-50+ модальные окна
-        return zIndex > 50 && !isBurgerMenu && !isHeader
+        // Явно исключаем z-index 45, чтобы избежать ложных срабатываний на overlay бургер-меню
+        return zIndex > 50 && zIndex !== 45 && !isBurgerMenu && !isHeader
       })
       
       // Проверяем модальные окна с backdrop/overlay
+      // Проверяем только элементы с явными признаками Radix UI диалогов или реальных модальных окон
       const modalBackdrops = Array.from(document.querySelectorAll('div')).filter(el => {
         const styles = window.getComputedStyle(el)
         const zIndex = parseInt(styles.zIndex) || 0
         const position = styles.position
+        
+        // Явно исключаем overlay бургер-меню: z-index 45 или элементы с z-[45] в Tailwind
+        if (zIndex === 45 || styles.zIndex === '45') return false
+        
         const isBurgerMenu = el.closest('[class*="burger"]') || el.closest('[class*="Burger"]')
         const isHeader = el.closest('header')
+        
+        // Проверяем наличие атрибутов Radix UI - это более надежный способ определения диалогов
+        const hasRadixAttributes = el.getAttribute('data-radix-dialog-overlay') !== null ||
+                                   el.getAttribute('data-radix-alert-dialog-overlay') !== null ||
+                                   el.hasAttribute('data-state')
+        
         const hasBackdrop = (el.classList.contains('bg-black') || 
                             el.classList.contains('backdrop-blur') ||
                             (styles.backgroundColor && (styles.backgroundColor.includes('rgba') || styles.backgroundColor.includes('rgb'))))
@@ -87,6 +99,7 @@ export default function BurgerMenu() {
         return position === 'fixed' && 
                zIndex > 50 &&
                hasBackdrop &&
+               (hasRadixAttributes || zIndex >= 50) && // Только элементы с явными признаками диалогов
                !isBurgerMenu &&
                !isHeader &&
                el.offsetWidth > 0 &&
