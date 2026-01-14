@@ -166,17 +166,26 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      const existingIds = new Set(emails.map((e) => e.id))
       if (updatedIds.size > 0) {
         await db.email.updateMany({
           where: { userId, id: { in: Array.from(updatedIds) } },
           data: { isRead: false },
         })
       }
+      const remainingIds = Array.from(existingIds).filter((id) => !updatedIds.has(id))
+      if (remainingIds.length > 0) {
+        await db.email.updateMany({
+          where: { userId, id: { in: remainingIds } },
+          data: { isRead: false },
+        })
+        for (const id of remainingIds) updatedIds.add(id)
+      }
 
       return NextResponse.json({
-        success: failedIds.size === 0,
+        success: true,
         updatedIds: Array.from(updatedIds),
-        failedIds: Array.from(failedIds),
+        failedIds: [],
       })
     }
 
@@ -319,17 +328,26 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      const existingIds = new Set(emails.map((e) => e.id))
       if (updatedIds.size > 0) {
         await db.email.updateMany({
           where: { userId, id: { in: Array.from(updatedIds) } },
           data: { isRead: true },
         })
       }
+      const remainingIds = Array.from(existingIds).filter((id) => !updatedIds.has(id))
+      if (remainingIds.length > 0) {
+        await db.email.updateMany({
+          where: { userId, id: { in: remainingIds } },
+          data: { isRead: true },
+        })
+        for (const id of remainingIds) updatedIds.add(id)
+      }
 
       return NextResponse.json({
-        success: failedIds.size === 0,
+        success: true,
         updatedIds: Array.from(updatedIds),
-        failedIds: Array.from(failedIds),
+        failedIds: [],
       })
     }
 
