@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { fetchJson } from '@/lib/api-client';
 
 export function SignupForm() {
   const router = useRouter();
@@ -13,6 +14,8 @@ export function SignupForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const JSON_HEADERS = { 'Content-Type': 'application/json' } as const;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,20 +27,16 @@ export function SignupForm() {
         setError('Пожалуйста, заполните все поля');
         return;
       }
-      const resp = await fetch('/api/auth/register', {
+      await fetchJson('/api/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: JSON_HEADERS,
         body: JSON.stringify({ name, email, password }),
-      })
-      const data = await resp.json().catch(() => ({}))
-      if (!resp.ok || !data?.success) {
-        setError(data?.error || 'Ошибка регистрации')
-        return
-      }
+      });
       // Registered + logged in -> go to personal cabinet
       router.push('/profile')
     } catch (err) {
-      setError('Ошибка регистрации');
+      const message = err instanceof Error ? err.message : 'Ошибка регистрации';
+      setError(message);
     } finally {
       setLoading(false);
     }

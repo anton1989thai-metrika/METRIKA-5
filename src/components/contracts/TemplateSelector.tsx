@@ -1,26 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
-interface Template {
-  id: string
-  name: string
-  category: string
-  fields: Array<{
-    key: string
-    label: string
-    type: string
-    required: boolean
-  }>
-}
+import type { ContractTemplate } from '@/types/contracts'
+import { fetchJson } from '@/lib/api-client'
 
 interface TemplateSelectorProps {
-  onSelect: (template: Template) => void
-  selectedTemplate?: Template
+  onSelect: (template: ContractTemplate) => void
+  selectedTemplate?: ContractTemplate
 }
 
 export default function TemplateSelector({ onSelect, selectedTemplate }: TemplateSelectorProps) {
-  const [templates, setTemplates] = useState<Template[]>([])
+  const [templates, setTemplates] = useState<ContractTemplate[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -29,9 +19,13 @@ export default function TemplateSelector({ onSelect, selectedTemplate }: Templat
 
   const fetchTemplates = async () => {
     try {
-      const res = await fetch('/api/templates')
-      const data = await res.json()
-      setTemplates(data)
+      const data = await fetchJson<ContractTemplate[]>('/api/templates')
+      const list = Array.isArray(data) ? data : []
+      const normalized = list.map((template) => ({
+        ...template,
+        template: template.template || ''
+      }))
+      setTemplates(normalized)
     } catch (error) {
       console.error('Ошибка загрузки шаблонов:', error)
     } finally {
@@ -68,4 +62,3 @@ export default function TemplateSelector({ onSelect, selectedTemplate }: Templat
     </div>
   )
 }
-

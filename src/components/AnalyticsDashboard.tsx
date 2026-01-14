@@ -1,35 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useMemo, useState } from "react"
 import { 
   BarChart3, 
-  TrendingUp, 
   TrendingDown, 
   Users, 
   Eye, 
-  Building2, 
-  FileText, 
-  Calendar, 
   Download, 
-  Filter, 
   RefreshCw, 
   Settings, 
-  PieChart, 
-  LineChart, 
-  Activity,
   Target,
-  Award,
   Clock,
   DollarSign,
   Percent,
   ArrowUp,
   ArrowDown,
   Minus,
-  Search,
-  X,
-  CheckCircle,
-  AlertCircle,
-  Info
+  X
 } from "lucide-react"
 
 interface AnalyticsData {
@@ -61,14 +50,12 @@ interface ReportTemplate {
 
 export default function AnalyticsDashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState('7d')
-  const [selectedMetric, setSelectedMetric] = useState('visitors')
   const [showReportBuilder, setShowReportBuilder] = useState(false)
   const [isGeneratingReport, setIsGeneratingReport] = useState(false)
   const [selectedReport, setSelectedReport] = useState<ReportTemplate | null>(null)
-  const [customDateRange, setCustomDateRange] = useState({ start: '', end: '' })
 
   // Mock данные аналитики
-  const analyticsData: AnalyticsData = {
+  const analyticsData = useMemo<AnalyticsData>(() => ({
     period: selectedPeriod,
     visitors: 15420,
     pageViews: 45680,
@@ -103,9 +90,9 @@ export default function AnalyticsDashboard() {
     conversions: 156,
     conversionRate: 1.01,
     revenue: 2450000
-  }
+  }), [selectedPeriod])
 
-  const reportTemplates: ReportTemplate[] = [
+  const reportTemplates = useMemo<ReportTemplate[]>(() => [
     {
       id: 1,
       name: 'Ежедневный отчет',
@@ -142,7 +129,7 @@ export default function AnalyticsDashboard() {
       lastGenerated: '2024-01-18',
       isScheduled: false
     }
-  ]
+  ], [])
 
   const formatNumber = (num: number) => {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'
@@ -185,16 +172,16 @@ export default function AnalyticsDashboard() {
     
     setIsGeneratingReport(false)
     // В реальном приложении здесь будет скачивание файла
-    console.log('Отчет сгенерирован:', template.name)
+    debugLog('Отчет сгенерирован:', template.name)
   }
 
-  const periods = [
+  const periods = useMemo(() => [
     { value: '1d', label: 'Сегодня' },
     { value: '7d', label: '7 дней' },
     { value: '30d', label: '30 дней' },
     { value: '90d', label: '90 дней' },
     { value: 'custom', label: 'Произвольный период' }
-  ]
+  ], [])
 
   return (
     <div className="space-y-6">

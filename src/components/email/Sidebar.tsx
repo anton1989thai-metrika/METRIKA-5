@@ -21,16 +21,6 @@ export default function Sidebar({ folders }: SidebarProps) {
   const searchParams = useSearchParams()
   const currentFolder = searchParams.get('folder') || 'inbox'
 
-  const defaultFolders = [
-    { slug: 'inbox', name: 'Входящие', icon: Inbox },
-    { slug: 'sent', name: 'Отправленные', icon: Send },
-    { slug: 'drafts', name: 'Черновики', icon: FileText },
-    { slug: 'starred', name: 'Важные', icon: Star },
-    { slug: 'spam', name: 'Спам', icon: AlertTriangle },
-    { slug: 'archive', name: 'Архив', icon: Archive },
-    { slug: 'trash', name: 'Корзина', icon: Trash2 },
-  ]
-
   return (
     <div className="w-64 space-y-1">
       <Link
@@ -155,4 +145,3 @@ export default function Sidebar({ folders }: SidebarProps) {
     </div>
   )
 }
-

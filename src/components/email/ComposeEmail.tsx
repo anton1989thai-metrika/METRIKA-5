@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 import { X, Send, Paperclip, Trash2 } from 'lucide-react'
+import { fetchJson } from '@/lib/api-client'
 
 interface ComposeEmailProps {
   isOpen: boolean
@@ -61,24 +62,21 @@ export default function ComposeEmail({
         form.append('attachments', f, f.name)
       }
 
-      const response = await fetch('/api/emails/send', { method: 'POST', body: form })
+      await fetchJson('/api/emails/send', { method: 'POST', body: form })
 
-      if (response.ok) {
-        onClose()
-        // Reset form
-        setTo('')
-        setCc('')
-        setBcc('')
-        setSubject('')
-        setText('')
-        setFiles([])
-        onSent?.()
-      } else {
-        alert('Ошибка при отправке письма')
-      }
+      onClose()
+      // Reset form
+      setTo('')
+      setCc('')
+      setBcc('')
+      setSubject('')
+      setText('')
+      setFiles([])
+      onSent?.()
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Ошибка при отправке письма'
       console.error('Error sending email:', error)
-      alert('Ошибка при отправке письма')
+      alert(message)
     } finally {
       setSending(false)
     }
@@ -254,4 +252,3 @@ export default function ComposeEmail({
     </div>
   )
 }
-

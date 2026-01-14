@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export interface MetrikaSelectProps
+interface MetrikaSelectProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   className?: string;

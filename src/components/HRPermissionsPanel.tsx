@@ -1,164 +1,23 @@
 "use client"
 
 import { useState } from "react"
-import { 
-  Shield, 
-  Users, 
-  Settings, 
-  Lock, 
-  Unlock, 
-  Eye, 
-  EyeOff, 
-  Edit, 
-  Save, 
-  X, 
-  Plus, 
-  Trash2, 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle,
+import {
+  BarChart3,
+  Clock,
+  DollarSign,
+  Edit,
+  Key,
+  Plus,
+  Receipt,
+  Save,
+  Settings,
+  Shield,
+  Trash2,
+  User,
   UserCheck,
   UserX,
-  Key,
-  Database,
-  FileText,
-  BarChart3,
-  Calculator,
-  DollarSign,
-  Clock,
-  Calendar,
-  Receipt,
-  Award,
-  Bell,
-  PieChart,
-  Building2,
-  Mail,
-  Home,
-  Map,
-  Info,
-  Phone,
-  BookOpen,
-  User,
-  Heart,
-  GraduationCap,
-  CheckSquare,
-  Globe,
-  Tag,
-  Archive,
-  Copy,
-  MoreVertical,
-  File,
-  Folder,
-  Image,
-  Video,
-  Music,
-  Link,
-  Link2,
-  Unlink,
-  Activity,
-  ArrowUp,
-  ArrowDown,
-  RotateCcw,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  SkipForward,
-  SkipBack,
-  Volume2,
-  VolumeX,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Server,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  Signal,
-  SignalZero,
-  Battery,
-  BatteryLow,
-  Power,
-  PowerOff,
-  Sun,
-  Moon,
-  Star,
-  Heart as HeartIcon,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Frown,
-  Meh,
-  Angry,
-  Laugh,
-  Star as StarIcon,
-  Home as HomeIcon,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  MessageCircle,
-  Play,
-  QrCode,
-  Info as InfoIcon,
-  Cloud,
-  Tag as TagIcon,
-  Archive as ArchiveIcon,
-  Grid,
-  List,
-  Layers,
-  MapPin,
-  Video as VideoIcon,
-  Music as MusicIcon,
-  Folder as FolderIcon,
-  Link as LinkIcon,
-  Link2 as Link2Icon,
-  Unlink as UnlinkIcon,
-  Activity as ActivityIcon,
-  ArrowUp as ArrowUpIcon,
-  ArrowDown as ArrowDownIcon,
-  RotateCcw as RotateCcwIcon,
-  PlayCircle as PlayCircleIcon,
-  PauseCircle as PauseCircleIcon,
-  StopCircle as StopCircleIcon,
-  SkipForward as SkipForwardIcon,
-  SkipBack as SkipBackIcon,
-  Volume2 as Volume2Icon,
-  VolumeX as VolumeXIcon,
-  Mic as MicIcon,
-  MicOff as MicOffIcon,
-  Camera as CameraIcon,
-  CameraOff as CameraOffIcon,
-  Monitor as MonitorIcon,
-  Smartphone as SmartphoneIcon,
-  Tablet as TabletIcon,
-  Laptop as LaptopIcon,
-  Server as ServerIcon,
-  HardDrive as HardDriveIcon,
-  Wifi as WifiIcon,
-  WifiOff as WifiOffIcon,
-  Signal as SignalIcon,
-  SignalZero as SignalZeroIcon,
-  Battery as BatteryIcon,
-  BatteryLow as BatteryLowIcon,
-  Power as PowerIcon,
-  PowerOff as PowerOffIcon,
-  Sun as SunIcon,
-  Moon as MoonIcon,
-  Star as StarIcon2,
-  Heart as HeartIcon2,
-  ThumbsUp as ThumbsUpIcon,
-  ThumbsDown as ThumbsDownIcon,
-  Smile as SmileIcon,
-  Frown as FrownIcon,
-  Meh as MehIcon,
-  Angry as AngryIcon,
-  Laugh as LaughIcon
+  Users,
+  X
 } from "lucide-react"
 
 interface Permission {
@@ -191,7 +50,6 @@ interface User {
 
 export default function HRPermissionsPanel() {
   const [activeTab, setActiveTab] = useState<'roles' | 'users' | 'permissions'>('roles')
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [showRoleModal, setShowRoleModal] = useState(false)
   const [showUserModal, setShowUserModal] = useState(false)
   const [editingRole, setEditingRole] = useState<Role | null>(null)
@@ -395,6 +253,57 @@ export default function HRPermissionsPanel() {
     permissions: [] as string[]
   })
 
+  const resetRoleForm = () => {
+    setNewRole({ name: '', description: '', permissions: [] })
+    setEditingRole(null)
+  }
+
+  const closeRoleModal = () => {
+    setShowRoleModal(false)
+    resetRoleForm()
+  }
+
+  const resetUserForm = () => {
+    setNewUser({ name: '', email: '', role: '', permissions: [] })
+    setEditingUser(null)
+  }
+
+  const closeUserModal = () => {
+    setShowUserModal(false)
+    resetUserForm()
+  }
+
+  const openCreateRoleModal = () => {
+    resetRoleForm()
+    setShowRoleModal(true)
+  }
+
+  const openCreateUserModal = () => {
+    resetUserForm()
+    setShowUserModal(true)
+  }
+
+  const startEditRole = (role: Role) => {
+    setEditingRole(role)
+    setNewRole({
+      name: role.name,
+      description: role.description,
+      permissions: [...role.permissions],
+    })
+    setShowRoleModal(true)
+  }
+
+  const startEditUser = (user: User) => {
+    setEditingUser(user)
+    setNewUser({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      permissions: [...user.permissions],
+    })
+    setShowUserModal(true)
+  }
+
   const createRole = () => {
     if (!newRole.name || !newRole.description) return
 
@@ -408,17 +317,18 @@ export default function HRPermissionsPanel() {
     }
 
     setRoles(prev => [...prev, role])
-    setShowRoleModal(false)
-    setNewRole({ name: '', description: '', permissions: [] })
+    closeRoleModal()
   }
 
   const updateRole = () => {
     if (!editingRole) return
 
     setRoles(prev => prev.map(role => 
-      role.id === editingRole.id ? editingRole : role
+      role.id === editingRole.id
+        ? { ...role, name: newRole.name, description: newRole.description, permissions: [...newRole.permissions] }
+        : role
     ))
-    setEditingRole(null)
+    closeRoleModal()
   }
 
   const deleteRole = (roleId: string) => {
@@ -438,17 +348,34 @@ export default function HRPermissionsPanel() {
     }
 
     setUsers(prev => [...prev, user])
-    setShowUserModal(false)
-    setNewUser({ name: '', email: '', role: '', permissions: [] })
+    closeUserModal()
   }
 
   const updateUser = () => {
     if (!editingUser) return
 
     setUsers(prev => prev.map(user => 
-      user.id === editingUser.id ? editingUser : user
+      user.id === editingUser.id
+        ? { ...user, name: newUser.name, email: newUser.email, role: newUser.role, permissions: [...newUser.permissions] }
+        : user
     ))
-    setEditingUser(null)
+    closeUserModal()
+  }
+
+  const handleSaveRole = () => {
+    if (editingRole) {
+      updateRole()
+      return
+    }
+    createRole()
+  }
+
+  const handleSaveUser = () => {
+    if (editingUser) {
+      updateUser()
+      return
+    }
+    createUser()
   }
 
   const deleteUser = (userId: string) => {
@@ -518,7 +445,7 @@ export default function HRPermissionsPanel() {
         <h2 className="text-2xl font-bold text-black">Права доступа</h2>
         <div className="flex space-x-2">
           <button
-            onClick={() => setShowRoleModal(true)}
+            onClick={openCreateRoleModal}
             className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
             style={{backgroundColor: '#fff60b'}}
             onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
@@ -528,7 +455,7 @@ export default function HRPermissionsPanel() {
             Создать роль
           </button>
           <button
-            onClick={() => setShowUserModal(true)}
+            onClick={openCreateUserModal}
             className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
           >
             <UserCheck className="w-4 h-4 inline mr-2" />
@@ -619,7 +546,7 @@ export default function HRPermissionsPanel() {
                 
                 <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => setEditingRole(role)}
+                    onClick={() => startEditRole(role)}
                     className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                   >
                     <Edit className="w-3 h-3 inline mr-1" />
@@ -710,7 +637,7 @@ export default function HRPermissionsPanel() {
                     )}
                   </button>
                   <button
-                    onClick={() => setEditingUser(user)}
+                    onClick={() => startEditUser(user)}
                     className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm"
                   >
                     <Edit className="w-3 h-3 inline mr-1" />
@@ -733,16 +660,18 @@ export default function HRPermissionsPanel() {
       {/* Разрешения */}
       {activeTab === 'permissions' && (
         <div className="space-y-6">
-          {permissions.reduce((acc, permission) => {
-            const category = permission.category
-            if (!acc[category]) acc[category] = []
-            acc[category].push(permission)
-            return acc
-          }, {} as Record<string, Permission[]>).map((categoryPermissions, category) => (
+          {Object.entries(
+            permissions.reduce((acc, permission) => {
+              const category = permission.category
+              if (!acc[category]) acc[category] = []
+              acc[category].push(permission)
+              return acc
+            }, {} as Record<string, Permission[]>)
+          ).map(([category, categoryPermissions]) => (
             <div key={category} className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
               <h3 className="text-lg font-semibold text-black mb-4">{category}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {categoryPermissions.map(permission => (
+                {categoryPermissions.map((permission: Permission) => (
                   <div key={permission.id} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-2">
                       {getPermissionIcon(permission.module)}
@@ -770,9 +699,11 @@ export default function HRPermissionsPanel() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-black">Создать роль</h3>
+              <h3 className="text-lg font-semibold text-black">
+                {editingRole ? 'Редактировать роль' : 'Создать роль'}
+              </h3>
               <button
-                onClick={() => setShowRoleModal(false)}
+                onClick={closeRoleModal}
                 className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -834,18 +765,18 @@ export default function HRPermissionsPanel() {
 
             <div className="flex justify-end space-x-3 mt-6">
               <button
-                onClick={() => setShowRoleModal(false)}
+                onClick={closeRoleModal}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Отмена
               </button>
               <button
-                onClick={createRole}
+                onClick={handleSaveRole}
                 disabled={!newRole.name || !newRole.description}
                 className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-4 h-4 inline mr-2" />
-                Создать
+                {editingRole ? 'Сохранить' : 'Создать'}
               </button>
             </div>
           </div>
@@ -857,9 +788,11 @@ export default function HRPermissionsPanel() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-black">Добавить пользователя</h3>
+              <h3 className="text-lg font-semibold text-black">
+                {editingUser ? 'Редактировать пользователя' : 'Добавить пользователя'}
+              </h3>
               <button
-                onClick={() => setShowUserModal(false)}
+                onClick={closeUserModal}
                 className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -914,18 +847,18 @@ export default function HRPermissionsPanel() {
 
             <div className="flex justify-end space-x-3 mt-6">
               <button
-                onClick={() => setShowUserModal(false)}
+                onClick={closeUserModal}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Отмена
               </button>
               <button
-                onClick={createUser}
+                onClick={handleSaveUser}
                 disabled={!newUser.name || !newUser.email || !newUser.role}
                 className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-4 h-4 inline mr-2" />
-                Создать
+                {editingUser ? 'Сохранить' : 'Добавить'}
               </button>
             </div>
           </div>

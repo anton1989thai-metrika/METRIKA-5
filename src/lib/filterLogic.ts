@@ -20,7 +20,7 @@ export interface FieldConfig {
 }
 
 // --- Исходные данные из таблицы ---
-export const fields: FieldConfig[] = [
+const fields: FieldConfig[] = [
   // Основные поля (всегда видимы)
   {
     name: "Страна",
@@ -1175,63 +1175,11 @@ export function getAvailableFields(selectedCountry: string, selectedOperation: s
 }
 
 // --- Опционально: расширение логики для UI ---
-export function shouldDisplayField(field: FieldConfig, selected: { country: string; operation: string; objectType: string }): boolean {
-  return (
-    field.countries.includes(selected.country) &&
-    field.operations.includes(selected.operation) &&
-    field.objects.includes(selected.objectType)
-  )
-}
-
-// --- Утилиты для работы с полями ---
-export function getFieldById(fieldId: string): FieldConfig | undefined {
-  return fields.find(field => field.name === fieldId)
-}
-
-export function getFieldsByType(type: string): FieldConfig[] {
-  return fields.filter(field => field.type === type)
-}
-
-export function getRequiredFields(selectedCountry: string, selectedOperation: string, selectedObjectType: string): FieldConfig[] {
-  return getAvailableFields(selectedCountry, selectedOperation, selectedObjectType)
-    .filter(field => field.validation?.required)
-}
-
-// --- Пример использования ---
-export const exampleUsage = {
-  selected: {
-    country: "Таиланд",
-    operation: "Аренда", 
-    objectType: "Квартира"
-  },
-  
-  getVisibleFields: () => {
-    const visibleFields = getAvailableFields("Таиланд", "Аренда", "Квартира")
-    console.log("Поля, которые показываются:", visibleFields.map(f => f.name))
-    return visibleFields
-  }
-}
-
 /*
   🔹 Логика работы:
   1. Пользователь выбирает страну → остаются поля, где есть эта страна.
   2. Выбирает операцию (Продажа / Аренда / Обмен) → остаются поля, где совпадает операция.
   3. Выбирает тип объекта → остаются только соответствующие поля.
-  4. Итог: на экране отображаются только те поля, которые реально нужны.
-*/
-
-/*
-  ✅ Пример:
-  Страна = "Россия"
-  Операция = "Продажа"
-  Тип объекта = "Частный дом"
-
-  Показать:
-   - Тип помещения
-   - Комнат
-   - Тип фундамента
-   - Кадастровый номер
-   - ...и другие поля, соответствующие этим условиям
 */
 
 /*

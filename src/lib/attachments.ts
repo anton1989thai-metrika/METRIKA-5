@@ -12,17 +12,17 @@ export type StoredAttachment = {
 
 const DEFAULT_ATTACHMENTS_DIR = path.join(process.cwd(), 'uploads', 'email-attachments')
 
-export function getAttachmentsRoot(): string {
+function getAttachmentsRoot(): string {
   return process.env.ATTACHMENTS_DIR?.trim() || DEFAULT_ATTACHMENTS_DIR
 }
 
-export function safeFilename(name: string): string {
+function safeFilename(name: string): string {
   const base = (name || 'attachment').replace(/[/\\?%*:|"<>]/g, '_')
   // avoid super long names
   return base.length > 200 ? base.slice(0, 200) : base
 }
 
-export function hashKey(input: string): string {
+function hashKey(input: string): string {
   return crypto.createHash('sha256').update(input).digest('hex')
 }
 
@@ -65,5 +65,4 @@ export function resolveAttachmentPath(relPath: string): { root: string; absPath:
   }
   return { root, absPath }
 }
-
 

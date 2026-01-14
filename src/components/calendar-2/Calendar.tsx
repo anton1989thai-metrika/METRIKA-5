@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { addMonths, subMonths, format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, isToday } from "date-fns";
+import { useState, type ReactNode } from "react";
+import { addMonths, subMonths, format, startOfMonth, startOfWeek, addDays, isSameMonth, isSameDay, isToday } from "date-fns";
 import { ru } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -56,10 +56,10 @@ export default function Calendar() {
   };
 
   // Генерируем ровно 6 недель (42 дня) для календаря
-  const days: JSX.Element[] = [];
+  const days: ReactNode[] = [];
   let day = startDate;
   for (let weekIndex = 0; weekIndex < 6; weekIndex++) {
-    const week: JSX.Element[] = [];
+    const week: ReactNode[] = [];
     for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
       const clone = day;
       const formatted = format(day, "d");
@@ -169,4 +169,3 @@ export default function Calendar() {
     </div>
   );
 }
-

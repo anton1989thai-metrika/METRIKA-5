@@ -2,160 +2,24 @@
 
 import { useState, useEffect, useRef } from "react"
 import {
-  X,
-  MapPin,
-  Search,
-  Navigation,
-  Target,
-  Map,
-  Globe,
-  ExternalLink,
-  Copy,
-  RefreshCw,
   AlertCircle,
   CheckCircle,
+  Copy,
+  ExternalLink,
   Loader,
-  Plus,
-  Minus,
-  ZoomIn,
-  ZoomOut,
+  Map,
+  MapPin,
+  Navigation,
   RotateCcw,
-  Layers,
-  Settings,
-  Info,
-  HelpCircle,
-  Lightbulb,
-  Star,
-  Heart,
-  Share2,
-  MessageCircle,
-  Phone,
-  Mail,
-  Calendar,
-  Clock,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  DollarSign,
-  User,
-  Users,
-  Database,
-  Bell,
-  Cog,
-  Video,
-  Music,
-  Folder,
-  ChevronDown,
-  ChevronUp,
-  Check,
-  AlertTriangle,
-  Edit,
   Save,
-  Download,
-  Upload,
-  Trash2,
-  Edit3,
+  Search,
+  Target,
   FileText,
-  Image,
-  Link,
-  Tag,
-  TrendingUp,
-  BarChart,
-  Filter,
-  SortAsc,
-  SortDesc,
-  Grid,
-  List,
-  MoreVertical,
-  Eye,
-  EyeOff,
-  Lock,
-  Unlock,
-  Shield,
-  ShieldCheck,
-  Key,
-  KeyRound,
-  LockKeyhole,
-  UnlockKeyhole,
-  Map as MapIcon,
-  MapPin as MapPinIcon,
-  Navigation as NavigationIcon,
-  Target as TargetIcon,
-  Globe as GlobeIcon,
-  ExternalLink as ExternalLinkIcon,
-  Copy as CopyIcon,
-  RefreshCw as RefreshCwIcon,
-  AlertCircle as AlertCircleIcon,
-  CheckCircle as CheckCircleIcon,
-  Loader as LoaderIcon,
-  Plus as PlusIcon,
-  Minus as MinusIcon,
-  ZoomIn as ZoomInIcon,
-  ZoomOut as ZoomOutIcon,
-  RotateCcw as RotateCcwIcon,
-  Layers as LayersIcon,
-  Settings as SettingsIcon,
-  Info as InfoIcon,
-  HelpCircle as HelpCircleIcon,
-  Lightbulb as LightbulbIcon,
-  Star as StarIcon,
-  Heart as HeartIcon,
-  Share2 as Share2Icon,
-  MessageCircle as MessageCircleIcon,
-  Phone as PhoneIcon,
-  Mail as MailIcon,
-  Calendar as CalendarIcon,
-  Clock as ClockIcon,
-  Home as HomeIcon,
-  Building as BuildingIcon,
-  LandPlot as LandPlotIcon,
-  Store as StoreIcon,
-  Factory as FactoryIcon,
-  Share as ShareIcon,
-  DollarSign as DollarSignIcon,
-  User as UserIcon,
-  Users as UsersIcon,
-  Database as DatabaseIcon,
-  Bell as BellIcon,
-  Cog as CogIcon,
-  Video as VideoIcon,
-  Music as MusicIcon,
-  Folder as FolderIcon,
-  ChevronDown as ChevronDownIcon,
-  ChevronUp as ChevronUpIcon,
-  Check as CheckIcon,
-  AlertTriangle as AlertTriangleIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-  Download as DownloadIcon,
-  Upload as UploadIcon,
-  Trash2 as TrashIcon,
-  Edit3 as Edit3Icon,
-  FileText as FileTextIcon,
-  Image as ImageIcon,
-  Link as LinkIcon,
-  Tag as TagIcon,
-  TrendingUp as TrendingUpIcon,
-  BarChart as BarChartIcon,
-  Filter as FilterIcon,
-  SortAsc as SortAscIcon,
-  SortDesc as SortDescIcon,
-  Grid as GridIcon,
-  List as ListIcon,
-  MoreVertical as MoreVerticalIcon,
-  Eye as EyeIcon,
-  EyeOff as EyeOffIcon,
-  Lock as LockIcon,
-  Unlock as UnlockIcon,
-  Shield as ShieldIcon,
-  ShieldCheck as ShieldCheckIcon,
-  Key as KeyIcon,
-  KeyRound as KeyRoundIcon,
-  LockKeyhole as LockKeyholeIcon,
-  UnlockKeyhole as UnlockKeyholeIcon
+  Settings,
+  Globe,
+  X,
+  ZoomIn,
+  ZoomOut
 } from "lucide-react"
 
 interface LocationData {
@@ -181,6 +45,22 @@ interface LocationData {
   source: 'manual' | 'geocoding' | 'gps'
   verified: boolean
   notes: string
+}
+
+interface LocationSearchResult {
+  address: string
+  coordinates: {
+    lat: number
+    lng: number
+  }
+  district: string
+  metro: string
+  city: string
+  country: string
+  postalCode: string
+  street: string
+  houseNumber: string
+  accuracy: number
 }
 
 interface LocationModalProps {
@@ -216,25 +96,19 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
 
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchResults, setSearchResults] = useState<LocationSearchResult[]>([])
   const [activeTab, setActiveTab] = useState('search')
   const [mapProvider, setMapProvider] = useState<'yandex' | 'google' | '2gis'>('yandex')
   const [mapZoom, setMapZoom] = useState(15)
-  const [mapCenter, setMapCenter] = useState({ lat: 55.7558, lng: 37.6176 }) // Москва по умолчанию
-  const [isMapLoaded, setIsMapLoaded] = useState(false)
   const [geocodingError, setGeocodingError] = useState('')
   const [gpsError, setGpsError] = useState('')
 
-  const mapRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Инициализация данных
   useEffect(() => {
     if (initialData) {
       setLocationData(initialData)
-      if (initialData.coordinates.lat && initialData.coordinates.lng) {
-        setMapCenter(initialData.coordinates)
-      }
     } else if (objectAddress) {
       setLocationData(prev => ({
         ...prev,
@@ -245,7 +119,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
   }, [initialData, objectAddress])
 
   // Обновление данных
-  const updateLocationData = (field: string, value: any) => {
+  const updateLocationData = <K extends keyof LocationData>(field: K, value: LocationData[K]) => {
     setLocationData(prev => ({
       ...prev,
       [field]: value
@@ -260,7 +134,6 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
       longitude: lng.toString(),
       coordinates: { lat, lng }
     }))
-    setMapCenter({ lat, lng })
   }
 
   // Поиск адреса (геокодирование)
@@ -302,7 +175,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
       ]
 
       setSearchResults(mockResults)
-    } catch (error) {
+    } catch {
       setGeocodingError('Ошибка при поиске адреса. Попробуйте еще раз.')
     } finally {
       setIsLoading(false)
@@ -310,7 +183,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
   }
 
   // Выбор результата поиска
-  const selectSearchResult = (result: any) => {
+  const selectSearchResult = (result: LocationSearchResult) => {
     setLocationData(prev => ({
       ...prev,
       address: result.address,
@@ -328,7 +201,6 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
       verified: true,
       timestamp: new Date().toISOString()
     }))
-    setMapCenter(result.coordinates)
     setSearchResults([])
     setActiveTab('map')
   }
@@ -370,7 +242,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
   }
 
   // Обратное геокодирование (координаты -> адрес)
-  const reverseGeocode = async (lat: number, lng: number) => {
+  const reverseGeocode = async () => {
     setIsLoading(true)
     try {
       // Имитация API обратного геокодирования
@@ -390,12 +262,6 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
     } finally {
       setIsLoading(false)
     }
-  }
-
-  // Клик по карте
-  const handleMapClick = (lat: number, lng: number) => {
-    updateCoordinates(lat, lng)
-    reverseGeocode(lat, lng)
   }
 
   // Сохранение
@@ -648,7 +514,9 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
                 <div className="flex items-center space-x-2">
                   <select
                     value={mapProvider}
-                    onChange={(e) => setMapProvider(e.target.value as any)}
+                    onChange={(e) =>
+                      setMapProvider(e.target.value as 'yandex' | 'google' | '2gis')
+                    }
                     className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white text-sm"
                   >
                     <option value="yandex">Яндекс.Карты</option>
@@ -696,7 +564,10 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
                   Отдалить
                 </button>
                 <button
-                  onClick={() => setMapCenter({ lat: 55.7558, lng: 37.6176 })}
+                  onClick={() => {
+                    updateCoordinates(55.7558, 37.6176)
+                    reverseGeocode()
+                  }}
                   className="px-3 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-sm hover:shadow-md transition-all"
                 >
                   <Target className="w-4 h-4 inline mr-1" />
@@ -881,7 +752,7 @@ export default function LocationModal({ isOpen, onClose, onSave, initialData, ob
                     ].map(provider => (
                       <button
                         key={provider.id}
-                        onClick={() => setMapProvider(provider.id as any)}
+                        onClick={() => setMapProvider(provider.id as 'yandex' | 'google' | '2gis')}
                         className={`p-3 rounded-lg border transition-all ${
                           mapProvider === provider.id
                             ? 'border-black bg-white shadow-md'

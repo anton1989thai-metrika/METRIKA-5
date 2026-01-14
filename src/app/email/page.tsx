@@ -1,12 +1,14 @@
 'use client'
 
-import { useState, useEffect, Suspense, useRef } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import BurgerMenu from '@/components/BurgerMenu'
+import Header from '@/components/Header'
 import Sidebar from '@/components/email/Sidebar'
 import EmailList from '@/components/email/EmailList'
 import ComposeEmail from '@/components/email/ComposeEmail'
 import { Mail, Send, Search, RefreshCw, ChevronDown, Trash2 } from 'lucide-react'
+import { fetchJsonOrNull } from '@/lib/api-client'
 
 interface Thread {
   id: string
@@ -35,6 +37,7 @@ interface Folder {
 function EmailPageContent() {
   const searchParams = useSearchParams()
   const folderSlug = searchParams.get('folder') || 'inbox'
+  const isTrash = String(folderSlug || '').toLowerCase() === 'trash'
   const searchQuery = searchParams.get('search') || ''
 
   const [threads, setThreads] = useState<Thread[]>([])
@@ -46,14 +49,11 @@ function EmailPageContent() {
   const [showCompose, setShowCompose] = useState(false)
   const [searchInput, setSearchInput] = useState(searchQuery)
   const [syncing, setSyncing] = useState(false)
-  const [backgroundSyncing, setBackgroundSyncing] = useState(false)
   const [currentEmail, setCurrentEmail] = useState<string>('')
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [allMailboxes, setAllMailboxes] = useState<string[]>([])
+  const [mailboxes, setMailboxes] = useState<string[]>([])
   const [selectedMailbox, setSelectedMailbox] = useState<string>('')
   const [refreshKey, setRefreshKey] = useState(0)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const lastUidNextRef = useRef<number | null>(null)
 
   // Загружаем данные пользователя один раз
   useEffect(() => {
@@ -66,13 +66,10 @@ function EmailPageContent() {
           if (storedMailbox) storedMailbox = storedMailbox.trim()
         } catch {}
 
-        const userResponse = await fetch('/api/user')
-        if (userResponse.ok) {
-          const userData = await userResponse.json()
-          if (userData.email) {
-            setCurrentEmail(userData.email)
-            setSelectedMailbox((prev) => prev || storedMailbox || userData.email)
-          }
+        const userData = await fetchJsonOrNull<{ email?: string }>('/api/user')
+        if (userData?.email) {
+          setCurrentEmail(userData.email)
+          setSelectedMailbox((prev) => prev || storedMailbox || userData.email || '')
         }
       } catch (error) {
         console.error('Error fetching user data:', error)
@@ -97,10 +94,8 @@ function EmailPageContent() {
         }
         params.set('limit', '30')
 
-        // Добавляем viewEmail если выбран другой ящик
-        if (selectedMailbox && selectedMailbox !== currentEmail) {
-          params.set('viewEmail', selectedMailbox)
-        }
+        // Always request selected mailbox; server will enforce access.
+        params.set('viewEmail', selectedMailbox)
 
         // Persist selection for other /email/* pages
         try {
@@ -117,10 +112,12 @@ function EmailPageContent() {
           setHasMore(Boolean(data.hasMore))
           setNextCursor(data.nextCursor || null)
           
-          // Сохраняем информацию об админе и ящиках
-          if (data.isAdmin && data.allMailboxes) {
-            setIsAdmin(true)
-            setAllMailboxes(data.allMailboxes)
+          if (Array.isArray(data.mailboxes)) {
+            setMailboxes(data.mailboxes)
+            // Ensure current selection exists
+            if (!data.mailboxes.includes(selectedMailbox)) {
+              setSelectedMailbox(data.mailboxes[0] || '')
+            }
           }
         }
       } catch (error) {
@@ -164,6 +161,7 @@ function EmailPageContent() {
       for (const e of t.emails) {
         if (!seen.has(e.id)) mergedEmails.push(e)
       }
+      mergedEmails.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       const updatedAt =
         new Date(existing.updatedAt).getTime() >= new Date(t.updatedAt).getTime()
           ? existing.updatedAt
@@ -187,9 +185,7 @@ function EmailPageContent() {
       if (searchInput) params.set('search', searchInput)
       params.set('limit', '30')
       params.set('cursor', nextCursor)
-      if (selectedMailbox && selectedMailbox !== currentEmail) {
-        params.set('viewEmail', selectedMailbox)
-      }
+      params.set('viewEmail', selectedMailbox)
 
       const response = await fetch(`/api/emails?${params.toString()}`, {
         headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
@@ -215,8 +211,7 @@ function EmailPageContent() {
 
     async function syncSelectedMailbox(opts: { silent: boolean }) {
       if (!selectedMailbox) return
-      if (opts.silent) setBackgroundSyncing(true)
-      else setSyncing(true)
+      if (!opts.silent) setSyncing(true)
       try {
         const params = new URLSearchParams()
         // Для админа синхронизируем выбранный ящик; для обычного пользователя сервер сам ограничит его ящиком
@@ -232,7 +227,7 @@ function EmailPageContent() {
         q.set('folder', folderSlug)
         if (searchInput) q.set('search', searchInput)
         q.set('limit', '30')
-        if (selectedMailbox && selectedMailbox !== currentEmail) q.set('viewEmail', selectedMailbox)
+        q.set('viewEmail', selectedMailbox)
         const fetchResp = await fetch(`/api/emails?${q.toString()}`, {
           headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
         })
@@ -241,12 +236,11 @@ function EmailPageContent() {
         if (cancelled) return
         setThreads((prev) => mergeThreads(prev, data.threads || []))
         if (data.folders) setFolders(data.folders || [])
-      } catch (e) {
+      } catch {
         // silent
       } finally {
         if (!cancelled) {
-          if (opts.silent) setBackgroundSyncing(false)
-          else setSyncing(false)
+          if (!opts.silent) setSyncing(false)
         }
       }
     }
@@ -259,58 +253,43 @@ function EmailPageContent() {
     }
   }, [selectedMailbox, currentEmail, folderSlug, searchInput])
 
-  // Background watch: only refresh when NEW mail arrives (uidNext changes)
+  // Background sync: every 30s, silently refresh mailbox/folder
   useEffect(() => {
     if (!selectedMailbox) return
     let cancelled = false
 
-    async function checkForNewMail() {
+    async function runBackgroundSync() {
+      if (cancelled) return
       try {
-        const params = new URLSearchParams()
-        params.set('email', selectedMailbox)
-        const resp = await fetch(`/api/emails/watch?${params.toString()}`, {
+        const syncParams = new URLSearchParams()
+        syncParams.set('email', selectedMailbox)
+        await fetch(`/api/emails/sync?${syncParams.toString()}`, {
+          method: 'POST',
           headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
         })
-        if (!resp.ok) return
-        const data = await resp.json()
         if (cancelled) return
-        const uidNext = typeof data.uidNext === 'number' ? data.uidNext : null
-        if (lastUidNextRef.current === null) {
-          lastUidNextRef.current = uidNext
-          return
-        }
-        if (uidNext !== null && uidNext !== lastUidNextRef.current) {
-          lastUidNextRef.current = uidNext
-          // New mail detected -> run silent sync+merge
-          const syncParams = new URLSearchParams()
-          syncParams.set('email', selectedMailbox)
-          await fetch(`/api/emails/sync?${syncParams.toString()}`, {
-            method: 'POST',
-            headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
-          })
-          // Pull updated first page and merge (silent)
-          const q = new URLSearchParams()
-          q.set('folder', folderSlug)
-          if (searchInput) q.set('search', searchInput)
-          q.set('limit', '30')
-          if (selectedMailbox && selectedMailbox !== currentEmail) q.set('viewEmail', selectedMailbox)
-          const fetchResp = await fetch(`/api/emails?${q.toString()}`, {
-            headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
-          })
-          if (!fetchResp.ok) return
-          const d = await fetchResp.json()
-          if (cancelled) return
-          setThreads((prev) => mergeThreads(prev, d.threads || []))
-          if (d.folders) setFolders(d.folders || [])
-        }
+        const q = new URLSearchParams()
+        q.set('folder', folderSlug)
+        if (searchInput) q.set('search', searchInput)
+        q.set('limit', '30')
+        q.set('viewEmail', selectedMailbox)
+        const fetchResp = await fetch(`/api/emails?${q.toString()}`, {
+          headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
+        })
+        if (!fetchResp.ok) return
+        const d = await fetchResp.json()
+        if (cancelled) return
+        setThreads((prev) => mergeThreads(prev, d.threads || []))
+        if (d.folders) setFolders(d.folders || [])
       } catch {
+        // silent
+      } finally {
         // silent
       }
     }
 
-    // initial snapshot
-    checkForNewMail()
-    const interval = window.setInterval(checkForNewMail, 12_000)
+    runBackgroundSync()
+    const interval = window.setInterval(runBackgroundSync, 30_000)
     return () => {
       cancelled = true
       window.clearInterval(interval)
@@ -345,37 +324,55 @@ function EmailPageContent() {
         const error = await response.json()
         alert(`Ошибка синхронизации: ${error.error || 'Неизвестная ошибка'}`)
       }
-    } catch (error: any) {
-      alert(`Ошибка синхронизации: ${error.message}`)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Неизвестная ошибка'
+      alert(`Ошибка синхронизации: ${message}`)
     } finally {
       setSyncing(false)
     }
   }
 
   const handleEmptyTrash = async () => {
-    if (folderSlug !== 'trash') return
+    if (!isTrash) return
     if (!confirm('Очистить корзину? Все письма будут удалены без возможности восстановления.')) return
 
     setSyncing(true)
     try {
       const params = new URLSearchParams()
       // If admin is viewing another mailbox, pass viewEmail so server purges that mailbox's trash.
-      if (selectedMailbox && selectedMailbox !== currentEmail) {
-        params.set('viewEmail', selectedMailbox)
-      }
+      if (selectedMailbox) params.set('viewEmail', selectedMailbox)
       const response = await fetch(`/api/emails/trash/empty?${params.toString()}`, {
         method: 'POST',
         headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
       })
+      const data = await response.json().catch(() => ({}))
       if (!response.ok) {
-        const err = await response.json().catch(() => ({}))
-        alert(`Ошибка: ${err.error || 'Не удалось очистить корзину'}`)
+        alert(`Ошибка: ${data?.error || 'Не удалось очистить корзину'}`)
         return
       }
-      // Clear list locally and refresh folders counters.
-      setThreads([])
-      setHasMore(false)
-      setNextCursor(null)
+
+      const failedIds = Array.isArray(data?.failedIds) ? data.failedIds : []
+      const deletedIds = Array.isArray(data?.deletedIds) ? data.deletedIds : []
+
+      if (failedIds.length === 0) {
+        setThreads([])
+        setHasMore(false)
+        setNextCursor(null)
+      } else if (deletedIds.length > 0) {
+        setThreads((prev) =>
+          prev
+            .map((t) => ({
+              ...t,
+              emails: t.emails.filter((e) => !deletedIds.includes(e.id)),
+            }))
+            .filter((t) => t.emails.length > 0)
+        )
+      }
+
+      if (failedIds.length > 0) {
+        alert(`Не удалось удалить ${failedIds.length} писем из корзины`)
+      }
+
       setRefreshKey((k) => k + 1)
     } finally {
       setSyncing(false)
@@ -429,126 +426,128 @@ function EmailPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header>
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <Mail className="w-8 h-8 text-black" />
+                <div>
+                  <h1 className="text-xl font-semibold text-black">Почта METRIKA</h1>
+                  {mailboxes.length > 0 ? (
+                    <div className="relative">
+                      <select
+                        value={selectedMailbox}
+                        onChange={(e) => {
+                          setSelectedMailbox(e.target.value)
+                        }}
+                        className="text-sm text-gray-700 bg-transparent border border-gray-300 rounded px-2 py-1 pr-8 appearance-none cursor-pointer hover:bg-gray-50"
+                      >
+                        {mailboxes.map((mailbox) => (
+                          <option key={mailbox} value={mailbox}>
+                            {mailbox}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500" />
+                    </div>
+                  ) : (
+                    <span className="text-sm text-gray-500">{currentEmail || 'Загрузка...'}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <form onSubmit={handleSearch} className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Поиск писем..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300 w-64"
+                  />
+                </form>
+
+                <button
+                  onClick={handleSync}
+                  disabled={syncing}
+                  className="min-w-[132px] justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                  title="Синхронизировать письма с почтового сервера"
+                >
+                  <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
+                  Обновить
+                </button>
+
+                {isTrash ? (
+                  <button
+                    onClick={handleEmptyTrash}
+                    disabled={syncing}
+                    className="px-4 py-2 border border-red-300 text-red-700 rounded-lg text-sm hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                    title="Удалить все письма из корзины навсегда"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Очистить корзину
+                  </button>
+                ) : null}
+
+                <button
+                  onClick={() => setShowCompose(true)}
+                  className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
+                  style={{ backgroundColor: '#fff60b' }}
+                  onMouseEnter={(e) =>
+                    ((e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a')
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.target as HTMLButtonElement).style.backgroundColor = '#fff60b')
+                  }
+                >
+                  <Send className="w-4 h-4 inline mr-2" />
+                  Написать
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Header>
       <BurgerMenu />
 
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <Mail className="w-8 h-8 text-black" />
-              <div>
-                <h1 className="text-xl font-semibold text-black">Почта METRIKA</h1>
-                {isAdmin && allMailboxes.length > 0 ? (
-                  <div className="relative">
-                    <select
-                      value={selectedMailbox}
-                      onChange={(e) => {
-                        setSelectedMailbox(e.target.value)
-                      }}
-                      className="text-sm text-gray-700 bg-transparent border border-gray-300 rounded px-2 py-1 pr-8 appearance-none cursor-pointer hover:bg-gray-50"
-                    >
-                      {allMailboxes.map((mailbox) => (
-                        <option key={mailbox} value={mailbox}>
-                          {mailbox}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500" />
-                  </div>
-                ) : (
-                  <span className="text-sm text-gray-500">{currentEmail || 'Загрузка...'}</span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <form onSubmit={handleSearch} className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Поиск писем..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-300 w-64"
-                />
-              </form>
-
-              <button
-                onClick={handleSync}
-                disabled={syncing}
-                className="min-w-[132px] justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-                title="Синхронизировать письма с почтового сервера"
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${(syncing || backgroundSyncing) ? 'animate-spin' : ''}`} />
-                Обновить
-              </button>
-
-              {folderSlug === 'trash' ? (
-                <button
-                  onClick={handleEmptyTrash}
-                  disabled={syncing}
-                  className="px-4 py-2 border border-red-300 text-red-700 rounded-lg text-sm hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-                  title="Удалить все письма из корзины навсегда"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Очистить корзину
-                </button>
-              ) : null}
-
-              <button
-                onClick={() => setShowCompose(true)}
-                className="px-4 py-2 text-black rounded-lg shadow-lg hover:shadow-xl transition-all font-medium"
-                style={{ backgroundColor: '#fff60b' }}
-                onMouseEnter={(e) =>
-                  ((e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a')
-                }
-                onMouseLeave={(e) =>
-                  ((e.target as HTMLButtonElement).style.backgroundColor = '#fff60b')
-                }
-              >
-                <Send className="w-4 h-4 inline mr-2" />
-                Написать
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex space-x-6">
-          {/* Sidebar */}
-          <Sidebar folders={folders} />
+      <main className="pt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex space-x-6">
+            {/* Sidebar */}
+            <Sidebar folders={folders} />
 
-          {/* Email List */}
-          <div className="flex-1">
-            {loading ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="text-gray-500">Загрузка...</div>
-              </div>
-            ) : (
-              <EmailList
-                threads={threads}
-                folderSlug={folderSlug}
-                currentEmail={currentEmail}
-                selectedMailbox={selectedMailbox}
-                onEmailDeleted={removeEmailFromThreads}
-                onEmailOpened={markReadInThreads}
-                onMarkedUnread={applyMarkUnread}
-                onMarkedRead={applyMarkRead}
-                selectedIds={selectedIds}
-                onToggleSelected={toggleSelected}
-                onSelectAll={selectAll}
-                onClearSelection={clearSelection}
-                hasMore={hasMore}
-                loadingMore={loadingMore}
-                onLoadMore={loadMoreThreads}
-              />
-            )}
+            {/* Email List */}
+            <div className="flex-1">
+              {loading ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-gray-500">Загрузка...</div>
+                </div>
+              ) : (
+                <EmailList
+                  threads={threads}
+                  folderSlug={folderSlug}
+                  currentEmail={currentEmail}
+                  selectedMailbox={selectedMailbox}
+                  onEmailDeleted={removeEmailFromThreads}
+                  onEmailOpened={markReadInThreads}
+                  onMarkedUnread={applyMarkUnread}
+                  onMarkedRead={applyMarkRead}
+                  selectedIds={selectedIds}
+                  onToggleSelected={toggleSelected}
+                  onSelectAll={selectAll}
+                  onClearSelection={clearSelection}
+                  hasMore={hasMore}
+                  loadingMore={loadingMore}
+                  onLoadMore={loadMoreThreads}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Compose Modal */}
       <ComposeEmail

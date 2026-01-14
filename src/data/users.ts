@@ -43,6 +43,7 @@ export interface User {
       sendEmails: boolean;
       manageMailboxes: boolean;
       mailSettings: boolean;
+      allowedMailboxes?: string[];
     };
     academy: {
       enabled: boolean;
@@ -102,6 +103,16 @@ export interface User {
   comments?: string; // Комментарии
 }
 
+export const EMPTY_PERMISSIONS: User['permissions'] = {
+  canManageObjects: false,
+  canManageUsers: false,
+  canViewAnalytics: false,
+  canManageTasks: false,
+  canManageMedia: false,
+  canManageContent: false,
+  canManageSettings: false,
+}
+
 // Дефолтные пользователи
 export const defaultUsers: User[] = [
   {
@@ -133,7 +144,8 @@ export const defaultUsers: User[] = [
         viewMail: true,
         sendEmails: true,
         manageMailboxes: true,
-        mailSettings: true
+        mailSettings: true,
+        allowedMailboxes: []
       },
       academy: {
         enabled: true,
@@ -1062,6 +1074,3 @@ export const defaultUsers: User[] = [
     comments: 'Секретарь'
   }
 ];
-
-// Экспорт дефолтных пользователей
-export { defaultUsers as users };

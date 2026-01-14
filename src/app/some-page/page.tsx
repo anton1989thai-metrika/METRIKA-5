@@ -1,8 +1,4 @@
-export default async function SomePage({ 
-  searchParams 
-}: { 
-  searchParams?: Record<string, string | string[]>;
-}) {
+export default async function SomePage() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-4">Some Page</h1>
@@ -10,4 +6,3 @@ export default async function SomePage({
     </div>
   );
 }
-

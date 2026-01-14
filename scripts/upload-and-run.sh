@@ -4,7 +4,13 @@
 # Использование: ./upload-and-run.sh
 
 SERVER="root@72.62.72.196"
-PASSWORD="SikaAnt7Hostinger7+"
+PASSWORD="${VPS_PASSWORD:-}"
+
+if [ -z "$PASSWORD" ]; then
+  echo "Введите пароль от VPS (будет скрыт):"
+  read -rs PASSWORD
+  echo ""
+fi
 
 echo "📤 Загрузка скрипта на сервер..."
 
@@ -33,4 +39,3 @@ else
     echo "   brew install hudochenkov/sshpass/sshpass  # macOS"
     echo "   sudo apt-get install sshpass  # Linux"
 fi
-

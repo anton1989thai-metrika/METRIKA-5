@@ -1,6 +1,10 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import Image from "next/image"
+import { debugLog } from "@/lib/logger"
+import { formatFileSize } from "@/lib/utils"
+
+import { useState, useRef, useCallback, useMemo } from "react"
 import { 
   Upload, 
   Image as ImageIcon, 
@@ -9,27 +13,15 @@ import {
   Music, 
   Archive, 
   FileText, 
-  Download, 
   Trash2, 
   Edit, 
   Eye, 
-  Copy, 
   Search, 
-  Filter, 
   Grid, 
   List, 
   Folder, 
   FolderPlus, 
-  X, 
-  Check, 
-  AlertCircle,
-  RefreshCw,
-  Maximize2,
-  Minimize2,
-  RotateCw,
-  Crop,
-  Palette,
-  Settings
+  X
 } from "lucide-react"
 
 interface MediaFile {
@@ -72,14 +64,12 @@ export default function MediaManager({
   const [uploadProgress, setUploadProgress] = useState(0)
   const [showPreview, setShowPreview] = useState(false)
   const [previewFile, setPreviewFile] = useState<MediaFile | null>(null)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [editingFile, setEditingFile] = useState<MediaFile | null>(null)
   
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dropZoneRef = useRef<HTMLDivElement>(null)
 
   // Mock данные
-  const mediaFiles: MediaFile[] = [
+  const mediaFiles = useMemo<MediaFile[]>(() => [
     {
       id: 1,
       name: "hero-bg.jpg",
@@ -145,18 +135,18 @@ export default function MediaManager({
       tags: ["видео", "компания"],
       description: "Видео о компании"
     }
-  ]
+  ], [])
 
-  const folders = [
+  const folders = useMemo(() => [
     { name: "all", label: "Все файлы", count: mediaFiles.length },
     { name: "heroes", label: "Фоны", count: mediaFiles.filter(f => f.folder === "heroes").length },
     { name: "branding", label: "Брендинг", count: mediaFiles.filter(f => f.folder === "branding").length },
     { name: "objects", label: "Объекты", count: mediaFiles.filter(f => f.folder === "objects").length },
     { name: "documents", label: "Документы", count: mediaFiles.filter(f => f.folder === "documents").length },
     { name: "videos", label: "Видео", count: mediaFiles.filter(f => f.folder === "videos").length }
-  ]
+  ], [mediaFiles])
 
-  const filteredFiles = mediaFiles.filter(file => {
+  const filteredFiles = useMemo(() => mediaFiles.filter(file => {
     const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          file.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          file.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -164,15 +154,7 @@ export default function MediaManager({
     const matchesType = selectedType === 'all' || file.type === selectedType
     
     return matchesSearch && matchesFolder && matchesType
-  })
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
+  }), [mediaFiles, searchQuery, selectedFolder, selectedType])
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -198,13 +180,12 @@ export default function MediaManager({
     }
   }
 
-  const handleUpload = async (files: FileList) => {
+  const handleUpload = useCallback(async (files: FileList) => {
     setIsUploading(true)
     setUploadProgress(0)
     
     // Симуляция загрузки
     for (let i = 0; i < files.length; i++) {
-      const file = files[i]
       const progress = ((i + 1) / files.length) * 100
       setUploadProgress(progress)
       
@@ -215,7 +196,7 @@ export default function MediaManager({
     setIsUploading(false)
     setShowUploadModal(false)
     setUploadProgress(0)
-  }
+  }, [])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -223,7 +204,7 @@ export default function MediaManager({
     if (files.length > 0) {
       handleUpload(files)
     }
-  }, [])
+  }, [handleUpload])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -235,14 +216,13 @@ export default function MediaManager({
   }
 
   const handleEdit = (file: MediaFile) => {
-    setEditingFile(file)
-    setShowEditModal(true)
+    alert(`Редактирование файла "${file.name}" пока недоступно`)
   }
 
   const handleDelete = (id: number) => {
     if (confirm('Вы уверены, что хотите удалить этот файл?')) {
       // В реальном приложении здесь будет API вызов
-      console.log('Удаление файла:', id)
+      debugLog('Удаление файла:', id)
     }
   }
 
@@ -373,9 +353,12 @@ export default function MediaManager({
                     >
                       <div className="aspect-square flex items-center justify-center mb-2">
                         {file.thumbnail ? (
-                          <img
+                          <Image
                             src={file.thumbnail}
                             alt={file.alt || file.name}
+                            width={200}
+                            height={200}
+                            unoptimized
                             className="w-full h-full object-cover rounded"
                           />
                         ) : (
@@ -436,9 +419,12 @@ export default function MediaManager({
                     >
                       <div className="w-12 h-12 flex items-center justify-center mr-4">
                         {file.thumbnail ? (
-                          <img
+                          <Image
                             src={file.thumbnail}
                             alt={file.alt || file.name}
+                            width={48}
+                            height={48}
+                            unoptimized
                             className="w-full h-full object-cover rounded"
                           />
                         ) : (
@@ -570,9 +556,12 @@ export default function MediaManager({
               
               <div className="p-4">
                 {previewFile.type === 'image' ? (
-                  <img
+                  <Image
                     src={previewFile.url}
                     alt={previewFile.alt || previewFile.name}
+                    width={previewFile.dimensions?.width ?? 1200}
+                    height={previewFile.dimensions?.height ?? 800}
+                    unoptimized
                     className="max-w-full max-h-[60vh] mx-auto"
                   />
                 ) : previewFile.type === 'video' ? (

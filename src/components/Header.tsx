@@ -1,15 +1,18 @@
 "use client"
 
+import type { ReactNode } from "react"
 import LanguageSelector from "./LanguageSelector"
 import HeaderFilters from "./HeaderFilters"
 import { AnimatedShinyButton } from "./ui/animated-shiny-button"
-import { useLanguage } from "@/contexts/LanguageContext"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-export default function Header() {
-  const { t } = useLanguage()
+interface HeaderProps {
+  children?: ReactNode
+}
+
+export default function Header({ children }: HeaderProps) {
   const pathname = usePathname()
 
   return (
@@ -42,6 +45,8 @@ export default function Header() {
       {/* Черная линия */}
       <div className="h-0.5 bg-black"></div>
       
+      {children}
+
       {/* Фильтры - показываем на странице объектов и карты */}
       {(pathname === '/objects' || pathname === '/map') && <HeaderFilters />}
     </header>

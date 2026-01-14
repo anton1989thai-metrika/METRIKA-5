@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSessionUser } from '@/lib/auth/session'
 import { db } from '@/lib/db'
+import { prismaRoleToUiRole } from '@/lib/permissions-core'
 
 export const runtime = 'nodejs'
-
-function prismaRoleToUi(role: string): string {
-  if (role === 'site_user') return 'site-user'
-  if (role === 'foreign_employee') return 'foreign-employee'
-  return role
-}
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,9 +32,9 @@ export async function GET(request: NextRequest) {
       id: fullUser.id,
       email: fullUser.email,
       name: fullUser.name || fullUser.email.split('@')[0],
-      role: prismaRoleToUi(String(fullUser.role)),
+      role: prismaRoleToUiRole(String(fullUser.role)),
       status: fullUser.status || 'active',
-      detailedPermissions: (fullUser as any).detailedPermissions || null,
+      detailedPermissions: fullUser.detailedPermissions || null,
       createdAt: fullUser.createdAt.toISOString(),
     })
   } catch (error) {

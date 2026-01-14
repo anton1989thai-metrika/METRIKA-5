@@ -1,9 +1,12 @@
 'use client'
 
+import { debugLog } from '@/lib/logger'
+
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Eye, Download, Trash2 } from 'lucide-react'
+import { fetchJson } from '@/lib/api-client'
 
 interface Contract {
   id: string
@@ -25,9 +28,8 @@ export default function ContractList() {
 
   const fetchContracts = async () => {
     try {
-      const res = await fetch('/api/contracts')
-      const data = await res.json()
-      setContracts(data)
+      const data = await fetchJson<Contract[]>('/api/contracts')
+      setContracts(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Ошибка загрузки договоров:', error)
     } finally {
@@ -39,9 +41,13 @@ export default function ContractList() {
     if (!confirm('Удалить договор?')) return
     
     try {
-      // TODO: Добавить API для удаления
-      console.log('Удаление договора:', id)
-      fetchContracts()
+      await fetchJson('/api/contracts', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      })
+      debugLog('Удаление договора:', id)
+      setContracts((prev) => prev.filter((contract) => contract.id !== id))
     } catch (error) {
       console.error('Ошибка удаления:', error)
     }
@@ -115,4 +121,3 @@ export default function ContractList() {
     </div>
   )
 }
-

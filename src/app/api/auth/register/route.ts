@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { AccountType, UserRole } from '@prisma/client'
 import { db } from '@/lib/db'
 import { hashPassword } from '@/lib/auth/password'
 import { createSession, setSessionCookie } from '@/lib/auth/session'
@@ -28,8 +29,9 @@ export async function POST(request: NextRequest) {
         email,
         login: email,
         name,
-        role: 'site_user' as any,
+        role: UserRole.site_user,
         status: 'active',
+        accountType: AccountType.human,
         passwordHash: await hashPassword(password),
       },
     })
@@ -41,10 +43,8 @@ export async function POST(request: NextRequest) {
       success: true,
       user: { email: user.email, name: user.name, role: 'site-user' },
     })
-  } catch (e: any) {
+  } catch (e) {
     console.error('register error', e)
     return NextResponse.json({ success: false, error: 'Ошибка регистрации' }, { status: 500 })
   }
 }
-
-

@@ -1,7 +1,9 @@
 'use client';
 
+import { debugLog } from '@/lib/logger'
+
 import React, { useState, useEffect } from 'react';
-import { FieldRow, FormData, FilterState } from '@/types/realEstateForm';
+import { COUNTRIES, FieldRow, FormData, FilterState, OBJECT_TYPES, OPERATIONS } from '@/types/realEstateForm';
 import { FIELD_ROWS } from '@/data/fieldRows';
 import { filterFields } from '@/lib/fieldFilter';
 import { DynamicForm } from '@/components/DynamicRealEstateForm';
@@ -16,25 +18,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Save } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
-const COUNTRIES = ['Россия', 'Таиланд', 'Китай', 'Южная Корея'];
-const OPERATIONS = ['Продажа', 'Аренда', 'Обмен'];
-const OBJECT_TYPES = [
-  'Квартира',
-  'Частный дом',
-  'Коммерческое помещение',
-  'Здание',
-  'Имущественный комплекс',
-  'Некапитальный объект',
-  'Доля в праве',
-  'Земельный участок'
-];
-
 export default function DynamicRealEstateFormPage() {
   const [filters, setFilters] = useState<FilterState>({});
   const [formData, setFormData] = useState<FormData>({});
   const [availableFields, setAvailableFields] = useState<FieldRow[]>([]);
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [activeTab, setActiveTab] = useState<'characteristics' | 'media'>('characteristics');
+
+  const getStringValue = (value: FormData[keyof FormData]): string => {
+    return typeof value === 'string' ? value : ''
+  }
+
+  const getNumericValue = (value: FormData[keyof FormData]): string | number => {
+    if (typeof value === 'number' || typeof value === 'string') return value
+    return ''
+  }
   
   // Обновляем доступные поля при изменении фильтров
   useEffect(() => {
@@ -69,33 +67,6 @@ export default function DynamicRealEstateFormPage() {
     }
   };
   
-  const handleSetCover = (id: string) => {
-    setMediaFiles((items) => {
-      const updatedItems = items.map((item) => ({
-        ...item,
-        isCover: item.id === id
-      }));
-      return updatedItems;
-    });
-  };
-  
-  const handleRemoveMedia = (id: string) => {
-    setMediaFiles((items) => {
-      const updatedItems = items.filter(file => file.id !== id);
-      
-      // Если удаляем обложку, выбираем новую
-      const removedItem = items.find(item => item.id === id);
-      if (removedItem?.isCover) {
-        const firstImage = updatedItems.find(item => item.type === 'image');
-        if (firstImage) {
-          firstImage.isCover = true;
-        }
-      }
-      
-      return updatedItems;
-    });
-  };
-  
   const handleSubmit = (data: FormData) => {
     // Подготавливаем медиа-данные для сохранения
     const mediaData = mediaFiles.map(file => ({
@@ -126,9 +97,9 @@ export default function DynamicRealEstateFormPage() {
       coverId: coverFile?.id // 👈 сохраняем ID обложки
     };
 
-    console.log('Сохранён объект с медиа:', newObject);
-    console.log('Медиа-файлы:', mediaFiles);
-    console.log('Обложка:', coverFile);
+    debugLog('Сохранён объект с медиа:', newObject);
+    debugLog('Медиа-файлы:', mediaFiles);
+    debugLog('Обложка:', coverFile);
     alert(`Объект недвижимости успешно сохранён!\n\nХарактеристики: ${Object.keys(data).length} полей\nМедиа-файлы: ${mediaFiles.length} файлов\nОбложка: ${coverFile ? coverFile.name : 'не выбрана'}`);
     
     // Позже можно добавить сохранение в localStorage или API
@@ -259,7 +230,7 @@ export default function DynamicRealEstateFormPage() {
                       <Input
                         type="text"
                         placeholder="Введите адрес объекта"
-                        value={formData.address || ''}
+                        value={getStringValue(formData.address)}
                         onChange={(e) => handleFormDataChange({ ...formData, address: e.target.value })}
                       />
                     </div>
@@ -271,13 +242,13 @@ export default function DynamicRealEstateFormPage() {
                           <Input
                             type="number"
                             placeholder="Введите площадь"
-                            value={formData.totalArea || ''}
+                            value={getNumericValue(formData.totalArea)}
                             onChange={(e) => handleFormDataChange({ ...formData, totalArea: e.target.value })}
                           />
                         </div>
                         <div className="relative">
                           <Select 
-                            value={formData.areaUnit || 'm2'} 
+                            value={getStringValue(formData.areaUnit) || 'm2'} 
                             onValueChange={(value) => handleFormDataChange({ ...formData, areaUnit: value === '__empty__' ? undefined : value })}
                           >
                             <SelectTrigger className="w-32">

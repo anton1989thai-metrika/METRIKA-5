@@ -19,42 +19,50 @@ export default function ChatPage() {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     const newMsg: Message = { role: 'user', content: input };
-    setMessages((p) => [...p, newMsg]);
+    const nextMessages = [...messages, newMsg];
+    setMessages(nextMessages);
     setInput('');
     setLoading(true);
 
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: [...messages, newMsg] }),
-    });
-
-    if (!res.body) {
-      setLoading(false);
-      return;
-    }
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let reply: Message = { role: 'assistant', content: '' };
-    setMessages((p) => [...p, reply]);
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value);
-      reply.content += chunk;
-      setMessages((prev) => {
-        const updated = [...prev];
-        updated[updated.length - 1] = { ...reply };
-        return updated;
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: nextMessages }),
       });
-    }
 
-    setLoading(false);
+      if (!res.ok) {
+        throw new Error('Не удалось отправить сообщение');
+      }
+
+      if (!res.body) {
+        throw new Error('Ответ сервера пустой');
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      const reply: Message = { role: 'assistant', content: '' };
+      setMessages((p) => [...p, reply]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        reply.content += chunk;
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { ...reply };
+          return updated;
+        });
+      }
+    } catch (error) {
+      console.error('Chat send error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

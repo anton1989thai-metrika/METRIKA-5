@@ -1,48 +1,36 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
 import { 
   Users, 
   Building2, 
   FileText, 
-  Image, 
+  Image as ImageIcon, 
   BarChart3, 
   Settings, 
   CheckSquare,
   Bell,
-  Shield,
   Database,
   Calendar,
   Mail,
-  Search,
   Plus,
-  Edit,
   Eye,
   Download,
-  Upload,
   AlertCircle,
   CheckCircle,
   Clock,
   UserPlus,
   BarChart,
-  CheckSquare as TaskSquare,
-  Copy,
-  Video,
-  Music,
-  File,
-  Folder,
   Calculator,
   DollarSign,
   UserCheck,
   Receipt,
-  Award,
-  PieChart,
-  ArrowLeft,
-  Archive,
-  Trash2,
-  Globe
+  ArrowLeft
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ContentEditor from "@/components/ContentEditor"
@@ -50,6 +38,7 @@ import MediaManager from "@/components/MediaManager"
 import AnalyticsDashboard from "@/components/AnalyticsDashboard"
 import SiteSettingsPanel from "@/components/SiteSettingsPanel"
 import ObjectManagementPanel from "@/components/ObjectManagementPanel"
+import { fetchJsonOrNull } from "@/lib/api-client"
 import TaskManagementPanel from "@/components/TaskManagementPanel"
 import UserManagementPanel from "@/components/UserManagementPanel"
 import TimeTrackingCalendar from "@/components/TimeTrackingCalendar"
@@ -60,22 +49,31 @@ import HRNotificationsPanel from "@/components/HRNotificationsPanel"
 import HRReportingPanel from "@/components/HRReportingPanel"
 import ContractBuilder from "@/components/contracts/ContractBuilder"
 import ContractList from "@/components/contracts/ContractList"
+import AdminEmailMailboxes from "@/components/admin/AdminEmailMailboxes"
+import type { ContentDraft, ContentItem } from "@/types/content"
+
+type EmailStats = {
+  totalEmails: number
+  unreadInbox: number
+  deliveryErrors: number
+  storageBytes: number
+  updatedAt?: string
+}
 
 export default function AdminPage() {
   return <AdminPageContent />
 }
 
 function AdminPageContent() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState('dashboard')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [showFilters, setShowFilters] = useState(false)
   const [hrActiveTab, setHrActiveTab] = useState('dashboard')
   const [showContentEditor, setShowContentEditor] = useState(false)
-  const [selectedContent, setSelectedContent] = useState(null)
-  const [contentCategory, setContentCategory] = useState('all')
-  const [contentStatus, setContentStatus] = useState('all')
+  const [selectedContent, setSelectedContent] = useState<ContentDraft | undefined>(undefined)
   const [showMediaManager, setShowMediaManager] = useState(false)
   const [contractsTab, setContractsTab] = useState('builder')
+  const [emailStats, setEmailStats] = useState<EmailStats | null>(null)
+  const emailStatsLoadingRef = useRef(false)
 
   // Allow deep-linking to a tab, e.g. /admin?tab=users
   useEffect(() => {
@@ -98,6 +96,47 @@ function AdminPageContent() {
     totalUsers: 156
   }
 
+  const formatBytes = (bytes: number | null | undefined) => {
+    const value = Number(bytes || 0)
+    if (!Number.isFinite(value) || value <= 0) return '0 B'
+    const units = ['B', 'KB', 'MB', 'GB', 'TB']
+    let idx = 0
+    let v = value
+    while (v >= 1024 && idx < units.length - 1) {
+      v /= 1024
+      idx += 1
+    }
+    return `${v.toFixed(v >= 10 || idx === 0 ? 0 : 1)}${units[idx]}`
+  }
+
+  const fetchEmailStats = async () => {
+    if (emailStatsLoadingRef.current) return
+    emailStatsLoadingRef.current = true
+    try {
+      const data = await fetchJsonOrNull<{ stats?: EmailStats }>('/api/admin/email-stats')
+      if (data?.stats) {
+        setEmailStats((prev) => ({
+          totalEmails: data.stats?.totalEmails ?? prev?.totalEmails ?? 0,
+          unreadInbox: data.stats?.unreadInbox ?? prev?.unreadInbox ?? 0,
+          deliveryErrors: data.stats?.deliveryErrors ?? prev?.deliveryErrors ?? 0,
+          storageBytes: data.stats?.storageBytes ?? prev?.storageBytes ?? 0,
+          updatedAt: data.stats?.updatedAt ?? prev?.updatedAt,
+        }))
+      }
+    } catch {
+      // keep previous stats to avoid UI jumps
+    } finally {
+      emailStatsLoadingRef.current = false
+    }
+  }
+
+  useEffect(() => {
+    if (activeTab !== 'email') return
+    fetchEmailStats()
+    const timer = setInterval(fetchEmailStats, 60 * 60 * 1000)
+    return () => clearInterval(timer)
+  }, [activeTab])
+
   const recentActivities = [
     { id: 1, type: 'application', message: 'Новая заявка на покупку квартиры', time: '2 мин назад', status: 'new' },
     { id: 2, type: 'task', message: 'Задача "Обновить фото объекта" выполнена', time: '15 мин назад', status: 'completed' },
@@ -108,227 +147,15 @@ function AdminPageContent() {
   const quickActions = [
     { id: 1, title: 'Создать статью', icon: <FileText className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
     { id: 2, title: 'Добавить объект', icon: <Building2 className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
-    { id: 3, title: 'Загрузить фото', icon: <Image className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
+    { id: 3, title: 'Загрузить фото', icon: <ImageIcon className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
     { id: 4, title: 'Создать задачу', icon: <CheckSquare className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
     { id: 5, title: 'Добавить пользователя', icon: <UserPlus className="w-6 h-6" />, color: 'bg-white border border-gray-300' },
     { id: 6, title: 'Создать отчет', icon: <BarChart className="w-6 h-6" />, color: 'bg-white border border-gray-300' }
   ]
 
-  // Mock данные для контента
-  const contentItems = [
-    {
-      id: 1,
-      title: "Рынок недвижимости в 2024 году",
-      excerpt: "Анализ текущего состояния рынка недвижимости и прогнозы на будущее",
-      category: "blog",
-      status: "published",
-      views: 1250,
-      createdAt: "2024-01-15",
-      updatedAt: "2024-01-20",
-      author: "Администратор",
-      tags: ["рынок", "анализ", "2024"],
-      language: "ru"
-    },
-    {
-      id: 2,
-      title: "Новые возможности для клиентов",
-      excerpt: "Расширение сервисов и улучшение качества обслуживания",
-      category: "news",
-      status: "published",
-      views: 890,
-      createdAt: "2024-01-18",
-      updatedAt: "2024-01-18",
-      author: "Администратор",
-      tags: ["новости", "сервис"],
-      language: "ru"
-    },
-    {
-      id: 3,
-      title: "Как правильно выбрать квартиру",
-      excerpt: "Подробное руководство по выбору недвижимости для покупки",
-      category: "knowledge",
-      status: "draft",
-      views: 0,
-      createdAt: "2024-01-20",
-      updatedAt: "2024-01-20",
-      author: "Администратор",
-      tags: ["покупка", "руководство"],
-      language: "ru"
-    },
-    {
-      id: 4,
-      title: "Часто задаваемые вопросы",
-      excerpt: "Ответы на самые популярные вопросы клиентов",
-      category: "faq",
-      status: "published",
-      views: 2100,
-      createdAt: "2024-01-10",
-      updatedAt: "2024-01-15",
-      author: "Администратор",
-      tags: ["FAQ", "помощь"],
-      language: "ru"
-    }
-  ]
-
-  const handleCreateContent = () => {
-    setSelectedContent(null)
-    setShowContentEditor(true)
-  }
-
-  const handleEditContent = (content: any) => {
-    setSelectedContent(content)
-    setShowContentEditor(true)
-  }
-
-  const handleSaveContent = async (contentData: any) => {
+  const handleSaveContent = async (contentData: ContentItem) => {
     // В реальном приложении здесь будет API вызов
-    console.log('Сохранение контента:', contentData)
-  }
-
-  const handleDeleteContent = (id: number) => {
-    if (confirm('Вы уверены, что хотите удалить этот контент?')) {
-      // В реальном приложении здесь будет API вызов
-      console.log('Удаление контента:', id)
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'published': return 'text-gray-600 bg-gray-50 border border-gray-200'
-      case 'draft': return 'text-gray-600 bg-gray-50 border border-gray-200'
-      case 'scheduled': return 'text-gray-600 bg-gray-50 border border-gray-200'
-      case 'archived': return 'text-gray-600 bg-gray-50 border border-gray-200'
-      default: return 'text-gray-600 bg-gray-50 border border-gray-200'
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'published': return 'Опубликовано'
-      case 'draft': return 'Черновик'
-      case 'scheduled': return 'Запланировано'
-      case 'archived': return 'Архив'
-      default: return 'Неизвестно'
-    }
-  }
-
-  const getCategoryText = (category: string) => {
-    switch (category) {
-      case 'blog': return 'Статьи блога'
-      case 'news': return 'Новости'
-      case 'knowledge': return 'База знаний'
-      case 'faq': return 'FAQ'
-      case 'policies': return 'Политики'
-      default: return 'Неизвестно'
-    }
-  }
-
-  const filteredContent = contentItems.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    const matchesCategory = contentCategory === 'all' || item.category === contentCategory
-    const matchesStatus = contentStatus === 'all' || item.status === contentStatus
-    
-    return matchesSearch && matchesCategory && matchesStatus
-  })
-
-  // Mock данные для медиафайлов
-  const mediaFiles = [
-    {
-      id: 1,
-      name: "hero-bg.jpg",
-      type: "image",
-      size: 2048576,
-      url: "/images/hero-bg.jpg",
-      thumbnail: "/images/hero-bg.jpg",
-      uploadedAt: "2024-01-15",
-      folder: "heroes",
-      tags: ["фон", "главная"],
-      description: "Фоновое изображение для главной страницы",
-      alt: "Фон главной страницы",
-      dimensions: { width: 1920, height: 1080 }
-    },
-    {
-      id: 2,
-      name: "logo.png",
-      type: "image",
-      size: 512000,
-      url: "/images/logo.png",
-      thumbnail: "/images/logo.png",
-      uploadedAt: "2024-01-10",
-      folder: "branding",
-      tags: ["логотип", "бренд"],
-      description: "Логотип компании",
-      alt: "Логотип МЕТРИКА",
-      dimensions: { width: 200, height: 200 }
-    },
-    {
-      id: 3,
-      name: "object-1.jpg",
-      type: "image",
-      size: 1536000,
-      url: "/images/object-1.jpg",
-      thumbnail: "/images/object-1.jpg",
-      uploadedAt: "2024-01-20",
-      folder: "objects",
-      tags: ["объект", "недвижимость"],
-      description: "Фотография объекта недвижимости",
-      alt: "Объект недвижимости",
-      dimensions: { width: 800, height: 600 }
-    },
-    {
-      id: 4,
-      name: "presentation.pdf",
-      type: "document",
-      size: 5242880,
-      url: "/documents/presentation.pdf",
-      uploadedAt: "2024-01-18",
-      folder: "documents",
-      tags: ["презентация", "документ"],
-      description: "Презентация компании"
-    },
-    {
-      id: 5,
-      name: "company-video.mp4",
-      type: "video",
-      size: 52428800,
-      url: "/videos/company-video.mp4",
-      thumbnail: "/images/video-thumb-1.jpg",
-      uploadedAt: "2024-01-12",
-      folder: "videos",
-      tags: ["видео", "компания"],
-      description: "Видео о компании"
-    }
-  ]
-
-  const mediaStats = {
-    totalFiles: mediaFiles.length,
-    totalSize: mediaFiles.reduce((acc, file) => acc + file.size, 0),
-    images: mediaFiles.filter(f => f.type === 'image').length,
-    videos: mediaFiles.filter(f => f.type === 'video').length,
-    documents: mediaFiles.filter(f => f.type === 'document').length,
-    audio: mediaFiles.filter(f => f.type === 'audio').length,
-    archives: mediaFiles.filter(f => f.type === 'archive').length
-  }
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
-
-  const getFileIcon = (type: string) => {
-    switch (type) {
-      case 'image': return <Image className="w-8 h-8 text-gray-500" />
-      case 'video': return <Video className="w-8 h-8 text-gray-500" />
-      case 'document': return <FileText className="w-8 h-8 text-gray-500" />
-      case 'audio': return <Music className="w-8 h-8 text-gray-500" />
-      case 'archive': return <Archive className="w-8 h-8 text-gray-500" />
-      default: return <File className="w-8 h-8 text-gray-500" />
-    }
+    debugLog('Сохранение контента:', contentData)
   }
 
   return (
@@ -336,7 +163,7 @@ function AdminPageContent() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-20 px-4">
+      <main className="pt-32 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Заголовок - скрыт для раздела "Кадры и бухгалтерия" */}
           {activeTab !== 'hr' && (
@@ -574,12 +401,15 @@ function AdminPageContent() {
                 style={{backgroundColor: '#fff60b'}}
                 onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#e6d90a'}
                 onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#fff60b'}
+                onClick={() => router.push('/email')}
               >
                     <Mail className="w-4 h-4 inline mr-2" />
                     Открыть почту
               </button>
                 </div>
             </div>
+
+              <AdminEmailMailboxes />
             
               {/* Статистика почты */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -587,7 +417,7 @@ function AdminPageContent() {
                   <div className="flex items-center">
                     <Mail className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">156</div>
+                      <div className="text-2xl font-bold text-black">{emailStats?.totalEmails ?? '—'}</div>
                       <div className="text-sm text-gray-600">Всего писем</div>
                     </div>
                   </div>
@@ -597,7 +427,7 @@ function AdminPageContent() {
                   <div className="flex items-center">
                     <Bell className="w-8 h-8 text-gray-600 mr-3" />
                   <div>
-                      <div className="text-2xl font-bold text-black">23</div>
+                      <div className="text-2xl font-bold text-black">{emailStats?.unreadInbox ?? '—'}</div>
                       <div className="text-sm text-gray-600">Непрочитанных</div>
                   </div>
                   </div>
@@ -607,8 +437,8 @@ function AdminPageContent() {
                   <div className="flex items-center">
                     <Users className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">8</div>
-                      <div className="text-sm text-gray-600">Активных ящиков</div>
+                      <div className="text-2xl font-bold text-black">{emailStats?.deliveryErrors ?? '—'}</div>
+                      <div className="text-sm text-gray-600">Ошибки доставки</div>
                     </div>
                   </div>
                 </div>
@@ -617,97 +447,12 @@ function AdminPageContent() {
                   <div className="flex items-center">
                     <Database className="w-8 h-8 text-gray-600 mr-3" />
                     <div>
-                      <div className="text-2xl font-bold text-black">2.4GB</div>
+                      <div className="text-2xl font-bold text-black">{formatBytes(emailStats?.storageBytes)}</div>
                       <div className="text-sm text-gray-600">Использовано места</div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Управление почтовыми ящиками */}
-              <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-black">Почтовые ящики</h3>
-                  <button className="px-4 py-2 bg-white border border-gray-300 text-black rounded-lg shadow-lg hover:shadow-xl transition-all">
-                    <UserPlus className="w-4 h-4 inline mr-2" />
-                    Создать ящик
-                    </button>
-            </div>
-            
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-medium text-black">Email</th>
-                        <th className="text-left py-3 px-4 font-medium text-black">Владелец</th>
-                        <th className="text-left py-3 px-4 font-medium text-black">Статус</th>
-                        <th className="text-left py-3 px-4 font-medium text-black">Писем</th>
-                        <th className="text-left py-3 px-4 font-medium text-black">Размер</th>
-                        <th className="text-left py-3 px-4 font-medium text-black">Действия</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-black">admin@metrika.direct</td>
-                        <td className="py-3 px-4 text-gray-600">Администратор</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Активен</span>
-                        </td>
-                        <td className="py-3 px-4 text-gray-600">45</td>
-                        <td className="py-3 px-4 text-gray-600">1.2GB</td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center space-x-2">
-                            <button className="p-1 text-gray-600 hover:text-black">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button className="p-1 text-gray-600 hover:text-gray-800">
-                              <Trash2 className="w-4 h-4" />
-                    </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-black">lawyer@metrika.direct</td>
-                        <td className="py-3 px-4 text-gray-600">Юрист</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Активен</span>
-                        </td>
-                        <td className="py-3 px-4 text-gray-600">32</td>
-                        <td className="py-3 px-4 text-gray-600">890MB</td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center space-x-2">
-                            <button className="p-1 text-gray-600 hover:text-black">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button className="p-1 text-gray-600 hover:text-gray-800">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-black">manager@metrika.direct</td>
-                        <td className="py-3 px-4 text-gray-600">Менеджер</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">Приостановлен</span>
-                        </td>
-                        <td className="py-3 px-4 text-gray-600">18</td>
-                        <td className="py-3 px-4 text-gray-600">456MB</td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center space-x-2">
-                            <button className="p-1 text-gray-600 hover:text-black">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button className="p-1 text-gray-600 hover:text-gray-800">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  </div>
-                </div>
                 
               {/* Быстрые действия */}
               <div className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg">
@@ -1169,7 +914,7 @@ function AdminPageContent() {
         isOpen={showContentEditor}
         onClose={() => {
           setShowContentEditor(false)
-          setSelectedContent(null)
+          setSelectedContent(undefined)
         }}
         content={selectedContent}
         onSave={handleSaveContent}
@@ -1185,4 +930,3 @@ function AdminPageContent() {
     </div>
   )
 }
-

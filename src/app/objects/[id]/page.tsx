@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useState, useEffect, useMemo } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import Header from "@/components/Header"
 import BurgerMenu from "@/components/BurgerMenu"
-import { useLanguage } from "@/contexts/LanguageContext"
 import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects"
 import { 
   Breadcrumb,
@@ -20,20 +21,32 @@ import { PropertyGallery } from "@/components/PropertyGallery"
 import { PropertyDetails } from "@/components/PropertyDetails"
 import { InfrastructureSection } from "@/components/InfrastructureSection"
 import { LocationSection } from "@/components/LocationSection"
-import { CATEGORY_LABELS } from '@/data/categoryLabels';
+
+const DEFAULT_IMAGES = [
+  "/images/object-1.jpg",
+  "/images/object-2.jpg",
+  "/images/object-3.jpg",
+  "/images/object-4.jpg",
+  "/images/object-5.jpg"
+]
 
 export default function ObjectDetailPage() {
   const params = useParams()
-  const { t } = useLanguage()
   const [object, setObject] = useState<RealEstateObject | null>(null)
   const [isFavorite, setIsFavorite] = useState(false)
 
+  const objectId = useMemo(() => {
+    const raw = params.id as string | undefined
+    const parsed = raw ? Number.parseInt(raw, 10) : NaN
+    return Number.isFinite(parsed) ? parsed : null
+  }, [params.id])
+
   useEffect(() => {
-    if (params.id) {
-      const foundObject = realEstateObjects.find(obj => obj.id === parseInt(params.id as string))
+    if (objectId) {
+      const foundObject = realEstateObjects.find(obj => obj.id === objectId)
       setObject(foundObject || null)
     }
-  }, [params.id])
+  }, [objectId])
 
   if (!object) {
     return (
@@ -52,38 +65,35 @@ export default function ObjectDetailPage() {
     )
   }
 
-  const images = [
-    "/images/object-1.jpg",
-    "/images/object-2.jpg", 
-    "/images/object-3.jpg",
-    "/images/object-4.jpg",
-    "/images/object-5.jpg"
-  ]
+  const images = DEFAULT_IMAGES
 
   // Обработчики событий
   const handleCall = () => {
-    console.log('Звонок по номеру:', object.id)
+    debugLog('Звонок по номеру:', object.id)
   }
 
   const handleMessage = () => {
-    console.log('Отправка сообщения для объекта:', object.id)
+    debugLog('Отправка сообщения для объекта:', object.id)
   }
 
   const handleFavorite = () => {
-    setIsFavorite(!isFavorite)
-    console.log('Избранное:', !isFavorite)
+    setIsFavorite((prev) => {
+      const next = !prev
+      debugLog('Избранное:', next)
+      return next
+    })
   }
 
   const handleShare = () => {
-    console.log('Поделиться объектом:', object.id)
+    debugLog('Поделиться объектом:', object.id)
   }
 
   const handleRequestViewing = () => {
-    console.log('Запрос просмотра объекта:', object.id)
+    debugLog('Запрос просмотра объекта:', object.id)
   }
 
   const handleExportPDF = () => {
-    console.log('Экспорт в PDF объекта:', object.id)
+    debugLog('Экспорт в PDF объекта:', object.id)
   }
 
   return (

@@ -100,6 +100,7 @@ export default function FileUploader() {
             >
               <div className='flex items-center gap-3 overflow-hidden'>
                 <div className='w-10 h-10 rounded-md overflow-hidden bg-muted flex-shrink-0'>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={URL.createObjectURL(file)}
                     alt={file.name}
@@ -133,4 +134,3 @@ export default function FileUploader() {
     </div>
   );
 }
-

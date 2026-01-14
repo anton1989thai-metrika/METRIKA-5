@@ -8,9 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ 
-  children,
-  requiredPermission,
-  fallbackUrl 
+  children
 }: ProtectedRouteProps) {
   // Авторизация отключена - просто возвращаем содержимое
   return <>{children}</>

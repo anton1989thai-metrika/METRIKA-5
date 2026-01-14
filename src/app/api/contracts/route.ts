@@ -44,3 +44,29 @@ export async function POST(req: Request) {
   }
 }
 
+export async function DELETE(req: Request) {
+  try {
+    const body = await req.json().catch(() => ({}))
+    const id = String(body?.id || '').trim()
+    if (!id) {
+      return NextResponse.json({ error: 'id is required' }, { status: 400 })
+    }
+
+    const data = fs.readFileSync(contractsPath, 'utf8')
+    const contracts = JSON.parse(data)
+    const nextContracts = Array.isArray(contracts)
+      ? contracts.filter((contract) => contract.id !== id)
+      : []
+
+    if (nextContracts.length === contracts.length) {
+      return NextResponse.json({ error: 'Contract not found' }, { status: 404 })
+    }
+
+    fs.writeFileSync(contractsPath, JSON.stringify(nextContracts, null, 2))
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Ошибка удаления договора:', error)
+    return NextResponse.json({ error: 'Ошибка удаления договора' }, { status: 500 })
+  }
+}

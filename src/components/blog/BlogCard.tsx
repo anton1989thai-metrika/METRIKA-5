@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -34,9 +35,12 @@ export function BlogCard({
       <CardHeader className="p-0">
         <div className="relative overflow-hidden rounded-t-lg">
           {image && !imageError ? (
-            <img
+            <Image
               src={image}
               alt={title}
+              width={600}
+              height={192}
+              unoptimized
               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
               onError={() => setImageError(true)}
             />

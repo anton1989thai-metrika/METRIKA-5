@@ -1,8 +1,26 @@
 'use client';
 
+import { debugLog } from '@/lib/logger'
+
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { Mic, MicOff, Video, VideoOff, Phone, PhoneOff, Maximize2, Minimize2, Settings, Monitor, Share2, Square } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+
+type RtpCodecCapability = {
+  mimeType: string
+  clockRate?: number
+  channels?: number
+  sdpFmtpLine?: string
+}
+
+type RtpEncodingWithMinBitrate = RTCRtpEncodingParameters & {
+  minBitrate?: number
+  adaptivePtime?: boolean
+}
+
+type IceCandidateStats = RTCStats & {
+  candidateType?: string
+}
 
 function CallVideoContent() {
   const searchParams = useSearchParams();
@@ -32,8 +50,8 @@ function CallVideoContent() {
   const localStreamRef = useRef<MediaStream | null>(null);
   const screenStreamRef = useRef<MediaStream | null>(null);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
-  const iceCandidateCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const signalingCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const iceCandidateCheckIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const signalingCheckIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const cameraMenuRef = useRef<HTMLDivElement>(null);
   const microphoneMenuRef = useRef<HTMLDivElement>(null);
   const qualityMenuRef = useRef<HTMLDivElement>(null);
@@ -127,16 +145,17 @@ function CallVideoContent() {
       }
 
       // Настройки для высокого качества аудио при международных звонках
-      params.encodings[0] = {
+      const audioEncoding: RtpEncodingWithMinBitrate = {
         ...params.encodings[0],
         maxBitrate: 128000, // 128 kbps для высокого качества аудио
         minBitrate: 32000, // Минимум 32 kbps
         // Приоритет аудио трека
         networkPriority: 'high',
       };
+      params.encodings[0] = audioEncoding as RTCRtpEncodingParameters;
 
       await sender.setParameters(params);
-      console.log('Audio sender configured with high quality settings');
+      debugLog('Audio sender configured with high quality settings');
     } catch (error) {
       console.error('Ошибка настройки параметров аудио:', error);
     }
@@ -153,7 +172,7 @@ function CallVideoContent() {
       const qualitySettings = videoQualitySettings[quality];
       
       // Настраиваем параметры для максимального качества при международных звонках
-      params.encodings[0] = {
+      const encoding: RtpEncodingWithMinBitrate = {
         ...params.encodings[0],
         maxBitrate: qualitySettings.bitrate,
         minBitrate: qualitySettings.minBitrate,
@@ -165,6 +184,7 @@ function CallVideoContent() {
         // Адаптивное качество для международных соединений
         adaptivePtime: false,
       };
+      params.encodings[0] = encoding as RTCRtpEncodingParameters;
 
       // Пытаемся установить приоритет кодеков (поддерживается не всеми браузерами)
       try {
@@ -177,16 +197,19 @@ function CallVideoContent() {
             codec.mimeType === 'video/VP9' || 
             codec.mimeType === 'video/H264' ||
             codec.mimeType === 'video/VP8'
-          );
-          (sender as any).setCodecPreferences?.(preferredCodecs);
+          ) as RtpCodecCapability[];
+          const senderWithPrefs = sender as RTCRtpSender & {
+            setCodecPreferences?: (codecs: RtpCodecCapability[]) => void
+          }
+          senderWithPrefs.setCodecPreferences?.(preferredCodecs);
         }
-      } catch (codecError) {
+      } catch {
         // Игнорируем ошибки кодеков, используем браузерные настройки по умолчанию
-        console.log('Codec preferences not supported, using browser defaults');
+        debugLog('Codec preferences not supported, using browser defaults');
       }
 
       await sender.setParameters(params);
-      console.log(`Video sender configured with bitrate: ${qualitySettings.bitrate / 1000000} Mbps (min: ${qualitySettings.minBitrate / 1000000} Mbps)`);
+      debugLog(`Video sender configured with bitrate: ${qualitySettings.bitrate / 1000000} Mbps (min: ${qualitySettings.minBitrate / 1000000} Mbps)`);
     } catch (error) {
       console.error('Ошибка настройки параметров видео:', error);
       // Fallback на более простую конфигурацию
@@ -196,11 +219,12 @@ function CallVideoContent() {
           params.encodings = [{}];
         }
         const qualitySettings = videoQualitySettings[quality];
-        params.encodings[0] = {
+        const fallbackEncoding: RtpEncodingWithMinBitrate = {
           ...params.encodings[0],
           maxBitrate: qualitySettings.bitrate,
           minBitrate: qualitySettings.minBitrate,
         };
+        params.encodings[0] = fallbackEncoding as RTCRtpEncodingParameters;
         await sender.setParameters(params);
       } catch (fallbackError) {
         console.error('Ошибка при fallback настройке параметров:', fallbackError);
@@ -238,17 +262,18 @@ function CallVideoContent() {
         if (microphones.length > 0 && !selectedMicrophoneId) {
           setSelectedMicrophoneId(microphones[0].deviceId);
         }
-      } catch (error: any) {
-        console.error('Ошибка запроса разрешений:', error);
+      } catch (error) {
+        const err = error as { name?: string; message?: string }
+        console.error('Ошибка запроса разрешений:', err);
         // Улучшенная обработка ошибок разрешений
-        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
           setConnectionStatus('Необходимо разрешить доступ к камере и микрофону');
-        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
           setConnectionStatus('Камера или микрофон не найдены');
-        } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
           setConnectionStatus('Ошибка доступа к камере или микрофону');
         } else {
-          setConnectionStatus(`Ошибка: ${error.message || 'Неизвестная ошибка'}`);
+          setConnectionStatus(`Ошибка: ${err.message || 'Неизвестная ошибка'}`);
         }
       }
     };
@@ -302,7 +327,7 @@ function CallVideoContent() {
               frameRate: { ideal: quality.frameRate, max: quality.frameRate },
             };
 
-        const audioConstraints: MediaTrackConstraints = selectedMicrophoneId
+        const audioConstraints: MediaStreamConstraints['audio'] = selectedMicrophoneId
           ? {
               deviceId: { exact: selectedMicrophoneId },
             }
@@ -450,7 +475,7 @@ function CallVideoContent() {
     // Обработка изменения ICE соединения
     pc.oniceconnectionstatechange = () => {
       const iceState = pc.iceConnectionState;
-      console.log('ICE connection state:', iceState);
+      debugLog('ICE connection state:', iceState);
       
       if (iceState === 'failed') {
         console.warn('ICE connection failed, attempting restart...');
@@ -464,19 +489,28 @@ function CallVideoContent() {
         // Соединение установлено - проверяем тип соединения
         const stats = pc.getStats();
         stats.then((report) => {
-          report.forEach((stat: any) => {
-            if (stat.type === 'candidate-pair' && stat.selected) {
-              const localCandidate: any = report.get(stat.localCandidateId);
-              const remoteCandidate: any = report.get(stat.remoteCandidateId);
-              
-              if (localCandidate && localCandidate.candidateType) {
-                const connectionType = localCandidate.candidateType;
-                console.log('Connection type:', connectionType);
+          report.forEach((stat) => {
+            if (stat.type === 'candidate-pair') {
+              const pair = stat as RTCIceCandidatePairStats & {
+                selected?: boolean
+                localCandidateId?: string
+                remoteCandidateId?: string
+              }
+
+              if (!pair.selected) return
+
+              const localCandidate = pair.localCandidateId
+                ? (report.get(pair.localCandidateId) as IceCandidateStats | undefined)
+                : undefined
+
+              if (localCandidate?.candidateType) {
+                const connectionType = localCandidate.candidateType
+                debugLog('Connection type:', connectionType);
                 if (connectionType === 'relay') {
-                  console.log('Using TURN relay - оптимальное соединение между любыми странами');
+                  debugLog('Using TURN relay - оптимальное соединение между любыми странами');
                   setConnectionStatus('Подключено через TURN сервер');
                 } else if (connectionType === 'srflx') {
-                  console.log('Using STUN reflexive for connection');
+                  debugLog('Using STUN reflexive for connection');
                   setConnectionStatus('Подключено');
                 } else {
                   setConnectionStatus('Подключено напрямую');
@@ -492,9 +526,9 @@ function CallVideoContent() {
 
     // Обработка ICE gathering state для мониторинга
     pc.onicegatheringstatechange = () => {
-      console.log('ICE gathering state:', pc.iceGatheringState);
+      debugLog('ICE gathering state:', pc.iceGatheringState);
       if (pc.iceGatheringState === 'complete') {
-        console.log('ICE gathering complete');
+        debugLog('ICE gathering complete');
       }
     };
 
@@ -524,7 +558,7 @@ function CallVideoContent() {
   }, [isCaller, isCallActive, roomId]);
 
   // Функция для отправки signaling данных с повторными попытками
-  const sendSignaling = async (type: string, data: any, retries = 3) => {
+  const sendSignaling = async (type: string, data: unknown, retries = 3) => {
     for (let attempt = 0; attempt < retries; attempt++) {
       try {
         const response = await fetch('/api/webrtc/signaling', {
@@ -534,7 +568,7 @@ function CallVideoContent() {
         });
         
         if (response.ok) {
-          console.log(`Signaling ${type} sent successfully`);
+          debugLog(`Signaling ${type} sent successfully`);
           return true;
         } else {
           throw new Error(`HTTP ${response.status}`);
@@ -551,7 +585,7 @@ function CallVideoContent() {
   };
 
   // Функция для получения signaling данных с повторными попытками
-  const getSignaling = async (type: string, retries = 3): Promise<any> => {
+  const getSignaling = async <T,>(type: string, retries = 3): Promise<T | null> => {
     for (let attempt = 0; attempt < retries; attempt++) {
       try {
         const response = await fetch(
@@ -568,7 +602,7 @@ function CallVideoContent() {
         }
         
         const result = await response.json();
-        return result.data;
+        return result.data as T;
       } catch (error) {
         console.error(`Ошибка получения signaling (попытка ${attempt + 1}/${retries}):`, error);
         if (attempt < retries - 1) {
@@ -599,12 +633,12 @@ function CallVideoContent() {
       }
       
       await peerConnectionRef.current.setLocalDescription(offer);
-      console.log('Local description (offer) set successfully');
+      debugLog('Local description (offer) set successfully');
       
       // Отправляем offer с повторными попытками
       const offerSent = await sendSignaling('offer', offer, 5);
       if (offerSent) {
-        console.log('Offer sent successfully');
+        debugLog('Offer sent successfully');
         setConnectionStatus('Звонок инициирован, ожидание ответа...');
       } else {
         console.error('Failed to send offer after multiple retries');
@@ -643,7 +677,7 @@ function CallVideoContent() {
       }
 
       try {
-        const answer = await getSignaling('answer');
+        const answer = await getSignaling<RTCSessionDescriptionInit>('answer');
         if (answer && peerConnectionRef.current) {
           // Проверяем, что answer валидный
           if (!answer.type || !answer.sdp) {
@@ -667,7 +701,7 @@ function CallVideoContent() {
               new RTCSessionDescription(answer)
             );
             
-            console.log('Remote description (answer) set successfully');
+            debugLog('Remote description (answer) set successfully');
             
             // Настраиваем параметры передачи после установки remote description
             const videoSender = peerConnectionRef.current
@@ -686,9 +720,10 @@ function CallVideoContent() {
             
             checkForIceCandidates();
             setConnectionStatus('Ответ получен, установка соединения...');
-          } catch (error: any) {
-            console.error('Ошибка установки answer:', error);
-            const errorMessage = error.message || error.toString() || 'Неизвестная ошибка';
+          } catch (error) {
+            const err = error as { message?: string }
+            console.error('Ошибка установки answer:', err);
+            const errorMessage = err?.message || String(error || 'Неизвестная ошибка');
             setConnectionStatus(`Ошибка установки ответа: ${errorMessage}`);
             
             // Подробное логирование для отладки
@@ -703,7 +738,7 @@ function CallVideoContent() {
                 peerConnectionRef.current.signalingState !== 'closed' &&
                 peerConnectionRef.current.connectionState !== 'closed') {
               try {
-                console.log('Attempting ICE restart...');
+                debugLog('Attempting ICE restart...');
                 // Не пересоздаем offer сразу, ждем немного
                 setTimeout(() => {
                   if (peerConnectionRef.current && 
@@ -722,7 +757,7 @@ function CallVideoContent() {
         // Продолжаем проверку даже при ошибке сети
       }
     }, 500);
-    signalingCheckIntervalRef.current = checkInterval as any;
+    signalingCheckIntervalRef.current = checkInterval;
   };
 
   // Ожидание offer (для callee)
@@ -748,7 +783,7 @@ function CallVideoContent() {
       }
 
       try {
-        const offer = await getSignaling('offer');
+        const offer = await getSignaling<RTCSessionDescriptionInit>('offer');
         if (offer && peerConnectionRef.current) {
           // Проверяем, что offer валидный
           if (!offer.type || !offer.sdp) {
@@ -772,7 +807,7 @@ function CallVideoContent() {
               new RTCSessionDescription(offer)
             );
             
-            console.log('Remote description (offer) set successfully');
+            debugLog('Remote description (offer) set successfully');
             setConnectionStatus('Получен звонок, создание ответа...');
             
             // Настраиваем параметры передачи перед созданием answer
@@ -802,16 +837,17 @@ function CallVideoContent() {
             // Отправляем answer с повторными попытками
             const answerSent = await sendSignaling('answer', answer, 5);
             if (answerSent) {
-              console.log('Answer sent successfully');
+              debugLog('Answer sent successfully');
               setConnectionStatus('Ответ отправлен, установка соединения...');
               checkForIceCandidates();
             } else {
               console.error('Failed to send answer after multiple retries');
               setConnectionStatus('Ошибка отправки ответа');
             }
-          } catch (error: any) {
-            console.error('Ошибка обработки offer:', error);
-            setConnectionStatus(`Ошибка обработки предложения: ${error.message || 'Неизвестная ошибка'}`);
+          } catch (error) {
+            const err = error as { message?: string }
+            console.error('Ошибка обработки offer:', err);
+            setConnectionStatus(`Ошибка обработки предложения: ${err?.message || 'Неизвестная ошибка'}`);
           }
         }
       } catch (error) {
@@ -819,7 +855,7 @@ function CallVideoContent() {
         // Продолжаем проверку даже при ошибке сети
       }
     }, 500);
-    signalingCheckIntervalRef.current = checkInterval as any;
+    signalingCheckIntervalRef.current = checkInterval;
   };
 
   // Проверка новых ICE candidates
@@ -836,7 +872,7 @@ function CallVideoContent() {
         return;
       }
 
-      const candidates = await getSignaling('ice-candidates');
+      const candidates = await getSignaling<RTCIceCandidateInit[]>('ice-candidates');
       if (candidates && Array.isArray(candidates) && candidates.length > lastIndex) {
         if (peerConnectionRef.current) {
           for (let i = lastIndex; i < candidates.length; i++) {
@@ -857,7 +893,7 @@ function CallVideoContent() {
         }
       }
     }, 1000);
-    iceCandidateCheckIntervalRef.current = checkInterval as any;
+    iceCandidateCheckIntervalRef.current = checkInterval;
   };
 
   const toggleVideo = () => {
@@ -938,7 +974,7 @@ function CallVideoContent() {
 
       setIsScreenSharing(true);
       setIsVideoEnabled(true);
-      console.log('Screen sharing started');
+      debugLog('Screen sharing started');
     } catch (error) {
       console.error('Ошибка запуска шаринга экрана:', error);
       setConnectionStatus('Ошибка запуска шаринга экрана');
@@ -985,7 +1021,7 @@ function CallVideoContent() {
           },
           audio: false, // Не запрашиваем аудио от камеры, используем существующий микрофон
         });
-      } catch (error) {
+      } catch {
         // Fallback к ideal если exact не работает
         cameraStream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -1034,7 +1070,7 @@ function CallVideoContent() {
 
       setIsScreenSharing(false);
       setIsVideoEnabled(true);
-      console.log('Screen sharing stopped, camera restored');
+      debugLog('Screen sharing stopped, camera restored');
     } catch (error) {
       console.error('Ошибка остановки шаринга экрана:', error);
       setIsScreenSharing(false);
@@ -1128,7 +1164,7 @@ function CallVideoContent() {
     
     // Не переключаем камеру во время шаринга экрана
     if (isScreenSharing) {
-      console.log('Cannot switch camera while screen sharing');
+      debugLog('Cannot switch camera while screen sharing');
       return;
     }
 
@@ -1148,7 +1184,7 @@ function CallVideoContent() {
           },
           audio: selectedMicrophoneId ? { deviceId: { exact: selectedMicrophoneId } } : true,
         });
-      } catch (error) {
+      } catch {
         // Fallback к ideal если exact не работает
         newStream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -1271,7 +1307,7 @@ function CallVideoContent() {
     
     // Не меняем качество во время шаринга экрана
     if (isScreenSharing) {
-      console.log('Cannot change video quality while screen sharing');
+      debugLog('Cannot change video quality while screen sharing');
       return;
     }
 
@@ -1300,7 +1336,7 @@ function CallVideoContent() {
           },
           audio: selectedMicrophoneId ? { deviceId: { exact: selectedMicrophoneId } } : true,
         });
-      } catch (error) {
+      } catch {
         // Fallback к ideal если exact не работает
         newStream = await navigator.mediaDevices.getUserMedia({
           video: {

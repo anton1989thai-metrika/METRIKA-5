@@ -1,8 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import Image from "next/image"
+import { debugLog } from "@/lib/logger"
+
+import { useState } from "react"
 import { 
-  Settings, 
   Save, 
   BarChart,
   FileText,
@@ -10,36 +12,18 @@ import {
   RefreshCw, 
   Globe, 
   Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
   Shield, 
   Database, 
-  Image as ImageIcon, 
   Palette, 
   Bell, 
   Users, 
-  Key, 
-  Eye, 
-  EyeOff, 
   Upload, 
   Download, 
-  Trash2, 
   Plus, 
-  Edit, 
-  Check, 
   X, 
-  AlertCircle, 
-  CheckCircle, 
   Info,
-  Lock,
-  Unlock,
   Server,
-  HardDrive,
-  Wifi,
   Monitor,
-  Smartphone,
-  Tablet,
   Link
 } from "lucide-react"
 
@@ -1138,10 +1122,9 @@ export default function SiteSettingsPanel() {
 
   const [activeTab, setActiveTab] = useState('general')
   const [isSaving, setIsSaving] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
   const [newIP, setNewIP] = useState('')
   const [showIPModal, setShowIPModal] = useState(false)
-  const [ipModalType, setIpModalType] = useState<'whitelist' | 'blocked'>('whitelist')
+  const [ipModalType] = useState<'whitelist' | 'blocked'>('whitelist')
 
   const tabs = [
     { id: 'general', label: 'Общие', icon: <Globe className="w-4 h-4" /> },
@@ -1168,7 +1151,7 @@ export default function SiteSettingsPanel() {
     
     setIsSaving(false)
     // В реальном приложении здесь будет API вызов
-    console.log('Настройки сохранены:', settings)
+    debugLog('Настройки сохранены:', settings)
   }
 
   const handleReset = () => {
@@ -1190,16 +1173,6 @@ export default function SiteSettingsPanel() {
       setNewIP('')
       setShowIPModal(false)
     }
-  }
-
-  const handleRemoveIP = (ip: string, type: 'whitelist' | 'blocked') => {
-    const updatedSettings = { ...settings }
-    if (type === 'whitelist') {
-      updatedSettings.security.ipWhitelist = updatedSettings.security.ipWhitelist.filter(i => i !== ip)
-    } else {
-      updatedSettings.security.blockedIPs = updatedSettings.security.blockedIPs.filter(i => i !== ip)
-    }
-    setSettings(updatedSettings)
   }
 
   const handleFileUpload = (field: string, file: File) => {
@@ -1547,9 +1520,12 @@ export default function SiteSettingsPanel() {
                 <div>
                   <label className="block text-sm font-medium text-black mb-2">Логотип</label>
                   <div className="flex items-center gap-4">
-                    <img
+                    <Image
                       src={settings.appearance.logo}
                       alt="Logo"
+                      width={64}
+                      height={64}
+                      unoptimized
                       className="w-16 h-16 object-contain border border-gray-300 rounded"
                     />
                     <div>
@@ -1574,9 +1550,12 @@ export default function SiteSettingsPanel() {
                 <div>
                   <label className="block text-sm font-medium text-black mb-2">Favicon</label>
                   <div className="flex items-center gap-4">
-                    <img
+                    <Image
                       src={settings.appearance.favicon}
                       alt="Favicon"
+                      width={32}
+                      height={32}
+                      unoptimized
                       className="w-8 h-8 object-contain border border-gray-300 rounded"
                     />
                     <div>
@@ -2502,7 +2481,7 @@ export default function SiteSettingsPanel() {
                           })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                         >
-                          <option value="Let's Encrypt">Let's Encrypt</option>
+                          <option value="Let's Encrypt">Let&apos;s Encrypt</option>
                           <option value="Cloudflare">Cloudflare</option>
                           <option value="DigiCert">DigiCert</option>
                           <option value="Comodo">Comodo</option>
@@ -8896,7 +8875,7 @@ export default function SiteSettingsPanel() {
                   <Info className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-blue-800">
                     <strong>Совет:</strong> Вы можете создать новые шаблоны договоров или редактировать существующие. 
-                    После сохранения шаблона он будет доступен в разделе "Конструктор договоров" админ-панели.
+                    После сохранения шаблона он будет доступен в разделе &quot;Конструктор договоров&quot; админ-панели.
                   </div>
                 </div>
               </div>

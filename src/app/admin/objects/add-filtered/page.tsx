@@ -1,5 +1,7 @@
 'use client'
 
+import { debugLog } from '@/lib/logger'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Home, Plus } from 'lucide-react'
@@ -52,8 +54,24 @@ const REVERSE_OBJECT_TYPE_MAPPING = Object.fromEntries(
 
 export default function AddObjectFilteredPage() {
   const router = useRouter()
+  const isDev = process.env.NODE_ENV !== 'production'
+
+  type FilterFormValue = string | string[] | DateRange | undefined
+
+  const getStringValue = (value: FilterFormValue): string => {
+    return typeof value === 'string' ? value : ''
+  }
+
+  const getMultiValue = (value: FilterFormValue): string[] => {
+    return Array.isArray(value) ? value : []
+  }
+
+  const getDateRangeValue = (value: FilterFormValue): DateRange | undefined => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined
+    return value
+  }
   
-  const [formData, setFormData] = useState<Record<string, any>>({
+  const [formData, setFormData] = useState<Record<string, FilterFormValue>>({
     country: '',
     operation: '',
     objectType: '',
@@ -65,7 +83,12 @@ export default function AddObjectFilteredPage() {
 
   // Обновляем доступные поля при изменении основных параметров
   useEffect(() => {
-    if (formData.country && formData.operation && formData.objectType) {
+    if (typeof formData.country === 'string' &&
+        typeof formData.operation === 'string' &&
+        typeof formData.objectType === 'string' &&
+        formData.country &&
+        formData.operation &&
+        formData.objectType) {
       const countryName = REVERSE_COUNTRY_MAPPING[formData.country]
       const operationName = REVERSE_OPERATION_MAPPING[formData.operation]
       const objectTypeName = REVERSE_OBJECT_TYPE_MAPPING[formData.objectType]
@@ -73,36 +96,22 @@ export default function AddObjectFilteredPage() {
       const fields = getAvailableFields(countryName, operationName, objectTypeName)
       setAvailableFields(fields)
       
-      console.log(`Показываем ${fields.length} полей для:`, {
-        country: countryName,
-        operation: operationName,
-        objectType: objectTypeName
-      })
-      
-      // Отладочная информация
-      console.log("Доступные поля:", fields.map(f => f.name))
-      
-      // Проверяем проблемные поля
-      const problematicFields = fields.filter(field => 
-        field.name === "Тип фундамента" || 
-        field.name === "Кадастровый номер" ||
-        field.name === "Кадастровая стоимость"
-      )
-      
-      if (problematicFields.length > 0) {
-        console.warn("❌ ПРОБЛЕМА: Показываются поля, которые не должны отображаться:", problematicFields.map(f => f.name))
-        problematicFields.forEach(field => {
-          console.warn(`- ${field.name}: countries=${field.countries}, operations=${field.operations}, objects=${field.objects}`)
+      if (isDev) {
+        debugLog(`Показываем ${fields.length} полей для:`, {
+          country: countryName,
+          operation: operationName,
+          objectType: objectTypeName
         })
-      } else {
-        console.log("✅ Логика фильтрации работает правильно")
+
+        // Отладочная информация
+        debugLog("Доступные поля:", fields.map(f => f.name))
       }
     } else {
       setAvailableFields([])
     }
-  }, [formData.country, formData.operation, formData.objectType])
+  }, [formData.country, formData.operation, formData.objectType, isDev])
 
-  const updateFormData = (fieldName: string, value: any) => {
+  const updateFormData = (fieldName: string, value: FilterFormValue) => {
     setFormData(prev => ({
       ...prev,
       [fieldName]: value
@@ -130,7 +139,7 @@ export default function AddObjectFilteredPage() {
               {field.name}
             </Label>
             <Input
-              value={formData[fieldKey] || ''}
+              value={getStringValue(formData[fieldKey])}
               onChange={(e) => updateFormData(fieldKey, e.target.value)}
               placeholder={field.placeholder || `Введите ${field.name.toLowerCase()}`}
               className={hasError ? 'border-red-500' : ''}
@@ -148,7 +157,7 @@ export default function AddObjectFilteredPage() {
               {field.name}
             </Label>
             <Select
-              value={formData[fieldKey] || ''}
+              value={getStringValue(formData[fieldKey])}
               onValueChange={(value) => updateFormData(fieldKey, value)}
             >
               <SelectTrigger className={hasError ? 'border-red-500' : ''}>
@@ -176,7 +185,7 @@ export default function AddObjectFilteredPage() {
             </Label>
             <div className="flex gap-2">
               <Select
-                value={formData[fieldKey] || ''}
+                value={typeof formData[fieldKey] === 'string' ? formData[fieldKey] : ''}
                 onValueChange={(value) => updateFormData(fieldKey, value)}
               >
                 <SelectTrigger className={`flex-1 ${hasError ? 'border-red-500' : ''}`}>
@@ -190,9 +199,9 @@ export default function AddObjectFilteredPage() {
                   ))}
                 </SelectContent>
               </Select>
-              {formData[fieldKey] === 'other' && (
+              {getStringValue(formData[fieldKey]) === 'other' && (
                 <Input
-                  value={formData[`${fieldKey}_other`] || ''}
+                  value={getStringValue(formData[`${fieldKey}_other`])}
                   onChange={(e) => updateFormData(`${fieldKey}_other`, e.target.value)}
                   placeholder="Укажите значение"
                   className="flex-1"
@@ -213,7 +222,7 @@ export default function AddObjectFilteredPage() {
             </Label>
             <MultiSelect
               options={field.options || []}
-              value={formData[fieldKey] || []}
+              value={getMultiValue(formData[fieldKey])}
               onValueChange={(value) => updateFormData(fieldKey, value)}
               placeholder={`Выберите ${field.name.toLowerCase()}`}
               className={hasError ? 'border-red-500' : ''}
@@ -232,7 +241,7 @@ export default function AddObjectFilteredPage() {
             </Label>
             <Calendar
               mode="range"
-              selected={formData[fieldKey] as DateRange}
+              selected={getDateRangeValue(formData[fieldKey])}
               onSelect={(range) => updateFormData(fieldKey, range)}
               className="rounded-md border"
             />
@@ -250,7 +259,7 @@ export default function AddObjectFilteredPage() {
             </Label>
             <div className="flex gap-2">
               <Input
-                value={formData[fieldKey] || ''}
+                value={typeof formData[fieldKey] === 'string' ? formData[fieldKey] : ''}
                 onChange={(e) => updateFormData(fieldKey, e.target.value)}
                 placeholder={field.placeholder || `Введите ${field.name.toLowerCase()}`}
                 className={`flex-1 ${hasError ? 'border-red-500' : ''}`}
@@ -260,7 +269,9 @@ export default function AddObjectFilteredPage() {
                 variant="outline"
                 onClick={() => {
                   // Здесь можно добавить логику для кнопки (например, поиск по кадастру)
-                  console.log('Поиск по кадастру:', formData[fieldKey])
+                  if (isDev) {
+                    debugLog('Поиск по кадастру:', formData[fieldKey])
+                  }
                 }}
               >
                 Найти
@@ -279,16 +290,26 @@ export default function AddObjectFilteredPage() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
+
+    const isEmptyValue = (value: FilterFormValue) => {
+      if (value === undefined || value === '') return true
+      if (Array.isArray(value)) return value.length === 0
+      if (value && typeof value === 'object') {
+        const range = value as DateRange
+        return !range.from && !range.to
+      }
+      return false
+    }
     
     // Проверка обязательных полей
-    if (!formData.country) newErrors.country = 'Страна обязательна для заполнения'
-    if (!formData.operation) newErrors.operation = 'Операция обязательна для заполнения'
-    if (!formData.objectType) newErrors.objectType = 'Тип объекта обязателен для заполнения'
+    if (isEmptyValue(formData.country)) newErrors.country = 'Страна обязательна для заполнения'
+    if (isEmptyValue(formData.operation)) newErrors.operation = 'Операция обязательна для заполнения'
+    if (isEmptyValue(formData.objectType)) newErrors.objectType = 'Тип объекта обязателен для заполнения'
     
     // Проверка доступных полей
     availableFields.forEach(field => {
       const fieldKey = field.name.toLowerCase().replace(/\s+/g, '_')
-      if (field.validation?.required && !formData[fieldKey]) {
+      if (field.validation?.required && isEmptyValue(formData[fieldKey])) {
         newErrors[fieldKey] = `${field.name} обязательно для заполнения`
       }
     })
@@ -301,7 +322,7 @@ export default function AddObjectFilteredPage() {
     e.preventDefault()
     
     if (validateForm()) {
-      console.log('Отправленные данные:', formData)
+      debugLog('Отправленные данные:', formData)
       alert('Объект успешно добавлен!')
       router.push('/admin/objects')
     }
@@ -365,7 +386,7 @@ export default function AddObjectFilteredPage() {
                     Страна <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={formData.country}
+                    value={getStringValue(formData.country)}
                     onValueChange={(value) => updateFormData('country', value)}
                   >
                     <SelectTrigger className={errors.country ? 'border-red-500' : ''}>
@@ -389,7 +410,7 @@ export default function AddObjectFilteredPage() {
                     Операция <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={formData.operation}
+                    value={getStringValue(formData.operation)}
                     onValueChange={(value) => updateFormData('operation', value)}
                   >
                     <SelectTrigger className={errors.operation ? 'border-red-500' : ''}>
@@ -413,7 +434,7 @@ export default function AddObjectFilteredPage() {
                     Тип объекта <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={formData.objectType}
+                    value={getStringValue(formData.objectType)}
                     onValueChange={(value) => updateFormData('objectType', value)}
                   >
                     <SelectTrigger className={errors.objectType ? 'border-red-500' : ''}>
@@ -434,10 +455,15 @@ export default function AddObjectFilteredPage() {
               </div>
 
               {/* Информация о фильтрации */}
-              {formData.country && formData.operation && formData.objectType && (
+              {getStringValue(formData.country) &&
+                getStringValue(formData.operation) &&
+                getStringValue(formData.objectType) && (
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <p className="text-sm text-blue-700">
-                    <strong>Активные фильтры:</strong> {REVERSE_COUNTRY_MAPPING[formData.country]} → {REVERSE_OPERATION_MAPPING[formData.operation]} → {REVERSE_OBJECT_TYPE_MAPPING[formData.objectType]}
+                    <strong>Активные фильтры:</strong>{' '}
+                    {REVERSE_COUNTRY_MAPPING[getStringValue(formData.country)]} →{' '}
+                    {REVERSE_OPERATION_MAPPING[getStringValue(formData.operation)]} →{' '}
+                    {REVERSE_OBJECT_TYPE_MAPPING[getStringValue(formData.objectType)]}
                   </p>
                   <p className="text-sm text-blue-600 mt-1">
                     Показано полей: {availableFields.length}

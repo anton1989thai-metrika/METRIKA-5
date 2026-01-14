@@ -1,90 +1,32 @@
 "use client"
 
-import { useState, useRef, useCallback, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+import { formatFileSize } from "@/lib/utils"
+
+import Image from "next/image"
+import { useState, useRef, useCallback, useEffect, useMemo } from "react"
 import {
+  AlertCircle,
+  BarChart,
+  Bell,
+  CheckCircle,
+  DollarSign,
+  ExternalLink,
+  File,
+  FileText,
+  Globe,
+  Image as ImageIcon,
+  MapPin,
+  MessageCircle,
+  MessageSquare,
+  RefreshCw,
+  Save,
+  Settings,
+  Trash2,
   Upload,
   X,
-  Image as ImageIcon,
-  File,
-  Trash2,
-  Save,
-  Eye,
-  Plus,
-  MapPin,
-  User,
-  DollarSign,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  Calendar,
-  Clock,
-  AlertCircle,
-  CheckCircle,
-  Globe,
-  AlertTriangle,
-  MessageSquare,
-  Bell,
-  BarChart,
-  DollarSign,
-  ExternalLink,
-  Settings,
-  Search,
-  Filter,
-  Edit,
-  Download,
-  RefreshCw,
-  Bell,
-  BarChart,
-  DollarSign,
-  ExternalLink,
-  Database,
-  BarChart,
-  DollarSign,
-  ExternalLink,
-  Cog,
-  Video,
-  Music,
-  Folder,
-  ChevronDown,
-  ChevronUp,
-  Check,
-  AlertTriangle,
-  MessageSquare,
-  Bell,
-  BarChart,
-  DollarSign,
-  ExternalLink,
-  AlertTriangle,
-  MessageSquare,
-  Bell,
-  BarChart,
-  DollarSign,
-  ExternalLink,
-  Link,
-  Target,
-  Layers,
-  Grid,
-  List,
-  SortAsc,
-  SortDesc,
-  Phone,
-  MessageCircle,
-  Share2,
-  Heart,
-  Star,
-  Calculator,
-  Play,
-  FileText,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
-  Users,
-  UserPlus
 } from "lucide-react"
+import { AGENTS, COUNTRIES, OPERATION_TYPES, PROPERTY_TYPES } from "@/lib/real-estate-options"
 import SEOModal from "./SEOModal"
 import LocationModal from "./LocationModal"
 import CommentsModal from "./CommentsModal"
@@ -92,39 +34,6 @@ import IntegrationsModal from "./IntegrationsModal"
 import NotificationsModal from "./NotificationsModal"
 import AnalyticsModal from "./AnalyticsModal"
 import PriceUpdatesModal from "./PriceUpdatesModal"
-
-// Типы объектов недвижимости
-const PROPERTY_TYPES = [
-  { id: 'apartment', name: 'Квартира', icon: Home, color: 'text-gray-600' },
-  { id: 'house', name: 'Дом', icon: Building, color: 'text-gray-600' },
-  { id: 'land', name: 'Участок', icon: LandPlot, color: 'text-gray-600' },
-  { id: 'commercial', name: 'Коммерция', icon: Store, color: 'text-gray-600' },
-  { id: 'building', name: 'Здание', icon: Factory, color: 'text-gray-600' },
-  { id: 'nonCapital', name: 'Некопитальный', icon: Building, color: 'text-gray-600' },
-  { id: 'shares', name: 'Доля', icon: Share, color: 'text-indigo-600' }
-]
-
-// Страны
-const COUNTRIES = [
-  { id: 'russia', name: 'Россия' },
-  { id: 'thailand', name: 'Таиланд' },
-  { id: 'china', name: 'Китай' },
-  { id: 'south-korea', name: 'Южная Корея' }
-]
-
-// Типы операций
-const OPERATION_TYPES = [
-  { id: 'sale', name: 'Продажа' },
-  { id: 'rent', name: 'Аренда' }
-]
-
-// Агенты
-const AGENTS = [
-  { id: 'agent1', name: 'Анна Петрова', email: 'anna@metrika.direct' },
-  { id: 'agent2', name: 'Михаил Сидоров', email: 'mikhail@metrika.direct' },
-  { id: 'agent3', name: 'Елена Козлова', email: 'elena@metrika.direct' },
-  { id: 'agent4', name: 'Дмитрий Волков', email: 'dmitry@metrika.direct' }
-]
 
 // Интерфейс загруженного файла
 interface UploadedFile {
@@ -196,11 +105,40 @@ interface ObjectFormData {
   comments: string
 }
 
+type SeoData = NonNullable<ObjectFormData['seoData']>
+
+const createSeoData = (): SeoData => ({
+  metaTitle: '',
+  metaDescription: '',
+  keywords: [],
+  ogTitle: '',
+  ogDescription: '',
+  ogImage: '',
+  canonicalUrl: '',
+  robots: ['index', 'follow'],
+  structuredData: {
+    type: 'RealEstateListing',
+    name: '',
+    description: '',
+    address: '',
+    price: '',
+    currency: 'RUB',
+    availability: 'InStock',
+    image: [],
+  },
+  schemaMarkup: '',
+  sitemapPriority: 0.8,
+  lastModified: new Date().toISOString(),
+  alternateLanguages: [],
+})
+
 interface ObjectCreateFormProps {
   templateId: string
   onClose: () => void
   onSave: (data: ObjectFormData, files: UploadedFile[], action: 'draft' | 'task' | 'publish') => void
 }
+
+const REQUIRED_FIELDS: Array<keyof ObjectFormData> = ['title', 'address', 'price', 'description']
 
 export default function ObjectCreateForm({ templateId, onClose, onSave }: ObjectCreateFormProps) {
   const [formData, setFormData] = useState<ObjectFormData>({
@@ -213,30 +151,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
     agent: 'agent1',
     description: '',
     characteristics: {},
-    seoData: {
-      metaTitle: '',
-      metaDescription: '',
-      keywords: [],
-      ogTitle: '',
-      ogDescription: '',
-      ogImage: '',
-      canonicalUrl: '',
-      robots: ['index', 'follow'],
-      structuredData: {
-        type: 'RealEstateListing',
-        name: '',
-        description: '',
-        address: '',
-        price: '',
-        currency: 'RUB',
-        availability: 'InStock',
-        image: []
-      },
-      schemaMarkup: '',
-      sitemapPriority: 0.8,
-      lastModified: new Date().toISOString(),
-      alternateLanguages: []
-    },
+    seoData: createSeoData(),
     location: {},
     comments: ''
   })
@@ -251,16 +166,17 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
   const [showNotificationsModal, setShowNotificationsModal] = useState(false)
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false)
   const [showPriceUpdatesModal, setShowPriceUpdatesModal] = useState(false)
-  const [isCreatingTask, setIsCreatingTask] = useState(false)
-  const [canCreateTask, setCanCreateTask] = useState(false)
-  const [canPublish, setCanPublish] = useState(false)
   
   // Автосохранение
   const [isAutoSaving, setIsAutoSaving] = useState(false)
   const [lastAutoSave, setLastAutoSave] = useState<Date | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
-  const [autoSaveInterval, setAutoSaveInterval] = useState<NodeJS.Timeout | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const hasRequiredFields = useMemo(() => {
+    return REQUIRED_FIELDS.every((field) => Boolean(formData[field]))
+  }, [formData])
+  const canCreateTask = hasRequiredFields
+  const canPublish = hasRequiredFields
 
   // Автосохранение черновика
   const autoSaveDraft = useCallback(async () => {
@@ -285,7 +201,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
       setLastAutoSave(new Date())
       setHasUnsavedChanges(false)
       
-      console.log('Черновик автосохранен:', new Date().toLocaleTimeString())
+      debugLog('Черновик автосохранен:', new Date().toLocaleTimeString())
     } catch (error) {
       console.error('Ошибка автосохранения:', error)
     } finally {
@@ -303,7 +219,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         setUploadedFiles(draftData.uploadedFiles || [])
         setLastAutoSave(new Date(draftData.timestamp))
         setHasUnsavedChanges(false)
-        console.log('Черновик загружен:', draftData.timestamp)
+        debugLog('Черновик загружен:', draftData.timestamp)
         return true
       }
     } catch (error) {
@@ -318,7 +234,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
       localStorage.removeItem(`object_draft_${templateId}`)
       setLastAutoSave(null)
       setHasUnsavedChanges(false)
-      console.log('Черновик очищен')
+      debugLog('Черновик очищен')
     } catch (error) {
       console.error('Ошибка очистки черновика:', error)
     }
@@ -336,7 +252,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
       const hasDraft = loadDraft()
       if (hasDraft) {
         // Показываем уведомление о загруженном черновике
-        console.log('Черновик восстановлен из автосохранения')
+        debugLog('Черновик восстановлен из автосохранения')
       }
     }
 
@@ -346,8 +262,6 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         autoSaveDraft()
       }
     }, 30000)
-
-    setAutoSaveInterval(interval)
 
     // Очистка при размонтировании
     return () => {
@@ -383,15 +297,6 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [hasUnsavedChanges])
 
-  // Форматирование размера файла
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
-
   // Обработка загрузки файлов
   const handleFileUpload = useCallback((files: FileList | File[]) => {
     const fileArray = Array.from(files)
@@ -413,7 +318,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         reader.readAsDataURL(file)
       }
     })
-  }, [])
+  }, [markAsChanged])
 
   // Drag & Drop обработчики
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -447,7 +352,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
   }
 
   // Обновление формы
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = <K extends keyof ObjectFormData>(field: K, value: ObjectFormData[K]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -468,13 +373,13 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
   }
 
   // Обновление SEO
-  const updateSeoData = (field: string, value: any) => {
+  const updateSeoData = <K extends keyof SeoData>(field: K, value: SeoData[K]) => {
     setFormData(prev => ({
       ...prev,
       seoData: {
-        ...prev.seoData,
-        [field]: value
-      } as any
+        ...(prev.seoData ?? createSeoData()),
+        [field]: value,
+      }
     }))
     markAsChanged()
   }
@@ -489,20 +394,6 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
       }
     }))
     markAsChanged()
-  }
-
-  // Проверка возможности создания задачи
-  const checkCanCreateTask = () => {
-    const required = ['title', 'address', 'price', 'description']
-    const hasRequired = required.every(field => formData[field as keyof ObjectFormData])
-    setCanCreateTask(hasRequired)
-  }
-
-  // Проверка возможности публикации
-  const checkCanPublish = () => {
-    const required = ['title', 'address', 'price', 'description']
-    const hasRequired = required.every(field => formData[field as keyof ObjectFormData])
-    setCanPublish(hasRequired)
   }
 
   // Обработка сохранения
@@ -809,9 +700,12 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
                   {uploadedFiles.map(file => (
                     <div key={file.id} className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                       <div className="relative">
-                        <img
+                        <Image
                           src={file.preview}
                           alt={file.name}
+                          width={320}
+                          height={128}
+                          unoptimized
                           className="w-full h-32 object-cover rounded-lg mb-2"
                         />
                         <button
@@ -1193,7 +1087,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         onClose={() => setShowIntegrationsModal(false)}
         onSave={(integrations) => {
           // Сохраняем настройки интеграций
-          console.log('Интеграции сохранены:', integrations)
+          debugLog('Интеграции сохранены:', integrations)
           setShowIntegrationsModal(false)
         }}
         objectData={{
@@ -1212,7 +1106,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         onClose={() => setShowNotificationsModal(false)}
         onSave={(notifications, rules) => {
           // Сохраняем настройки уведомлений
-          console.log('Уведомления сохранены:', notifications, rules)
+          debugLog('Уведомления сохранены:', notifications, rules)
           setShowNotificationsModal(false)
         }}
         objectData={{
@@ -1231,7 +1125,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         onClose={() => setShowAnalyticsModal(false)}
         onSave={(analytics) => {
           // Сохраняем данные аналитики
-          console.log('Аналитика сохранена:', analytics)
+          debugLog('Аналитика сохранена:', analytics)
           setShowAnalyticsModal(false)
         }}
         objectData={{
@@ -1251,7 +1145,7 @@ export default function ObjectCreateForm({ templateId, onClose, onSave }: Object
         onClose={() => setShowPriceUpdatesModal(false)}
         onSave={(rules, updates, history) => {
           // Сохраняем настройки обновления цен
-          console.log('Настройки цен сохранены:', rules, updates, history)
+          debugLog('Настройки цен сохранены:', rules, updates, history)
           setShowPriceUpdatesModal(false)
         }}
         objectData={{

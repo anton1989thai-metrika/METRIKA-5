@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import Image from "next/image"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { 
   Phone, 
   Mail, 
@@ -26,8 +25,6 @@ import {
   Zap,
   Heart,
   Briefcase,
-  BarChart3,
-  Lightbulb,
   Rocket
 } from "lucide-react"
 
@@ -107,8 +104,6 @@ const values = [
 ]
 
 export default function AboutPage() {
-  const [activeTab, setActiveTab] = useState("overview")
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <div id="preview-container">
@@ -299,9 +294,12 @@ export default function AboutPage() {
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg overflow-hidden bg-white">
                   <div className="relative">
                     {member.image ? (
-                      <img
+                      <Image
                         src={member.image}
                         alt={member.name}
+                        width={400}
+                        height={256}
+                        unoptimized
                         className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (

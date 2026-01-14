@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { fetchJson } from '@/lib/api-client'
 
 export default function ResetPasswordClient({ token }: { token: string }) {
   const router = useRouter()
@@ -13,24 +14,22 @@ export default function ResetPasswordClient({ token }: { token: string }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const JSON_HEADERS = { 'Content-Type': 'application/json' } as const
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
     try {
-      const resp = await fetch('/api/auth/password-reset/confirm', {
+      await fetchJson('/api/auth/password-reset/confirm', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: JSON_HEADERS,
         body: JSON.stringify({ token, password }),
       })
-      const data = await resp.json().catch(() => ({}))
-      if (!resp.ok || !data?.success) {
-        setError(data?.error || 'Не удалось сменить пароль')
-        return
-      }
       router.push('/auth/signin')
-    } catch {
-      setError('Не удалось сменить пароль')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось сменить пароль'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -70,4 +69,3 @@ export default function ResetPasswordClient({ token }: { token: string }) {
     </div>
   )
 }
-

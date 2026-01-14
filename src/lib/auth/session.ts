@@ -2,7 +2,7 @@ import 'server-only'
 
 import { cookies } from 'next/headers'
 import { NextRequest } from 'next/server'
-import { createHash, randomBytes, timingSafeEqual } from 'crypto'
+import { createHash, randomBytes } from 'crypto'
 import { db } from '@/lib/db'
 import { SESSION_COOKIE } from '@/lib/auth/constants'
 
@@ -67,13 +67,6 @@ export async function clearSessionCookie() {
     path: '/',
     expires: new Date(0),
   })
-}
-
-export function constantTimeEqual(a: string, b: string) {
-  const ab = Buffer.from(a)
-  const bb = Buffer.from(b)
-  if (ab.length !== bb.length) return false
-  return timingSafeEqual(ab, bb)
 }
 
 

@@ -2,14 +2,16 @@
 
 import { createContext, useContext, useState } from 'react'
 
+type TranslationValue = string | string[] | Translations
+
 interface Translations {
-  [key: string]: string | Translations | any
+  [key: string]: TranslationValue
 }
 
 interface LanguageContextType {
   locale: string
   setLocale: (locale: string) => void
-  t: (key: string) => string | any
+  t: (key: string) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -4025,19 +4027,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState('ru')
 
   // Получаем перевод по ключу
-  const t = (key: string): string | any => {
+  const t = (key: string): string => {
     const keys = key.split('.')
-    let value: string | Translations | any = translations[locale]
+    let value: TranslationValue = translations[locale]
     
     for (const k of keys) {
-      if (value && typeof value === 'object') {
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
         value = value[k]
       } else {
         return key // Возвращаем ключ если перевод не найден
       }
     }
-    
-    return value
+
+    if (Array.isArray(value)) return value.join(', ')
+    return typeof value === 'string' ? value : key
   }
 
   return (

@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { debugLog } from "@/lib/logger"
+
+import Image from "next/image";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
@@ -60,8 +63,8 @@ interface TaskHistory {
   id: string;
   action: string;
   field: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   timestamp: string;
   userId: string;
   comment?: string;
@@ -142,32 +145,15 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
   const [isCreateChecklistModalOpen, setIsCreateChecklistModalOpen] = useState(false);
   
   // Тестовые пользователи
-  const users: User[] = [
-    { id: '1', name: 'Анна Петрова', role: 'admin' },
-    { id: '2', name: 'Иван Сидоров', role: 'employee' },
-    { id: '3', name: 'Мария Козлова', role: 'manager' },
-    { id: '4', name: 'Петр Иванов', role: 'employee' }
-  ];
-
-  // Загрузка задачи при монтировании компонента
-  useEffect(() => {
-    loadTask();
-  }, [taskId]);
-
-  // Автосохранение каждые 30 секунд
-  useEffect(() => {
-    if (hasUnsavedChanges) {
-      autoSaveInterval.current = setInterval(() => {
-        saveDraft();
-      }, 30000);
-    }
-
-    return () => {
-      if (autoSaveInterval.current) {
-        clearInterval(autoSaveInterval.current);
-      }
-    };
-  }, [hasUnsavedChanges]);
+  const users = useMemo<User[]>(
+    () => [
+      { id: '1', name: 'Анна Петрова', role: 'admin' },
+      { id: '2', name: 'Иван Сидоров', role: 'employee' },
+      { id: '3', name: 'Мария Козлова', role: 'manager' },
+      { id: '4', name: 'Петр Иванов', role: 'employee' }
+    ],
+    []
+  );
 
   // Закрытие выпадающих меню при клике вне их
   useEffect(() => {
@@ -186,7 +172,7 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
   }, []);
 
   // Функция загрузки задачи
-  const loadTask = async () => {
+  const loadTask = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -299,7 +285,7 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [taskId]);
 
   // Функция валидации формы
   const validateForm = () => {
@@ -332,15 +318,35 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
   };
 
   // Функция сохранения черновика
-  const saveDraft = async () => {
+  const saveDraft = useCallback(async () => {
     try {
       // Здесь будет API вызов для сохранения черновика
-      console.log('Saving draft...', formData);
+      debugLog('Saving draft...', formData);
       setLastSaved(new Date().toLocaleTimeString());
     } catch (err) {
       console.error('Error saving draft:', err);
     }
-  };
+  }, [formData]);
+
+  // Загрузка задачи при монтировании компонента
+  useEffect(() => {
+    loadTask();
+  }, [loadTask]);
+
+  // Автосохранение каждые 30 секунд
+  useEffect(() => {
+    if (hasUnsavedChanges) {
+      autoSaveInterval.current = setInterval(() => {
+        saveDraft();
+      }, 30000);
+    }
+
+    return () => {
+      if (autoSaveInterval.current) {
+        clearInterval(autoSaveInterval.current);
+      }
+    };
+  }, [hasUnsavedChanges, saveDraft]);
 
   // Функции для работы с фотографиями
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -376,11 +382,6 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
     
     setUploadedImages(newImages);
     setImagePreviews(newPreviews);
-  };
-
-  // Функции для работы с подзадачами
-  const addSubtask = (subtask: Subtask) => {
-    setFormData(prev => ({ ...prev, subtasks: [...prev.subtasks, subtask] }));
   };
 
   const removeSubtask = (index: number) => {
@@ -434,11 +435,6 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
     }
   };
 
-  // Функции для работы с чек-листами
-  const addChecklist = (checklist: Checklist) => {
-    setFormData(prev => ({ ...prev, checklists: [...prev.checklists, checklist] }));
-  };
-
   const removeChecklist = (index: number) => {
     setFormData(prev => ({ 
       ...prev, 
@@ -464,7 +460,7 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
 
     try {
       // Здесь будет API вызов для отправки уведомлений
-      console.log('Отправка уведомлений:', {
+      debugLog('Отправка уведомлений:', {
         recipients: uniqueRecipients.map(id => getUserName(id)),
         message,
         changes
@@ -473,7 +469,7 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
       // Имитация отправки уведомлений
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      console.log('Уведомления отправлены успешно');
+      debugLog('Уведомления отправлены успешно');
     } catch (error) {
       console.error('Ошибка отправки уведомлений:', error);
     }
@@ -501,7 +497,7 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
       }
 
       // Здесь будет API вызов для сохранения задачи
-      console.log('Saving task...', formData);
+      debugLog('Saving task...', formData);
       
       // Обновляем историю изменений
       const newHistoryEntry: TaskHistory = {
@@ -703,7 +699,12 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
                     </label>
                     <select
                       value={formData.priority}
-                      onChange={(e) => setFormData(prev => ({ ...prev, priority: e.target.value as any }))}
+                      onChange={(e) =>
+                        setFormData(prev => ({
+                          ...prev,
+                          priority: e.target.value as 'low' | 'medium' | 'high' | 'boss',
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       <option value="low">Обычная</option>
@@ -718,7 +719,12 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
                     </label>
                     <select
                       value={formData.status}
-                      onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+                      onChange={(e) =>
+                        setFormData(prev => ({
+                          ...prev,
+                          status: e.target.value as 'new' | 'in_progress' | 'review' | 'completed' | 'postponed' | 'cancelled',
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       <option value="new">Новая</option>
@@ -964,9 +970,12 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
                         <div className="grid grid-cols-3 gap-3">
                           {formData.images.map((image, index) => (
                             <div key={index} className="relative group">
-                              <img
+                              <Image
                                 src={image}
                                 alt={`Фото ${index + 1}`}
+                                width={160}
+                                height={96}
+                                unoptimized
                                 className="w-full h-24 object-cover rounded-lg border border-gray-300"
                               />
                               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center">
@@ -1019,9 +1028,12 @@ export default function EditTaskClient({ taskId }: EditTaskClientProps) {
                         <div className="grid grid-cols-3 gap-3">
                           {imagePreviews.map((preview, index) => (
                             <div key={index} className="relative group">
-                              <img
+                              <Image
                                 src={preview}
                                 alt={`Новое фото ${index + 1}`}
+                                width={160}
+                                height={96}
+                                unoptimized
                                 className="w-full h-24 object-cover rounded-lg border border-gray-300"
                               />
                               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 rounded-lg flex items-center justify-center">

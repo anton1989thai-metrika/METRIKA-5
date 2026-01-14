@@ -1,9 +1,14 @@
 import 'server-only'
 
-import { randomBytes, scrypt as _scrypt, timingSafeEqual } from 'crypto'
+import { randomBytes, scrypt as _scrypt, timingSafeEqual, type ScryptOptions } from 'crypto'
 import { promisify } from 'util'
 
-const scryptAsync = promisify(_scrypt)
+const scryptAsync = promisify(_scrypt) as (
+  password: string | Buffer,
+  salt: string | Buffer,
+  keylen: number,
+  options: ScryptOptions
+) => Promise<Buffer>
 
 // Format: scrypt$N$r$p$saltB64$hashB64
 const N = 16384
@@ -41,5 +46,4 @@ export async function verifyPassword(password: string, stored: string): Promise<
     return false
   }
 }
-
 

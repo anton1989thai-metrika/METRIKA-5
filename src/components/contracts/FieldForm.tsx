@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -12,16 +12,22 @@ interface Field {
   required: boolean
 }
 
+type FieldValues = Record<string, string>
+
 interface FieldFormProps {
   fields: Field[]
-  onValuesChange: (values: Record<string, any>) => void
-  initialValues?: Record<string, any>
+  onValuesChange: (values: FieldValues) => void
+  initialValues?: FieldValues
 }
 
 export default function FieldForm({ fields, onValuesChange, initialValues = {} }: FieldFormProps) {
-  const [values, setValues] = useState<Record<string, any>>(initialValues)
+  const [values, setValues] = useState<FieldValues>(initialValues)
 
-  const handleChange = (key: string, value: any) => {
+  useEffect(() => {
+    setValues(initialValues)
+  }, [initialValues, fields])
+
+  const handleChange = (key: string, value: string) => {
     const newValues = { ...values, [key]: value }
     setValues(newValues)
     onValuesChange(newValues)
@@ -61,4 +67,3 @@ export default function FieldForm({ fields, onValuesChange, initialValues = {} }
     </div>
   )
 }
-

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from 'react';
+import Image from "next/image";
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import BurgerMenu from '@/components/BurgerMenu';
@@ -34,7 +35,7 @@ interface Task {
     description: string;
     user: string;
     timestamp: string;
-    details?: any;
+    details?: Record<string, unknown>;
   }>;
   messages: Array<{
     id: string;
@@ -63,7 +64,7 @@ export default function TaskDetailPage() {
   const taskId = params.id as string;
   
   const [task, setTask] = useState<Task | null>(null);
-  const [currentUser, setCurrentUser] = useState<User>({ id: 'user-1', name: 'Анна Петрова', role: 'admin' });
+  const currentUser: User = { id: 'user-1', name: 'Анна Петрова', role: 'admin' };
   const [loading, setLoading] = useState(true);
   const [currentImagePage, setCurrentImagePage] = useState(0);
   const [newMessage, setNewMessage] = useState('');
@@ -196,10 +197,11 @@ export default function TaskDetailPage() {
       ]
     };
 
-    setTimeout(() => {
+    const timeout = window.setTimeout(() => {
       setTask(mockTask);
       setLoading(false);
     }, 500);
+    return () => window.clearTimeout(timeout);
   }, [taskId]);
 
   // Автоскролл к последнему сообщению
@@ -209,11 +211,18 @@ export default function TaskDetailPage() {
 
   // Функции для работы с изображениями
   const imagesPerPage = 9;
-  const totalImagePages = Math.ceil((task?.images.length || 0) / imagesPerPage);
-  const currentImages = task?.images.slice(
-    currentImagePage * imagesPerPage,
-    (currentImagePage + 1) * imagesPerPage
-  ) || [];
+  const totalImagePages = useMemo(
+    () => Math.ceil((task?.images.length || 0) / imagesPerPage),
+    [task?.images.length, imagesPerPage]
+  );
+  const currentImages = useMemo(
+    () =>
+      task?.images.slice(
+        currentImagePage * imagesPerPage,
+        (currentImagePage + 1) * imagesPerPage
+      ) || [],
+    [task?.images, currentImagePage, imagesPerPage]
+  );
 
   const nextImagePage = () => {
     if (currentImagePage < totalImagePages - 1) {
@@ -545,13 +554,16 @@ export default function TaskDetailPage() {
                   {currentImages.map((image, index) => (
                     <div
                       key={index}
-                      className="aspect-square bg-gray-200 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                      className="relative aspect-square bg-gray-200 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                       onClick={() => setShowImageModal(image)}
                     >
-                      <img
+                      <Image
                         src={image}
                         alt={`Фото ${index + 1}`}
-                        className="w-full h-full object-cover rounded-lg"
+                        fill
+                        unoptimized
+                        sizes="(max-width: 768px) 33vw, 200px"
+                        className="object-cover rounded-lg"
                       />
                     </div>
                   ))}
@@ -653,9 +665,12 @@ export default function TaskDetailPage() {
       {showImageModal && (
         <div className="fixed inset-0 flex items-center justify-center z-[70] bg-black bg-opacity-75">
           <div className="max-w-4xl max-h-4xl">
-            <img
+            <Image
               src={showImageModal}
               alt="Увеличенное изображение"
+              width={1200}
+              height={900}
+              unoptimized
               className="max-w-full max-h-full object-contain"
             />
             <button

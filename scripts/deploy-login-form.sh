@@ -7,10 +7,16 @@ set -e
 
 SERVER="root@72.62.72.196"
 VPS_PATH="/var/www/metrika5"
-PASSWORD="SikaAnt7Hostinger7+"
+PASSWORD="${VPS_PASSWORD:-}"
 FILE="src/components/login-form.tsx"
 
 echo "🚀 Деплой login-form.tsx на VPS..."
+
+if [ -z "$PASSWORD" ]; then
+  echo "Введите пароль от VPS (будет скрыт):"
+  read -rs PASSWORD
+  echo ""
+fi
 
 # Проверяем наличие файла
 if [ ! -f "$FILE" ]; then

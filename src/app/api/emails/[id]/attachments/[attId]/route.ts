@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { getEmailUserId, isAdmin } from '@/lib/auth-email'
-import { resolveAttachmentPath } from '@/lib/attachments'
+import { getEmailUserId } from '@/lib/auth-email'
+import { StoredAttachment, resolveAttachmentPath } from '@/lib/attachments'
+import { resolveRequestedMailbox } from '@/lib/mailbox-access'
 import fs from 'fs/promises'
 
 export const runtime = 'nodejs'
@@ -12,9 +13,8 @@ export async function GET(
 ) {
   try {
     const { id, attId } = await params
-    const viewEmail = request.nextUrl.searchParams.get('viewEmail') || undefined
-    const admin = await isAdmin(request)
-    const userId = await getEmailUserId(request, admin ? viewEmail : undefined)
+    const { mailboxEmail } = await resolveRequestedMailbox(request)
+    const userId = await getEmailUserId(request, mailboxEmail)
 
     const email = await db.email.findFirst({
       where: { id, userId },
@@ -25,7 +25,9 @@ export async function GET(
       return NextResponse.json({ error: 'Email not found' }, { status: 404 })
     }
 
-    const list = Array.isArray(email.attachments) ? (email.attachments as any[]) : []
+    const list = Array.isArray(email.attachments)
+      ? (email.attachments as StoredAttachment[])
+      : []
     const att = list.find((a) => String(a?.id || '') === String(attId))
     if (!att) {
       return NextResponse.json({ error: 'Attachment not found' }, { status: 404 })
@@ -47,11 +49,13 @@ export async function GET(
     const filename = String(att.filename || 'attachment').replace(/"/g, '')
     headers.set('Content-Disposition', `attachment; filename="${filename}"`)
 
-    return new NextResponse(file, { status: 200, headers })
-  } catch (e: any) {
+    return new NextResponse(new Uint8Array(file), { status: 200, headers })
+  } catch (e) {
     console.error('download attachment error', e)
+    const err = e as { message?: string }
+    const msg = err.message || ''
+    if (msg === 'Unauthorized') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (msg === 'Forbidden') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     return NextResponse.json({ error: 'Failed' }, { status: 500 })
   }
 }
-
-

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createHash, randomBytes } from 'crypto'
 import nodemailer from 'nodemailer'
 import { db } from '@/lib/db'
+import { getMailPasswordByEmail } from '@/lib/mail-password'
 
 export const runtime = 'nodejs'
 
@@ -52,19 +53,45 @@ export async function POST(request: NextRequest) {
       data: { tokenHash, userId: user.id, expiresAt },
     })
 
-    if (!process.env.SMTP_HOST || !process.env.SMTP_PASS) return okResponse
+    if (!process.env.SMTP_HOST) return okResponse
 
     const fromEmail = (process.env.SMTP_USER || process.env.DEFAULT_MAILBOX_EMAIL || '').trim()
     if (!fromEmail) return okResponse
 
+    const smtpPassword =
+      (await getMailPasswordByEmail(fromEmail)) ??
+      process.env.SMTP_PASS ??
+      process.env.IMAP_PASS ??
+      ''
+    if (!smtpPassword) return okResponse
+
     const resetUrl = new URL('/auth/reset-password', getAppOrigin(request))
     resetUrl.searchParams.set('token', rawToken)
+    const resetLink = resetUrl.toString()
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111;">
+        <h2 style="margin: 0 0 12px;">Сброс пароля — METRIKA</h2>
+        <p style="margin: 0 0 16px;">Чтобы сбросить пароль, нажмите кнопку (ссылка действует 30 минут):</p>
+        <p style="margin: 0 0 16px;">
+          <a href="${resetLink}"
+             style="display: inline-block; background: #fff60b; color: #000; text-decoration: none; font-weight: 600; padding: 12px 18px; border-radius: 8px; border: 1px solid #e6d90a;">
+            Сбросить пароль
+          </a>
+        </p>
+        <p style="margin: 0 0 16px; color: #555; font-size: 12px;">
+          Если кнопка не работает, откройте ссылку вручную:<br/>
+          <a href="${resetLink}" style="color: #111; text-decoration: underline;">${resetLink}</a>
+        </p>
+        <p style="margin: 0; color: #555;">Если вы не запрашивали сброс — просто игнорируйте это письмо.</p>
+      </div>
+    `.trim()
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_PORT === '465',
-      auth: { user: fromEmail, pass: process.env.SMTP_PASS },
+      auth: { user: fromEmail, pass: smtpPassword },
       tls: { rejectUnauthorized: false },
     })
 
@@ -72,12 +99,13 @@ export async function POST(request: NextRequest) {
       from: fromEmail,
       to: email,
       subject: 'Сброс пароля — METRIKA',
-      text: `Чтобы сбросить пароль, откройте ссылку (действует 30 минут):\n${resetUrl.toString()}\n\nЕсли вы не запрашивали сброс — просто игнорируйте это письмо.`,
+      text: `Чтобы сбросить пароль, откройте ссылку (действует 30 минут):\n${resetLink}\n\nЕсли вы не запрашивали сброс — просто игнорируйте это письмо.`,
+      html,
     })
 
     return okResponse
-  } catch (e) {
+  } catch (error) {
+    console.error('password reset request error', error)
     return NextResponse.json({ success: false, error: 'Ошибка' }, { status: 500 })
   }
 }
-

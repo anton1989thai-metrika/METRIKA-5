@@ -4,13 +4,11 @@ import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import VisibleObjectsList from "@/components/VisibleObjectsList";
 import YandexMap from "@/components/YandexMap";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
 import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
 import { useState, useMemo } from "react";
 
 export default function MapPage() {
-  const { t } = useLanguage();
   const { filters } = useFilters();
   const [visibleObjects, setVisibleObjects] = useState<RealEstateObject[]>([]);
 
@@ -48,7 +46,7 @@ export default function MapPage() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-[166px] px-4">
+      <main className="pt-32 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex gap-6">
             {/* Карточки объектов слева */}

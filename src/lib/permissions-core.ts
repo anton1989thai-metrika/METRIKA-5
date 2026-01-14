@@ -88,7 +88,40 @@ export function getRolePermissions(role: UiRole): Record<PermissionSection, bool
   return permissions
 }
 
-type DetailedPermissions = any
+export type DetailedPermissions = {
+  personalCabinet?: { enabled?: boolean }
+  myObjects?: { enabled?: boolean }
+  email?: { enabled?: boolean }
+  academy?: { enabled?: boolean }
+  knowledgeBase?: { enabled?: boolean }
+  taskManager?: { enabled?: boolean }
+  adminPanel?: { enabled?: boolean }
+}
+
+export function coerceDetailedPermissions(
+  input: unknown
+): DetailedPermissions | null {
+  if (!input) return null
+  if (typeof input === 'string') {
+    try {
+      const parsed = JSON.parse(input)
+      return coerceDetailedPermissions(parsed)
+    } catch {
+      return null
+    }
+  }
+  if (typeof input !== 'object') return null
+  const maybe = input as DetailedPermissions
+  const hasKnownKey =
+    'personalCabinet' in maybe ||
+    'myObjects' in maybe ||
+    'email' in maybe ||
+    'academy' in maybe ||
+    'knowledgeBase' in maybe ||
+    'taskManager' in maybe ||
+    'adminPanel' in maybe
+  return hasKnownKey ? maybe : null
+}
 
 export function getSectionEnabledFromDetailed(
   detailedPermissions: DetailedPermissions | null | undefined,
@@ -117,7 +150,7 @@ export function getSectionEnabledFromDetailed(
 }
 
 export function hasSectionAccess(
-  user: { role: string; detailedPermissions?: DetailedPermissions | null } | null | undefined,
+  user: { role?: string; detailedPermissions?: unknown } | null | undefined,
   section: PermissionSection
 ): boolean {
   if (!user) return false
@@ -126,7 +159,9 @@ export function hasSectionAccess(
   if (uiRole === 'admin') return true
 
   const base = getRolePermissions(uiRole)[section]
-  const override = getSectionEnabledFromDetailed(user.detailedPermissions, section)
+  const override = getSectionEnabledFromDetailed(
+    coerceDetailedPermissions(user.detailedPermissions),
+    section
+  )
   return typeof override === 'boolean' ? override : base
 }
-

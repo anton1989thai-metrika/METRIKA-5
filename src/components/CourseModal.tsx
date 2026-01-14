@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X, Play, FileText, TestTube, Clock, Users, Star, User, Calendar, Bookmark, Share2, Download, Eye, CheckCircle, AlertCircle, BookOpen } from "lucide-react"
+import { X, Play, FileText, TestTube, Clock, Users, Star, User, Calendar, Bookmark, Share2, Download, Eye, CheckCircle, BookOpen } from "lucide-react"
 
 interface CourseModalProps {
   isOpen: boolean
@@ -31,7 +31,6 @@ interface CourseModalProps {
 
 export default function CourseModal({ isOpen, onClose, course }: CourseModalProps) {
   const [activeTab, setActiveTab] = useState('overview')
-  const [currentVideo, setCurrentVideo] = useState(0)
 
   const videos = [
     { id: 1, title: "Введение в курс", duration: "15:30", completed: true },
@@ -301,7 +300,7 @@ export default function CourseModal({ isOpen, onClose, course }: CourseModalProp
             {/* Видео */}
             {activeTab === 'videos' && (
               <div className="space-y-4">
-                {videos.map((video, index) => (
+                {videos.map((video) => (
                   <div key={video.id} className="flex items-center justify-between p-4 bg-white shadow-sm border border-gray-300 rounded-lg shadow-lg">
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-white shadow-sm border border-gray-300 rounded-lg mr-4 flex items-center justify-center">

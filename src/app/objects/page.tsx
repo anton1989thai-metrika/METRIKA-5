@@ -5,13 +5,12 @@ import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
-import { realEstateObjects, RealEstateObject } from "@/data/realEstateObjects";
+import { useEffect, useMemo, useState, Suspense } from "react";
+import { realEstateObjects } from "@/data/realEstateObjects";
 import Link from "next/link";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -32,15 +31,15 @@ function ObjectsContent() {
   }, [searchParams])
 
   // Получаем переведенные объекты
-  const objects = realEstateObjects.map(obj => ({
+  const objects = useMemo(() => realEstateObjects.map(obj => ({
     ...obj,
     title: t(`realEstateObjects.${obj.id}.title`),
     address: t(`realEstateObjects.${obj.id}.address`),
     material: t(`realEstateObjects.${obj.id}.material`)
-  }))
+  })), [t])
 
   // Функция для фильтрации объектов
-  const getFilteredObjects = () => {
+  const filteredObjects = useMemo(() => {
     return objects.filter(obj => {
       // Фильтр по стране
       if (filters.country && filters.country.length > 0 && !filters.country.includes(obj.country)) {
@@ -61,14 +60,12 @@ function ObjectsContent() {
       
       return true
     })
-  }
-
-  const filteredObjects = getFilteredObjects()
+  }, [filters, objects])
 
   return (
     <>
       {/* Основной контент с объектами */}
-      <main className="pt-36 sm:pt-40 lg:pt-44">
+      <main className="pt-32">
         <div className="px-2 sm:px-4 lg:px-6 xl:px-8">
           {activeFilter === 'rent' && (
             <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6">
@@ -93,93 +90,11 @@ function ObjectsContent() {
                       {object.title}
                     </h2>
                     <p className="text-gray-600 text-sm font-normal px-4 mb-2">
-                      {(() => {
-                        const fullText = `${object.address} • ${object.area}`;
-                        
-                        // Проверка на наличие window (клиентская сторона)
-                        if (typeof window === 'undefined') {
-                          return fullText;
-                        }
-                        
-                        // Создаем временный элемент для измерения ширины текста
-                        const measureElement = document.createElement('span');
-                        measureElement.style.visibility = 'hidden';
-                        measureElement.style.position = 'absolute';
-                        measureElement.style.fontSize = '14px'; // text-sm
-                        measureElement.style.fontFamily = 'inherit';
-                        measureElement.textContent = fullText;
-                        document.body.appendChild(measureElement);
-                        
-                        const fullWidth = measureElement.offsetWidth;
-                        const availableWidth = 280 - 32; // ширина карточки минус padding (px-4 = 16px с каждой стороны)
-                        
-                        document.body.removeChild(measureElement);
-                        
-                        if (fullWidth <= availableWidth) {
-                          return fullText;
-                        }
-                        
-                        // Если не помещается, обрезаем адрес
-                        const areaText = ` ${object.area}`;
-                        const ellipsisText = '...';
-                        const areaWidth = (() => {
-                          const areaElement = document.createElement('span');
-                          areaElement.style.visibility = 'hidden';
-                          areaElement.style.position = 'absolute';
-                          areaElement.style.fontSize = '14px';
-                          areaElement.style.fontFamily = 'inherit';
-                          areaElement.textContent = areaText;
-                          document.body.appendChild(areaElement);
-                          const width = areaElement.offsetWidth;
-                          document.body.removeChild(areaElement);
-                          return width;
-                        })();
-                        
-                        const ellipsisWidth = (() => {
-                          const ellipsisElement = document.createElement('span');
-                          ellipsisElement.style.visibility = 'hidden';
-                          ellipsisElement.style.position = 'absolute';
-                          ellipsisElement.style.fontSize = '14px';
-                          ellipsisElement.style.fontFamily = 'inherit';
-                          ellipsisElement.textContent = ellipsisText;
-                          document.body.appendChild(ellipsisElement);
-                          const width = ellipsisElement.offsetWidth;
-                          document.body.removeChild(ellipsisElement);
-                          return width;
-                        })();
-                        
-                        const availableForAddress = availableWidth - areaWidth - ellipsisWidth;
-                        
-                        // Бинарный поиск для точной обрезки адреса
-                        let left = 0;
-                        let right = object.address.length;
-                        let bestLength = 0;
-                        
-                        while (left <= right) {
-                          const mid = Math.floor((left + right) / 2);
-                          const testAddress = object.address.substring(0, mid);
-                          
-                          const testElement = document.createElement('span');
-                          testElement.style.visibility = 'hidden';
-                          testElement.style.position = 'absolute';
-                          testElement.style.fontSize = '14px';
-                          testElement.style.fontFamily = 'inherit';
-                          testElement.textContent = testAddress;
-                          document.body.appendChild(testElement);
-                          const testWidth = testElement.offsetWidth;
-                          document.body.removeChild(testElement);
-                          
-                          if (testWidth <= availableForAddress) {
-                            bestLength = mid;
-                            left = mid + 1;
-                          } else {
-                            right = mid - 1;
-                          }
-                        }
-                        
-                        const truncatedAddress = object.address.substring(0, bestLength);
-                        return `${truncatedAddress}${ellipsisText}${areaText}`;
-                      })()}
+                      <span className="flex items-center gap-1 min-w-0">
+                        <span className="truncate min-w-0">{object.address}</span>
+                        <span className="text-gray-400">•</span>
+                        <span className="flex-shrink-0">{object.area}</span>
+                      </span>
                     </p>
                     <div className="card-actions justify-end px-4 pb-2 mt-1">
                       <div className="text-lg font-normal text-black">
@@ -236,7 +151,7 @@ export default function ObjectsPage() {
       <div id="preview-container">
       <Header />
       <BurgerMenu />
-      <Suspense fallback={<div className="pt-36 text-center">Загрузка...</div>}>
+      <Suspense fallback={<div className="pt-32 text-center">Загрузка...</div>}>
         <ObjectsContent />
       </Suspense>
       </div>

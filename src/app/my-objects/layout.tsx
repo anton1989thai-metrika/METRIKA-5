@@ -6,7 +6,6 @@ import { hasSectionAccess } from '@/lib/permissions-core'
 export default async function MyObjectsLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser()
   if (!user) redirect('/auth/signin')
-  if (!hasSectionAccess(user as any, 'my-objects')) redirect('/')
+  if (!hasSectionAccess(user, 'my-objects')) redirect('/')
   return children
 }
-

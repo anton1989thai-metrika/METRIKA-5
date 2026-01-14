@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useState, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Upload, X, Image, Video, Star, StarOff, GripVertical } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Upload, X, Image as ImageIcon, Video, Star, StarOff, GripVertical } from 'lucide-react'
+import { cn, formatFileSize } from '@/lib/utils'
 import {
   DndContext,
   closestCenter,
@@ -70,14 +71,6 @@ function SortableMediaItem({
     opacity: isDragging ? 0.5 : 1,
   }
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
-
   return (
     <Card 
       ref={setNodeRef} 
@@ -90,9 +83,12 @@ function SortableMediaItem({
       <CardContent className="p-2">
         <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
           {media.type === 'image' ? (
-            <img
+            <Image
               src={media.preview}
               alt={media.name}
+              width={300}
+              height={300}
+              unoptimized
               className="w-full h-full object-cover"
             />
           ) : (
@@ -158,7 +154,7 @@ function SortableMediaItem({
           <div className="flex items-center justify-between text-xs text-gray-500">
             <div className="flex items-center">
               {media.type === 'image' ? (
-                <Image className="w-3 h-3 mr-1" />
+                <ImageIcon className="w-3 h-3 mr-1" />
               ) : (
                 <Video className="w-3 h-3 mr-1" />
               )}
@@ -192,7 +188,7 @@ export function MediaUploader({
     })
   )
 
-  const validateFile = (file: File): boolean => {
+  const validateFile = useCallback((file: File): boolean => {
     if (!acceptedTypes.includes(file.type)) {
       alert(`Неподдерживаемый тип файла: ${file.type}`)
       return false
@@ -209,9 +205,9 @@ export function MediaUploader({
     }
     
     return true
-  }
+  }, [acceptedTypes, maxFiles, maxSize, mediaFiles.length])
 
-  const createMediaFile = async (file: File): Promise<MediaFile> => {
+  const createMediaFile = useCallback(async (file: File): Promise<MediaFile> => {
     const id = Math.random().toString(36).substr(2, 9)
     const type = file.type.startsWith('image/') ? 'image' : 'video'
     
@@ -233,7 +229,7 @@ export function MediaUploader({
       isCover: false,
       order: mediaFiles.length
     }
-  }
+  }, [mediaFiles.length])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -296,7 +292,7 @@ export function MediaUploader({
     } finally {
       setIsUploading(false)
     }
-  }, [mediaFiles, onMediaChange, maxFiles, maxSize, acceptedTypes])
+  }, [createMediaFile, mediaFiles, onMediaChange, validateFile])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -352,14 +348,6 @@ export function MediaUploader({
       return reorderedItems
     })
   }, [onMediaChange])
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
 
   return (
     <div className="space-y-6">

@@ -16,8 +16,9 @@ export async function GET(request: NextRequest) {
       .map(s => s.trim())
       .filter(Boolean)
     return NextResponse.json({ success: true, mailboxes })
-  } catch (e: any) {
-    const msg = e?.message || 'Failed to list mailboxes'
+  } catch (e) {
+    const err = e as { message?: string }
+    const msg = err.message || 'Failed to list mailboxes'
     const status = msg === 'Unauthorized' ? 401 : 500
     return jsonError(msg, status)
   }
@@ -33,8 +34,9 @@ export async function POST(request: NextRequest) {
 
     await mailboxctl('create', [email, password], secret)
     return NextResponse.json({ success: true })
-  } catch (e: any) {
-    const msg = e?.message || 'Failed to create mailbox'
+  } catch (e) {
+    const err = e as { message?: string }
+    const msg = err.message || 'Failed to create mailbox'
     const status = msg === 'Unauthorized' ? 401 : 500
     return jsonError(msg, status)
   }
@@ -50,8 +52,9 @@ export async function PATCH(request: NextRequest) {
 
     await mailboxctl('passwd', [email, password], secret)
     return NextResponse.json({ success: true })
-  } catch (e: any) {
-    const msg = e?.message || 'Failed to change password'
+  } catch (e) {
+    const err = e as { message?: string }
+    const msg = err.message || 'Failed to change password'
     const status = msg === 'Unauthorized' ? 401 : 500
     return jsonError(msg, status)
   }
@@ -66,11 +69,11 @@ export async function DELETE(request: NextRequest) {
 
     await mailboxctl('delete', [email], secret)
     return NextResponse.json({ success: true })
-  } catch (e: any) {
-    const msg = e?.message || 'Failed to delete mailbox'
+  } catch (e) {
+    const err = e as { message?: string }
+    const msg = err.message || 'Failed to delete mailbox'
     const status = msg === 'Unauthorized' ? 401 : 500
     return jsonError(msg, status)
   }
 }
-
 

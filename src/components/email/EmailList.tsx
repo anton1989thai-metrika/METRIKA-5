@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Star, Trash2, Mail } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { fetchJson } from '@/lib/api-client'
 
 interface Email {
   id: string
@@ -43,6 +44,19 @@ interface EmailListProps {
   onLoadMore?: () => void
 }
 
+type BulkAction = 'markUnread' | 'markRead' | 'restore'
+
+type BulkResponse = {
+  success?: boolean
+  error?: string
+  updatedIds?: string[]
+  failedIds?: string[]
+  restoredIds?: string[]
+  skippedIds?: string[]
+}
+
+const JSON_HEADERS = { 'Content-Type': 'application/json' } as const
+
 export default function EmailList({
   threads,
   folderSlug,
@@ -64,18 +78,26 @@ export default function EmailList({
   const [starredEmails, setStarredEmails] = useState<Set<string>>(new Set())
   const sentinelRef = useRef<HTMLDivElement | null>(null)
   const selected = selectedIds ?? new Set<string>()
+  const isTrash = String(folderSlug || '').toLowerCase() === 'trash'
 
-  const viewParam =
-    selectedMailbox && currentEmail && selectedMailbox !== currentEmail
-      ? `?mb=${encodeURIComponent(selectedMailbox)}`
-      : ''
-
-  const apiViewQuery =
-    selectedMailbox && currentEmail && selectedMailbox !== currentEmail
-      ? `?viewEmail=${encodeURIComponent(selectedMailbox)}`
-      : ''
+  const viewParam = selectedMailbox ? `?mb=${encodeURIComponent(selectedMailbox)}` : ''
 
   const userHeader = currentEmail ? { 'x-user-email': currentEmail } : undefined
+  const jsonHeaders = userHeader ? { ...userHeader, ...JSON_HEADERS } : JSON_HEADERS
+
+  const buildApiQuery = (extra?: Record<string, string>) => {
+    const qs = new URLSearchParams()
+    if (selectedMailbox) qs.set('viewEmail', selectedMailbox)
+    if (extra) {
+      for (const [key, value] of Object.entries(extra)) {
+        if (value) qs.set(key, value)
+      }
+    }
+    const query = qs.toString()
+    return query ? `?${query}` : ''
+  }
+
+  const apiViewQuery = buildApiQuery()
 
   const visibleEmailIds = useMemo(() => {
     return threads
@@ -83,82 +105,78 @@ export default function EmailList({
       .filter(Boolean) as string[]
   }, [threads])
 
-  const markSelectedUnread = async () => {
+  const runBulkAction = async (action: BulkAction) => {
     if (selected.size === 0) return
+    const ids = Array.from(selected)
     try {
-      const ids = Array.from(selected)
-      const qs = new URLSearchParams()
-      if (selectedMailbox && currentEmail && selectedMailbox !== currentEmail) {
-        qs.set('viewEmail', selectedMailbox)
-      }
-      const suffix = qs.toString() ? `?${qs.toString()}` : ''
-
-      const response = await fetch(`/api/emails/bulk${suffix}`, {
+      const data = await fetchJson<BulkResponse>(`/api/emails/bulk${buildApiQuery()}`, {
         method: 'POST',
-        headers: {
-          ...(userHeader || {}),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'markUnread', ids }),
+        headers: jsonHeaders,
+        body: JSON.stringify({ action, ids }),
       })
-      if (response.ok) {
-        onMarkedUnread?.(ids)
+
+      if (action === 'markUnread') {
+        const updatedIds = Array.isArray(data?.updatedIds) ? data.updatedIds : ids
+        onMarkedUnread?.(updatedIds)
         onClearSelection?.()
+        if (Array.isArray(data?.failedIds) && data.failedIds.length > 0) {
+          alert(`Не удалось отметить как непрочитанное ${data.failedIds.length} писем`)
+        }
+        return
+      }
+
+      if (action === 'markRead') {
+        const updatedIds = Array.isArray(data?.updatedIds) ? data.updatedIds : ids
+        onMarkedRead?.(updatedIds)
+        onClearSelection?.()
+        if (Array.isArray(data?.failedIds) && data.failedIds.length > 0) {
+          alert(`Не удалось отметить как прочитанные ${data.failedIds.length} писем`)
+        }
+        return
+      }
+
+      const restoredIds = Array.isArray(data?.restoredIds) ? data.restoredIds : []
+      for (const id of restoredIds) {
+        onEmailDeleted?.(id)
+      }
+      onClearSelection?.()
+      if (Array.isArray(data?.failedIds) && data.failedIds.length > 0) {
+        alert(`Не удалось восстановить ${data.failedIds.length} писем`)
       }
     } catch (e) {
-      console.error('bulk markUnread error', e)
+      const message = e instanceof Error ? e.message : 'Не удалось выполнить действие'
+      alert(message)
+      console.error('bulk email action error', e)
     }
   }
 
-  const markSelectedRead = async () => {
-    if (selected.size === 0) return
-    try {
-      const ids = Array.from(selected)
-      const qs = new URLSearchParams()
-      if (selectedMailbox && currentEmail && selectedMailbox !== currentEmail) {
-        qs.set('viewEmail', selectedMailbox)
-      }
-      const suffix = qs.toString() ? `?${qs.toString()}` : ''
+  const markSelectedUnread = () => runBulkAction('markUnread')
 
-      const response = await fetch(`/api/emails/bulk${suffix}`, {
-        method: 'POST',
-        headers: {
-          ...(userHeader || {}),
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'markRead', ids }),
-      })
-      if (response.ok) {
-        onMarkedRead?.(ids)
-        onClearSelection?.()
-      }
-    } catch (e) {
-      console.error('bulk markRead error', e)
-    }
-  }
+  const markSelectedRead = () => runBulkAction('markRead')
+
+  const restoreSelected = () => runBulkAction('restore')
 
   const handleStar = async (emailId: string, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
     try {
-      const response = await fetch(`/api/emails/${emailId}/star${apiViewQuery}`, {
+      await fetchJson(`/api/emails/${emailId}/star${apiViewQuery}`, {
         method: 'POST',
         headers: userHeader,
       })
-
-      if (response.ok) {
-        setStarredEmails((prev) => {
-          const next = new Set(prev)
-          if (next.has(emailId)) {
-            next.delete(emailId)
-          } else {
-            next.add(emailId)
-          }
-          return next
-        })
-      }
+      setStarredEmails((prev) => {
+        const next = new Set(prev)
+        if (next.has(emailId)) {
+          next.delete(emailId)
+        } else {
+          next.add(emailId)
+        }
+        return next
+      })
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Не удалось изменить флаг'
+      alert(message)
       console.error('Error toggling star:', error)
     }
   }
@@ -170,24 +188,15 @@ export default function EmailList({
     if (!confirm('Удалить это письмо?')) return
 
     try {
-      const qs = new URLSearchParams()
-      if (selectedMailbox && currentEmail && selectedMailbox !== currentEmail) {
-        qs.set('viewEmail', selectedMailbox)
-      }
-      if (folderSlug === 'trash') {
-        qs.set('permanent', '1')
-      }
-      const suffix = qs.toString() ? `?${qs.toString()}` : ''
-
-      const response = await fetch(`/api/emails/${emailId}/delete${suffix}`, {
+      const suffix = buildApiQuery(isTrash ? { permanent: '1' } : undefined)
+      await fetchJson(`/api/emails/${emailId}/delete${suffix}`, {
         method: 'POST',
         headers: userHeader,
       })
-
-      if (response.ok) {
-        onEmailDeleted?.(emailId)
-      }
+      onEmailDeleted?.(emailId)
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Не удалось удалить письмо'
+      alert(message)
       console.error('Error deleting email:', error)
     }
   }
@@ -237,26 +246,41 @@ export default function EmailList({
             >
               Выбрать все
             </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                markSelectedRead()
-              }}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-white"
-            >
-              Отметить как прочитанное
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                markSelectedUnread()
-              }}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-white"
-            >
-              Отметить как непрочитанное
-            </button>
+            {isTrash ? (
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  restoreSelected()
+                }}
+                className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-white"
+              >
+                Восстановить
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    markSelectedRead()
+                  }}
+                  className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-white"
+                >
+                  Отметить как прочитанное
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    markSelectedUnread()
+                  }}
+                  className="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-white"
+                >
+                  Отметить как непрочитанное
+                </button>
+              </>
+            )}
             <button
               onClick={(e) => {
                 e.preventDefault()
@@ -390,4 +414,3 @@ export default function EmailList({
     </div>
   )
 }
-

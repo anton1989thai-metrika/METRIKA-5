@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSessionUser } from '@/lib/auth/session'
+import { prismaRoleToUiRole } from '@/lib/permissions-core'
 
 export const runtime = 'nodejs'
-
-function roleToUi(role: string) {
-  // Prisma enum uses snake_case for mapped values (site_user, foreign_employee)
-  if (role === 'site_user') return 'site-user'
-  if (role === 'foreign_employee') return 'foreign-employee'
-  return role
-}
 
 export async function GET(request: NextRequest) {
   const user = await getSessionUser(request)
@@ -19,9 +13,8 @@ export async function GET(request: NextRequest) {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: roleToUi(String((user as any).role || '')),
-      detailedPermissions: (user as any).detailedPermissions || null,
+      role: prismaRoleToUiRole(String(user.role || '')),
+      detailedPermissions: user.detailedPermissions || null,
     },
   })
 }
-

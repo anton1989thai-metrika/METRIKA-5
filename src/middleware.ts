@@ -3,8 +3,6 @@ import { SESSION_COOKIE } from '@/lib/auth/constants'
 
 // Глобальные CORS-заголовки и обработка preflight для корректной работы через прокси/iframe
 export async function middleware(request: NextRequest) {
-  const origin = request.headers.get('origin') || '*'
-
   const { pathname } = new URL(request.url)
 
   // Protect UI routes (simple session check)

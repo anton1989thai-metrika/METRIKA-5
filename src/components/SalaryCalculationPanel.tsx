@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { 
   Calculator, 
   DollarSign, 
@@ -181,13 +181,6 @@ export default function SalaryCalculationPanel() {
 
       setIsCalculating(false)
     }, 1500)
-  }
-
-  // Обновление данных сотрудника
-  const updateEmployee = (employeeId: string, field: keyof Employee, value: any) => {
-    setEmployees(prev => prev.map(emp => 
-      emp.id === employeeId ? { ...emp, [field]: value } : emp
-    ))
   }
 
   // Одобрение расчёта

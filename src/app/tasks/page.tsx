@@ -1,34 +1,42 @@
 "use client"
 
-'use client';
-
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { EventCalendar, type CalendarEvent } from "@/components/event-calendar";
 import Calendar from "@/components/calendar-2/Calendar";
-import { addDays, setHours, setMinutes, subDays } from "date-fns";
+import type {
+  TaskAttachment,
+  TaskChecklist,
+  TaskChecklistItem,
+  TaskComment,
+  TaskHistory,
+  TaskItem,
+  TaskPriorityUi,
+  TaskStatusUi,
+  TaskSubtask,
+  UserId,
+} from "@/types/task-ui";
+import { taskUsers, type TaskUser } from "@/data/task-users";
 
 // Типы для состояний
 interface TaskFormData {
   title: string;
   description: string;
-  priority: string;
+  priority: TaskPriorityUi;
   deadline: string;
   deadlineTime: string;
   startDate: string;
   startTime: string;
   completionTime: string;
   isBlocking: boolean;
-  executors: string[];
-  curators: string[];
-  subtasks: any[];
-  checklists: any[];
-  images: any[];
-  links: any[];
+  executors: UserId[];
+  curators: UserId[];
+  subtasks: TaskSubtask[];
+  checklists: TaskChecklist[];
+  images: TaskAttachment[];
+  links: string[];
   isAutoTask: boolean;
   autoFrequency: string;
   autoRepetitions: string;
@@ -39,27 +47,37 @@ interface FormErrors {
   [key: string]: string;
 }
 
-interface SubtaskFormErrors {
-  [key: string]: string;
-}
-
-interface User {
-  id: number;
-  name: string;
-  role: string;
-}
-
-interface ChecklistItem {
-  id: number;
-  text: string;
-  completed: boolean;
-  executor: string;
-  curator: string;
-}
-
 interface ChecklistFormData {
   title: string;
-  items: ChecklistItem[];
+  items: TaskChecklistItem[];
+}
+
+interface SubtaskFormData {
+  title: string;
+  description: string;
+  executors: UserId[];
+  curators: UserId[];
+  priority: TaskPriorityUi;
+  deadline: string;
+  deadlineTime: string;
+  startDate: string;
+  startTime: string;
+  completionTime: string;
+  isBlocking: boolean;
+  subtasks: TaskSubtask[];
+  checklists: TaskChecklist[];
+  attachments: TaskAttachment[];
+  isHiddenTask: boolean;
+}
+
+interface TaskTemplate {
+  id: number;
+  name: string;
+  title: string;
+  description: string;
+  priority: TaskPriorityUi;
+  deadline: string;
+  deadlineTime: string;
 }
 
 export default function TasksPage() {
@@ -100,17 +118,18 @@ export default function TasksPage() {
   const updateLinkInput = (index: number, value: string) => {
     setLinkInputs(prev => prev.map((link, i) => i === index ? value : link));
   };
-  const [currentUser, setCurrentUser] = useState<User>({ id: 1, name: "Анна Петрова", role: "admin" }); // Текущий пользователь
-  const [userPermissions, setUserPermissions] = useState<any>(null); // Разрешения пользователя
+  const [currentUser] = useState<TaskUser>(() => {
+    return taskUsers.find((user) => user.email === "anna@metrika.ru") ?? taskUsers[0];
+  }); // Текущий пользователь
   const [showCommentsModal, setShowCommentsModal] = useState(false);
-  const [selectedTaskForComments, setSelectedTaskForComments] = useState<any>(null);
+  const [selectedTaskForComments, setSelectedTaskForComments] = useState<TaskItem | null>(null);
   const [newComment, setNewComment] = useState('');
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [allTasks, setAllTasks] = useState<any[]>([]);
-  const [editingTask, setEditingTask] = useState(null);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [allTasks, setAllTasks] = useState<TaskItem[]>([]);
+  const [editingTask, setEditingTask] = useState<TaskItem | null>(null);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
-  const [notificationSettings, setNotificationSettings] = useState({
+  const [notificationSettings] = useState({
     email: true,
     whatsapp: false,
     telegram: false,
@@ -118,11 +137,8 @@ export default function TasksPage() {
   });
   const [showExecutorsDropdown, setShowExecutorsDropdown] = useState(false);
   const [showCuratorsDropdown, setShowCuratorsDropdown] = useState(false);
-  const [showSubtasks, setShowSubtasks] = useState(false);
-  const [showChecklists, setShowChecklists] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [showAutomation, setShowAutomation] = useState(false);
-  const [showAutomationCalendar, setShowAutomationCalendar] = useState(false);
   const [selectedAutomationDates, setSelectedAutomationDates] = useState<string[]>([]);
   const [automationCalendarMonth, setAutomationCalendarMonth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -134,7 +150,7 @@ export default function TasksPage() {
   const [showBlockingTask, setShowBlockingTask] = useState(false);
   const [isBlockingTask, setIsBlockingTask] = useState(false);
   const [isCreateSubtaskModalOpen, setIsCreateSubtaskModalOpen] = useState(false);
-  const [subtaskFormData, setSubtaskFormData] = useState({
+  const [subtaskFormData, setSubtaskFormData] = useState<SubtaskFormData>({
     title: '',
     description: '',
     executors: [],
@@ -151,11 +167,11 @@ export default function TasksPage() {
     attachments: [],
     isHiddenTask: false
   });
-  const [subtaskFormErrors, setSubtaskFormErrors] = useState({});
+  const [subtaskFormErrors, setSubtaskFormErrors] = useState<Record<string, string>>({});
 
   // Состояние для модального окна создания чек-листа
   const [isCreateChecklistModalOpen, setIsCreateChecklistModalOpen] = useState(false);
-  const [checklistFormData, setChecklistFormData] = useState({
+  const [checklistFormData, setChecklistFormData] = useState<ChecklistFormData>({
     title: '',
     items: [
       { id: 1, text: '', completed: false, executor: '', curator: '' },
@@ -163,7 +179,7 @@ export default function TasksPage() {
       { id: 3, text: '', completed: false, executor: '', curator: '' }
     ]
   });
-  const [checklistFormErrors, setChecklistFormErrors] = useState({});
+  const [checklistFormErrors, setChecklistFormErrors] = useState<Record<string, string>>({});
   
   // Состояние для выпадающих списков в чек-листе
   const [showChecklistCuratorDropdown, setShowChecklistCuratorDropdown] = useState<number | null>(null);
@@ -185,7 +201,7 @@ export default function TasksPage() {
 
   // Закрытие выпадающих списков при клике вне их
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = () => {
       if (showChecklistCuratorDropdown !== null || showChecklistExecutorDropdown !== null) {
         setShowChecklistCuratorDropdown(null);
         setShowChecklistExecutorDropdown(null);
@@ -202,57 +218,10 @@ export default function TasksPage() {
   }, [isCreateChecklistModalOpen, showChecklistCuratorDropdown, showChecklistExecutorDropdown]);
 
   // Функции для работы с задачами
-  // Загрузка данных пользователя и его разрешений
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch('/api/user');
-        if (response.ok) {
-          const userData = await response.json();
-          setCurrentUser(userData);
-          setUserPermissions(userData.detailedPermissions);
-        }
-      } catch (error) {
-        console.error('Ошибка загрузки данных пользователя:', error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   // Авторизация отключена - все могут создавать скрытые задачи
   const canCreateHiddenTasks = () => {
     return true;
-  };
-
-  // Функции навигации календаря
-  const goToPreviousMonth = () => {
-    setCurrentMonth(prev => {
-      const newDate = new Date(prev);
-      newDate.setMonth(prev.getMonth() - 1);
-      return newDate;
-    });
-  };
-
-  const goToNextMonth = () => {
-    setCurrentMonth(prev => {
-      const newDate = new Date(prev);
-      newDate.setMonth(prev.getMonth() + 1);
-      return newDate;
-    });
-  };
-
-  const goToToday = () => {
-    setCurrentMonth(new Date());
-  };
-
-  // Функция для получения названия месяца
-  const getMonthName = (month: number) => {
-    const months = [
-      'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-      'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-    ];
-    return months[month];
   };
 
   // Функция для генерации дней календаря для одного месяца
@@ -303,7 +272,7 @@ export default function TasksPage() {
     return 'Пропущено';
   };
 
-  const getTasksForDate = (date) => {
+  const getTasksForDate = (date: Date): TaskItem[] => {
     return allTasks.filter(task => {
       if (!task.deadline) return false;
       const taskDate = new Date(task.deadline).toDateString();
@@ -312,18 +281,18 @@ export default function TasksPage() {
     });
   };
 
-  const getTasksForToday = () => {
+  const getTasksForToday = (): TaskItem[] => {
     const today = new Date();
     return getTasksForDate(today);
   };
 
-  const getTasksForTomorrow = () => {
+  const getTasksForTomorrow = (): TaskItem[] => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return getTasksForDate(tomorrow);
   };
 
-  const getMissedTasks = () => {
+  const getMissedTasks = (): TaskItem[] => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -335,52 +304,23 @@ export default function TasksPage() {
     });
   };
 
-  const getOverdueTasks = () => {
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    
-    return allTasks.filter(task => {
-      if (!task.deadline) return false;
-      const taskDate = new Date(task.deadline);
-      return taskDate < today;
-    });
-  };
-
-  const getTasksForCalendar = () => {
-    const tasksByDate = {};
-    allTasks.forEach(task => {
-      if (task.deadline) {
-        const date = new Date(task.deadline).toDateString();
-        if (!tasksByDate[date]) {
-          tasksByDate[date] = [];
-        }
-        tasksByDate[date].push(task);
-      }
-    });
-    return tasksByDate;
-  };
-
   // Функции для редактирования и управления задачами
-  const updateTask = (taskId, updates) => {
+  const updateTask = (taskId: TaskItem['id'], updates: Partial<TaskItem>) => {
     setAllTasks(prev => prev.map(task => 
       task.id === taskId ? { ...task, ...updates } : task
     ));
   };
 
-  const deleteTask = (taskId) => {
+  const deleteTask = (taskId: TaskItem['id']) => {
     setAllTasks(prev => prev.filter(task => task.id !== taskId));
   };
 
   // Авторизация отключена - все пользователи могут всё
-  const canReassignExecutor = (task) => {
-    return true; // Все могут переназначать исполнителей
-  };
+  const canReassignExecutor = () => true; // Все могут переназначать исполнителей
 
-  const canChangeStatus = (task, newStatus) => {
-    return true; // Все могут менять статус задач
-  };
+  const canChangeStatus = () => true; // Все могут менять статус задач
 
-  const isTaskFullyApproved = (task) => {
+  const isTaskFullyApproved = (task: TaskItem) => {
     // Проверяем, что все элементы подтверждены куратором
     const mainTaskApproved = task.approvedByCurator || false;
     const subtasksApproved = task.subtasks.every(subtask => subtask.approvedByCurator);
@@ -390,8 +330,8 @@ export default function TasksPage() {
   };
 
   // Функции для работы с замечаниями
-  const addComment = (taskId, comment) => {
-    const commentData = {
+  const addComment = (taskId: TaskItem['id'], comment: string) => {
+    const commentData: TaskComment = {
       id: Date.now(),
       text: comment,
       author: currentUser.name,
@@ -407,7 +347,7 @@ export default function TasksPage() {
 
 
   // Функции для работы с подзадачами
-  const handleSubtaskInputChange = (field, value) => {
+  const handleSubtaskInputChange = <K extends keyof SubtaskFormData>(field: K, value: SubtaskFormData[K]) => {
     setSubtaskFormData(prev => ({
       ...prev,
       [field]: value
@@ -423,7 +363,7 @@ export default function TasksPage() {
   };
 
   const validateSubtaskForm = () => {
-    const errors = {};
+    const errors: Record<string, string> = {};
     
     if (!subtaskFormData.title.trim()) {
       errors.title = 'Название подзадачи обязательно';
@@ -485,7 +425,7 @@ export default function TasksPage() {
       return;
     }
 
-    const newSubtask = {
+    const newSubtask: TaskSubtask = {
       id: Date.now(),
       title: subtaskFormData.title,
       description: subtaskFormData.description,
@@ -497,11 +437,7 @@ export default function TasksPage() {
       status: 'new',
       createdAt: new Date().toISOString(),
       createdBy: currentUser.id,
-      approvedByCurator: {
-        mainTask: false,
-        subtasks: [],
-        checklists: []
-      },
+      approvedByCurator: false,
       history: [{
         id: Date.now(),
         action: 'created',
@@ -540,7 +476,7 @@ export default function TasksPage() {
   };
 
   // Функции для работы с чек-листами
-  const handleChecklistInputChange = (field: string, value: any) => {
+  const handleChecklistInputChange = <K extends keyof ChecklistFormData>(field: K, value: ChecklistFormData[K]) => {
     setChecklistFormData(prev => ({
       ...prev,
       [field]: value
@@ -555,7 +491,11 @@ export default function TasksPage() {
     }
   };
 
-  const handleChecklistItemChange = (itemId: number, field: string, value: any) => {
+  const handleChecklistItemChange = <K extends keyof TaskChecklistItem>(
+    itemId: number,
+    field: K,
+    value: TaskChecklistItem[K]
+  ) => {
     setChecklistFormData(prev => ({
       ...prev,
       items: prev.items.map(item => 
@@ -582,7 +522,7 @@ export default function TasksPage() {
   };
 
   const validateChecklistForm = () => {
-    const errors = {};
+    const errors: Record<string, string> = {};
     
     if (!checklistFormData.title.trim()) {
       errors.title = 'Название чек-листа обязательно';
@@ -610,7 +550,7 @@ export default function TasksPage() {
         id: Date.now() + Math.random() // Уникальный ID
       }));
 
-    const newChecklist = {
+    const newChecklist: TaskChecklist = {
       id: Date.now(),
       title: checklistFormData.title,
       items: filledItems,
@@ -635,7 +575,7 @@ export default function TasksPage() {
   };
 
   // Функции для выбора кураторов и исполнителей в чек-листе
-  const handleChecklistCuratorSelect = (itemId: number, userId: string) => {
+  const handleChecklistCuratorSelect = (itemId: number, userId: number) => {
     const user = users.find(u => u.id === userId);
     if (user) {
       handleChecklistItemChange(itemId, 'curator', user.name);
@@ -643,7 +583,7 @@ export default function TasksPage() {
     setShowChecklistCuratorDropdown(null);
   };
 
-  const handleChecklistExecutorSelect = (itemId: number, userId: string) => {
+  const handleChecklistExecutorSelect = (itemId: number, userId: number) => {
     const user = users.find(u => u.id === userId);
     if (user) {
       handleChecklistItemChange(itemId, 'executor', user.name);
@@ -659,16 +599,18 @@ export default function TasksPage() {
     handleChecklistItemChange(itemId, 'executor', '');
   };
 
-  const handleStatusChange = (taskId, newStatus) => {
+  const handleStatusChange = (taskId: TaskItem['id'], newStatus: TaskStatusUi) => {
     const task = allTasks.find(t => t.id === taskId);
+    if (!task) return;
     
-    if (!canChangeStatus(task, newStatus)) {
+    if (!canChangeStatus()) {
       alert('У вас нет прав для изменения статуса');
       return;
     }
 
-    const statusChange = {
+    const statusChange: TaskHistory = {
       id: Date.now(),
+      action: 'status_change',
       from: task.status,
       to: newStatus,
       author: currentUser.name,
@@ -683,12 +625,10 @@ export default function TasksPage() {
     });
 
     // Отправляем уведомления
-    sendStatusChangeNotification(task, newStatus);
+    sendStatusChangeNotification(task);
   };
 
-  const sendStatusChangeNotification = (task, newStatus) => {
-    const message = `Статус задачи "${task.title}" изменен на "${newStatus}" пользователем ${currentUser.name}`;
-    
+  const sendStatusChangeNotification = (task: TaskItem) => {
     // Уведомляем кураторов
     task.curators.forEach(curatorId => {
       const curator = users.find(u => u.id === curatorId);
@@ -711,7 +651,7 @@ export default function TasksPage() {
   };
 
   // Шаблоны задач
-  const taskTemplates = [
+  const taskTemplates: TaskTemplate[] = [
     {
       id: 1,
       name: "Показать объект клиенту",
@@ -760,9 +700,7 @@ export default function TasksPage() {
   ];
 
   // Функции для уведомлений
-  const sendNotification = (task, type) => {
-    const message = `Напоминание: Задача "${task.title}" должна быть выполнена ${new Date(task.deadline).toLocaleDateString('ru-RU')} в ${task.deadlineTime || 'не указано время'}`;
-    
+  const sendNotification = (task: TaskItem, type: 'email' | 'whatsapp' | 'telegram') => {
     switch (type) {
       case 'email':
         // Email уведомление отправлено
@@ -796,44 +734,8 @@ export default function TasksPage() {
     return upcomingTasks;
   };
 
-  // Функции для статистики
-  const getTaskStatistics = () => {
-    const total = allTasks.length;
-    const completed = allTasks.filter(task => task.status === 'completed').length;
-    const inProgress = allTasks.filter(task => task.status === 'in_progress').length;
-    const overdue = getOverdueTasks().length;
-    const missed = getMissedTasks().length;
-    
-    const priorityStats = {
-      high: allTasks.filter(task => task.priority === 'high').length,
-      medium: allTasks.filter(task => task.priority === 'medium').length,
-      low: allTasks.filter(task => task.priority === 'low').length,
-      boss: allTasks.filter(task => task.priority === 'boss').length
-    };
-
-    const statusStats = {
-      new: allTasks.filter(task => task.status === 'new').length,
-      in_progress: allTasks.filter(task => task.status === 'in_progress').length,
-      completed: allTasks.filter(task => task.status === 'completed').length,
-      on_review: allTasks.filter(task => task.status === 'on_review').length,
-      deferred: allTasks.filter(task => task.status === 'deferred').length,
-      canceled: allTasks.filter(task => task.status === 'canceled').length
-    };
-
-    return {
-      total,
-      completed,
-      inProgress,
-      overdue,
-      missed,
-      priorityStats,
-      statusStats,
-      completionRate: total > 0 ? Math.round((completed / total) * 100) : 0
-    };
-  };
-
   // Функции для работы с формой
-  const handleInputChange = (field, value) => {
+  const handleInputChange = <K extends keyof TaskFormData>(field: K, value: TaskFormData[K]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -848,7 +750,7 @@ export default function TasksPage() {
   };
 
   const validateForm = () => {
-    const errors = {};
+    const errors: FormErrors = {};
     
     // Валидация обязательных полей
     if (!formData.title.trim()) {
@@ -915,12 +817,12 @@ export default function TasksPage() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (validateForm()) {
       // Создаем новую задачу
-      const newTask = {
+      const newTask: TaskItem = {
         id: Date.now(),
         title: formData.title,
         description: formData.description,
@@ -986,79 +888,16 @@ export default function TasksPage() {
   };
 
   // Тестовые пользователи с ролями
-  const users = [
-    { id: 1, name: "Анна Петрова", role: "admin", email: "anna@metrika.ru" },
-    { id: 2, name: "Иван Сидоров", role: "manager", email: "ivan@metrika.ru" },
-    { id: 3, name: "Мария Козлова", role: "employee", email: "maria@metrika.ru" },
-    { id: 4, name: "Алексей Волков", role: "employee", email: "alexey@metrika.ru" },
-    { id: 5, name: "Елена Соколова", role: "employee", email: "elena@metrika.ru" },
-    { id: 6, name: "Дмитрий Морозов", role: "freelancer", email: "dmitry@metrika.ru" },
-    { id: 7, name: "Ольга Новикова", role: "client", email: "olga@metrika.ru" },
-    { id: 8, name: "Сергей Лебедев", role: "employee", email: "sergey@metrika.ru" }
-  ];
+  const users = taskUsers;
 
   // Авторизация отключена - все пользователи имеют все права
-  const rolePermissions = {
-    admin: {
-      canCreate: true,
-      canEdit: true,
-      canAssign: true,
-      canReassign: true,
-      canApprove: true,
-      canViewAll: true
-    },
-    manager: {
-      canCreate: true,
-      canEdit: true,
-      canAssign: true,
-      canReassign: true,
-      canApprove: true,
-      canViewAll: true
-    },
-    employee: {
-      canCreate: true,
-      canEdit: true,
-      canAssign: true,
-      canReassign: true,
-      canApprove: true,
-      canViewAll: true
-    },
-    freelancer: {
-      canCreate: true,
-      canEdit: true,
-      canAssign: true,
-      canReassign: true,
-      canApprove: true,
-      canViewAll: true
-    },
-    client: {
-      canCreate: true,
-      canEdit: true,
-      canAssign: true,
-      canReassign: true,
-      canApprove: true,
-      canViewAll: true
-    },
-    guest: {
-      canCreate: true,
-      canEdit: true,
-      canAssign: true,
-      canReassign: true,
-      canApprove: true,
-      canViewAll: true
-    }
-  };
-
   // Получаем актуальные задачи
   const todayTasks = getTasksForToday();
   const tomorrowTasks = getTasksForTomorrow();
   const missedTasks = getMissedTasks();
-  const overdueTasks = getOverdueTasks();
-  const tasksForCalendar = getTasksForCalendar();
   const filteredTasks = getFilteredTasks();
-  const statistics = getTaskStatistics();
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: TaskPriorityUi) => {
     switch (priority) {
       case 'high': return 'bg-gray-600';
       case 'medium': return 'bg-gray-500';
@@ -1214,7 +1053,7 @@ export default function TasksPage() {
                         >
                           Редактировать
                         </button>
-                        {canReassignExecutor(task) && (
+                        {canReassignExecutor() && (
                           <button
                             onClick={() => {/* Переназначить исполнителя */}}
                             className="px-3 py-1 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600 transition-colors"
@@ -1463,7 +1302,7 @@ export default function TasksPage() {
                   </label>
                       <select 
                         value={formData.priority}
-                        onChange={(e) => handleInputChange('priority', e.target.value)}
+                        onChange={(e) => handleInputChange('priority', e.target.value as TaskPriorityUi)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                       >
                         <option value="low">🟢 Обычная</option>
@@ -2149,10 +1988,7 @@ export default function TasksPage() {
                         value={formData.autoFrequency}
                         onChange={(e) => {
                           handleInputChange('autoFrequency', e.target.value);
-                          if (e.target.value === 'custom') {
-                            setShowAutomationCalendar(true);
-                          } else {
-                            setShowAutomationCalendar(false);
+                          if (e.target.value !== 'custom') {
                             setSelectedAutomationDates([]);
                           }
                         }}
@@ -2205,7 +2041,11 @@ export default function TasksPage() {
                               <button
                                 key={index}
                                 type="button"
-                                onClick={() => handleAutomationDateSelect(day)}
+                                onClick={() => {
+                                  if (day !== null) {
+                                    handleAutomationDateSelect(day);
+                                  }
+                                }}
                                 className={`p-2 text-center text-sm ${
                                   day === null 
                                     ? 'text-gray-300 cursor-not-allowed' 
@@ -2283,11 +2123,8 @@ export default function TasksPage() {
                     setShowDeadline(false);
                     setShowExecutorsDropdown(false);
                     setShowCuratorsDropdown(false);
-                    setShowSubtasks(false);
-                    setShowChecklists(false);
                     setShowAttachments(false);
                     setShowAutomation(false);
-                    setShowAutomationCalendar(false);
                     setSelectedAutomationDates([]);
                     setAutomationCalendarMonth(new Date());
                   }}
@@ -2344,7 +2181,7 @@ export default function TasksPage() {
                 </label>
                 <select
                   value={editingTask.status}
-                  onChange={(e) => setEditingTask({...editingTask, status: e.target.value})}
+                  onChange={(e) => setEditingTask({...editingTask, status: e.target.value as TaskStatusUi})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   <option value="new">Новая</option>
@@ -2363,7 +2200,7 @@ export default function TasksPage() {
                 </label>
                 <select
                   value={editingTask.priority}
-                  onChange={(e) => setEditingTask({...editingTask, priority: e.target.value})}
+                  onChange={(e) => setEditingTask({...editingTask, priority: e.target.value as TaskPriorityUi})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   <option value="low">🟢 Обычная</option>
@@ -2497,7 +2334,7 @@ export default function TasksPage() {
                       </label>
                       <select 
                         value={subtaskFormData.priority}
-                        onChange={(e) => handleSubtaskInputChange('priority', e.target.value)}
+                        onChange={(e) => handleSubtaskInputChange('priority', e.target.value as TaskPriorityUi)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
                       >
                         <option value="low">🟢 Обычная</option>
@@ -3045,8 +2882,6 @@ export default function TasksPage() {
                     setShowCompletionTime(false);
                     setShowBlockingTask(false);
                     setIsBlockingTask(false);
-                    setShowSubtaskAttachments(false);
-                    setSubtaskLinkInputs(['']);
                   }}
                   className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                 >
@@ -3115,7 +2950,7 @@ export default function TasksPage() {
                   </div>
                   
                   <div className="divide-y divide-gray-200">
-                    {checklistFormData.items.map((item, index) => (
+                    {checklistFormData.items.map((item) => (
                       <div key={item.id} className="p-4">
                         <div className="grid grid-cols-12 gap-4 items-center">
                           {/* Поле ввода действия */}
@@ -3273,8 +3108,12 @@ export default function TasksPage() {
                   onClick={handleChecklistSubmit}
                   className="px-6 py-2 text-black rounded-md transition-colors shadow-sm"
                   style={{ backgroundColor: '#fff60b' }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#e6d90a'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#fff60b'}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#e6d90a'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#fff60b'
+                  }}
                 >
                   Создать чек-лист
                 </button>

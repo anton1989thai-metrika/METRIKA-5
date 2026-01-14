@@ -1,9 +1,7 @@
 "use client"
 
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useFilters } from "@/contexts/FiltersContext";
-import { useState } from "react";
-import { ChevronDown, Square, Eye, Hammer, Building, Star, TreePine, Calendar, FileText, Key, Home, Settings } from "lucide-react";
+import { ChevronDown, Calendar } from "lucide-react";
 
 // Кастомная иконка для Аренда (кот)
 const CatIcon = ({ className }: { className?: string }) => (
@@ -193,11 +191,9 @@ const CharacteristicsIcon = ({ className }: { className?: string }) => (
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetTrigger,
@@ -209,22 +205,21 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
-import { cn } from "@/lib/utils";
+ 
 
 export default function HeaderFilters() {
-  const { t } = useLanguage();
   const { filters, updateFilter } = useFilters();
 
-  const handleArrayFilterChange = (key: string, value: string) => {
-    const currentArray = filters[key as keyof typeof filters] as string[] || [];
+  const handleArrayFilterChange = <K extends keyof typeof filters>(key: K, value: string) => {
+    const currentArray = Array.isArray(filters[key]) ? (filters[key] as string[]) : [];
     const newArray = currentArray.includes(value)
       ? currentArray.filter(item => item !== value)
       : [...currentArray, value];
-    updateFilter(key, newArray);
+    updateFilter(key, newArray as (typeof filters)[K]);
   };
 
-  const handleInputChange = (key: string, value: string) => {
-    updateFilter(key, value);
+  const handleInputChange = <K extends keyof typeof filters>(key: K, value: string) => {
+    updateFilter(key, value as (typeof filters)[K]);
   };
 
   // Обработчик изменения фильтра по стране (множественный выбор)
@@ -805,11 +800,11 @@ export default function HeaderFilters() {
                           </div>
                           <div className="mt-2">
                             <label className="text-sm text-gray-600">
-                              Расстояние (км): {parseFloat(filters.infrastructureDistance || 0.5) === 10 ? '10+ км' : `${filters.infrastructureDistance || 0.5} км`}
+                              Расстояние (км): {parseFloat(String(filters.infrastructureDistance || 0.5)) === 10 ? '10+ км' : `${filters.infrastructureDistance || 0.5} км`}
                             </label>
                             <div className="mt-2">
                               <Slider
-                                value={[parseFloat(filters.infrastructureDistance || 0.5)]}
+                                value={[parseFloat(String(filters.infrastructureDistance || 0.5))]}
                                 onValueChange={(value) => handleInputChange('infrastructureDistance', value[0].toString())}
                                 min={0.5}
                                 max={10}

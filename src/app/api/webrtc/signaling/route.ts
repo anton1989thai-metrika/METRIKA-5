@@ -1,3 +1,5 @@
+import { debugLog } from '@/lib/logger'
+
 import { NextRequest, NextResponse } from 'next/server';
 
 // In-memory хранилище для signaling (в продакшене использовать Redis или базу данных)
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Room ID required' }, { status: 400 });
     }
 
-    let signaling = signalingStore.get(roomId) || {
+    const signaling: SignalingData = signalingStore.get(roomId) || {
       iceCandidates: [],
       roomId,
       timestamp: Date.now(),
@@ -45,7 +47,7 @@ export async function POST(req: NextRequest) {
         signaling.timestamp = Date.now();
         // Очищаем старый answer при новом offer
         signaling.answer = undefined;
-        console.log(`Offer received for room ${roomId}`);
+        debugLog(`Offer received for room ${roomId}`);
         break;
       case 'answer':
         // Проверяем валидность answer
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
         }
         signaling.answer = data;
         signaling.timestamp = Date.now();
-        console.log(`Answer received for room ${roomId}`);
+        debugLog(`Answer received for room ${roomId}`);
         break;
       case 'ice-candidate':
         if (!data || !data.candidate) {
@@ -68,7 +70,7 @@ export async function POST(req: NextRequest) {
         break;
       case 'clear':
         signalingStore.delete(roomId);
-        console.log(`Room ${roomId} cleared`);
+        debugLog(`Room ${roomId} cleared`);
         return NextResponse.json({ success: true });
       default:
         return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
@@ -126,4 +128,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-

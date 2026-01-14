@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { SignupForm } from "@/components/signup-form"
 
 export default function SignupPage() {
@@ -14,9 +15,11 @@ export default function SignupPage() {
         {/* Картинка - справа от центра */}
         <div className="flex items-center justify-start" style={{ width: 'calc(50% - 100px)' }}>
           <div className="h-[800px] w-[530px] bg-white overflow-hidden">
-            <img
+            <Image
               src="/images/register-bg.jpg"
               alt="МЕТРИКА - Регистрация"
+              width={530}
+              height={800}
               className="h-full w-full object-cover"
             />
           </div>

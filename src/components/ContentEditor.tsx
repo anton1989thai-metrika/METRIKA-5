@@ -1,6 +1,8 @@
 "use client"
 
+import Image from "next/image"
 import { useState, useRef } from "react"
+import type { ContentDraft, ContentItem } from "@/types/content"
 import { 
   Bold, 
   Italic, 
@@ -9,17 +11,10 @@ import {
   ListOrdered, 
   Link, 
   Image as ImageIcon, 
-  Video, 
-  FileText, 
   Save, 
   Eye, 
-  Calendar, 
-  Tag, 
-  Globe, 
   Upload,
   X,
-  Check,
-  AlertCircle,
   Plus,
   RefreshCw
 } from "lucide-react"
@@ -27,8 +22,8 @@ import {
 interface ContentEditorProps {
   isOpen: boolean
   onClose: () => void
-  content?: any
-  onSave: (content: any) => void
+  content?: ContentDraft
+  onSave: (content: ContentItem) => Promise<void> | void
 }
 
 export default function ContentEditor({ isOpen, onClose, content, onSave }: ContentEditorProps) {
@@ -36,7 +31,7 @@ export default function ContentEditor({ isOpen, onClose, content, onSave }: Cont
   const [excerpt, setExcerpt] = useState(content?.excerpt || '')
   const [contentText, setContentText] = useState(content?.content || '')
   const [category, setCategory] = useState(content?.category || 'blog')
-  const [tags, setTags] = useState(content?.tags || [])
+  const [tags, setTags] = useState<string[]>(content?.tags || [])
   const [status, setStatus] = useState(content?.status || 'draft')
   const [featuredImage, setFeaturedImage] = useState(content?.featuredImage || '')
   const [seoTitle, setSeoTitle] = useState(content?.seoTitle || '')
@@ -351,9 +346,12 @@ export default function ContentEditor({ isOpen, onClose, content, onSave }: Cont
               <div className="space-y-3">
                 {featuredImage ? (
                   <div className="relative">
-                    <img
+                    <Image
                       src={featuredImage}
                       alt="Featured"
+                      width={800}
+                      height={128}
+                      unoptimized
                       className="w-full h-32 object-cover rounded-lg"
                     />
                     <button
@@ -420,9 +418,12 @@ export default function ContentEditor({ isOpen, onClose, content, onSave }: Cont
                 
                 <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
                   {featuredImage && (
-                    <img
+                    <Image
                       src={featuredImage}
                       alt="Preview"
+                      width={800}
+                      height={192}
+                      unoptimized
                       className="w-full h-48 object-cover rounded-lg mb-4"
                     />
                   )}

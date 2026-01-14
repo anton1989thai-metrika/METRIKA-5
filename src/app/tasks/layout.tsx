@@ -6,7 +6,6 @@ import { hasSectionAccess } from '@/lib/permissions-core'
 export default async function TasksLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser()
   if (!user) redirect('/auth/signin')
-  if (!hasSectionAccess(user as any, 'tasks')) redirect('/')
+  if (!hasSectionAccess(user, 'tasks')) redirect('/')
   return children
 }
-

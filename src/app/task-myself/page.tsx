@@ -1,5 +1,7 @@
 "use client";
 
+import { debugLog } from "@/lib/logger"
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -148,7 +150,7 @@ export default function TaskMyselfPage() {
   }, [calendarTime]);
 
   const handleSubmit = () => {
-    console.log("Form data:", formData);
+    debugLog("Form data:", formData);
     // Здесь будет логика сохранения задачи
     alert("Задача создана!");
   };

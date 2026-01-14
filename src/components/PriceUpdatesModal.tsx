@@ -1,103 +1,21 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import type { ObjectData } from "@/types/object-data"
 import {
   X,
   DollarSign,
   TrendingUp,
-  TrendingDown,
   Clock,
-  Calendar,
   Settings,
   Plus,
-  Edit,
   Trash2,
   Save,
-  RefreshCw,
   Check,
-  AlertTriangle,
-  User,
-  Users,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  Phone,
-  Mail,
-  MessageCircle,
-  Calculator,
   Play,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
-  FileText,
-  Image,
-  Tag,
-  Archive,
-  Minus,
-  Copy,
-  Download,
-  Upload,
-  Grid,
-  List,
-  MoreVertical,
-  ChevronDown,
-  ChevronUp,
-  Target,
-  Layers,
-  MapPin,
-  Video,
-  Music,
-  Folder,
   Cog,
-  Shield,
-  ShieldCheck,
-  Link,
-  Link2,
-  Unlink,
-  Activity,
   ArrowUp,
   ArrowDown,
-  RotateCcw,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  SkipForward,
-  SkipBack,
-  Volume2,
-  VolumeX,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Server,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  Signal,
-  SignalZero,
-  Battery,
-  BatteryLow,
-  Power,
-  PowerOff,
-  Sun,
-  Moon,
-  Star,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Frown,
-  Meh,
-  Angry,
-  Laugh
 } from "lucide-react"
 
 interface PriceRule {
@@ -191,7 +109,7 @@ interface PriceUpdatesModalProps {
   initialRules?: PriceRule[]
   initialUpdates?: PriceUpdate[]
   initialHistory?: PriceHistory[]
-  objectData?: any
+  objectData?: ObjectData
 }
 
 export default function PriceUpdatesModal({ 
@@ -207,13 +125,16 @@ export default function PriceUpdatesModal({
   const [updates, setUpdates] = useState<PriceUpdate[]>(initialUpdates)
   const [history, setHistory] = useState<PriceHistory[]>(initialHistory)
   const [activeTab, setActiveTab] = useState('overview')
-  const [selectedRule, setSelectedRule] = useState<string | null>(null)
   const [isCreatingRule, setIsCreatingRule] = useState(false)
   const [isRunningUpdate, setIsRunningUpdate] = useState(false)
   const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [filterRule, setFilterRule] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'date' | 'change' | 'confidence'>('date')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+
+  const getPriceValue = (value: ObjectData['price']): number => {
+    const n = Number(value)
+    return Number.isFinite(n) ? n : 0
+  }
 
   // Новое правило
   const [newRule, setNewRule] = useState<Partial<PriceRule>>({
@@ -251,7 +172,6 @@ export default function PriceUpdatesModal({
   const filteredUpdates = updates
     .filter(update => {
       if (filterStatus !== 'all' && update.status !== filterStatus) return false
-      if (filterRule !== 'all' && update.ruleId !== filterRule) return false
       return true
     })
     .sort((a, b) => {
@@ -345,15 +265,16 @@ export default function PriceUpdatesModal({
     if (!rule || !objectData) return
 
     // Имитация тестирования правила
-    const suggestedPrice = objectData.price * (1 + (rule.actions.value || 0) / 100)
-    const change = suggestedPrice - objectData.price
-    const changePercent = (change / objectData.price) * 100
+    const currentPrice = getPriceValue(objectData.price)
+    const suggestedPrice = currentPrice * (1 + (rule.actions.value || 0) / 100)
+    const change = suggestedPrice - currentPrice
+    const changePercent = currentPrice ? (change / currentPrice) * 100 : 0
 
     const update: PriceUpdate = {
       id: Date.now().toString(),
-      objectId: objectData.id || 'test-object',
+      objectId: objectData.id ? String(objectData.id) : 'test-object',
       objectTitle: objectData.title || 'Тестовый объект',
-      currentPrice: objectData.price || 0,
+      currentPrice,
       suggestedPrice,
       change,
       changePercent,
@@ -362,9 +283,9 @@ export default function PriceUpdatesModal({
       reason: `Тест правила: ${rule.description}`,
       confidence: 85,
       marketData: {
-        averagePrice: objectData.price * 0.95,
-        medianPrice: objectData.price * 1.05,
-        priceRange: { min: objectData.price * 0.8, max: objectData.price * 1.2 },
+        averagePrice: currentPrice * 0.95,
+        medianPrice: currentPrice * 1.05,
+        priceRange: { min: currentPrice * 0.8, max: currentPrice * 1.2 },
         trend: 'up',
         volume: 150
       },
@@ -454,19 +375,21 @@ export default function PriceUpdatesModal({
     if (objectData && isOpen && rules.length > 0) {
       const applicableRule = rules.find(rule => 
         rule.isActive && 
-        (!rule.conditions.objectTypes || rule.conditions.objectTypes.includes(objectData.type))
+        (!rule.conditions.objectTypes ||
+          (objectData.type ? rule.conditions.objectTypes.includes(objectData.type) : false))
       )
 
       if (applicableRule) {
-        const suggestedPrice = objectData.price * (1 + (applicableRule.actions.value || 0) / 100)
-        const change = suggestedPrice - objectData.price
-        const changePercent = (change / objectData.price) * 100
+        const currentPrice = getPriceValue(objectData.price)
+        const suggestedPrice = currentPrice * (1 + (applicableRule.actions.value || 0) / 100)
+        const change = suggestedPrice - currentPrice
+        const changePercent = currentPrice ? (change / currentPrice) * 100 : 0
 
         const update: PriceUpdate = {
           id: Date.now().toString(),
-          objectId: objectData.id || 'new-object',
+          objectId: objectData.id ? String(objectData.id) : 'new-object',
           objectTitle: objectData.title || 'Новый объект',
-          currentPrice: objectData.price || 0,
+          currentPrice,
           suggestedPrice,
           change,
           changePercent,
@@ -475,9 +398,9 @@ export default function PriceUpdatesModal({
           reason: `Автоматическое предложение для ${objectData.title}`,
           confidence: 75,
           marketData: {
-            averagePrice: objectData.price * 0.95,
-            medianPrice: objectData.price * 1.05,
-            priceRange: { min: objectData.price * 0.8, max: objectData.price * 1.2 },
+            averagePrice: currentPrice * 0.95,
+            medianPrice: currentPrice * 1.05,
+            priceRange: { min: currentPrice * 0.8, max: currentPrice * 1.2 },
             trend: 'stable',
             volume: 100
           },
@@ -670,7 +593,9 @@ export default function PriceUpdatesModal({
                 </select>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) =>
+                    setSortBy(e.target.value as 'date' | 'change' | 'confidence')
+                  }
                   className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                 >
                   <option value="date">По дате</option>
@@ -846,7 +771,10 @@ export default function PriceUpdatesModal({
                         value={newRule.actions?.type || 'percentage'}
                         onChange={(e) => setNewRule(prev => ({
                           ...prev,
-                          actions: { ...prev.actions!, type: e.target.value as any }
+                          actions: {
+                            ...prev.actions!,
+                            type: e.target.value as PriceRule['actions']['type'],
+                          }
                         }))}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                       >
@@ -875,7 +803,10 @@ export default function PriceUpdatesModal({
                         value={newRule.schedule?.frequency || 'daily'}
                         onChange={(e) => setNewRule(prev => ({
                           ...prev,
-                          schedule: { ...prev.schedule!, frequency: e.target.value as any }
+                          schedule: {
+                            ...prev.schedule!,
+                            frequency: e.target.value as PriceRule['schedule']['frequency'],
+                          }
                         }))}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                       >

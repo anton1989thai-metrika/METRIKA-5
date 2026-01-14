@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { fetchJson } from '@/lib/api-client'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -12,25 +13,26 @@ export default function ForgotPasswordPage() {
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  const JSON_HEADERS = { 'Content-Type': 'application/json' } as const
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
     setMessage(null)
     try {
-      const resp = await fetch('/api/auth/password-reset/request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      const data = await resp.json().catch(() => ({}))
-      if (!resp.ok || !data?.success) {
-        setError(data?.error || 'Не удалось отправить ссылку')
-        return
-      }
+      const data = await fetchJson<{ success?: boolean; message?: string }>(
+        '/api/auth/password-reset/request',
+        {
+          method: 'POST',
+          headers: JSON_HEADERS,
+          body: JSON.stringify({ email }),
+        }
+      )
       setMessage(data?.message || 'Проверьте почту для дальнейших инструкций.')
-    } catch {
-      setError('Не удалось отправить ссылку')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Не удалось отправить ссылку'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -67,4 +69,3 @@ export default function ForgotPasswordPage() {
     </div>
   )
 }
-

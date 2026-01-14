@@ -1,65 +1,26 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { useLanguage } from "@/contexts/LanguageContext";
+import type { TaskItem, UserId } from "@/types/task-ui";
+import { taskUsers, type TaskUser } from "@/data/task-users";
 
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  priority: string;
-  status: string;
-  deadline: string;
-  deadlineTime: string;
-  executors: number[];
-  curators: number[];
-  createdAt: string;
-  updatedAt: string;
-  createdBy: number;
-  images: any[];
-  links: any[];
-  checklists: any[];
-  subtasks: any[];
-  comments: any[];
-  tags: string[];
-  estimatedHours: number;
-  actualHours: number;
-}
-
-interface User {
-  id: number;
-  name: string;
-  role: string;
-  email: string;
-}
+type Task = TaskItem;
 
 export default function MyTasksPage() {
-  const { t } = useLanguage();
-  const [currentUser] = useState<User>({ id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" });
+  const [currentUser] = useState<TaskUser>(() => {
+    return taskUsers.find((user) => user.email === "nekhoroshkov@metrika.direct") ?? taskUsers[0];
+  });
   const [allTasks, setAllTasks] = useState<Task[]>([]);
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [activeTab, setActiveTab] = useState('all');
 
   // Тестовые пользователи
-  const users = [
-    { id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" },
-    { id: 2, name: "Сникфайкер", role: "manager", email: "snikfayker@metrika.direct" },
-    { id: 3, name: "Маслова Ирина", role: "agent", email: "maslova@metrika.direct" },
-    { id: 4, name: "Ионин Владислав", role: "agent", email: "ionin@metrika.direct" },
-    { id: 5, name: "Андрей Широких", role: "agent", email: "shirokikh@metrika.direct" },
-    { id: 6, name: "Бердник Вадим", role: "agent", email: "berdnik@metrika.direct" },
-    { id: 7, name: "Дерик Олег", role: "agent", email: "derik@metrika.direct" },
-    { id: 8, name: "Кан Татьяна", role: "employee", email: "kan@metrika.direct" },
-    { id: 9, name: "Поврезнюк Мария", role: "employee", email: "povreznyuk@metrika.direct" },
-    { id: 10, name: "Стулина Елена", role: "employee", email: "stulina@metrika.direct" },
-    { id: 11, name: "Тамбовцева Екатерина", role: "employee", email: "tambovtseva@metrika.direct" }
-  ];
+  const users = taskUsers;
 
   // Тестовые задачи (те же что и в основной странице)
-  const testTasks: Task[] = [
+  const testTasks = useMemo<Task[]>(() => ([
     {
       id: 1,
       title: "Разработка нового модуля аналитики",
@@ -126,23 +87,23 @@ export default function MyTasksPage() {
       estimatedHours: 12,
       actualHours: 12
     }
-  ];
+  ]), []);
 
   useEffect(() => {
     setAllTasks(testTasks);
-  }, []);
+  }, [testTasks]);
 
   // Функция для получения задач связанных с текущим пользователем
-  const getMyTasks = () => {
+  const getMyTasks = useCallback(() => {
     return allTasks.filter(task => 
       task.createdBy === currentUser.id || // Задачи которые я создал
       task.executors.includes(currentUser.id) || // Задачи где я исполнитель
       task.curators.includes(currentUser.id) // Задачи где я куратор
     );
-  };
+  }, [allTasks, currentUser.id]);
 
   // Функция для получения задач по статусу
-  const getTasksByStatus = (status: string) => {
+  const getTasksByStatus = useCallback((status: string) => {
     const myTasks = getMyTasks();
     switch (status) {
       case 'created':
@@ -164,7 +125,7 @@ export default function MyTasksPage() {
       default:
         return myTasks;
     }
-  };
+  }, [currentUser.id, getMyTasks]);
 
   // Функция для получения цвета приоритета
   const getPriorityColor = (priority: string) => {
@@ -174,17 +135,6 @@ export default function MyTasksPage() {
       case 'high': return 'bg-gray-600';
       case 'boss': return 'bg-gray-700';
       default: return 'bg-gray-500';
-    }
-  };
-
-  // Функция для получения названия приоритета
-  const getPriorityName = (priority: string) => {
-    switch (priority) {
-      case 'low': return '🟢 Обычная';
-      case 'medium': return '🟠 Важная';
-      case 'high': return '🔴 Срочная';
-      case 'boss': return '🟡 Задача от руководителя';
-      default: return 'Неизвестно';
     }
   };
 
@@ -203,8 +153,8 @@ export default function MyTasksPage() {
   };
 
   // Функция для получения имени пользователя по ID
-  const getUserName = (userId: number) => {
-    const user = users.find(u => u.id === userId);
+  const getUserName = (userId: UserId) => {
+    const user = users.find(u => u.id === Number(userId));
     return user ? user.name : 'Неизвестный пользователь';
   };
 
@@ -216,11 +166,9 @@ export default function MyTasksPage() {
     return 'Участник';
   };
 
-  // Фильтрация задач
-  useEffect(() => {
-    const tasks = getTasksByStatus(activeTab);
-    setFilteredTasks(tasks);
-  }, [allTasks, activeTab, currentUser.id]);
+  const filteredTasks = useMemo(() => {
+    return getTasksByStatus(activeTab)
+  }, [activeTab, getTasksByStatus])
 
   const tabs = [
     { id: 'all', name: 'Все задачи', count: getMyTasks().length },

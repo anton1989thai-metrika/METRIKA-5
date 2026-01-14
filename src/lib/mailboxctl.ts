@@ -13,7 +13,7 @@ function requireAdminSecret(provided: string | null | undefined) {
   }
 }
 
-export type MailboxCtlAction = 'list' | 'create' | 'passwd' | 'delete'
+type MailboxCtlAction = 'list' | 'create' | 'passwd' | 'delete'
 
 export async function mailboxctl(
   action: MailboxCtlAction,
@@ -28,5 +28,4 @@ export async function mailboxctl(
   })
   return { stdout: String(stdout ?? ''), stderr: String(stderr ?? '') }
 }
-
 

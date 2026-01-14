@@ -1,119 +1,31 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useState } from "react"
+import type { ObjectData } from "@/types/object-data"
 import {
   X,
   ExternalLink,
-  Settings,
-  CheckCircle,
   AlertCircle,
   RefreshCw,
   Upload,
-  Download,
-  Eye,
-  EyeOff,
-  Lock,
-  Unlock,
-  Key,
-  Globe,
   Database,
-  BarChart,
-  Bell,
-  Calendar,
-  Clock,
-  User,
-  Users,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  DollarSign,
-  Phone,
-  Mail,
-  MessageCircle,
-  Calculator,
-  Play,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
-  FileText,
-  Image,
-  Tag,
-  TrendingUp,
-  Archive,
   Plus,
-  Minus,
-  Edit,
   Trash2,
   Save,
-  Copy,
-  Search,
-  Filter,
-  SortAsc,
-  SortDesc,
-  Grid,
-  List,
-  MoreVertical,
-  ChevronDown,
-  ChevronUp,
   Check,
-  AlertTriangle,
-  Target,
-  Layers,
-  MapPin,
-  Video,
-  Music,
-  Folder,
-  Cog,
-  Shield,
-  ShieldCheck,
+  Home,
+  Store,
+  Building,
+  Globe,
+  Share,
+  Users,
+  MessageCircle,
+  BarChart,
   Link,
-  Link2,
-  Unlink,
-  Activity,
-  TrendingDown,
-  ArrowUp,
-  ArrowDown,
-  RotateCcw,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  SkipForward,
-  SkipBack,
-  Volume2,
-  VolumeX,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Server,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  Signal,
-  SignalZero,
-  Battery,
-  BatteryLow,
-  Power,
-  PowerOff,
-  Sun,
-  Moon,
-  Star,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Frown,
-  Meh,
-  Angry,
-  Laugh
+  Settings,
+  FileText
 } from "lucide-react"
 
 interface Integration {
@@ -151,7 +63,7 @@ interface IntegrationsModalProps {
   onClose: () => void
   onSave: (integrations: Integration[]) => void
   initialIntegrations?: Integration[]
-  objectData?: any
+  objectData?: ObjectData
 }
 
 export default function IntegrationsModal({ 
@@ -163,7 +75,6 @@ export default function IntegrationsModal({
 }: IntegrationsModalProps) {
   const [integrations, setIntegrations] = useState<Integration[]>(initialIntegrations)
   const [activeTab, setActiveTab] = useState('overview')
-  const [selectedIntegration, setSelectedIntegration] = useState<string | null>(null)
   const [isConfiguring, setIsConfiguring] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [syncProgress, setSyncProgress] = useState(0)
@@ -225,13 +136,13 @@ export default function IntegrationsModal({
     const integration: Integration = {
       id: Date.now().toString(),
       name: newIntegration.name,
-      type: newIntegration.type as any,
+      type: newIntegration.type ?? 'cian',
       status: 'inactive',
       apiKey: newIntegration.apiKey,
       apiSecret: newIntegration.apiSecret,
       webhookUrl: newIntegration.webhookUrl,
       lastSync: new Date().toISOString(),
-      syncFrequency: newIntegration.syncFrequency as any,
+      syncFrequency: newIntegration.syncFrequency ?? 'daily',
       autoPublish: newIntegration.autoPublish || false,
       autoUpdate: newIntegration.autoUpdate || true,
       syncFields: newIntegration.syncFields || [],
@@ -327,7 +238,7 @@ export default function IntegrationsModal({
           : integration
       ))
 
-      console.log(`Синхронизация ${integration.name} завершена`)
+      debugLog(`Синхронизация ${integration.name} завершена`)
     } catch (error) {
       console.error('Ошибка синхронизации:', error)
     } finally {
@@ -352,7 +263,7 @@ export default function IntegrationsModal({
       ))
 
       alert('Подключение успешно установлено!')
-    } catch (error) {
+    } catch {
       setIntegrations(prev => prev.map(integration => 
         integration.id === id 
           ? { ...integration, status: 'error' }
@@ -679,7 +590,12 @@ export default function IntegrationsModal({
                       <label className="block text-sm font-medium text-black mb-2">Тип сервиса</label>
                       <select
                         value={newIntegration.type || 'cian'}
-                        onChange={(e) => setNewIntegration(prev => ({ ...prev, type: e.target.value as any }))}
+                        onChange={(e) =>
+                          setNewIntegration(prev => ({
+                            ...prev,
+                            type: e.target.value as Integration['type'],
+                          }))
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                       >
                         {integrationTypes.map(type => (
@@ -701,7 +617,12 @@ export default function IntegrationsModal({
                       <label className="block text-sm font-medium text-black mb-2">Частота синхронизации</label>
                       <select
                         value={newIntegration.syncFrequency || 'daily'}
-                        onChange={(e) => setNewIntegration(prev => ({ ...prev, syncFrequency: e.target.value as any }))}
+                        onChange={(e) =>
+                          setNewIntegration(prev => ({
+                            ...prev,
+                            syncFrequency: e.target.value as Integration['syncFrequency'],
+                          }))
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                       >
                         <option value="realtime">В реальном времени</option>

@@ -7,7 +7,6 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const user = await getSessionUser()
   if (!user) redirect('/auth/signin')
 
-  if (!hasSectionAccess(user as any, 'admin')) redirect('/')
+  if (!hasSectionAccess(user, 'admin')) redirect('/')
   return children
 }
-

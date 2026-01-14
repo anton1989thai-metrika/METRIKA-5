@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
+import { fetchJson } from '@/lib/api-client';
 
 export function LoginForm() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
+  const JSON_HEADERS = { 'Content-Type': 'application/json' } as const;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -24,21 +27,19 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
+      await fetchJson('/api/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: JSON_HEADERS,
         body: JSON.stringify({ email, password }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok || !data?.success) {
-        const msg = String(data?.error || 'Ошибка авторизации')
-        setError(msg)
-        if (res.status === 401 || msg.includes('Неверный')) setShowForgotPassword(true)
-        return
-      }
+      });
       router.push('/email')
     } catch (err) {
-      setError('Ошибка авторизации');
+      const message = err instanceof Error ? err.message : 'Ошибка авторизации';
+      setError(message);
+      const lower = message.toLowerCase();
+      if (lower.includes('неверн') || lower.includes('unauthorized')) {
+        setShowForgotPassword(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -92,9 +93,9 @@ export function LoginForm() {
         <div className="text-sm text-red-600">
           {error}
           {showForgotPassword ? (
-            <div className="mt-1 text-sm text-gray-700">
+            <div className="mt-2 text-sm text-black">
               <Link className="underline" href="/auth/forgot">
-                Забыли пароль? Нажмите чтобы восстановить.
+                Забыли пароль? Нажмите, чтобы восстановить.
               </Link>
             </div>
           ) : null}

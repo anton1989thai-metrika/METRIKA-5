@@ -4,24 +4,26 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { fetchJson } from '@/lib/api-client'
 
 type ApiResponse =
   | { success: true; mailboxes: string[] }
   | { success: false; error: string }
+
+const JSON_HEADERS = { 'Content-Type': 'application/json' } as const
 
 async function apiFetch<T>(
   url: string,
   opts: RequestInit & { secret: string },
 ): Promise<T> {
   const { secret, ...init } = opts
-  const res = await fetch(url, {
+  return fetchJson<T>(url, {
     ...init,
     headers: {
       ...(init.headers || {}),
       'x-admin-secret': secret,
     },
   })
-  return (await res.json()) as T
 }
 
 export default function AdminMailboxesPage() {
@@ -57,8 +59,9 @@ export default function AdminMailboxesPage() {
       })
       if (!data.success) throw new Error(data.error)
       setMailboxes(data.mailboxes)
-    } catch (e: any) {
-      setError(e?.message || 'Ошибка загрузки списка ящиков')
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Ошибка загрузки списка ящиков'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -73,7 +76,7 @@ export default function AdminMailboxesPage() {
         {
           method: 'POST',
           secret: secret.trim(),
-          headers: { 'Content-Type': 'application/json' },
+          headers: JSON_HEADERS,
           body: JSON.stringify({
             email: createEmail.trim(),
             password: createPassword,
@@ -84,8 +87,9 @@ export default function AdminMailboxesPage() {
       setCreateEmail('')
       setCreatePassword('')
       await loadList()
-    } catch (e: any) {
-      setError(e?.message || 'Ошибка создания ящика')
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Ошибка создания ящика'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -100,7 +104,7 @@ export default function AdminMailboxesPage() {
         {
           method: 'PATCH',
           secret: secret.trim(),
-          headers: { 'Content-Type': 'application/json' },
+          headers: JSON_HEADERS,
           body: JSON.stringify({
             email: passwdEmail.trim(),
             password: passwdPassword,
@@ -111,8 +115,9 @@ export default function AdminMailboxesPage() {
       setPasswdEmail('')
       setPasswdPassword('')
       await loadList()
-    } catch (e: any) {
-      setError(e?.message || 'Ошибка смены пароля')
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Ошибка смены пароля'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -131,8 +136,9 @@ export default function AdminMailboxesPage() {
       )
       if (!res.success) throw new Error(res.error || 'Ошибка удаления')
       await loadList()
-    } catch (e: any) {
-      setError(e?.message || 'Ошибка удаления')
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Ошибка удаления'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -237,5 +243,3 @@ export default function AdminMailboxesPage() {
     </div>
   )
 }
-
-

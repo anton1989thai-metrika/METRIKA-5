@@ -1,13 +1,15 @@
 "use client"
 
+import { debugLog } from "@/lib/logger"
+
 import { useState, useEffect } from "react"
 import { useRouter } from 'next/navigation'
 import { User as UserType, RoleSettings } from '@/data/users'
 import { arePermissionsStandardWithLocalStorage, getRoleDisplayName } from '@/lib/permissions'
+import { fetchJson } from '@/lib/api-client'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -15,43 +17,28 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  Users,
   UserPlus,
   Edit,
   Trash2,
-  Save,
   X,
-  Check,
   AlertTriangle,
-  Shield,
-  ShieldCheck,
-  Mail,
-  Phone,
-  Calendar,
-  MoreVertical,
   Search,
-  Filter,
-  Download,
-  Upload,
-  RefreshCw,
   User,
   UserCheck,
   Crown,
   Star,
-  Settings,
-  Eye,
-  EyeOff
+  Users,
+  Shield,
+  Settings
 } from "lucide-react"
 
-interface UserManagementPanelProps {
-  onClose?: () => void
-}
+type DetailedPermissions = NonNullable<UserType['detailedPermissions']>
+type MailboxRecord = { email?: string | null }
 
-export default function UserManagementPanel({ onClose }: UserManagementPanelProps) {
+export default function UserManagementPanel() {
   const router = useRouter()
   const [users, setUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState('list')
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null)
   const [isEditingUser, setIsEditingUser] = useState(false)
@@ -154,7 +141,9 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   // Состояние для модального окна индивидуальных разрешений
   const [isIndividualPermissionsModalOpen, setIsIndividualPermissionsModalOpen] = useState(false)
   const [selectedUserForPermissions, setSelectedUserForPermissions] = useState<UserType | null>(null)
-  const [individualPermissions, setIndividualPermissions] = useState<any>(null)
+  const [individualPermissions, setIndividualPermissions] = useState<DetailedPermissions | null>(null)
+  const [availableMailboxes, setAvailableMailboxes] = useState<string[]>([])
+  const [mailboxesLoading, setMailboxesLoading] = useState(false)
   
   // Состояние для фильтра задач
   const [hiddenTasksFilter, setHiddenTasksFilter] = useState<{
@@ -174,17 +163,16 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   const [sortBy, setSortBy] = useState<'name' | 'role' | 'lastLogin' | 'createdAt'>('name')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
+  const updateIndividualPermissions = (updater: (prev: DetailedPermissions) => DetailedPermissions) => {
+    setIndividualPermissions(prev => (prev ? updater(prev) : prev))
+  }
+
   // Загрузка пользователей при инициализации
   useEffect(() => {
     const fetchInitialUsers = async () => {
       try {
-        const response = await fetch('/api/users');
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
-        }
-        const usersData = await response.json();
-        setUsers(usersData);
-        setLastSaved(new Date());
+        const usersData = await fetchJson<UserType[]>('/api/users');
+        setUsers(Array.isArray(usersData) ? usersData : []);
       } catch (error) {
         console.error('Error fetching users:', error);
         // Загружаем дефолтных пользователей из файла
@@ -212,7 +200,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
   // Синхронизация пользователей с сервером
   const syncUsersWithServer = async (updatedUsers: UserType[]) => {
     try {
-      const response = await fetch('/api/users', {
+      await fetchJson('/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -220,16 +208,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         body: JSON.stringify(updatedUsers),
       });
 
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}))
-        throw new Error(err?.message || 'Не удалось сохранить пользователей')
-      }
-
-      setLastSaved(new Date());
       return { ok: true as const }
     } catch (error) {
       console.error('Error syncing users:', error);
-      return { ok: false as const, error: (error as any)?.message || 'Ошибка сохранения' }
+      const message = error instanceof Error ? error.message : 'Ошибка сохранения'
+      return { ok: false as const, error: message }
     }
   };
 
@@ -324,7 +307,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     };
     localStorage.setItem('roleSettings', JSON.stringify(updatedRoleSettings));
     
-    console.log('Сохранение разрешений для роли:', selectedRole, rolePermissions)
+    debugLog('Сохранение разрешений для роли:', selectedRole, rolePermissions)
     
     // В реальном приложении здесь была бы отправка на сервер
     // Разрешения сохранены
@@ -340,8 +323,16 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
 
   const confirmDeleteRole = () => {
     if (roleToDelete) {
-      // TODO: Удалить роль
-      console.log('Удаление роли:', roleToDelete)
+      const nextRoleSettings = { ...roleSettings }
+      delete nextRoleSettings[roleToDelete]
+      setRoleSettings(nextRoleSettings)
+      localStorage.setItem('roleSettings', JSON.stringify(nextRoleSettings))
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.role === roleToDelete ? { ...user, role: 'site-user' } : user
+        )
+      )
+      debugLog('Удаление роли:', roleToDelete)
       setIsDeleteRoleModalOpen(false)
       setRoleToDelete(null)
     }
@@ -360,7 +351,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     const userPermissionsKey = `userPermissions_${user.id}`;
     const savedPermissions = localStorage.getItem(userPermissionsKey);
     
-    let initialPermissions;
+    let initialPermissions: DetailedPermissions;
     if (savedPermissions) {
       try {
         initialPermissions = JSON.parse(savedPermissions);
@@ -371,13 +362,40 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
     } else {
       initialPermissions = user.detailedPermissions || getDefaultPermissions();
     }
+
+    // Ensure new email permission fields exist
+    if (initialPermissions?.email && typeof initialPermissions.email === 'object') {
+      if (!Array.isArray(initialPermissions.email.allowedMailboxes)) {
+        initialPermissions = {
+          ...initialPermissions,
+          email: { ...initialPermissions.email, allowedMailboxes: [] },
+        }
+      }
+    }
     
     setIndividualPermissions(initialPermissions)
     setIsIndividualPermissionsModalOpen(true)
+
+    // Load available mailboxes (admin-only endpoint)
+    ;(async () => {
+      try {
+        setMailboxesLoading(true)
+        const data = await fetchJson<{ mailboxes?: MailboxRecord[] }>('/api/mailboxes')
+        const items = Array.isArray(data?.mailboxes) ? data.mailboxes : []
+        const emails = (items as MailboxRecord[])
+          .map((m) => String(m?.email || '').trim().toLowerCase())
+          .filter(Boolean)
+        setAvailableMailboxes(Array.from(new Set(emails)))
+      } catch {
+        // ignore
+      } finally {
+        setMailboxesLoading(false)
+      }
+    })()
   }
   
   // Функция для получения дефолтных разрешений
-  const getDefaultPermissions = () => {
+  const getDefaultPermissions = (): DetailedPermissions => {
     return {
       personalCabinet: { enabled: true },
       myObjects: { enabled: false },
@@ -386,7 +404,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         viewMail: false,
         sendEmails: false,
         manageMailboxes: false,
-        mailSettings: false
+        mailSettings: false,
+        allowedMailboxes: []
       },
       academy: { 
         enabled: false,
@@ -490,7 +509,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
         viewMail: roleSettingsForUser['email'],
         sendEmails: roleSettingsForUser['email'],
         manageMailboxes: roleSettingsForUser['email'],
-        mailSettings: roleSettingsForUser['email']
+        mailSettings: roleSettingsForUser['email'],
+        allowedMailboxes: []
       },
       academy: { 
         enabled: roleSettingsForUser['academy'],
@@ -549,7 +569,8 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
           viewMail: roleSettingsForUser['email'],
           sendEmails: roleSettingsForUser['email'],
           manageMailboxes: roleSettingsForUser['email'],
-          mailSettings: roleSettingsForUser['email']
+          mailSettings: roleSettingsForUser['email'],
+          allowedMailboxes: []
         },
         academy: { 
           enabled: roleSettingsForUser['academy'],
@@ -829,7 +850,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                         <div className="flex items-center justify-end space-x-2">
                           <Button
                             onClick={() => {
-                              setSelectedUser({ ...(user as any), password: '' })
+                              setSelectedUser({ ...user, password: '' })
                               setPasswordDraft('')
                               setIsEditingUser(true)
                             }}
@@ -1398,14 +1419,17 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     autoComplete="off"
                     spellCheck={false}
                     autoCorrect="off"
-                    style={{ WebkitTextSecurity: 'none' }}
                   />
                         </div>
                 <div className="bg-white shadow-sm border border-gray-300 rounded-lg p-6">
                   <label className="block text-sm font-medium text-black mb-2">Роль</label>
                   <Select
                     value={selectedUser?.role || ''}
-                    onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, role: value as any } : null)}
+                    onValueChange={(value) =>
+                      setSelectedUser((prev: UserType | null) =>
+                        prev ? { ...prev, role: value as UserType['role'] } : null
+                      )
+                    }
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Выберите роль" />
@@ -1425,7 +1449,11 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                   <label className="block text-sm font-medium text-black mb-2">Статус</label>
                   <Select
                     value={selectedUser?.status || ''}
-                    onValueChange={(value) => setSelectedUser((prev: UserType | null) => prev ? { ...prev, status: value as any } : null)}
+                    onValueChange={(value) =>
+                      setSelectedUser((prev: UserType | null) =>
+                        prev ? { ...prev, status: value as UserType['status'] } : null
+                      )
+                    }
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Выберите статус" />
@@ -1522,7 +1550,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
             <Button 
               onClick={async () => {
                 if (!selectedUser) return
-                const updates: any = { ...selectedUser }
+                const updates: Partial<UserType> = { ...selectedUser }
                 if (passwordDraft && passwordDraft.trim().length > 0) {
                   const nextPw = passwordDraft.trim()
                   if (nextPw.length < 6) {
@@ -1832,7 +1860,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                 </div>
 
               <p className="text-sm text-gray-600 mb-6">
-                Это действие нельзя отменить. Все пользователи с этой ролью будут переназначены на роль "Пользователь сайта".
+                Это действие нельзя отменить. Все пользователи с этой ролью будут переназначены на роль &quot;Пользователь сайта&quot;.
               </p>
 
               <div className="flex items-center justify-end space-x-3">
@@ -1877,7 +1905,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="personal-cabinet"
                       checked={individualPermissions.personalCabinet?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         personalCabinet: { ...prev.personalCabinet, enabled: checked }
                       }))}
@@ -1889,7 +1917,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="my-objects"
                       checked={individualPermissions.myObjects?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         myObjects: { ...prev.myObjects, enabled: checked }
                       }))}
@@ -1901,7 +1929,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="email"
                       checked={individualPermissions.email?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         email: { ...prev.email, enabled: checked }
                       }))}
@@ -1913,7 +1941,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="academy"
                       checked={individualPermissions.academy?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         academy: { ...prev.academy, enabled: checked }
                       }))}
@@ -1925,7 +1953,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="knowledge-base"
                       checked={individualPermissions.knowledgeBase?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         knowledgeBase: { ...prev.knowledgeBase, enabled: checked }
                       }))}
@@ -1937,7 +1965,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="task-manager"
                       checked={individualPermissions.taskManager?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         taskManager: { ...prev.taskManager, enabled: checked }
                       }))}
@@ -1949,7 +1977,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                     <Switch
                       id="admin-panel"
                       checked={individualPermissions.adminPanel?.enabled || false}
-                      onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                      onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                         adminPanel: { ...prev.adminPanel, enabled: checked }
                       }))}
@@ -1968,7 +1996,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="view-mail"
                         checked={individualPermissions.email?.viewMail || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           email: { ...prev.email, viewMail: checked }
                         }))}
@@ -1980,7 +2008,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="send-emails"
                         checked={individualPermissions.email?.sendEmails || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           email: { ...prev.email, sendEmails: checked }
                         }))}
@@ -1992,7 +2020,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="manage-mailboxes"
                         checked={individualPermissions.email?.manageMailboxes || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           email: { ...prev.email, manageMailboxes: checked }
                         }))}
@@ -2004,7 +2032,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="mail-settings"
                         checked={individualPermissions.email?.mailSettings || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           email: { ...prev.email, mailSettings: checked }
                         }))}
@@ -2012,6 +2040,60 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Label htmlFor="mail-settings">Настройки почты</Label>
                   </div>
                 </div>
+
+                  <div className="pt-4 border-t border-gray-200">
+                    <h5 className="text-sm font-semibold text-black mb-2">Доступ к почтовым ящикам</h5>
+                    <p className="text-xs text-gray-600 mb-3">
+                      Пользователь всегда видит свою почту ({selectedUserForPermissions?.email}). Ниже — дополнительные ящики, которые можно открыть в разделе Email.
+                    </p>
+
+                    {mailboxesLoading ? (
+                      <div className="text-sm text-gray-600">Загрузка списка почтовых ящиков...</div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {availableMailboxes
+                          .filter((e) => e !== String(selectedUserForPermissions?.email || '').trim().toLowerCase())
+                          .map((mailboxEmail) => {
+                            const allowed = Array.isArray(individualPermissions.email.allowedMailboxes)
+                              ? individualPermissions.email.allowedMailboxes
+                              : []
+                            const checked = allowed.includes(mailboxEmail)
+
+                            return (
+                              <div key={mailboxEmail} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`allowed-mailbox-${mailboxEmail}`}
+                                  checked={checked}
+                                  onCheckedChange={(nextChecked) => {
+                                    const isChecked = Boolean(nextChecked)
+                                    updateIndividualPermissions(prev => {
+                                      const prevAllowed = Array.isArray(prev.email.allowedMailboxes)
+                                        ? prev.email.allowedMailboxes
+                                        : []
+                                      const nextSet = new Set(
+                                        prevAllowed.map((x) => String(x || '').trim().toLowerCase()).filter(Boolean)
+                                      )
+                                      if (isChecked) nextSet.add(mailboxEmail)
+                                      else nextSet.delete(mailboxEmail)
+                                      return {
+                                        ...prev,
+                                        email: { ...prev.email, allowedMailboxes: Array.from(nextSet) },
+                                      }
+                                    })
+                                  }}
+                                />
+                                <Label htmlFor={`allowed-mailbox-${mailboxEmail}`}>{mailboxEmail}</Label>
+                              </div>
+                            )
+                          })}
+                        {!availableMailboxes.length && (
+                          <div className="text-sm text-gray-600">
+                            Почтовые ящики не найдены. Создайте их в админ-панели → Email.
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
               </div>
               )}
 
@@ -2024,7 +2106,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="academy-dashboard"
                         checked={individualPermissions.academy?.dashboard || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           academy: { ...prev.academy, dashboard: checked }
                         }))}
@@ -2036,7 +2118,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="academy-courses"
                         checked={individualPermissions.academy?.courses || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           academy: { ...prev.academy, courses: checked }
                         }))}
@@ -2048,7 +2130,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="academy-tests"
                         checked={individualPermissions.academy?.tests || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           academy: { ...prev.academy, tests: checked }
                         }))}
@@ -2060,7 +2142,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="academy-achievements"
                         checked={individualPermissions.academy?.achievements || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           academy: { ...prev.academy, achievements: checked }
                         }))}
@@ -2072,7 +2154,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="academy-materials"
                         checked={individualPermissions.academy?.materials || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           academy: { ...prev.academy, materials: checked }
                         }))}
@@ -2092,7 +2174,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-dashboard"
                         checked={individualPermissions.adminPanel?.dashboard || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, dashboard: checked }
                         }))}
@@ -2104,7 +2186,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-email"
                         checked={individualPermissions.adminPanel?.email || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, email: checked }
                         }))}
@@ -2116,7 +2198,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-content"
                         checked={individualPermissions.adminPanel?.content || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, content: checked }
                         }))}
@@ -2128,7 +2210,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-objects"
                         checked={individualPermissions.adminPanel?.objects || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, objects: checked }
                         }))}
@@ -2140,7 +2222,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-users"
                         checked={individualPermissions.adminPanel?.users || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, users: checked }
                         }))}
@@ -2152,7 +2234,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-tasks"
                         checked={individualPermissions.adminPanel?.tasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, tasks: checked }
                         }))}
@@ -2164,7 +2246,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-media"
                         checked={individualPermissions.adminPanel?.media || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, media: checked }
                         }))}
@@ -2176,7 +2258,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-hr"
                         checked={individualPermissions.adminPanel?.hr || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, hr: checked }
                         }))}
@@ -2188,7 +2270,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-analytics"
                         checked={individualPermissions.adminPanel?.analytics || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, analytics: checked }
                         }))}
@@ -2200,7 +2282,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="admin-settings"
                         checked={individualPermissions.adminPanel?.settings || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           adminPanel: { ...prev.adminPanel, settings: checked }
                         }))}
@@ -2220,7 +2302,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-view"
                         checked={individualPermissions.taskManager?.viewTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, viewTasks: checked }
                         }))}
@@ -2232,7 +2314,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-create"
                         checked={individualPermissions.taskManager?.createTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, createTasks: checked }
                         }))}
@@ -2244,7 +2326,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-assign"
                         checked={individualPermissions.taskManager?.assignExecutors || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, assignExecutors: checked }
                         }))}
@@ -2256,7 +2338,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-close"
                         checked={individualPermissions.taskManager?.closeTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, closeTasks: checked }
                         }))}
@@ -2268,7 +2350,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-edit"
                         checked={individualPermissions.taskManager?.editTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, editTasks: checked }
                         }))}
@@ -2280,7 +2362,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-change-executors"
                         checked={individualPermissions.taskManager?.changeExecutors || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, changeExecutors: checked }
                         }))}
@@ -2292,7 +2374,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-change-curators"
                         checked={individualPermissions.taskManager?.changeCurators || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           taskManager: { ...prev.taskManager, changeCurators: checked }
                         }))}
@@ -2304,7 +2386,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-edit-subtasks"
                         checked={individualPermissions.taskManager?.editSubtasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                           taskManager: { ...prev.taskManager, editSubtasks: checked }
                         }))}
@@ -2316,7 +2398,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-edit-checklists"
                         checked={individualPermissions.taskManager?.editChecklists || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                           taskManager: { ...prev.taskManager, editChecklists: checked }
                         }))}
@@ -2328,7 +2410,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="task-view-other-users"
                         checked={individualPermissions.taskManager?.viewOtherUsersTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                         ...prev,
                           taskManager: { ...prev.taskManager, viewOtherUsersTasks: checked }
                       }))}
@@ -2433,7 +2515,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="change-executor-own"
                         checked={individualPermissions.otherPermissions?.canChangeExecutorInOwnTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           otherPermissions: { 
                             ...prev.otherPermissions, 
@@ -2448,7 +2530,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="change-curator-own"
                         checked={individualPermissions.otherPermissions?.canChangeCuratorInOwnTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           otherPermissions: { 
                             ...prev.otherPermissions, 
@@ -2463,7 +2545,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="create-hidden-tasks"
                         checked={individualPermissions.otherPermissions?.canCreateHiddenTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           otherPermissions: { 
                             ...prev.otherPermissions, 
@@ -2478,7 +2560,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                       <Switch
                         id="view-hidden-tasks"
                         checked={individualPermissions.otherPermissions?.canViewHiddenTasks || false}
-                        onCheckedChange={(checked) => setIndividualPermissions((prev: any) => ({
+                        onCheckedChange={(checked) => updateIndividualPermissions(prev => ({
                           ...prev,
                           otherPermissions: { 
                             ...prev.otherPermissions, 
@@ -2504,7 +2586,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                             onCheckedChange={(checked) => {
                               const currentList = individualPermissions.otherPermissions?.cannotEditTasksFrom || []
                               if (checked) {
-                                setIndividualPermissions((prev: any) => ({
+                                updateIndividualPermissions(prev => ({
                         ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 
@@ -2512,7 +2594,7 @@ export default function UserManagementPanel({ onClose }: UserManagementPanelProp
                                   }
                                 }))
                               } else {
-                                setIndividualPermissions((prev: any) => ({
+                                updateIndividualPermissions(prev => ({
                         ...prev,
                                   otherPermissions: { 
                                     ...prev.otherPermissions, 

@@ -19,7 +19,6 @@ interface MultipleSelectorProps {
   maxCount?: number
   hidePlaceholderWhenSelected?: boolean
   disabled?: boolean
-  creatable?: boolean
   emptyText?: string
   className?: string
   hideClearAllButton?: boolean
@@ -34,7 +33,6 @@ export function MultipleSelector({
   maxCount,
   hidePlaceholderWhenSelected,
   disabled,
-  creatable,
   emptyText,
   className,
   hideClearAllButton = false,
@@ -42,6 +40,7 @@ export function MultipleSelector({
   const [open, setOpen] = React.useState(false)
   const [selectedOptions, setSelectedOptions] = React.useState<Option[]>(value || [])
   const [searchValue, setSearchValue] = React.useState("")
+  const listboxId = React.useId()
 
   React.useEffect(() => {
     if (value) {
@@ -93,6 +92,9 @@ export function MultipleSelector({
     <div className="relative multiple-selector-container">
       <div
         role="combobox"
+        aria-controls={listboxId}
+        aria-expanded={open}
+        aria-haspopup="listbox"
         className={cn(
           "relative w-full rounded-md border border-gray-300 bg-transparent text-sm shadow-sm",
           "min-h-[38px]",
@@ -101,7 +103,11 @@ export function MultipleSelector({
           },
           className
         )}
-        onClick={() => !disabled && setOpen(!open)}
+        onClick={() => {
+          if (!disabled) {
+            setOpen(!open)
+          }
+        }}
       >
         <div className="flex flex-wrap gap-1 px-3 py-2">
           {selectedOptions.map((option) => (
@@ -117,7 +123,11 @@ export function MultipleSelector({
                   e.preventDefault()
                   e.stopPropagation()
                 }}
-                onClick={() => !disabled && handleUnselect(option)}
+                onClick={() => {
+                  if (!disabled) {
+                    handleUnselect(option)
+                  }
+                }}
               >
                 <XIcon className="h-3 w-3" />
               </button>
@@ -139,7 +149,9 @@ export function MultipleSelector({
           className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
           onClick={(e) => {
             e.stopPropagation()
-            !disabled && setOpen(!open)
+            if (!disabled) {
+              setOpen(!open)
+            }
           }}
         >
           <ChevronDown className={cn("h-4 w-4", open && "rotate-180")} />
@@ -147,7 +159,11 @@ export function MultipleSelector({
       </div>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg">
+        <div
+          id={listboxId}
+          role="listbox"
+          className="absolute z-50 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg"
+        >
           <div className="max-h-60 overflow-auto p-1">
             {availableOptions.length === 0 ? (
               emptyIndicator || (
@@ -164,7 +180,9 @@ export function MultipleSelector({
                     disabled={option.disable || disabled}
                     onClick={(e) => {
                       e.stopPropagation()
-                      !option.disable && handleSelect(option)
+                      if (!option.disable) {
+                        handleSelect(option)
+                      }
                     }}
                     className={cn(
                       "w-full cursor-pointer rounded-sm px-2 py-1.5 text-left text-sm hover:bg-gray-100",
@@ -196,4 +214,3 @@ export function MultipleSelector({
     </div>
   )
 }
-

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FieldRow, FormData } from '@/types/realEstateForm';
+import React from 'react';
+import { FieldRow, FormData, FormValue } from '@/types/realEstateForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select-fixed';
@@ -7,16 +7,23 @@ import { MultiSelect } from '@/components/MultiSelect';
 import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
 import { Save } from 'lucide-react';
+import { hasOtherValue, toDateArray, toInputValue, toStringArray, toStringValue } from '@/lib/form-values';
 
 interface FieldRendererProps {
   field: FieldRow;
-  value: any;
-  onChange: (value: any) => void;
+  value: FormValue;
+  onChange: (value: FormValue) => void;
+  otherValue?: string;
+  onOtherChange?: (value: string) => void;
 }
 
-export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
-  const [otherValue, setOtherValue] = useState('');
-  
+function FieldRenderer({ field, value, onChange, otherValue = '', onOtherChange }: FieldRendererProps) {
+  const inputValue = toInputValue(value)
+  const selectValue = toStringValue(value)
+  const multiSelectValue = toStringArray(value)
+  const calendarValue = toDateArray(value)
+  const showOther = hasOtherValue(value)
+
   const renderField = () => {
     switch (field.control) {
       case 'Input':
@@ -27,7 +34,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
               <Input
                 id={field.id.toString()}
                 type={field.validation?.pattern === '\\d+' ? 'number' : 'text'}
-                value={value || ''}
+                value={inputValue}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={field.autoUnit ? `Введите значение (${field.autoUnit})` : 'Введите значение'}
                 pattern={field.validation?.pattern}
@@ -49,7 +56,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
           <div className="space-y-2">
             <Label htmlFor={field.id.toString()}>{field.category}</Label>
             <div className="relative">
-              <Select value={value || ''} onValueChange={onChange}>
+              <Select value={selectValue} onValueChange={onChange}>
                 <SelectTrigger>
                   <SelectValue placeholder={`Выберите ${field.category.toLowerCase()}`} />
                 </SelectTrigger>
@@ -73,7 +80,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
           <div className="space-y-2">
             <Label htmlFor={field.id.toString()}>{field.category}</Label>
             <div className="space-y-2">
-              <Select value={value || ''} onValueChange={onChange}>
+              <Select value={selectValue} onValueChange={onChange}>
                 <SelectTrigger>
                   <SelectValue placeholder={`Выберите ${field.category.toLowerCase()}`} />
                 </SelectTrigger>
@@ -88,11 +95,11 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
                   ))}
                 </SelectContent>
               </Select>
-              {value === 'other' && field.otherInput && (
+              {showOther && field.otherInput && (
                 <Input
                   placeholder="Введите свой вариант"
                   value={otherValue}
-                  onChange={(e) => setOtherValue(e.target.value)}
+                  onChange={(e) => onOtherChange?.(e.target.value)}
                 />
               )}
             </div>
@@ -106,7 +113,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
             <div className="relative">
               <MultiSelect
                 options={field.options || []}
-                value={value || []}
+                value={multiSelectValue}
                 onValueChange={onChange}
                 placeholder={`Выберите ${field.category.toLowerCase()}`}
               />
@@ -121,15 +128,15 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
             <div className="space-y-2">
               <MultiSelect
                 options={field.options || []}
-                value={value || []}
+                value={multiSelectValue}
                 onValueChange={onChange}
                 placeholder={`Выберите ${field.category.toLowerCase()}`}
               />
-              {value?.includes('other') && field.otherInput && (
+              {showOther && field.otherInput && (
                 <Input
                   placeholder="Введите свой вариант"
                   value={otherValue}
-                  onChange={(e) => setOtherValue(e.target.value)}
+                  onChange={(e) => onOtherChange?.(e.target.value)}
                 />
               )}
             </div>
@@ -142,7 +149,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
             <Label htmlFor={field.id.toString()}>{field.category}</Label>
             <Calendar
               mode="multiple"
-              selected={value || []}
+              selected={calendarValue}
               onSelect={onChange}
               className="rounded-md border"
             />
@@ -166,13 +173,27 @@ interface DynamicFormProps {
 }
 
 export function DynamicForm({ fields, formData, onFormDataChange, onSubmit, onReset }: DynamicFormProps) {
-  const handleFieldChange = (fieldId: number, value: any) => {
+  const handleFieldChange = (fieldId: number, value: FormValue) => {
     // Для обычных полей специальное значение становится undefined
     value = value === '__empty__' ? undefined : value;
     
-    onFormDataChange({
+    const next: FormData = {
       ...formData,
       [fieldId]: value
+    };
+    const otherKey = `${fieldId}_other`;
+    const hasOther = hasOtherValue(value);
+    if (!hasOther && Object.prototype.hasOwnProperty.call(next, otherKey)) {
+      delete next[otherKey];
+    }
+    onFormDataChange(next);
+  };
+
+  const handleOtherChange = (fieldId: number, value: string) => {
+    const otherKey = `${fieldId}_other`;
+    onFormDataChange({
+      ...formData,
+      [otherKey]: value
     });
   };
   
@@ -196,14 +217,19 @@ export function DynamicForm({ fields, formData, onFormDataChange, onSubmit, onRe
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {fields.map(field => (
-          <FieldRenderer
-            key={field.id}
-            field={field}
-            value={formData[field.id]}
-            onChange={(value) => handleFieldChange(field.id, value)}
-          />
-        ))}
+        {fields.map((field) => {
+          const otherKey = `${field.id}_other`;
+          return (
+            <FieldRenderer
+              key={field.id}
+              field={field}
+              value={formData[field.id]}
+              onChange={(value) => handleFieldChange(field.id, value)}
+              otherValue={String(formData[otherKey] || '')}
+              onOtherChange={(value) => handleOtherChange(field.id, value)}
+            />
+          );
+        })}
       </div>
       
       <div className="flex gap-4 pt-6 justify-end">

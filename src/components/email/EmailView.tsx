@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { ArrowLeft, Star, Trash2, Reply, ReplyAll, Forward, Paperclip, Download } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { fetchJson, fetchJsonOrNull } from '@/lib/api-client'
 
 interface Email {
   id: string
@@ -17,11 +18,17 @@ interface Email {
   html?: string | null
   date: string
   isStarred: boolean
-  attachments?: any | null
+  attachments?: Attachment[] | null
   thread?: {
     id: string
     emails: Email[]
   } | null
+}
+
+type Attachment = {
+  id?: string
+  filename?: string
+  size?: number
 }
 
 interface EmailViewProps {
@@ -36,26 +43,23 @@ export default function EmailView({ emailId, folderSlug, currentEmail, selectedM
   const [email, setEmail] = useState<Email | null>(null)
   const [loading, setLoading] = useState(true)
   const abortRef = useRef<AbortController | null>(null)
+  const isTrash = String(folderSlug || '').toLowerCase() === 'trash'
 
-  const apiViewQuery =
-    selectedMailbox && currentEmail && selectedMailbox !== currentEmail
-      ? `?viewEmail=${encodeURIComponent(selectedMailbox)}`
-      : ''
+  const apiQueryParams = new URLSearchParams()
+  if (selectedMailbox) apiQueryParams.set('viewEmail', selectedMailbox)
+  if (isTrash) apiQueryParams.set('includeDeleted', '1')
+  const apiViewQuery = apiQueryParams.toString() ? `?${apiQueryParams.toString()}` : ''
   const viewParam =
-    selectedMailbox && currentEmail && selectedMailbox !== currentEmail
-      ? `&mb=${encodeURIComponent(selectedMailbox)}`
-      : ''
-  const userHeader = currentEmail ? { 'x-user-email': currentEmail } : undefined
+    selectedMailbox ? `&mb=${encodeURIComponent(selectedMailbox)}` : ''
+  const userHeader = useMemo(
+    () => (currentEmail ? { 'x-user-email': currentEmail } : undefined),
+    [currentEmail]
+  )
 
   useEffect(() => {
     async function fetchEmail() {
       if (!emailId || emailId === 'undefined' || emailId === 'null') {
         // Avoid a "false 404" while router params are not ready
-        setLoading(true)
-        return
-      }
-      if (selectedMailbox && !currentEmail) {
-        // Need currentEmail to decide viewEmail usage
         setLoading(true)
         return
       }
@@ -66,21 +70,12 @@ export default function EmailView({ emailId, folderSlug, currentEmail, selectedM
 
       setLoading(true)
       try {
-        const response = await fetch(`/api/emails/${emailId}${apiViewQuery}`, {
+        const data = await fetchJsonOrNull<Email>(`/api/emails/${emailId}${apiViewQuery}`, {
           headers: userHeader,
           signal: ac.signal,
         })
-        if (!response.ok) {
-          // Do not show intermediate "not found" texts; keep UI calm.
-          // If it's a real 404, we'll just leave empty state.
-          return
-        }
-        const data = await response.json()
-        setEmail(data)
-      } catch (error) {
-        // Ignore abort errors; keep UI calm.
-        if ((error as any)?.name !== 'AbortError') {
-          console.error('Error fetching email:', error)
+        if (data) {
+          setEmail(data)
         }
       } finally {
         if (!ac.signal.aborted) setLoading(false)
@@ -89,21 +84,20 @@ export default function EmailView({ emailId, folderSlug, currentEmail, selectedM
 
     fetchEmail()
     return () => abortRef.current?.abort()
-  }, [emailId, apiViewQuery, currentEmail, selectedMailbox])
+  }, [emailId, apiViewQuery, currentEmail, selectedMailbox, userHeader])
 
   const handleStar = async () => {
     if (!email) return
 
     try {
-      const response = await fetch(`/api/emails/${emailId}/star${apiViewQuery}`, {
+      await fetchJson(`/api/emails/${emailId}/star${apiViewQuery}`, {
         method: 'POST',
         headers: userHeader,
       })
-
-      if (response.ok) {
-        setEmail({ ...email, isStarred: !email.isStarred })
-      }
+      setEmail({ ...email, isStarred: !email.isStarred })
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Не удалось изменить флаг'
+      alert(message)
       console.error('Error toggling star:', error)
     }
   }
@@ -115,23 +109,18 @@ export default function EmailView({ emailId, folderSlug, currentEmail, selectedM
 
     try {
       const qs = new URLSearchParams()
-      if (selectedMailbox && currentEmail && selectedMailbox !== currentEmail) {
-        qs.set('viewEmail', selectedMailbox)
-      }
-      if (folderSlug === 'trash') {
-        qs.set('permanent', '1')
-      }
+      if (selectedMailbox) qs.set('viewEmail', selectedMailbox)
+      if (isTrash) qs.set('permanent', '1')
       const suffix = qs.toString() ? `?${qs.toString()}` : ''
 
-      const response = await fetch(`/api/emails/${emailId}/delete${suffix}`, {
+      await fetchJson(`/api/emails/${emailId}/delete${suffix}`, {
         method: 'POST',
         headers: userHeader,
       })
-
-      if (response.ok) {
-        router.push(`/email?folder=${folderSlug}${viewParam}`)
-      }
+      router.push(`/email?folder=${folderSlug}${viewParam}`)
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Не удалось удалить письмо'
+      alert(message)
       console.error('Error deleting email:', error)
     }
   }
@@ -220,7 +209,7 @@ export default function EmailView({ emailId, folderSlug, currentEmail, selectedM
               Вложения ({email.attachments.length})
             </div>
             <div className="space-y-2">
-              {email.attachments.map((att: any) => {
+              {email.attachments.map((att: Attachment) => {
                 const filename = String(att?.filename || 'file')
                 const size = typeof att?.size === 'number' ? att.size : 0
                 const downloadHref = att?.id
@@ -301,4 +290,3 @@ export default function EmailView({ emailId, folderSlug, currentEmail, selectedM
     </div>
   )
 }
-

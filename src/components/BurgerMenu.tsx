@@ -1,14 +1,16 @@
 "use client"
 
+import { debugLog } from "@/lib/logger"
+
 import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
-import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, LogIn, LogOut } from "lucide-react"
+import { Menu, X, Home, Building, Map, Info, Phone, BookOpen, User as UserIcon, Heart, Mail, GraduationCap, Book, CheckSquare, Settings, LogIn, LogOut } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { usePathname } from "next/navigation"
-import type { UserRole } from "@/types/auth"
 import { hasPermission } from "@/lib/permissions"
-import type { User } from "@/data/users"
+import { EMPTY_PERMISSIONS, type User } from "@/data/users"
+import { fetchJson, fetchJsonOrNull } from "@/lib/api-client"
 
 interface MenuItem {
   href: string
@@ -20,7 +22,6 @@ export default function BurgerMenu() {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [hasOpenDialog, setHasOpenDialog] = useState(false)
-  const [authRole, setAuthRole] = useState<UserRole | null>(null)
   const [isAuthed, setIsAuthed] = useState(false)
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const { t } = useLanguage()
@@ -117,7 +118,7 @@ export default function BurgerMenu() {
       
       // Временно логируем для отладки
       if (hasDialog) {
-        console.log('Dialog detected:', { radixDialogs: radixDialogs.length, modalOverlays: modalOverlays.length, modalBackdrops: modalBackdrops.length })
+        debugLog('Dialog detected:', { radixDialogs: radixDialogs.length, modalOverlays: modalOverlays.length, modalBackdrops: modalBackdrops.length })
       }
       
       setHasOpenDialog(hasDialog)
@@ -153,21 +154,21 @@ export default function BurgerMenu() {
     }
   }, [isOpen])
   
-  const menuItemsWithTranslations: MenuItem[] = [
+  const menuItemsWithTranslations: MenuItem[] = useMemo(() => [
     { href: "/", label: t('menu.home'), icon: <Home className="w-5 h-5" /> },
     { href: "/objects", label: t('menu.objects'), icon: <Building className="w-5 h-5" /> },
     { href: "/map", label: t('menu.map'), icon: <Map className="w-5 h-5" /> },
     { href: "/about", label: t('menu.about'), icon: <Info className="w-5 h-5" /> },
     { href: "/contacts", label: t('menu.contacts'), icon: <Phone className="w-5 h-5" /> },
     { href: "/blog", label: t('menu.blog'), icon: <BookOpen className="w-5 h-5" /> },
-    { href: "/profile", label: t('menu.profile'), icon: <User className="w-5 h-5" /> },
+    { href: "/profile", label: t('menu.profile'), icon: <UserIcon className="w-5 h-5" /> },
     { href: "/my-objects", label: t('menu.myObjects'), icon: <Heart className="w-5 h-5" /> },
     { href: "/email", label: "Email", icon: <Mail className="w-5 h-5" /> },
     { href: "/academy", label: t('menu.academy'), icon: <GraduationCap className="w-5 h-5" /> },
     { href: "/knowledge-base", label: t('menu.knowledgeBase'), icon: <Book className="w-5 h-5" /> },
     { href: "/tasks", label: t('menu.tasks'), icon: <CheckSquare className="w-5 h-5" /> },
     { href: "/admin", label: t('menu.admin'), icon: <Settings className="w-5 h-5" /> }
-  ]
+  ], [t])
   
   // Load session user data (for permission-based menu)
   useEffect(() => {
@@ -175,19 +176,9 @@ export default function BurgerMenu() {
     async function loadMe() {
       try {
         // Загружаем полные данные пользователя из API
-        const resp = await fetch('/api/user')
-        if (!resp.ok) {
-          if (!cancelled) {
-            setIsAuthed(false)
-            setAuthRole(null)
-            setCurrentUser(null)
-          }
-          return
-        }
-        const userData = await resp.json().catch(() => ({}))
+        const userData = await fetchJsonOrNull<{ email?: string } & Partial<User>>('/api/user')
         if (!cancelled && userData?.email) {
           setIsAuthed(true)
-          setAuthRole(userData.role as UserRole)
           
           // Преобразуем данные пользователя в формат User
           setCurrentUser({
@@ -196,15 +187,17 @@ export default function BurgerMenu() {
             name: userData.name || '',
             role: userData.role,
             status: userData.status || 'active',
-            permissions: {} as any, // Будет вычислено из detailedPermissions
+            permissions: EMPTY_PERMISSIONS,
             detailedPermissions: userData.detailedPermissions || undefined,
             createdAt: userData.createdAt || new Date().toISOString(),
           } as User)
+        } else if (!cancelled) {
+          setIsAuthed(false)
+          setCurrentUser(null)
         }
       } catch {
         if (!cancelled) {
           setIsAuthed(false)
-          setAuthRole(null)
           setCurrentUser(null)
         }
       }
@@ -220,10 +213,8 @@ export default function BurgerMenu() {
     window.addEventListener('storage', handleStorageChange)
     
     // Слушаем кастомное событие обновления разрешений
-    const handlePermissionsUpdate = (e: CustomEvent) => {
-      if (currentUser && e.detail?.userId === currentUser.id) {
-        loadMe()
-      }
+    const handlePermissionsUpdate = () => {
+      loadMe()
     }
     window.addEventListener('permissionsUpdated', handlePermissionsUpdate as EventListener)
     
@@ -273,10 +264,9 @@ export default function BurgerMenu() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await fetchJson('/api/auth/logout', { method: 'POST' })
     } catch {}
     setIsAuthed(false)
-    setAuthRole(null)
     setIsOpen(false)
     router.push('/')
   }

@@ -10,10 +10,13 @@ export async function GET() {
     await db.$queryRaw`SELECT 1`
     const ms = Date.now() - startedAt
     return NextResponse.json({ ok: true, db: 'ok', ms })
-  } catch (e: any) {
+  } catch (e) {
     const ms = Date.now() - startedAt
-    return NextResponse.json({ ok: false, db: 'error', ms, error: e?.message || 'db error' }, { status: 500 })
+    const err = e as { message?: string }
+    return NextResponse.json(
+      { ok: false, db: 'error', ms, error: err.message || 'db error' },
+      { status: 500 }
+    )
   }
 }
-
 

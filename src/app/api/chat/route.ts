@@ -1,12 +1,29 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 export const runtime = 'edge';
+
+let openaiClient: OpenAI | null | undefined;
+
+const getOpenAIClient = () => {
+  if (openaiClient !== undefined) return openaiClient;
+  const apiKey = process.env.OPENAI_API_KEY || '';
+  openaiClient = apiKey ? new OpenAI({ apiKey }) : null;
+  return openaiClient;
+};
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const openai = getOpenAIClient();
+    if (!openai) {
+      return NextResponse.json({ error: 'OPENAI_API_KEY не задан' }, { status: 500 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const messages = Array.isArray(body?.messages) ? body.messages : null;
+    if (!messages) {
+      return NextResponse.json({ error: 'messages должны быть массивом' }, { status: 400 });
+    }
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
@@ -31,4 +48,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 });
   }
 }
-

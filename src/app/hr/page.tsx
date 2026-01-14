@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
 import { 
@@ -25,14 +25,13 @@ import PenaltiesBonusesPanel from "@/components/PenaltiesBonusesPanel"
 import CashManagementPanel from "@/components/CashManagementPanel"
 import SalaryCalculationPanel from "@/components/SalaryCalculationPanel"
 import HRNotificationsPanel from "@/components/HRNotificationsPanel"
-import HRReportingPanel from "@/components/HRReportingPanel"
 import HRPermissionsPanel from "@/components/HRPermissionsPanel"
 
 export default function HRPage() {
   const [activeTab, setActiveTab] = useState('dashboard')
 
   // Mock данные для кадров
-  const employees = [
+  const employees = useMemo(() => [
     {
       id: 1,
       name: "Иван Сидоров",
@@ -69,16 +68,16 @@ export default function HRPage() {
       status: "active",
       avatar: "/images/avatar-4.jpg"
     }
-  ]
+  ], [])
 
-  const salaryStats = {
+  const salaryStats = useMemo(() => ({
     totalSalary: 350000,
     averageSalary: 87500,
     totalHours: 668,
     averageHours: 167
-  }
+  }), [])
 
-  const recentActivities = [
+  const recentActivities = useMemo(() => [
     {
       id: 1,
       type: "arrival",
@@ -107,7 +106,7 @@ export default function HRPage() {
       time: "09:00",
       date: "3 дня назад"
     }
-  ]
+  ], [])
 
   return (
     <div className="min-h-screen bg-white">

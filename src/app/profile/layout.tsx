@@ -6,7 +6,6 @@ import { hasSectionAccess } from '@/lib/permissions-core'
 export default async function ProfileLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser()
   if (!user) redirect('/auth/signin')
-  if (!hasSectionAccess(user as any, 'profile')) redirect('/')
+  if (!hasSectionAccess(user, 'profile')) redirect('/')
   return children
 }
-

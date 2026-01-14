@@ -9,7 +9,8 @@ import { Switch } from '@/components/ui/switch'
 import { Calendar } from '@/components/ui/calendar'
 import { MultiSelect } from '@/components/MultiSelect'
 import { DateRange } from 'react-day-picker'
-import { FormConfig, FormData, FormRuleEngine, FormField } from '@/config/form-rules'
+import { FormConfig, FormData, FormRuleEngine, FormField, FormDataValue } from '@/config/form-rules'
+import { toInputValue, toStringArray, toStringValue } from '@/lib/form-values'
 
 interface DynamicFormProps {
   config: FormConfig
@@ -26,6 +27,16 @@ export function DynamicForm({
   onChange,
   className = ''
 }: DynamicFormProps) {
+  const getCheckedValue = (value: FormDataValue): boolean => {
+    return typeof value === 'boolean' ? value : false
+  }
+
+  const getDateRangeValue = (value: FormDataValue): DateRange | undefined => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined
+    const maybe = value as DateRange
+    return 'from' in maybe || 'to' in maybe ? maybe : undefined
+  }
+
   const [formData, setFormData] = useState<FormData>(initialData)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -41,7 +52,7 @@ export function DynamicForm({
   const requiredFields = FormRuleEngine.getRequiredFields(formData, config)
 
   // Обновление данных формы
-  const updateFormData = (fieldId: string, value: any) => {
+  const updateFormData = (fieldId: string, value: FormDataValue) => {
     setFormData(prev => ({
       ...prev,
       [fieldId]: value
@@ -97,7 +108,7 @@ export function DynamicForm({
             </Label>
             <Input
               {...commonProps}
-              value={formData[field.id] || ''}
+              value={toInputValue(formData[field.id])}
               onChange={(e) => updateFormData(field.id, e.target.value)}
               placeholder={field.placeholder}
             />
@@ -117,7 +128,7 @@ export function DynamicForm({
             <Input
               {...commonProps}
               type="number"
-              value={formData[field.id] || ''}
+              value={toInputValue(formData[field.id])}
               onChange={(e) => updateFormData(field.id, e.target.value)}
               placeholder={field.placeholder}
             />
@@ -135,7 +146,7 @@ export function DynamicForm({
               {isRequired && <span className="text-red-500 ml-1">*</span>}
             </Label>
             <Select
-              value={formData[field.id] || ''}
+              value={toStringValue(formData[field.id])}
               onValueChange={(value) => updateFormData(field.id, value)}
               disabled={isDisabled}
             >
@@ -165,7 +176,7 @@ export function DynamicForm({
             </Label>
             <MultiSelect
               options={field.options || []}
-              value={formData[field.id] || []}
+              value={toStringArray(formData[field.id])}
               onValueChange={(value) => updateFormData(field.id, value)}
               placeholder={field.placeholder || `Выберите ${field.label.toLowerCase()}`}
               className={hasError ? 'border-red-500' : ''}
@@ -180,7 +191,7 @@ export function DynamicForm({
         return (
           <div key={field.id} className="flex items-center space-x-2">
             <Switch
-              checked={formData[field.id] || false}
+              checked={getCheckedValue(formData[field.id])}
               onCheckedChange={(checked) => updateFormData(field.id, checked)}
               disabled={isDisabled}
             />
@@ -203,7 +214,7 @@ export function DynamicForm({
             </Label>
             <Calendar
               mode="range"
-              selected={formData[field.id] as DateRange}
+              selected={getDateRangeValue(formData[field.id])}
               onSelect={(range) => updateFormData(field.id, range)}
               className="rounded-md border"
               disabled={isDisabled}
@@ -223,7 +234,7 @@ export function DynamicForm({
             </Label>
             <textarea
               {...commonProps}
-              value={formData[field.id] || ''}
+              value={toStringValue(formData[field.id])}
               onChange={(e) => updateFormData(field.id, e.target.value)}
               placeholder={field.placeholder}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -292,42 +303,4 @@ export function DynamicForm({
       </div>
     </form>
   )
-}
-
-// Хук для использования формы с конфигурацией
-export function useDynamicForm(config: FormConfig, initialData?: FormData) {
-  const [formData, setFormData] = useState<FormData>(initialData || {})
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  const visibleFields = FormRuleEngine.getVisibleFields(formData, config)
-  const requiredFields = FormRuleEngine.getRequiredFields(formData, config)
-
-  const updateField = (fieldId: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldId]: value
-    }))
-  }
-
-  const validate = () => {
-    const newErrors = FormRuleEngine.validateForm(formData, config)
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const reset = () => {
-    setFormData(initialData || {})
-    setErrors({})
-  }
-
-  return {
-    formData,
-    errors,
-    visibleFields,
-    requiredFields,
-    updateField,
-    validate,
-    reset,
-    isValid: Object.keys(errors).length === 0
-  }
 }

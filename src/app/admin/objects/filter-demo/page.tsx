@@ -6,28 +6,28 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import { getAvailableFields } from '@/lib/filterLogic'
+import { getAvailableFields, FieldConfig } from '@/lib/filterLogic'
 
 export default function FilterDemoPage() {
   const [selectedCountry, setSelectedCountry] = useState('')
   const [selectedOperation, setSelectedOperation] = useState('')
   const [selectedObjectType, setSelectedObjectType] = useState('')
   
-  const [availableFields, setAvailableFields] = useState<any[]>([])
+  const [availableFields, setAvailableFields] = useState<FieldConfig[]>([])
 
-  const updateFields = () => {
+  const updateFields = React.useCallback(() => {
     if (selectedCountry && selectedOperation && selectedObjectType) {
       const fields = getAvailableFields(selectedCountry, selectedOperation, selectedObjectType)
       setAvailableFields(fields)
     } else {
       setAvailableFields([])
     }
-  }
+  }, [selectedCountry, selectedOperation, selectedObjectType])
 
   // Обновляем поля при изменении любого параметра
   React.useEffect(() => {
     updateFields()
-  }, [selectedCountry, selectedOperation, selectedObjectType])
+  }, [updateFields])
 
   const handleCountryChange = (value: string) => {
     setSelectedCountry(value)

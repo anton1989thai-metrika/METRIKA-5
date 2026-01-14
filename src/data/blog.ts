@@ -1,4 +1,4 @@
-export interface BlogPost {
+interface BlogPost {
   title: string
   excerpt: string
   slug: string

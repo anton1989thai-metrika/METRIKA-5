@@ -4,7 +4,7 @@
 // after 300s (no deploy webhooks needed)
 export const revalidate = 300;
 
-export default async function MyPage({ searchParams }: { searchParams?: Record<string, string | string[]> }) {
+export default async function MyPage() {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-4">My Page</h1>
@@ -12,4 +12,3 @@ export default async function MyPage({ searchParams }: { searchParams?: Record<s
     </div>
   );
 }
-

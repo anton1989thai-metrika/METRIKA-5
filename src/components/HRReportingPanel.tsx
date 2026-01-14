@@ -1,171 +1,28 @@
 "use client"
 
-import { useState } from "react"
-import { 
-  BarChart3, 
-  PieChart, 
-  TrendingUp, 
-  TrendingDown, 
-  Download, 
-  Calendar, 
-  Filter, 
-  Search, 
-  Eye, 
-  FileText, 
-  DollarSign, 
-  Users, 
-  Clock, 
-  Award, 
-  AlertTriangle, 
-  Receipt, 
-  Calculator,
-  Target,
+import { debugLog } from "@/lib/logger"
+
+import { useMemo, useState } from "react"
+import {
   Activity,
-  Zap,
-  Shield,
-  Lock,
-  Unlock,
-  Plus,
+  BarChart3,
+  Clock,
+  DollarSign,
+  Download,
   Edit,
-  Save,
-  X,
-  ChevronDown,
-  ChevronUp,
+  Eye,
+  FileText,
+  PieChart,
+  Plus,
+  Receipt,
   RefreshCw,
-  Upload,
-  Bell,
-  Settings,
-  MoreVertical,
-  Archive,
-  Star,
-  StarOff,
-  Mail,
-  MessageSquare,
-  Phone,
-  Smartphone,
-  Monitor,
-  Volume2,
-  VolumeX,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Frown,
-  Meh,
-  Angry,
-  Laugh,
-  Sun,
-  Moon,
-  Star as StarIcon,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  MessageCircle,
-  Play,
-  QrCode,
-  Info,
-  Cloud,
-  Tag,
-  Archive as ArchiveIcon,
-  Grid,
-  List,
-  Layers,
-  MapPin,
-  Video,
-  Music,
-  Folder,
-  Link,
-  Link2,
-  Unlink,
-  ArrowUp,
-  ArrowDown,
-  RotateCcw,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  SkipForward,
-  SkipBack,
-  Volume2 as Volume2Icon,
-  VolumeX as VolumeXIcon,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Monitor as MonitorIcon,
-  Smartphone as SmartphoneIcon,
-  Tablet,
-  Laptop,
-  Server,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  Signal,
-  SignalZero,
-  Battery,
-  BatteryLow,
-  Power,
-  PowerOff,
-  CreditCard,
-  Banknote,
-  Wallet,
-  Coins,
-  HandCoins,
-  PiggyBank,
-  Timer,
-  CalendarDays,
-  Clock3,
-  CheckCircle,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  Info as InfoIcon,
-  Calendar as CalendarIcon,
-  Clock as ClockIcon,
-  DollarSign as DollarSignIcon,
-  Users as UsersIcon,
-  Award as AwardIcon,
-  AlertTriangle as AlertTriangleIcon,
-  Bell as BellIcon,
-  Settings as SettingsIcon,
-  MoreVertical as MoreVerticalIcon,
-  Archive as ArchiveIcon2,
-  Star as StarIcon2,
-  StarOff,
-  Mail as MailIcon,
-  MessageSquare as MessageSquareIcon,
-  Phone as PhoneIcon,
-  Smartphone as SmartphoneIcon2,
-  Monitor as MonitorIcon2,
-  Volume2 as Volume2Icon2,
-  VolumeX as VolumeXIcon2,
-  Zap as ZapIcon,
-  Shield as ShieldIcon,
-  Lock as LockIcon,
-  Unlock as UnlockIcon,
-  Plus as PlusIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-  X as XIcon,
-  ChevronDown as ChevronDownIcon,
-  ChevronUp as ChevronUpIcon,
-  RefreshCw as RefreshCwIcon,
-  Download as DownloadIcon,
-  Upload as UploadIcon,
-  FileText as FileTextIcon,
-  BarChart3 as BarChart3Icon,
-  PieChart as PieChartIcon,
-  TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon,
-  Eye as EyeIcon,
-  Filter as FilterIcon,
-  Search as SearchIcon,
-  Calculator as CalculatorIcon,
-  Receipt as ReceiptIcon,
-  Target as TargetIcon,
-  Activity as ActivityIcon
+  Save,
+  Shield,
+  Target,
+  TrendingDown,
+  TrendingUp,
+  Users,
+  X
 } from "lucide-react"
 
 interface Report {
@@ -186,27 +43,18 @@ interface ReportParameter {
   id: string
   name: string
   type: 'date' | 'employee' | 'department' | 'amount' | 'text'
-  value: any
+  value: string | number | boolean | string[] | null
   required: boolean
-}
-
-interface DashboardWidget {
-  id: string
-  title: string
-  type: 'chart' | 'table' | 'metric' | 'kpi'
-  data: any
-  size: 'small' | 'medium' | 'large'
-  position: { x: number; y: number }
 }
 
 export default function HRReportingPanel() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'reports' | 'analytics' | 'exports'>('dashboard')
   const [selectedPeriod, setSelectedPeriod] = useState('2024-01')
-  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
   const [showReportBuilder, setShowReportBuilder] = useState(false)
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
 
   // Mock данные для отчётов
-  const reports: Report[] = [
+  const reports = useMemo<Report[]>(() => [
     {
       id: '1',
       name: 'Зарплатная ведомость',
@@ -269,10 +117,10 @@ export default function HRReportingPanel() {
       format: 'excel',
       status: 'active'
     }
-  ]
+  ], [])
 
   // Mock данные для дашборда
-  const dashboardData = {
+  const dashboardData = useMemo(() => ({
     totalEmployees: 12,
     totalSalary: 450000,
     averageHours: 167,
@@ -281,20 +129,15 @@ export default function HRReportingPanel() {
     monthlyGrowth: 12.5,
     attendanceRate: 95.2,
     overtimeHours: 45
-  }
+  }), [])
 
   const generateReport = (reportId: string) => {
-    console.log(`Генерация отчёта: ${reportId}`)
+    debugLog(`Генерация отчёта: ${reportId}`)
     // Здесь будет логика генерации отчёта
   }
 
-  const scheduleReport = (reportId: string, schedule: string) => {
-    console.log(`Планирование отчёта: ${reportId} с расписанием: ${schedule}`)
-    // Здесь будет логика планирования отчёта
-  }
-
   const exportData = (format: string) => {
-    console.log(`Экспорт данных в формате: ${format}`)
+    debugLog(`Экспорт данных в формате: ${format}`)
     // Здесь будет логика экспорта
   }
 
@@ -648,6 +491,58 @@ export default function HRReportingPanel() {
                 <div className="text-2xl font-bold text-black">+8.7%</div>
                 <div className="text-sm text-gray-600">Рост производительности</div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedReport && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-black">{selectedReport.name}</h3>
+              <button
+                onClick={() => setSelectedReport(null)}
+                className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="space-y-3 text-sm text-gray-700">
+              <p>{selectedReport.description}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <div className="text-gray-500">Тип</div>
+                  <div className="font-medium text-black">{selectedReport.type}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Статус</div>
+                  <div className="font-medium text-black">{selectedReport.status}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Формат</div>
+                  <div className="font-medium text-black">{selectedReport.format.toUpperCase()}</div>
+                </div>
+                <div>
+                  <div className="text-gray-500">Создан</div>
+                  <div className="font-medium text-black">
+                    {new Date(selectedReport.createdAt).toLocaleDateString('ru-RU')}
+                  </div>
+                </div>
+              </div>
+              {selectedReport.parameters.length > 0 && (
+                <div>
+                  <div className="text-gray-500 mb-1">Параметры</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {selectedReport.parameters.map((param) => (
+                      <div key={param.id} className="border border-gray-200 rounded px-3 py-2">
+                        <div className="text-xs text-gray-500">{param.name}</div>
+                        <div className="text-sm text-black">{String(param.value ?? '')}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

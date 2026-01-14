@@ -7,10 +7,16 @@ set -e
 
 SERVER="root@72.62.72.196"
 VPS_PATH="/var/www/metrika5"
-PASSWORD="SikaAnt7Hostinger7+"
+PASSWORD="${VPS_PASSWORD:-}"
 LOCAL_BACKUP="/tmp/vps-backup-metrika5"
 
 echo "📥 Скачивание файлов с VPS..."
+
+if [ -z "$PASSWORD" ]; then
+  echo "Введите пароль от VPS (будет скрыт):"
+  read -rs PASSWORD
+  echo ""
+fi
 
 # Исключаем node_modules, .next, и другие временные файлы
 EXCLUDE="--exclude='node_modules' --exclude='.next' --exclude='out' --exclude='.git' --exclude='*.db' --exclude='*.db-journal' --exclude='.env' --exclude='.env.local'"
@@ -37,4 +43,3 @@ EOF
 
 echo "✅ Файлы скачаны в $LOCAL_BACKUP"
 echo "📁 Проверьте содержимое перед синхронизацией"
-

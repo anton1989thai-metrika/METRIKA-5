@@ -3,19 +3,14 @@
 import { useState } from "react"
 import { 
   Receipt, 
-  CreditCard, 
   TrendingUp, 
   TrendingDown, 
   Wallet, 
-  Banknote, 
   Plus, 
   Edit, 
   Trash2, 
   Save, 
   X,
-  DollarSign,
-  Calendar,
-  Filter,
   Search,
   Building,
   Home,
@@ -26,14 +21,7 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Users,
-  Target,
-  PieChart,
-  BarChart3,
-  Download,
-  Upload,
-  Eye,
-  MoreVertical
+  Download
 } from "lucide-react"
 
 interface CashTransaction {
@@ -272,19 +260,6 @@ export default function CashManagementPanel() {
     }
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <CheckCircle className="w-4 h-4 text-gray-600" />
-      case 'rejected':
-        return <XCircle className="w-4 h-4 text-gray-600" />
-      case 'pending':
-        return <Clock className="w-4 h-4 text-gray-600" />
-      default:
-        return <Clock className="w-4 h-4 text-gray-600" />
-    }
-  }
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
@@ -434,7 +409,9 @@ export default function CashManagementPanel() {
           {/* Фильтр по статусу */}
           <select
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
+            onChange={(e) =>
+              setFilterStatus(e.target.value as 'all' | 'pending' | 'approved' | 'rejected')
+            }
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
           >
             <option value="all">Все статусы</option>

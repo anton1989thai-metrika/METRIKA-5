@@ -6,7 +6,6 @@ import { hasSectionAccess } from '@/lib/permissions-core'
 export default async function KnowledgeBaseLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser()
   if (!user) redirect('/auth/signin')
-  if (!hasSectionAccess(user as any, 'knowledge-base')) redirect('/')
+  if (!hasSectionAccess(user, 'knowledge-base')) redirect('/')
   return children
 }
-

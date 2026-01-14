@@ -1,75 +1,27 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import BurgerMenu from "@/components/BurgerMenu";
 import Header from "@/components/Header";
-import { useLanguage } from "@/contexts/LanguageContext";
+import type { TaskItem, UserId } from "@/types/task-ui";
+import { taskUsers, type TaskUser } from "@/data/task-users";
 
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  priority: string;
-  status: string;
-  deadline: string;
-  deadlineTime: string;
-  executors: number[];
-  curators: number[];
-  createdAt: string;
-  updatedAt: string;
-  createdBy: number;
-  images: any[];
-  links: any[];
-  checklists: any[];
-  subtasks: any[];
-  comments: any[];
-  tags: string[];
-  estimatedHours: number;
-  actualHours: number;
-}
-
-interface User {
-  id: number;
-  name: string;
-  role: string;
-  email: string;
-  detailedPermissions?: {
-    otherPermissions?: {
-      hideInTasks?: boolean;
-    };
-  };
-}
+type Task = TaskItem;
 
 export default function AllTasksPage() {
-  const { t } = useLanguage();
-  const [currentUser] = useState<User>({ id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" });
+  const [currentUser] = useState<TaskUser>(() => {
+    return taskUsers.find((user) => user.email === "nekhoroshkov@metrika.direct") ?? taskUsers[0];
+  });
   const [allTasks, setAllTasks] = useState<Task[]>([]);
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [activeTab, setActiveTab] = useState('all');
-  const [selectedUserFilter, setSelectedUserFilter] = useState<number | null>(null);
+  const [selectedUserFilter, setSelectedUserFilter] = useState<UserId | null>(null);
   const [showUserFilter, setShowUserFilter] = useState(false);
 
   // Тестовые пользователи
-  const users = [
-    { id: 1, name: "Нехорошков Антон", role: "admin", email: "nekhoroshkov@metrika.direct" },
-    { id: 2, name: "Сникфайкер", role: "manager", email: "snikfayker@metrika.direct" },
-    { id: 3, name: "Маслова Ирина", role: "employee", email: "maslova@metrika.direct" },
-    { id: 4, name: "Ионин Владислав", role: "employee", email: "ionin@metrika.direct" },
-    { id: 5, name: "Андрей Широких", role: "employee", email: "shirokikh@metrika.direct" },
-    { id: 6, name: "Бердник Вадим", role: "employee", email: "berdnik@metrika.direct" },
-    { id: 7, name: "Дерик Олег", role: "employee", email: "derik@metrika.direct" },
-    { id: 8, name: "Кан Татьяна", role: "employee", email: "kan@metrika.direct" },
-    { id: 9, name: "Поврезнюк Мария", role: "employee", email: "povreznyuk@metrika.direct" },
-    { id: 10, name: "Стулина Елена", role: "employee", email: "stulina@metrika.direct" },
-    { id: 11, name: "Тамбовцева Екатерина", role: "employee", email: "tambovtseva@metrika.direct" },
-    { id: 12, name: "Пользователь сайта 1", role: "site-user", email: "user1@example.com", detailedPermissions: { otherPermissions: { hideInTasks: true } } },
-    { id: 13, name: "Клиент Метрики 1", role: "client", email: "client1@example.com" },
-    { id: 14, name: "Иностранный сотрудник 1", role: "foreign-employee", email: "foreign1@example.com" },
-    { id: 15, name: "Внештатный сотрудник 1", role: "freelancer", email: "freelancer1@example.com" }
-  ];
+  const users = taskUsers;
 
   // Расширенные тестовые задачи (все задачи всех пользователей)
-  const testTasks: Task[] = [
+  const testTasks = useMemo<Task[]>(() => ([
     {
       id: 1,
       title: "Разработка нового модуля аналитики",
@@ -202,14 +154,14 @@ export default function AllTasksPage() {
       estimatedHours: 120,
       actualHours: 85
     }
-  ];
+  ]), []);
 
   useEffect(() => {
     setAllTasks(testTasks);
-  }, []);
+  }, [testTasks]);
 
   // Функция для получения задач по статусу
-  const getTasksByStatus = (status: string) => {
+  const getTasksByStatus = useCallback((status: string) => {
     switch (status) {
       case 'in_progress':
         return allTasks.filter(task => task.status === 'in_progress');
@@ -226,7 +178,7 @@ export default function AllTasksPage() {
       default:
         return allTasks;
     }
-  };
+  }, [allTasks]);
 
   // Функция для получения цвета приоритета
   const getPriorityColor = (priority: string) => {
@@ -254,8 +206,8 @@ export default function AllTasksPage() {
   };
 
   // Функция для получения имени пользователя по ID
-  const getUserName = (userId: number) => {
-    const user = users.find(u => u.id === userId);
+  const getUserName = (userId: UserId) => {
+    const user = users.find(u => u.id === Number(userId));
     return user ? user.name : 'Неизвестный пользователь';
   };
 
@@ -272,21 +224,17 @@ export default function AllTasksPage() {
     return 'Наблюдатель';
   };
 
-  // Фильтрация задач
-  useEffect(() => {
-    let tasks = getTasksByStatus(activeTab);
-    
-    // Если выбран фильтр по пользователю, фильтруем задачи
+  const filteredTasks = useMemo(() => {
+    let tasks = getTasksByStatus(activeTab)
     if (selectedUserFilter) {
-      tasks = tasks.filter(task => 
-        task.executors.includes(selectedUserFilter) || 
-        task.curators.includes(selectedUserFilter) || 
+      tasks = tasks.filter(task =>
+        task.executors.includes(selectedUserFilter) ||
+        task.curators.includes(selectedUserFilter) ||
         task.createdBy === selectedUserFilter
-      );
+      )
     }
-    
-    setFilteredTasks(tasks);
-  }, [allTasks, activeTab, currentUser.id, selectedUserFilter]);
+    return tasks
+  }, [activeTab, getTasksByStatus, selectedUserFilter])
 
   const tabs = [
     { id: 'all', name: 'Все задачи', count: allTasks.length },

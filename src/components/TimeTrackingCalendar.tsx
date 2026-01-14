@@ -2,9 +2,7 @@
 
 import { useState } from "react"
 import { 
-  Calendar, 
   Clock, 
-  Users, 
   Plus, 
   Edit, 
   Save, 
@@ -14,7 +12,6 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  UserCheck,
   Timer
 } from "lucide-react"
 

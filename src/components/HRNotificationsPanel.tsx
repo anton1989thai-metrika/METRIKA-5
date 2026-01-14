@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useMemo, useState } from "react"
 import { 
   Bell, 
   BellRing, 
@@ -11,7 +13,6 @@ import {
   Clock, 
   Calendar, 
   DollarSign, 
-  Users, 
   Award, 
   AlertCircle,
   Settings,
@@ -200,7 +201,7 @@ export default function HRNotificationsPanel() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showSettings, setShowSettings] = useState(false)
 
-  const filteredNotifications = notifications.filter(notification => {
+  const filteredNotifications = useMemo(() => notifications.filter(notification => {
     const matchesTab = activeTab === 'all' || 
                       (activeTab === 'unread' && !notification.isRead) ||
                       (activeTab === 'important' && notification.isImportant) ||
@@ -211,10 +212,13 @@ export default function HRNotificationsPanel() {
                          notification.message.toLowerCase().includes(searchTerm.toLowerCase())
     
     return matchesTab && matchesType && matchesSearch
-  })
+  }), [notifications, activeTab, filterType, searchTerm])
 
-  const unreadCount = notifications.filter(n => !n.isRead).length
-  const importantCount = notifications.filter(n => n.isImportant && !n.isRead).length
+  const unreadCount = useMemo(() => notifications.filter(n => !n.isRead).length, [notifications])
+  const importantCount = useMemo(
+    () => notifications.filter(n => n.isImportant && !n.isRead).length,
+    [notifications]
+  )
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -291,7 +295,7 @@ export default function HRNotificationsPanel() {
     const action = notification?.actions?.find(a => a.id === actionId)
     
     if (action) {
-      console.log(`Выполнение действия: ${action.action} для уведомления ${notificationId}`)
+      debugLog(`Выполнение действия: ${action.action} для уведомления ${notificationId}`)
       // Здесь будет логика выполнения действий
     }
   }
@@ -446,7 +450,11 @@ export default function HRNotificationsPanel() {
           {/* Фильтр по типу */}
           <select
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value as any)}
+            onChange={(e) =>
+              setFilterType(
+                e.target.value as 'all' | 'salary' | 'vacation' | 'penalty' | 'bonus' | 'time' | 'cash'
+              )
+            }
             className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
           >
             <option value="all">Все типы</option>
@@ -687,7 +695,12 @@ export default function HRNotificationsPanel() {
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">Частота уведомлений</h4>
                 <select
                   value={settings.frequency}
-                  onChange={(e) => setSettings(prev => ({ ...prev, frequency: e.target.value as any }))}
+                  onChange={(e) =>
+                    setSettings(prev => ({
+                      ...prev,
+                      frequency: e.target.value as 'immediate' | 'hourly' | 'daily' | 'weekly',
+                    }))
+                  }
                   className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="immediate">Немедленно</option>

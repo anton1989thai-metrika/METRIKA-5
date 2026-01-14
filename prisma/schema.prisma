@@ -20,6 +20,11 @@ enum UserRole {
   employee
 }
 
+enum AccountType {
+  human
+  mailbox
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -29,6 +34,8 @@ model User {
   role      UserRole @default(site_user)
   passwordHash String @default("")
   detailedPermissions Json?
+  accountType AccountType @default(human)
+  mailPasswordEnc String?
   status    String   @default("active") // active | inactive | pending (UI)
   lastLogin DateTime?
   dateOfBirth String?
@@ -104,7 +111,7 @@ model Thread {
 
 model Email {
   id          String   @id @default(cuid())
-  messageId   String   @unique
+  messageId   String
   threadId    String?
   folderId    String?
   userId      String
@@ -121,6 +128,9 @@ model Email {
   isRead      Boolean  @default(false)
   isStarred   Boolean  @default(false)
   isDeleted   Boolean  @default(false)
+
+  imapUid     Int?
+  imapMailbox String?
   
   attachments Json?
   
@@ -135,5 +145,33 @@ model Email {
   @@index([threadId])
   @@index([folderId])
   @@index([messageId])
+  @@unique([userId, imapMailbox, imapUid])
   @@index([date])
+}
+
+model MailDeliveryFailure {
+  id           String   @id @default(cuid())
+  mailboxEmail String
+  userId       String?
+  messageId    String?
+  recipient    String?
+  subject      String?
+  error        String?
+  source       String   // smtp | bounce
+  createdAt    DateTime @default(now())
+
+  @@index([mailboxEmail])
+  @@index([source])
+  @@index([createdAt])
+  @@unique([messageId, source])
+}
+
+model EmailStats {
+  id            String   @id @default("global")
+  totalEmails   Int      @default(0)
+  unreadInbox   Int      @default(0)
+  deliveryErrors Int     @default(0)
+  storageBytes  Int      @default(0)
+  mailboxCount  Int      @default(0)
+  updatedAt     DateTime @updatedAt
 }

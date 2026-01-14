@@ -1,173 +1,34 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import {
+  AlertTriangle,
+  Archive,
   Building2,
-  Plus,
-  Search,
-  Filter,
-  Edit,
-  Trash2,
-  Eye,
-  Download,
-  Upload,
-  Save,
-  RefreshCw,
-  AlertCircle,
   CheckCircle,
   Clock,
-  TrendingUp,
-  Tag,
-  Globe,
-  Archive,
   Copy,
-  MoreVertical,
+  Download,
+  Edit,
+  Eye,
   File,
-  Image,
-  MapPin,
-  User,
-  Calendar,
-  DollarSign,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  Heart,
-  Star,
-  Phone,
-  MessageCircle,
-  Share2,
-  Eye as ViewIcon,
-  Download as ExportIcon,
-  Calculator,
-  Play,
-  FileText,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
-  Users,
-  Settings,
-  Bell,
-  Database,
-  UserPlus,
-  BarChart,
-  Cog,
-  CheckSquare as TaskSquare,
-  Video,
-  Music,
-  Folder,
-  ChevronDown,
-  ChevronUp,
-  X,
-  Check,
-  AlertTriangle,
-  ExternalLink,
-  Link,
-  Target,
-  Layers,
-  Grid,
-  List,
+  Plus,
+  Search,
   SortAsc,
   SortDesc,
-  Filter as FilterIcon,
-  Search as SearchIcon,
-  Plus as PlusIcon,
-  Edit as EditIcon,
-  Trash2 as TrashIcon,
-  Eye as EyeIcon,
-  Download as DownloadIcon,
-  Upload as UploadIcon,
-  Save as SaveIcon,
-  RefreshCw as RefreshIcon,
-  AlertCircle as AlertIcon,
-  CheckCircle as CheckIcon,
-  Clock as ClockIcon,
-  TrendingUp as TrendingIcon,
-  Tag as TagIcon,
-  Globe as GlobeIcon,
-  Archive as ArchiveIcon,
-  Copy as CopyIcon,
-  MoreVertical as MoreIcon,
-  File as FileIcon,
-  Image as ImageIcon,
-  MapPin as MapIcon,
-  User as UserIcon,
-  Calendar as CalendarIcon,
-  DollarSign as DollarIcon,
-  Home as HomeIcon,
-  Building as BuildingIcon,
-  LandPlot as LandIcon,
-  Store as StoreIcon,
-  Factory as FactoryIcon,
-  Share as ShareIcon,
-  Heart as HeartIcon,
-  Star as StarIcon,
-  Phone as PhoneIcon,
-  MessageCircle as MessageIcon,
-  Share2 as Share2Icon,
-  Calculator as CalculatorIcon,
-  Play as PlayIcon,
-  FileText as FileTextIcon,
-  QrCode as QrCodeIcon,
-  Info as InfoIcon,
-  Cloud as CloudIcon,
-  Zap as ZapIcon,
-  Users as UsersIcon,
-  Settings as SettingsIcon,
-  Bell as BellIcon,
-  Database as DatabaseIcon,
-  UserPlus as UserPlusIcon,
-  BarChart as BarChartIcon,
-  Cog as CogIcon,
-  Video as VideoIcon,
-  Music as MusicIcon,
+  Trash2,
+  Upload,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import ObjectCreateForm from "./ObjectCreateForm"
-
-// Типы объектов недвижимости
-const PROPERTY_TYPES = [
-  { id: 'apartment', name: 'Квартира', icon: HomeIcon, color: 'text-gray-600' },
-  { id: 'house', name: 'Дом', icon: BuildingIcon, color: 'text-gray-600' },
-  { id: 'land', name: 'Участок', icon: LandIcon, color: 'text-gray-600' },
-  { id: 'commercial', name: 'Коммерция', icon: StoreIcon, color: 'text-gray-600' },
-  { id: 'building', name: 'Здание', icon: FactoryIcon, color: 'text-gray-600' },
-  { id: 'nonCapital', name: 'Некопитальный', icon: Building2, color: 'text-gray-600' },
-  { id: 'shares', name: 'Доля', icon: ShareIcon, color: 'text-gray-600' }
-]
-
-// Страны
-const COUNTRIES = [
-  { id: 'russia', name: 'Россия' },
-  { id: 'thailand', name: 'Таиланд' },
-  { id: 'china', name: 'Китай' },
-  { id: 'south-korea', name: 'Южная Корея' }
-]
-
-// Типы операций
-const OPERATION_TYPES = [
-  { id: 'sale', name: 'Продажа' },
-  { id: 'rent', name: 'Аренда' }
-]
-
-// Агенты (пока рандомные)
-const AGENTS = [
-  { id: 'agent1', name: 'Анна Петрова', email: 'anna@metrika.direct' },
-  { id: 'agent2', name: 'Михаил Сидоров', email: 'mikhail@metrika.direct' },
-  { id: 'agent3', name: 'Елена Козлова', email: 'elena@metrika.direct' },
-  { id: 'agent4', name: 'Дмитрий Волков', email: 'dmitry@metrika.direct' }
-]
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { AGENTS, PROPERTY_TYPES } from "@/lib/real-estate-options"
 
 // Интерфейс объекта
 interface RealEstateObject {
@@ -315,11 +176,8 @@ export default function ObjectManagementPanel() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [agentFilter, setAgentFilter] = useState<string>('all')
-  const [sortBy, setSortBy] = useState<string>('createdAt')
+  const [sortBy, setSortBy] = useState<keyof RealEstateObject>('createdAt')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('')
-  const [showTemplates, setShowTemplates] = useState(false)
   const [showBulkUpload, setShowBulkUpload] = useState(false)
 
   // Фильтрация и сортировка объектов
@@ -336,19 +194,24 @@ export default function ObjectManagementPanel() {
       return true
     })
     .sort((a, b) => {
-      let aValue: any = a[sortBy as keyof RealEstateObject]
-      let bValue: any = b[sortBy as keyof RealEstateObject]
-      
-      if (sortBy === 'createdAt' || sortBy === 'updatedAt') {
-        aValue = new Date(aValue as string).getTime()
-        bValue = new Date(bValue as string).getTime()
+      const normalizeValue = (value: RealEstateObject[keyof RealEstateObject]) => {
+        if (sortBy === 'createdAt' || sortBy === 'updatedAt') {
+          return new Date(String(value)).getTime()
+        }
+        if (typeof value === 'string') return value.toLowerCase()
+        if (Array.isArray(value)) return value.length
+        return value ? JSON.stringify(value) : ''
       }
-      
-      if (sortOrder === 'asc') {
-        return aValue > bValue ? 1 : -1
-      } else {
-        return aValue < bValue ? 1 : -1
+
+      const aValue = normalizeValue(a[sortBy])
+      const bValue = normalizeValue(b[sortBy])
+
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue
       }
+
+      const order = String(aValue).localeCompare(String(bValue))
+      return sortOrder === 'asc' ? order : -order
     })
 
   const handleCreateObject = () => {
@@ -417,7 +280,7 @@ export default function ObjectManagementPanel() {
       for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim()) {
           const values = lines[i].split(',')
-          const objectData: any = {}
+          const objectData: Record<string, string> = {}
           
           headers.forEach((header, index) => {
             objectData[header.trim()] = values[index]?.trim() || ''
@@ -481,73 +344,28 @@ export default function ObjectManagementPanel() {
     reader.readAsText(file)
   }
 
-  const handleTemplateSelect = (templateId: string) => {
-    setSelectedTemplate(templateId)
-    setShowTemplates(false)
-    setShowCreateForm(true)
-  }
-
   const handleDuplicateObject = (objectId: string) => {
     const objectToDuplicate = objects.find(obj => obj.id === objectId)
     if (objectToDuplicate) {
-      setSelectedTemplate(objectToDuplicate.type)
-      setShowCreateForm(true)
-    }
-  }
-
-  const handleSaveObject = (data: any, files: any[], action: 'draft' | 'task' | 'publish') => {
-    // Создание нового объекта
-    const newObject: RealEstateObject = {
-      id: Date.now().toString(),
-      title: data.title,
-      address: data.address,
-      price: data.price,
-      type: data.type,
-      country: data.country,
-      operation: data.operation,
-      agent: data.agent,
-      status: action === 'publish' ? 'published' : 'draft',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'current-user', // В реальном приложении получать из сессии
-      images: files.map(file => ({
-        id: file.id,
-        url: file.preview,
-        size: file.size,
-        name: file.name
-      })),
-      characteristics: data.characteristics,
-      description: data.description,
-      comments: data.comments ? [{
+      const duplicatedObject: RealEstateObject = {
+        ...objectToDuplicate,
         id: Date.now().toString(),
-        text: data.comments,
-        author: 'current-user',
-        createdAt: new Date().toISOString()
-      }] : [],
-      history: [{
-        id: Date.now().toString(),
-        action: action === 'publish' ? 'Опубликован объект' : 'Создан черновик',
-        author: 'current-user',
-        timestamp: new Date().toISOString()
-      }]
-    }
+        title: `${objectToDuplicate.title} (копия)`,
+        status: 'draft',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        history: [
+          {
+            id: Date.now().toString(),
+            action: 'Создан дубликат',
+            author: 'current-user',
+            timestamp: new Date().toISOString(),
+          },
+          ...objectToDuplicate.history,
+        ],
+      }
 
-    setObjects(prev => [newObject, ...prev])
-    setShowCreateForm(false)
-    setSelectedTemplate('')
-
-    // Если создается задача, показать уведомление
-    if (action === 'task') {
-      alert('Задача создана! Проверьте раздел "Задачи" для просмотра.')
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'published': return 'bg-gray-100 text-gray-800'
-      case 'draft': return 'bg-gray-100 text-gray-800'
-      case 'archived': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      setObjects(prev => [duplicatedObject, ...prev])
     }
   }
 
@@ -705,7 +523,7 @@ export default function ObjectManagementPanel() {
             </Select>
             
             <div className="flex space-x-2">
-              <Select value={sortBy} onValueChange={setSortBy}>
+              <Select value={sortBy} onValueChange={(value) => setSortBy(value as keyof RealEstateObject)}>
                 <SelectTrigger className="flex-1">
                   <SelectValue placeholder="Сортировка" />
                 </SelectTrigger>
@@ -814,34 +632,6 @@ export default function ObjectManagementPanel() {
           </Table>
         </div>
       </Card>
-
-      {/* Модальное окно выбора шаблона */}
-      <Dialog open={showTemplates} onOpenChange={setShowTemplates}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Выберите тип объекта</DialogTitle>
-          </DialogHeader>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {PROPERTY_TYPES.map(type => {
-              const IconComponent = type.icon
-              return (
-                <Button
-                  key={type.id}
-                  onClick={() => handleTemplateSelect(type.id)}
-                  variant="outline"
-                  className="p-4 h-auto justify-start"
-                >
-                  <div className="flex items-center space-x-3">
-                    <IconComponent className={`w-6 h-6 ${type.color}`} />
-                    <span className="font-medium text-black">{type.name}</span>
-                  </div>
-                </Button>
-              )
-            })}
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Модальное окно массовой загрузки */}
       <Dialog open={showBulkUpload} onOpenChange={setShowBulkUpload}>

@@ -2,121 +2,104 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { RealEstateObject } from "@/data/realEstateObjects";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface YandexMapProps {
   objects: RealEstateObject[];
   onVisibleObjectsChange: (objects: RealEstateObject[]) => void;
 }
 
+type YMapBounds = [[number, number], [number, number]]
+
+type YMapPlacemark = unknown
+
+type YMapInstance = {
+  container: {
+    fitToViewport: () => void
+  }
+  events: {
+    add: (event: string, handler: () => void) => void
+  }
+  getBounds: () => YMapBounds
+  setBounds: (bounds: YMapBounds) => void
+  geoObjects: {
+    add: (placemark: YMapPlacemark) => void
+    remove: (placemark: YMapPlacemark) => void
+  }
+}
+
+type YMapsApi = {
+  ready: (handler: () => void) => void
+  Map: new (
+    element: HTMLElement,
+    options: { center: number[]; zoom: number; controls: string[] }
+  ) => YMapInstance
+  Placemark: new (
+    coords: number[],
+    properties: Record<string, unknown>,
+    options: Record<string, unknown>
+  ) => YMapPlacemark
+}
+
 declare global {
   interface Window {
-    ymaps: any;
+    ymaps?: YMapsApi;
   }
 }
 
 export default function YandexMap({ objects, onVisibleObjectsChange }: YandexMapProps) {
   const { t } = useLanguage();
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
+  const mapInstanceRef = useRef<YMapInstance | null>(null);
+  const markersRef = useRef<YMapPlacemark[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  const mapLang = t('yandexMapLang') || 'ru_RU';
 
-  // Загружаем Яндекс.Карты
-  useEffect(() => {
-    const script = document.createElement('script');
-    // Определяем язык для карты
-    const mapLang = t('yandexMapLang') || 'ru_RU';
-    script.src = `https://api-maps.yandex.ru/2.1/?apikey=ba2d7617-fe30-4f3b-875a-bd485d49cf3c&lang=${mapLang}`;
-    script.async = true;
-    
-    script.onload = () => {
-      if (window.ymaps) {
-        window.ymaps.ready(() => {
-          setIsLoaded(true);
-        });
-      }
-    };
-    
-    document.head.appendChild(script);
-    
-    return () => {
-      document.head.removeChild(script);
-    };
+  const getMarkerColor = useCallback((type: string) => {
+    switch (type) {
+      case 'apartment': return '#3B82F6'; // Синий
+      case 'house': return '#10B981'; // Зеленый
+      case 'commercial': return '#F59E0B'; // Оранжевый
+      case 'land': return '#8B5CF6'; // Фиолетовый
+      case 'nonCapital': return '#EF4444'; // Красный
+      case 'shares': return '#6B7280'; // Серый
+      default: return '#3B82F6';
+    }
   }, []);
 
-  // Обработчик изменения размера окна
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-      // Обновляем карту при изменении размера
-      if (mapInstanceRef.current) {
-        // Принудительно обновляем размеры карты
-        setTimeout(() => {
-          try {
-            mapInstanceRef.current.container.fitToViewport();
-            // Дополнительно обновляем карту
-            mapInstanceRef.current.setBounds(mapInstanceRef.current.getBounds());
-          } catch (error) {
-            // Карта обновляется...
-          }
-        }, 50);
+  const updateVisibleObjects = useCallback(() => {
+    if (!mapInstanceRef.current) return;
+
+    const bounds = mapInstanceRef.current.getBounds();
+    const visibleObjects: RealEstateObject[] = [];
+
+    objects.forEach(obj => {
+      const lat = obj.coordinates.lat;
+      const lng = obj.coordinates.lng;
+      
+      if (lat >= bounds[0][0] && lat <= bounds[1][0] && 
+          lng >= bounds[0][1] && lng <= bounds[1][1]) {
+        visibleObjects.push(obj);
       }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Инициализация карты
-  useEffect(() => {
-    if (!isLoaded || !mapRef.current) return;
-
-    // Создаем карту
-    window.ymaps.ready(() => {
-      const map = new window.ymaps.Map(mapRef.current, {
-        center: [55.7558, 37.6176], // Центр Москвы
-        zoom: 10,
-        controls: ['zoomControl', 'fullscreenControl']
-      });
-
-      mapInstanceRef.current = map;
-
-      // Обработчик изменения видимой области карты
-      map.events.add('boundschange', () => {
-        updateVisibleObjects();
-      });
-
-      // Обработчик изменения размера окна для карты
-      window.addEventListener('resize', () => {
-        setTimeout(() => {
-          try {
-            map.container.fitToViewport();
-          } catch (error) {
-            // Карта адаптируется к размеру...
-          }
-        }, 100);
-      });
-
-      // Добавляем маркеры
-      addMarkers();
     });
-  }, [isLoaded, objects]);
 
-  // Добавление маркеров на карту
-  const addMarkers = () => {
+    // Показываем все видимые объекты без ограничений
+    onVisibleObjectsChange(visibleObjects);
+  }, [objects, onVisibleObjectsChange]);
+
+  const addMarkers = useCallback(() => {
     if (!mapInstanceRef.current) return;
 
     // Удаляем старые маркеры
     markersRef.current.forEach(marker => {
-      mapInstanceRef.current.geoObjects.remove(marker);
+      mapInstanceRef.current?.geoObjects.remove(marker);
     });
     markersRef.current = [];
 
     // Добавляем новые маркеры
     objects.forEach(obj => {
-      const marker = new window.ymaps.Placemark(
+      const marker = window.ymaps?.Placemark
+        ? new window.ymaps.Placemark(
         [obj.coordinates.lat, obj.coordinates.lng],
         {
           balloonContentHeader: obj.title || `Объект ${obj.id}`,
@@ -135,48 +118,104 @@ export default function YandexMap({ objects, onVisibleObjectsChange }: YandexMap
           preset: 'islands#blueDotIcon',
           iconColor: getMarkerColor(obj.type)
         }
-      );
+      )
+        : null
+      if (!marker) return
 
-      mapInstanceRef.current.geoObjects.add(marker);
+      mapInstanceRef.current?.geoObjects.add(marker);
       markersRef.current.push(marker);
     });
 
     updateVisibleObjects();
-  };
+  }, [getMarkerColor, objects, updateVisibleObjects]);
 
-  // Получение цвета маркера в зависимости от типа объекта
-  const getMarkerColor = (type: string) => {
-    switch (type) {
-      case 'apartment': return '#3B82F6'; // Синий
-      case 'house': return '#10B981'; // Зеленый
-      case 'commercial': return '#F59E0B'; // Оранжевый
-      case 'land': return '#8B5CF6'; // Фиолетовый
-      case 'nonCapital': return '#EF4444'; // Красный
-      case 'shares': return '#6B7280'; // Серый
-      default: return '#3B82F6';
-    }
-  };
-
-  // Обновление списка видимых объектов
-  const updateVisibleObjects = () => {
-    if (!mapInstanceRef.current) return;
-
-    const bounds = mapInstanceRef.current.getBounds();
-    const visibleObjects: RealEstateObject[] = [];
-
-    objects.forEach(obj => {
-      const lat = obj.coordinates.lat;
-      const lng = obj.coordinates.lng;
-      
-      if (lat >= bounds[0][0] && lat <= bounds[1][0] && 
-          lng >= bounds[0][1] && lng <= bounds[1][1]) {
-        visibleObjects.push(obj);
+  // Загружаем Яндекс.Карты
+  useEffect(() => {
+    const existingScript = document.getElementById('yandex-maps-sdk') as HTMLScriptElement | null
+    if (existingScript) {
+      if (existingScript.dataset.lang === mapLang) {
+        if (window.ymaps) {
+          window.ymaps.ready(() => {
+            setIsLoaded(true);
+          });
+        }
+        return
       }
-    });
+      existingScript.remove()
+    }
 
-    // Показываем все видимые объекты без ограничений
-    onVisibleObjectsChange(visibleObjects);
-  };
+    setIsLoaded(false)
+    const script = document.createElement('script');
+    script.id = 'yandex-maps-sdk'
+    script.dataset.lang = mapLang
+    script.src = `https://api-maps.yandex.ru/2.1/?apikey=ba2d7617-fe30-4f3b-875a-bd485d49cf3c&lang=${mapLang}`;
+    script.async = true;
+    
+    script.onload = () => {
+      if (window.ymaps) {
+        window.ymaps.ready(() => {
+          setIsLoaded(true);
+        });
+      }
+    };
+    
+    document.head.appendChild(script);
+    
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, [mapLang]);
+
+  // Обработчик изменения размера окна
+  useEffect(() => {
+    const handleResize = () => {
+      // Обновляем карту при изменении размера
+      const map = mapInstanceRef.current
+      if (map) {
+        // Принудительно обновляем размеры карты
+        setTimeout(() => {
+          try {
+            map.container.fitToViewport();
+            // Дополнительно обновляем карту
+            map.setBounds(map.getBounds());
+          } catch {
+            // Карта обновляется...
+          }
+        }, 50);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Инициализация карты
+  useEffect(() => {
+    if (!isLoaded || !mapRef.current || mapInstanceRef.current) return;
+
+    // Создаем карту
+    window.ymaps?.ready(() => {
+      if (!window.ymaps || !mapRef.current) return
+      const map = new window.ymaps.Map(mapRef.current, {
+        center: [55.7558, 37.6176], // Центр Москвы
+        zoom: 10,
+        controls: ['zoomControl', 'fullscreenControl']
+      });
+
+      mapInstanceRef.current = map;
+
+      // Обработчик изменения видимой области карты
+      map.events.add('boundschange', updateVisibleObjects);
+
+      // Добавляем маркеры
+      addMarkers();
+    });
+  }, [addMarkers, isLoaded, updateVisibleObjects]);
+
+  useEffect(() => {
+    if (!isLoaded || !mapInstanceRef.current) return;
+    addMarkers();
+  }, [addMarkers, isLoaded]);
 
   if (!isLoaded) {
     return (

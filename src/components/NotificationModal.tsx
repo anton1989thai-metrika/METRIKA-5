@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X, Bell, Clock, Calendar, Award, AlertCircle, CheckCircle, BookOpen, TestTube, FileText } from "lucide-react"
+import { X, Bell, Clock, Award, BookOpen, TestTube, FileText } from "lucide-react"
 
 interface NotificationModalProps {
   isOpen: boolean

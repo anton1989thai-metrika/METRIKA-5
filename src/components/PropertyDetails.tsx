@@ -47,7 +47,7 @@ export function PropertyDetails({
   // Фильтруем динамические поля - показываем только заполненные
   const dynamicCharacteristics = dynamicFields 
     ? Object.entries(dynamicFields)
-        .filter(([key, value]) => value && value !== '' && value !== null)
+        .filter(([, value]) => value && value !== '' && value !== null)
         .map(([key, value]) => ({
           label: CATEGORY_LABELS[key] || key,
           value: String(value)

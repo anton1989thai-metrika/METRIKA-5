@@ -1,37 +1,41 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Save, FileText, Printer, X, Edit2 } from 'lucide-react'
+import { Save, Printer, X, Edit2 } from 'lucide-react'
 import TemplateSelector from './TemplateSelector'
 import FieldForm from './FieldForm'
-
-interface Template {
-  id: string
-  name: string
-  category: string
-  fields: Array<{
-    key: string
-    label: string
-    type: string
-    required: boolean
-  }>
-  template: string
-}
+import type { ContractTemplate } from '@/types/contracts'
+import { fetchJson, fetchJsonOrNull } from '@/lib/api-client'
 
 export default function ContractBuilder() {
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>({})
+  const [selectedTemplate, setSelectedTemplate] = useState<ContractTemplate | null>(null)
+  const [formValues, setFormValues] = useState<Record<string, string>>({})
   const [editedTemplate, setEditedTemplate] = useState<string>('')
   const [isEditingTemplate, setIsEditingTemplate] = useState(false)
   const [contractNumber, setContractNumber] = useState('')
   const [contractCity, setContractCity] = useState('Москва')
   const [saving, setSaving] = useState(false)
+  const [createdBy, setCreatedBy] = useState('')
 
-  const handleTemplateSelect = (template: Template) => {
+  useEffect(() => {
+        const fetchUser = async () => {
+      try {
+        const data = await fetchJsonOrNull<{ name?: string; email?: string }>('/api/user')
+        if (!data) return
+        const displayName = data?.name || data?.email
+        if (displayName) setCreatedBy(displayName)
+      } catch {
+        // ignore user lookup errors
+      }
+    }
+    fetchUser()
+  }, [])
+
+  const handleTemplateSelect = (template: ContractTemplate) => {
     setSelectedTemplate(template)
     setEditedTemplate(template.template)
     setFormValues({})
@@ -65,7 +69,7 @@ export default function ContractBuilder() {
     try {
       const filledTemplate = handleFillTemplate()
       
-      await fetch('/api/contracts', {
+      await fetchJson('/api/contracts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -74,7 +78,7 @@ export default function ContractBuilder() {
           values: formValues,
           contractNumber,
           contractCity,
-          createdBy: 'Admin User' // TODO: Получить из сессии
+          createdBy: createdBy || 'Unknown user'
         })
       })
 
@@ -231,4 +235,3 @@ export default function ContractBuilder() {
     </div>
   )
 }
-

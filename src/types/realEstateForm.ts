@@ -25,8 +25,19 @@ export interface FilterState {
   objectType?: string;
 }
 
+export type FormValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | number[]
+  | Date[]
+  | null
+  | undefined
+
 export interface FormData {
-  [key: string]: any;
+  [key: string]: FormValue;
+  [key: number]: FormValue;
 }
 
 // Константы для типов объектов

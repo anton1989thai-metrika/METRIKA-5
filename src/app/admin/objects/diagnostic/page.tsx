@@ -1,12 +1,13 @@
 'use client'
 
+import { debugLog } from '@/lib/logger'
+
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import { getAvailableFields } from '@/lib/filterLogic'
+import { getAvailableFields, FieldConfig } from '@/lib/filterLogic'
 
 // Маппинг значений
 const COUNTRY_MAPPING: Record<string, string> = {
@@ -44,14 +45,32 @@ const REVERSE_OBJECT_TYPE_MAPPING = Object.fromEntries(
 )
 
 export default function DiagnosticPage() {
+  const isDev = process.env.NODE_ENV !== 'production'
   const [formData, setFormData] = useState({
     country: '',
     operation: '',
     objectType: ''
   })
   
-  const [availableFields, setAvailableFields] = useState<any[]>([])
-  const [debugInfo, setDebugInfo] = useState<any>(null)
+  const [availableFields, setAvailableFields] = useState<FieldConfig[]>([])
+
+  interface DebugInfo {
+    formData: {
+      country: string
+      operation: string
+      objectType: string
+    }
+    converted: {
+      country: string
+      operation: string
+      objectType: string
+    }
+    fieldsCount: number
+    problematicFields: FieldConfig[]
+    requiredFields: FieldConfig[]
+  }
+
+  const [debugInfo, setDebugInfo] = useState<DebugInfo | null>(null)
 
   useEffect(() => {
     if (formData.country && formData.operation && formData.objectType) {
@@ -89,12 +108,14 @@ export default function DiagnosticPage() {
       
       setDebugInfo(debug)
       
-      console.log("🔍 ДИАГНОСТИКА:", debug)
+      if (isDev) {
+        debugLog("🔍 ДИАГНОСТИКА:", debug)
+      }
     } else {
       setAvailableFields([])
       setDebugInfo(null)
     }
-  }, [formData.country, formData.operation, formData.objectType])
+  }, [formData, isDev])
 
   const updateFormData = (field: string, value: string) => {
     setFormData(prev => ({
@@ -114,7 +135,7 @@ export default function DiagnosticPage() {
           Диагностика логики фильтрации
         </h1>
         <p className="text-gray-600">
-          Проверка работы фильтрации полей для комбинации "Таиланд → Аренда → Частный дом"
+          Проверка работы фильтрации полей для комбинации &quot;Таиланд → Аренда → Частный дом&quot;
         </p>
       </div>
 
@@ -124,7 +145,7 @@ export default function DiagnosticPage() {
           <CardHeader>
             <CardTitle>Выбор параметров</CardTitle>
             <CardDescription>
-              Выберите "Таиланд → Аренда → Частный дом" для тестирования
+              Выберите &quot;Таиланд → Аренда → Частный дом&quot; для тестирования
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -215,7 +236,7 @@ export default function DiagnosticPage() {
                   <div>
                     <h4 className="font-medium text-green-600 mb-2">✅ Обязательные поля для аренды:</h4>
                     <div className="space-y-1">
-                      {debugInfo.requiredFields.map((field: any) => (
+                      {debugInfo.requiredFields.map((field) => (
                         <div key={field.name} className="text-sm text-green-600">
                           ✓ {field.name}
                         </div>
@@ -227,7 +248,7 @@ export default function DiagnosticPage() {
                     <h4 className="font-medium text-red-600 mb-2">❌ Проблемные поля (не должны показываться):</h4>
                     {debugInfo.problematicFields.length > 0 ? (
                       <div className="space-y-1">
-                        {debugInfo.problematicFields.map((field: any) => (
+                        {debugInfo.problematicFields.map((field) => (
                           <div key={field.name} className="text-sm text-red-600">
                             ✗ {field.name}
                           </div>

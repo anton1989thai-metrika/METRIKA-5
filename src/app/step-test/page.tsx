@@ -39,7 +39,7 @@ export default function StepTestPage() {
       <main className="pt-24 px-4">
         <div className="mx-auto w-full space-y-8 text-center" style={{ maxWidth: "797px" }}>
           <div className="flex flex-col gap-6 md:flex-row md:items-start">
-            {steps.map(({ step, title, description }, index) => {
+            {steps.map(({ step, title }, index) => {
               const isActive = step === currentStep;
               const isCompleted = step < currentStep;
               const isLast = index === steps.length - 1;

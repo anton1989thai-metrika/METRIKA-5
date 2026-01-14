@@ -4,7 +4,11 @@
 # Использование: ./remote-fix.sh
 
 set timeout 300
-set password "SikaAnt7Hostinger7+"
+if {![info exists env(VPS_PASSWORD)] || $env(VPS_PASSWORD) eq ""} {
+    puts "VPS_PASSWORD is not set. Run: export VPS_PASSWORD='...'"
+    exit 1
+}
+set password $env(VPS_PASSWORD)
 set server "root@72.62.72.196"
 
 # Загружаем скрипт исправления на сервер
@@ -59,4 +63,3 @@ send "cat /root/mail-fix-report-*.txt | tail -50\r"
 expect "# "
 send "exit\r"
 expect eof
-

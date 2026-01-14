@@ -1,14 +1,25 @@
 // Типы для динамической формы
 
-export interface FormRule {
+type FieldConditionValue = string | number | boolean
+type FieldCondition = Record<string, FieldConditionValue | FieldConditionValue[]>
+
+interface DateRangeValue {
+  from?: Date
+  to?: Date
+}
+
+export type FormDataValue =
+  | FieldConditionValue
+  | FieldConditionValue[]
+  | DateRangeValue
+  | null
+  | undefined
+
+interface FormRule {
   fieldId: string
   visibleIf?: FieldCondition
   requiredIf?: FieldCondition
   disabledIf?: FieldCondition
-}
-
-export interface FieldCondition {
-  [fieldName: string]: string | string[] | boolean
 }
 
 export interface FormField {
@@ -22,7 +33,7 @@ export interface FormField {
     minLength?: number
     maxLength?: number
     pattern?: string
-    custom?: (value: any) => string | null
+    custom?: (value: FormDataValue) => string | null
   }
   dependencies?: string[] // поля, от которых зависит это поле
 }
@@ -38,17 +49,7 @@ export interface FormConfig {
   }>
 }
 
-export interface FormData {
-  [key: string]: any
-}
-
-export interface DynamicFormProps {
-  config: FormConfig
-  initialData?: FormData
-  onSubmit: (data: FormData) => void
-  onChange?: (data: FormData) => void
-  className?: string
-}
+export type FormData = Record<string, FormDataValue>
 
 // Утилиты для работы с правилами
 export class FormRuleEngine {
@@ -90,7 +91,13 @@ export class FormRuleEngine {
       const actualValue = formData[fieldName]
       
       if (Array.isArray(expectedValue)) {
-        return expectedValue.includes(actualValue)
+        if (Array.isArray(actualValue)) {
+          return actualValue.some(value => expectedValue.includes(value as FieldConditionValue))
+        }
+
+        return actualValue !== null && actualValue !== undefined
+          ? expectedValue.includes(actualValue as FieldConditionValue)
+          : false
       }
       
       if (typeof expectedValue === 'boolean') {
@@ -99,6 +106,13 @@ export class FormRuleEngine {
       
       return actualValue === expectedValue
     })
+  }
+
+  private static isEmptyValue(value: FormDataValue): boolean {
+    if (value === null || value === undefined) return true
+    if (typeof value === 'string') return value.trim() === ''
+    if (Array.isArray(value)) return value.length === 0
+    return false
   }
 
   static validateForm(formData: FormData, config: FormConfig): Record<string, string> {
@@ -112,7 +126,7 @@ export class FormRuleEngine {
         const field = config.fields.find(f => f.id === fieldId)
         const value = formData[fieldId]
         
-        if (!value || (Array.isArray(value) && value.length === 0) || value === '') {
+        if (this.isEmptyValue(value)) {
           errors[fieldId] = `${field?.label || fieldId} обязательно для заполнения`
         }
       }

@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { db } from '@/lib/db'
-import nodemailer from 'nodemailer'
+import nodemailer, { type SentMessageInfo } from 'nodemailer'
 import { getSessionUser } from '@/lib/auth/session'
 import Imap from 'imap'
 import MailComposer from 'nodemailer/lib/mail-composer'
 import { storeAttachmentFile } from '@/lib/attachments'
+import { getAllowedMailboxEmails } from '@/lib/mailbox-access'
+import { getMailPasswordByEmail } from '@/lib/mail-password'
+import { messageIdCandidates } from '@/lib/imap-message-id'
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,12 +35,12 @@ export async function POST(request: NextRequest) {
       const files = form.getAll('attachments')
       for (const item of files) {
         if (item && typeof item === 'object' && 'arrayBuffer' in item) {
-          const f = item as unknown as File
+          const f = item as File
           const buf = Buffer.from(await f.arrayBuffer())
           attachments.push({
-            filename: (f as any).name || 'attachment',
+            filename: f.name || 'attachment',
             content: buf,
-            contentType: (f as any).type || undefined,
+            contentType: f.type || undefined,
           })
         }
       }
@@ -57,11 +61,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Decide which mailbox we send as:
-    // - normal user: always self
-    // - admin: can specify fromEmail to send as that mailbox
+    // - any user: can specify fromEmail ONLY if they have access to that mailbox
     let senderEmail = String(sessionUser.email).toLowerCase()
     const requestedFrom = String(fromEmail || '').trim().toLowerCase()
-    if (requestedFrom && sessionUser.role === 'admin') {
+    if (requestedFrom) {
+      const { allowed, isAdmin } = await getAllowedMailboxEmails(request)
+      if (!isAdmin && !allowed.includes(requestedFrom)) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      }
       senderEmail = requestedFrom
     }
 
@@ -70,9 +77,21 @@ export async function POST(request: NextRequest) {
     const userId = await getEmailUserId(request, senderEmail)
 
     // Configure SMTP transporter
-    if (!process.env.SMTP_HOST || !process.env.SMTP_PASS) {
+    if (!process.env.SMTP_HOST) {
       return NextResponse.json(
-        { error: 'SMTP не настроен. Укажите SMTP_HOST и SMTP_PASS в .env' },
+        { error: 'SMTP не настроен. Укажите SMTP_HOST в .env' },
+        { status: 400 }
+      )
+    }
+
+    const mailboxPassword =
+      (await getMailPasswordByEmail(senderEmail)) ??
+      process.env.SMTP_PASS ??
+      process.env.IMAP_PASS ??
+      ''
+    if (!mailboxPassword) {
+      return NextResponse.json(
+        { error: `Нет пароля для ящика ${senderEmail}. Задайте пароль в админ-панели → Email.` },
         { status: 400 }
       )
     }
@@ -83,7 +102,7 @@ export async function POST(request: NextRequest) {
       secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
       auth: {
         user: senderEmail,
-        pass: process.env.SMTP_PASS,
+        pass: mailboxPassword,
       },
       tls: {
         rejectUnauthorized: false, // Для самоподписанных сертификатов
@@ -102,7 +121,27 @@ export async function POST(request: NextRequest) {
       attachments: attachments.length > 0 ? attachments : undefined,
     }
 
-    const smtpResult = await transporter.sendMail(mailOptions)
+    let smtpResult: SentMessageInfo
+    try {
+      smtpResult = await transporter.sendMail(mailOptions)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err || 'SMTP error')
+      await db.mailDeliveryFailure.create({
+        data: {
+          mailboxEmail: senderEmail,
+          userId,
+          recipient: to,
+          subject,
+          error: errorMessage,
+          source: 'smtp',
+        },
+      })
+      return NextResponse.json({ error: 'Failed to send email' }, { status: 502 })
+    }
+
+    const sentMessageId = smtpResult.messageId
+      ? String(smtpResult.messageId)
+      : `<${Date.now()}@metrika.direct>`
 
     // Append a copy to sender's IMAP Sent folder (so it exists on server too)
     try {
@@ -116,14 +155,14 @@ export async function POST(request: NextRequest) {
         html,
         attachments: attachments.length > 0 ? attachments : undefined,
         date: new Date(),
-        messageId: smtpResult.messageId || undefined,
+        messageId: sentMessageId,
       })
         .compile()
         .build()
 
       const imap = new Imap({
         user: senderEmail,
-        password: process.env.IMAP_PASS || '',
+        password: mailboxPassword,
         host: process.env.IMAP_HOST || 'mail.metrika.direct',
         port: parseInt(process.env.IMAP_PORT || '993'),
         tls: true,
@@ -143,10 +182,33 @@ export async function POST(request: NextRequest) {
         imap.once('ready', () => {
           const mailbox = 'Sent'
           imap.addBox(mailbox, () => {
-            imap.append(raw, { mailbox, flags: ['\\Seen'], date: new Date() }, () => {
-              imap.end()
-              finish()
-            })
+            const messageId = smtpResult.messageId ? String(smtpResult.messageId) : ''
+            const candidates = messageIdCandidates(sentMessageId || messageId)
+            const searchNext = (idx: number) => {
+              if (!candidates.length || idx >= candidates.length) {
+                imap.append(raw, { mailbox, flags: ['\\Seen'], date: new Date() }, () => {
+                  imap.end()
+                  finish()
+                })
+                return
+              }
+              imap.search(['HEADER', 'MESSAGE-ID', candidates[idx]], (err, results) => {
+                if (err) {
+                  imap.append(raw, { mailbox, flags: ['\\Seen'], date: new Date() }, () => {
+                    imap.end()
+                    finish()
+                  })
+                  return
+                }
+                if (results && results.length > 0) {
+                  imap.end()
+                  finish()
+                  return
+                }
+                searchNext(idx + 1)
+              })
+            }
+            searchNext(0)
           })
         })
         imap.once('error', () => finish())
@@ -159,7 +221,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Save to database
-    const messageId = `<${Date.now()}@metrika.direct>`
     const date = new Date()
 
     // Create or find thread
@@ -193,20 +254,20 @@ export async function POST(request: NextRequest) {
       try {
         const stored = await storeAttachmentFile({
           userId,
-          messageKey: smtpResult.messageId || messageId,
+          messageKey: sentMessageId,
           filename: a.filename,
           contentType: a.contentType || 'application/octet-stream',
           content: a.content,
         })
         storedAttachments.push(stored)
-      } catch (e) {
+      } catch {
         // ignore per-attachment errors
       }
     }
 
     const email = await db.email.create({
       data: {
-        messageId: smtpResult.messageId || messageId,
+        messageId: sentMessageId,
         threadId: thread.id,
         userId,
         from: senderEmail,
@@ -219,7 +280,11 @@ export async function POST(request: NextRequest) {
         date,
         isRead: true,
         folderId: sentFolder?.id || null, // Sent emails go to sent folder
-        attachments: storedAttachments.length ? (storedAttachments as any) : null,
+        imapMailbox: 'Sent',
+        imapUid: null,
+        attachments: storedAttachments.length
+          ? (storedAttachments as Prisma.InputJsonValue)
+          : undefined,
       },
     })
 
@@ -232,4 +297,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

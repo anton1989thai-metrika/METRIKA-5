@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json({ success: true }, { status: 200 })
-  } catch (e) {
+  } catch (error) {
+    console.error('password reset confirm error', error)
     return NextResponse.json({ success: false, error: 'Ошибка' }, { status: 500 })
   }
 }
-

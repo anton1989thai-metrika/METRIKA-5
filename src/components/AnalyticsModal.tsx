@@ -1,104 +1,32 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
+import type { ObjectData } from "@/types/object-data"
 import {
   X,
   BarChart,
   TrendingUp,
-  TrendingDown,
   Clock,
-  Calendar,
-  User,
-  Users,
   Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  DollarSign,
-  Phone,
-  Mail,
-  MessageCircle,
-  Calculator,
   Play,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
   FileText,
   Image,
-  Tag,
-  Archive,
-  Plus,
-  Minus,
-  Edit,
   Trash2,
   Save,
-  Copy,
   Download,
-  Upload,
-  RefreshCw,
-  Grid,
-  List,
-  MoreVertical,
-  ChevronDown,
-  ChevronUp,
   Check,
-  AlertTriangle,
-  Target,
-  Layers,
-  MapPin,
-  Video,
-  Music,
-  Folder,
   Cog,
-  Shield,
-  ShieldCheck,
-  Link,
-  Link2,
-  Unlink,
-  Activity,
   ArrowUp,
   ArrowDown,
-  RotateCcw,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  SkipForward,
-  SkipBack,
-  Volume2,
-  VolumeX,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Server,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  Signal,
-  SignalZero,
-  Battery,
-  BatteryLow,
-  Power,
-  PowerOff,
-  Sun,
-  Moon,
-  Star,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Frown,
-  Meh,
-  Angry,
-  Laugh
+  Info,
+  Tag,
+  MapPin,
+  Search,
+  MessageCircle,
+  Link,
+  Bell
 } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 interface AnalyticsData {
   id: string
@@ -174,7 +102,7 @@ interface AnalyticsModalProps {
   onClose: () => void
   onSave: (analytics: AnalyticsData[]) => void
   initialAnalytics?: AnalyticsData[]
-  objectData?: any
+  objectData?: ObjectData
 }
 
 export default function AnalyticsModal({ 
@@ -186,18 +114,15 @@ export default function AnalyticsModal({
 }: AnalyticsModalProps) {
   const [analytics, setAnalytics] = useState<AnalyticsData[]>(initialAnalytics)
   const [activeTab, setActiveTab] = useState('overview')
-  const [selectedAnalytics, setSelectedAnalytics] = useState<string | null>(null)
   const [filterUser, setFilterUser] = useState<string>('all')
   const [filterType, setFilterType] = useState<string>('all')
-  const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [filterDateRange, setFilterDateRange] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'duration' | 'created' | 'user' | 'type'>('duration')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [isTracking, setIsTracking] = useState(false)
   const [currentSession, setCurrentSession] = useState<AnalyticsData | null>(null)
 
   // Статистика
-  const stats: AnalyticsStats = {
+  const stats = useMemo<AnalyticsStats>(() => ({
     totalObjects: analytics.length,
     totalTime: analytics.reduce((sum, item) => sum + item.duration, 0),
     averageTime: analytics.length > 0 ? analytics.reduce((sum, item) => sum + item.duration, 0) / analytics.length : 0,
@@ -213,14 +138,13 @@ export default function AnalyticsModal({
       weekly: [],
       monthly: []
     }
-  }
+  }), [analytics])
 
   // Фильтрация и сортировка
-  const filteredAnalytics = analytics
+  const filteredAnalytics = useMemo(() => analytics
     .filter(item => {
       if (filterUser !== 'all' && item.userId !== filterUser) return false
       if (filterType !== 'all' && item.objectType !== filterType) return false
-      if (filterStatus !== 'all' && item.status !== filterStatus) return false
       return true
     })
     .sort((a, b) => {
@@ -240,15 +164,19 @@ export default function AnalyticsModal({
           break
       }
       return sortOrder === 'asc' ? comparison : -comparison
-    })
+    }), [analytics, filterUser, filterType, sortBy, sortOrder])
+
+  useEffect(() => {
+    setAnalytics(initialAnalytics)
+  }, [initialAnalytics])
 
   // Начало отслеживания
-  const startTracking = () => {
+  const startTracking = useCallback(() => {
     if (!objectData) return
 
     const session: AnalyticsData = {
       id: Date.now().toString(),
-      objectId: objectData.id || 'new-object',
+      objectId: objectData.id ? String(objectData.id) : 'new-object',
       objectTitle: objectData.title || 'Новый объект',
       objectType: objectData.type || 'apartment',
       userId: 'current-user',
@@ -264,7 +192,7 @@ export default function AnalyticsModal({
 
     setCurrentSession(session)
     setIsTracking(true)
-  }
+  }, [objectData])
 
   // Остановка отслеживания
   const stopTracking = (status: 'completed' | 'abandoned' = 'completed') => {
@@ -364,7 +292,7 @@ export default function AnalyticsModal({
     if (isOpen && objectData && !isTracking) {
       startTracking()
     }
-  }, [isOpen, objectData])
+  }, [isOpen, objectData, isTracking, startTracking])
 
   // Сохранение
   const handleSave = () => {
@@ -585,7 +513,7 @@ export default function AnalyticsModal({
                   <h5 className="text-lg font-semibold text-black mb-4">Шаги создания объекта</h5>
                   
                   <div className="space-y-3">
-                    {[
+                    {([
                       { name: 'Основная информация', icon: Info },
                       { name: 'Характеристики', icon: Tag },
                       { name: 'Фотографии', icon: Image },
@@ -594,7 +522,7 @@ export default function AnalyticsModal({
                       { name: 'Комментарии', icon: MessageCircle },
                       { name: 'Интеграции', icon: Link },
                       { name: 'Уведомления', icon: Bell }
-                    ].map((step, index) => {
+                    ] as Array<{ name: string; icon: LucideIcon }>).map((step, index) => {
                       const IconComponent = step.icon
                       const stepData = currentSession.steps.find(s => s.step === step.name)
                       const isActive = currentSession.steps.length === index
@@ -681,7 +609,9 @@ export default function AnalyticsModal({
                 </select>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) =>
+                    setSortBy(e.target.value as 'duration' | 'created' | 'user' | 'type')
+                  }
                   className="medusa-form-select"
                 >
                   <option value="duration">По времени</option>

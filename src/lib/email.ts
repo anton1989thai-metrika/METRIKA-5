@@ -1,53 +1,5 @@
+import { Prisma } from '@prisma/client'
 import { db } from './db'
-import { Email, Thread, Folder } from '@prisma/client'
-
-export interface EmailWithRelations extends Email {
-  thread?: Thread | null
-  folder?: Folder | null
-}
-
-export async function getEmailsByFolder(
-  userId: string,
-  folderSlug: string,
-  searchQuery?: string
-) {
-  const folder = await db.folder.findFirst({
-    where: {
-      userId,
-      slug: folderSlug,
-    },
-  })
-
-  if (!folder) {
-    return []
-  }
-
-  const where: any = {
-    userId,
-    folderId: folder.id,
-    isDeleted: false,
-  }
-
-  if (searchQuery) {
-    // SQLite doesn't support case-insensitive mode directly
-    where.OR = [
-      { subject: { contains: searchQuery } },
-      { from: { contains: searchQuery } },
-      { text: { contains: searchQuery } },
-    ]
-  }
-
-  return db.email.findMany({
-    where,
-    include: {
-      thread: true,
-      folder: true,
-    },
-    orderBy: {
-      date: 'desc',
-    },
-  })
-}
 
 export async function getEmailThreads(
   userId: string,
@@ -56,119 +8,102 @@ export async function getEmailThreads(
   cursor?: { date: Date; id: string } | null,
   take: number = 30
 ) {
-  // Handle special folders
-  let folderId: string | null = null
-  
-  if (folderSlug !== 'inbox' && folderSlug !== 'sent' && folderSlug !== 'drafts' && folderSlug !== 'starred' && folderSlug !== 'spam' && folderSlug !== 'archive' && folderSlug !== 'trash') {
-    const folder = await db.folder.findFirst({
-      where: {
-        userId,
-        slug: folderSlug,
-      },
-    })
-    if (folder) {
-      folderId = folder.id
-    }
+  const normalizedSlug = String(folderSlug || 'inbox').toLowerCase()
+  const folders = await db.folder.findMany({
+    where: { userId },
+    select: { id: true, slug: true },
+  })
+  const folderBySlug = new Map<string, string>()
+  for (const folder of folders) {
+    const slug = String(folder.slug || '').toLowerCase()
+    if (slug) folderBySlug.set(slug, folder.id)
   }
 
-  const where: any = {
-    userId,
-  }
+  const isStandard =
+    normalizedSlug === 'inbox' ||
+    normalizedSlug === 'sent' ||
+    normalizedSlug === 'drafts' ||
+    normalizedSlug === 'starred' ||
+    normalizedSlug === 'spam' ||
+    normalizedSlug === 'archive' ||
+    normalizedSlug === 'trash'
+
+  const customFolderId = !isStandard ? folderBySlug.get(normalizedSlug) ?? null : null
+  const andFilters: Prisma.EmailWhereInput[] = []
 
   // Filter by folder
-  if (folderSlug === 'inbox') {
+  if (normalizedSlug === 'inbox') {
     // Backward compatible: older emails were stored with folderId = null.
     // Newer sync may store explicit inbox folderId.
-    const inboxFolder = await db.folder.findFirst({
-      where: { userId, slug: 'inbox' },
-    })
-    where.isDeleted = false
-    if (inboxFolder) {
-      where.OR = [{ folderId: null }, { folderId: inboxFolder.id }]
+    const inboxId = folderBySlug.get('inbox') || null
+    const inboxFilter: Prisma.EmailWhereInput = { isDeleted: false }
+    if (inboxId) {
+      inboxFilter.OR = [{ folderId: null }, { folderId: inboxId }]
     } else {
-      where.folderId = null
+      inboxFilter.folderId = null
     }
-  } else if (folderSlug === 'sent') {
-    const sentFolder = await db.folder.findFirst({
-      where: { userId, slug: 'sent' },
-    })
-    where.isDeleted = false
-    if (sentFolder) {
-      where.folderId = sentFolder.id
+    andFilters.push(inboxFilter)
+  } else if (normalizedSlug === 'sent') {
+    const sentId = folderBySlug.get('sent') || null
+    const sentFilter: Prisma.EmailWhereInput = { isDeleted: false }
+    if (sentId) {
+      sentFilter.folderId = sentId
     } else {
       // Fallback (older behavior) if folders were not initialized for some reason
-      where.folderId = null
+      sentFilter.folderId = null
     }
-  } else if (folderSlug === 'drafts') {
-    const draftsFolder = await db.folder.findFirst({
-      where: { userId, slug: 'drafts' },
-    })
-    if (draftsFolder) {
-      where.folderId = draftsFolder.id
-    }
-    where.isDeleted = false
-  } else if (folderSlug === 'starred') {
-    where.isStarred = true
-    where.isDeleted = false
-  } else if (folderSlug === 'spam') {
-    const spamFolder = await db.folder.findFirst({
-      where: { userId, slug: 'spam' },
-    })
-    if (spamFolder) {
-      where.folderId = spamFolder.id
-    }
-    where.isDeleted = false
-  } else if (folderSlug === 'archive') {
-    const archiveFolder = await db.folder.findFirst({
-      where: { userId, slug: 'archive' },
-    })
-    if (archiveFolder) {
-      where.folderId = archiveFolder.id
-    }
-    where.isDeleted = false
-  } else if (folderSlug === 'trash') {
-    where.isDeleted = true
-  } else if (folderId) {
-    where.folderId = folderId
-    where.isDeleted = false
+    andFilters.push(sentFilter)
+  } else if (normalizedSlug === 'drafts') {
+    const draftsId = folderBySlug.get('drafts') || null
+    const draftsFilter: Prisma.EmailWhereInput = { isDeleted: false }
+    if (draftsId) draftsFilter.folderId = draftsId
+    andFilters.push(draftsFilter)
+  } else if (normalizedSlug === 'starred') {
+    andFilters.push({ isStarred: true, isDeleted: false })
+  } else if (normalizedSlug === 'spam') {
+    const spamId = folderBySlug.get('spam') || null
+    const spamFilter: Prisma.EmailWhereInput = { isDeleted: false }
+    if (spamId) spamFilter.folderId = spamId
+    andFilters.push(spamFilter)
+  } else if (normalizedSlug === 'archive') {
+    const archiveId = folderBySlug.get('archive') || null
+    const archiveFilter: Prisma.EmailWhereInput = { isDeleted: false }
+    if (archiveId) archiveFilter.folderId = archiveId
+    andFilters.push(archiveFilter)
+  } else if (normalizedSlug === 'trash') {
+    andFilters.push({ isDeleted: true })
+  } else if (customFolderId) {
+    andFilters.push({ folderId: customFolderId, isDeleted: false })
   } else {
-    where.isDeleted = false
+    andFilters.push({ isDeleted: false })
   }
 
   if (searchQuery) {
     // SQLite doesn't support case-insensitive mode directly
-    const searchOr = [
-      { subject: { contains: searchQuery } },
-      { from: { contains: searchQuery } },
-      { text: { contains: searchQuery } },
-    ]
-    // Preserve folder OR clause if already used (e.g., inbox)
-    if (where.OR) {
-      where.AND = [{ OR: where.OR }, { OR: searchOr }]
-      delete where.OR
-    } else {
-      where.OR = searchOr
-    }
+    andFilters.push({
+      OR: [
+        { subject: { contains: searchQuery } },
+        { from: { contains: searchQuery } },
+        { text: { contains: searchQuery } },
+      ],
+    })
   }
 
   // Get emails first, then group by thread
   const safeTake = Math.max(1, Math.min(100, take))
 
   if (cursor) {
-    const cursorFilter = {
+    andFilters.push({
       OR: [
         { date: { lt: cursor.date } },
         { AND: [{ date: cursor.date }, { id: { lt: cursor.id } }] },
       ],
-    }
-    if (where.AND && Array.isArray(where.AND)) {
-      where.AND.push(cursorFilter)
-    } else if (where.OR) {
-      where.AND = [{ OR: where.OR }, cursorFilter]
-      delete where.OR
-    } else {
-      where.AND = [cursorFilter]
-    }
+    })
+  }
+
+  const where: Prisma.EmailWhereInput = { userId }
+  if (andFilters.length > 0) {
+    where.AND = andFilters
   }
 
   const emails = await db.email.findMany({
@@ -233,18 +168,27 @@ export async function getEmailThreads(
   return { threads, hasMore, nextCursor }
 }
 
-export async function getEmailById(emailId: string, userId: string) {
+export async function getEmailById(
+  emailId: string,
+  userId: string,
+  opts?: { markRead?: boolean; includeDeleted?: boolean }
+) {
+  const includeDeleted = opts?.includeDeleted === true
+  const baseWhere: Prisma.EmailWhereInput = {
+    id: emailId,
+    userId,
+  }
+  if (!includeDeleted) {
+    baseWhere.isDeleted = false
+  }
+
   const email = await db.email.findFirst({
-    where: {
-      id: emailId,
-      userId,
-      isDeleted: false,
-    },
+    where: baseWhere,
     include: {
       thread: {
         include: {
           emails: {
-            where: { isDeleted: false },
+            where: includeDeleted ? {} : { isDeleted: false },
             orderBy: { date: 'asc' },
           },
         },
@@ -253,43 +197,46 @@ export async function getEmailById(emailId: string, userId: string) {
     },
   })
 
+  const readMessageIds: string[] = []
+  const shouldMarkRead = opts?.markRead !== false
   if (email) {
     // Помечаем письмо (и всю цепочку) как прочитанное
     if (email.threadId) {
-      await db.email.updateMany({
-        where: {
-          userId,
-          threadId: email.threadId,
-          isDeleted: false,
-          isRead: false,
-        },
-        data: { isRead: true },
+      const unreadWhere: Prisma.EmailWhereInput = {
+        userId,
+        threadId: email.threadId,
+        isRead: false,
+      }
+      if (!includeDeleted) {
+        unreadWhere.isDeleted = false
+      }
+      const unread = await db.email.findMany({
+        where: unreadWhere,
+        select: { messageId: true },
       })
+      for (const u of unread) {
+        if (u.messageId) readMessageIds.push(u.messageId)
+      }
+      if (shouldMarkRead) {
+        await db.email.updateMany({
+          where: unreadWhere,
+          data: { isRead: true },
+        })
+      }
     } else {
-      await db.email.update({
-        where: { id: emailId },
-        data: { isRead: true },
-      })
+      if (!email.isRead && email.messageId) {
+        readMessageIds.push(email.messageId)
+      }
+      if (shouldMarkRead) {
+        await db.email.update({
+          where: { id: emailId },
+          data: { isRead: true },
+        })
+      }
     }
   }
 
-  return email
-}
-
-export async function getThreadById(threadId: string, userId: string) {
-  return db.thread.findFirst({
-    where: {
-      id: threadId,
-      userId,
-    },
-    include: {
-      emails: {
-        where: { isDeleted: false },
-        orderBy: { date: 'asc' },
-      },
-      folder: true,
-    },
-  })
+  return { email, readMessageIds }
 }
 
 export async function getFolders(userId: string) {
@@ -313,52 +260,44 @@ export async function getFolders(userId: string) {
   })
 }
 
-export async function deleteEmail(emailId: string, userId: string) {
-  return db.email.update({
+export async function deleteEmail(
+  emailId: string,
+  userId: string,
+  opts?: { imapMailbox?: string | null; imapUid?: number | null }
+) {
+  const data: { isDeleted: boolean; imapMailbox?: string | null; imapUid?: number | null } = {
+    isDeleted: true,
+  }
+  if (Object.prototype.hasOwnProperty.call(opts || {}, 'imapMailbox')) {
+    data.imapMailbox = opts?.imapMailbox ?? null
+  }
+  if (Object.prototype.hasOwnProperty.call(opts || {}, 'imapUid')) {
+    data.imapUid = opts?.imapUid ?? null
+  }
+
+  const result = await db.email.updateMany({
     where: {
       id: emailId,
       userId,
     },
-    data: {
-      isDeleted: true,
-    },
+    data,
   })
+  if (result.count === 0) {
+    throw new Error('Email not found')
+  }
+  return result
 }
 
 export async function permanentlyDeleteEmail(emailId: string, userId: string) {
   // Delete only within user's mailbox
-  return db.email.deleteMany({
+  const result = await db.email.deleteMany({
     where: {
       id: emailId,
       userId,
     },
   })
-}
-
-export async function emptyTrash(userId: string) {
-  return db.email.deleteMany({
-    where: {
-      userId,
-      isDeleted: true,
-    },
-  })
-}
-
-export async function toggleStarEmail(emailId: string, userId: string) {
-  const email = await db.email.findFirst({
-    where: {
-      id: emailId,
-      userId,
-    },
-  })
-
-  if (!email) {
+  if (result.count === 0) {
     throw new Error('Email not found')
   }
-
-  return db.email.update({
-    where: { id: emailId },
-    data: { isStarred: !email.isStarred },
-  })
+  return result
 }
-

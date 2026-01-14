@@ -1,116 +1,24 @@
 "use client"
 
+import Image from "next/image"
 import { useState, useEffect } from "react"
 import {
   X,
   Globe,
-  Search,
   Eye,
-  CheckCircle,
   AlertTriangle,
   Copy,
   RefreshCw,
-  BarChart,
-  Target,
   Zap,
   FileText,
-  Image,
-  Link,
-  Tag,
-  TrendingUp,
+  Image as ImageIcon,
   Settings,
   Save,
-  Download,
-  Upload,
-  Edit,
   Trash2,
   Plus,
-  Minus,
-  ChevronDown,
-  ChevronUp,
-  ExternalLink,
-  Info,
-  HelpCircle,
   Lightbulb,
-  Star,
-  Heart,
   Share2,
-  MessageCircle,
-  Phone,
-  Mail,
-  Calendar,
-  Clock,
-  MapPin,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  DollarSign,
-  User,
-  Users,
   Database,
-  Bell,
-  Cog,
-  Filter,
-  SortAsc,
-  SortDesc,
-  Grid,
-  List,
-  MoreVertical,
-  Check,
-  AlertCircle,
-  XCircle,
-  PlusCircle,
-  MinusCircle,
-  Edit3,
-  Save as SaveIcon,
-  Download as DownloadIcon,
-  Upload as UploadIcon,
-  Edit as EditIcon,
-  Trash2 as TrashIcon,
-  Plus as PlusIcon,
-  Minus as MinusIcon,
-  ChevronDown as ChevronDownIcon,
-  ChevronUp as ChevronUpIcon,
-  ExternalLink as ExternalLinkIcon,
-  Info as InfoIcon,
-  HelpCircle as HelpCircleIcon,
-  Lightbulb as LightbulbIcon,
-  Star as StarIcon,
-  Heart as HeartIcon,
-  Share2 as Share2Icon,
-  MessageCircle as MessageCircleIcon,
-  Phone as PhoneIcon,
-  Mail as MailIcon,
-  Calendar as CalendarIcon,
-  Clock as ClockIcon,
-  MapPin as MapPinIcon,
-  Home as HomeIcon,
-  Building as BuildingIcon,
-  LandPlot as LandPlotIcon,
-  Store as StoreIcon,
-  Factory as FactoryIcon,
-  Share as ShareIcon,
-  DollarSign as DollarSignIcon,
-  User as UserIcon,
-  Users as UsersIcon,
-  Database as DatabaseIcon,
-  Bell as BellIcon,
-  Cog as CogIcon,
-  Filter as FilterIcon,
-  SortAsc as SortAscIcon,
-  SortDesc as SortDescIcon,
-  Grid as GridIcon,
-  List as ListIcon,
-  MoreVertical as MoreVerticalIcon,
-  Check as CheckIcon,
-  AlertCircle as AlertCircleIcon,
-  XCircle as XCircleIcon,
-  PlusCircle as PlusCircleIcon,
-  MinusCircle as MinusCircleIcon,
-  Edit3 as Edit3Icon
 } from "lucide-react"
 
 interface SEOData {
@@ -272,7 +180,7 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
   }, [seoData])
 
   // Обновление данных
-  const updateSeoData = (field: string, value: any) => {
+  const updateSeoData = <K extends keyof SEOData>(field: K, value: SEOData[K]) => {
     setSeoData(prev => ({
       ...prev,
       [field]: value
@@ -280,7 +188,10 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
   }
 
   // Обновление структурированных данных
-  const updateStructuredData = (field: string, value: any) => {
+  const updateStructuredData = <K extends keyof SEOData['structuredData']>(
+    field: K,
+    value: SEOData['structuredData'][K]
+  ) => {
     setSeoData(prev => ({
       ...prev,
       structuredData: {
@@ -815,9 +726,16 @@ export default function SEOModal({ isOpen, onClose, onSave, initialData, objectD
                 <div className="flex space-x-4">
                   <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center">
                     {seoData.ogImage ? (
-                      <img src={seoData.ogImage} alt="OG Image" className="w-full h-full object-cover rounded-lg" />
+                      <Image
+                        src={seoData.ogImage}
+                        alt="OG Image"
+                        width={128}
+                        height={128}
+                        unoptimized
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                     ) : (
-                      <Image className="w-8 h-8 text-gray-400" />
+                      <ImageIcon className="w-8 h-8 text-gray-400" />
                     )}
                   </div>
                   <div className="flex-1">

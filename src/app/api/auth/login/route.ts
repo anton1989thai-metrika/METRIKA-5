@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { AccountType } from '@prisma/client'
 import { verifyPassword } from '@/lib/auth/password'
 import { createSession, setSessionCookie } from '@/lib/auth/session'
 
@@ -15,13 +16,17 @@ export async function POST(request: NextRequest) {
     }
 
     const user =
-      (await db.user.findUnique({ where: { email: emailOrLogin } })) ||
-      (await db.user.findFirst({ where: { login: emailOrLogin } }))
+      (await db.user.findFirst({
+        where: { email: emailOrLogin, accountType: AccountType.human },
+      })) ||
+      (await db.user.findFirst({
+        where: { login: emailOrLogin, accountType: AccountType.human },
+      }))
     if (!user || !user.passwordHash) {
       return NextResponse.json({ success: false, error: 'Неверный логин или пароль' }, { status: 401 })
     }
 
-    if (String((user as any).status || 'active') !== 'active') {
+    if (String(user.status || 'active') !== 'active') {
       return NextResponse.json({ success: false, error: 'Пользователь деактивирован' }, { status: 403 })
     }
 
@@ -39,9 +44,8 @@ export async function POST(request: NextRequest) {
       success: true,
       user: { email: user.email, name: user.name, role: user.role },
     })
-  } catch (e) {
+  } catch (error) {
+    console.error('Login error:', error)
     return NextResponse.json({ success: false, error: 'Ошибка авторизации' }, { status: 500 })
   }
 }
-
-

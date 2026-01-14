@@ -4,9 +4,11 @@ import { Suspense } from 'react'
 import { useParams } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 import BurgerMenu from '@/components/BurgerMenu'
+import Header from '@/components/Header'
 import Sidebar from '@/components/email/Sidebar'
 import EmailView from '@/components/email/EmailView'
 import { useState, useEffect } from 'react'
+import { fetchJsonOrNull } from '@/lib/api-client'
 
 interface Folder {
   id: string
@@ -27,11 +29,8 @@ function EmailViewPageContent() {
     // Load admin/user email
     async function fetchUserData() {
       try {
-        const userResponse = await fetch('/api/user')
-        if (userResponse.ok) {
-          const userData = await userResponse.json()
-          if (userData.email) setCurrentEmail(userData.email)
-        }
+        const userData = await fetchJsonOrNull<{ email?: string }>('/api/user')
+        if (userData?.email) setCurrentEmail(userData.email)
       } catch {}
     }
     fetchUserData()
@@ -55,21 +54,19 @@ function EmailViewPageContent() {
 
   useEffect(() => {
     async function fetchFolders() {
-      try {
-        const qs = new URLSearchParams()
-        qs.set('folder', 'inbox')
-        if (selectedMailbox && currentEmail && selectedMailbox !== currentEmail) {
-          qs.set('viewEmail', selectedMailbox)
-        }
-        const response = await fetch(`/api/emails?${qs.toString()}`, {
+      const qs = new URLSearchParams()
+      qs.set('folder', 'inbox')
+      if (selectedMailbox) {
+        qs.set('viewEmail', selectedMailbox)
+      }
+      const data = await fetchJsonOrNull<{ folders?: Folder[] }>(
+        `/api/emails?${qs.toString()}`,
+        {
           headers: currentEmail ? { 'x-user-email': currentEmail } : undefined,
-        })
-        if (response.ok) {
-          const data = await response.json()
-          setFolders(data.folders || [])
         }
-      } catch (error) {
-        console.error('Error fetching folders:', error)
+      )
+      if (data?.folders) {
+        setFolders(data.folders)
       }
     }
 
@@ -78,36 +75,38 @@ function EmailViewPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <BurgerMenu />
-
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-semibold text-black">Почта METRIKA</h1>
+      <Header>
+        <div className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <h1 className="text-xl font-semibold text-black">Почта METRIKA</h1>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Header>
+      <BurgerMenu />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex space-x-6">
-          {/* Sidebar */}
-          <Sidebar folders={folders} />
+      <main className="pt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex space-x-6">
+            {/* Sidebar */}
+            <Sidebar folders={folders} />
 
-          {/* Email View */}
-          <div className="flex-1">
-            <EmailView
-              emailId={emailId}
-              folderSlug={folderSlug}
-              currentEmail={currentEmail}
-              selectedMailbox={selectedMailbox}
-            />
+            {/* Email View */}
+            <div className="flex-1">
+              <EmailView
+                emailId={emailId}
+                folderSlug={folderSlug}
+                currentEmail={currentEmail}
+                selectedMailbox={selectedMailbox}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
@@ -119,4 +118,3 @@ export default function EmailViewPage() {
     </Suspense>
   )
 }
-

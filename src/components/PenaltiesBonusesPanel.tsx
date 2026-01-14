@@ -12,14 +12,10 @@ import {
   TrendingUp,
   TrendingDown,
   Target,
-  Star,
   CheckCircle,
   XCircle,
   Clock,
   DollarSign,
-  Users,
-  Calendar,
-  Filter,
   Search
 } from "lucide-react"
 
@@ -144,7 +140,10 @@ export default function PenaltiesBonusesPanel() {
   }
 
   const filteredItems = penaltiesBonuses.filter(item => {
-    const matchesTab = activeTab === 'all' || item.type === activeTab
+    const matchesTab =
+      activeTab === 'all' ||
+      (activeTab === 'penalties' && item.type === 'penalty') ||
+      (activeTab === 'bonuses' && item.type === 'bonus')
     const matchesSearch = item.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.reason.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -223,19 +222,6 @@ export default function PenaltiesBonusesPanel() {
         ? { ...item, status: 'rejected' as const }
         : item
     ))
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return <CheckCircle className="w-4 h-4 text-gray-600" />
-      case 'rejected':
-        return <XCircle className="w-4 h-4 text-gray-600" />
-      case 'pending':
-        return <Clock className="w-4 h-4 text-gray-600" />
-      default:
-        return <Clock className="w-4 h-4 text-gray-600" />
-    }
   }
 
   const getStatusColor = (status: string) => {
@@ -367,7 +353,9 @@ export default function PenaltiesBonusesPanel() {
           {/* Фильтр по статусу */}
           <select
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
+            onChange={(e) =>
+              setFilterStatus(e.target.value as 'all' | 'pending' | 'approved' | 'rejected')
+            }
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">Все статусы</option>

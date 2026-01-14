@@ -33,5 +33,14 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.tsUser Anton/back1.mp4
+next-env.d.ts
+
+# macOS metadata
+._*
+.AppleDouble
+.LSOverride
+__MACOSX
+
+# local artifacts
+User Anton/back1.mp4
 public/videos/back1.mp4

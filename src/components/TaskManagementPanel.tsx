@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useMemo, useState } from "react"
 import { 
   CheckSquare, 
   Plus, 
@@ -10,36 +12,15 @@ import {
   Calendar, 
   Clock, 
   User, 
-  Flag, 
   AlertCircle, 
-  CheckCircle, 
-  XCircle, 
   Search, 
-  Filter, 
-  SortAsc, 
-  SortDesc, 
-  Download, 
-  Upload, 
   RefreshCw, 
-  Bell, 
   Mail, 
-  Phone, 
-  Building2, 
   FileText, 
-  Tag, 
-  Users, 
   Target, 
   TrendingUp, 
   BarChart3,
-  MoreVertical,
-  Send,
-  Archive,
-  Star,
-  MessageSquare,
-  Paperclip,
-  Link,
-  Copy,
-  Share2
+  MessageSquare
 } from "lucide-react"
 
 interface Task {
@@ -103,14 +84,10 @@ export default function TaskManagementPanel() {
   const [statusFilter, setStatusFilter] = useState('all')
   const [priorityFilter, setPriorityFilter] = useState('all')
   const [assigneeFilter, setAssigneeFilter] = useState('all')
-  const [showTaskModal, setShowTaskModal] = useState(false)
-  const [showApplicationModal, setShowApplicationModal] = useState(false)
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   // Mock данные для задач
-  const tasks: Task[] = [
+  const tasks = useMemo<Task[]>(() => [
     {
       id: 1,
       title: "Обновить фотографии объекта #123",
@@ -191,10 +168,10 @@ export default function TaskManagementPanel() {
         phone: "+7 (495) 987-65-43"
       }
     }
-  ]
+  ], [])
 
   // Mock данные для заявок
-  const applications: Application[] = [
+  const applications = useMemo<Application[]>(() => [
     {
       id: 1,
       type: "purchase",
@@ -246,7 +223,7 @@ export default function TaskManagementPanel() {
       notes: "Консультация проведена, клиент получил всю необходимую информацию",
       source: "email"
     }
-  ]
+  ], [])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -311,7 +288,7 @@ export default function TaskManagementPanel() {
     }
   }
 
-  const filteredTasks = tasks.filter(task => {
+  const filteredTasks = useMemo(() => tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          task.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -320,15 +297,15 @@ export default function TaskManagementPanel() {
     const matchesAssignee = assigneeFilter === 'all' || task.assignee === assigneeFilter
     
     return matchesSearch && matchesStatus && matchesPriority && matchesAssignee
-  })
+  }), [tasks, searchQuery, statusFilter, priorityFilter, assigneeFilter])
 
-  const filteredApplications = applications.filter(app => {
+  const filteredApplications = useMemo(() => applications.filter(app => {
     const matchesSearch = app.client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          app.requirements.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesStatus = statusFilter === 'all' || app.status === statusFilter
     
     return matchesSearch && matchesStatus
-  })
+  }), [applications, searchQuery, statusFilter])
 
   const stats = {
     totalTasks: tasks.length,
@@ -346,31 +323,24 @@ export default function TaskManagementPanel() {
   }
 
   const handleEditTask = (task: Task) => {
-    setSelectedTask(task)
-    setShowTaskModal(true)
-  }
-
-  const handleCreateApplication = () => {
-    setSelectedApplication(null)
-    setShowApplicationModal(true)
+    window.location.href = `/task/${task.id}/edit`
   }
 
   const handleEditApplication = (application: Application) => {
-    setSelectedApplication(application)
-    setShowApplicationModal(true)
+    window.location.href = `/purchase-application?applicationId=${application.id}`
   }
 
   const handleDeleteTask = (id: number) => {
     if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
       // В реальном приложении здесь будет API вызов
-      console.log('Удаление задачи:', id)
+      debugLog('Удаление задачи:', id)
     }
   }
 
   const handleDeleteApplication = (id: number) => {
     if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
       // В реальном приложении здесь будет API вызов
-      console.log('Удаление заявки:', id)
+      debugLog('Удаление заявки:', id)
     }
   }
 

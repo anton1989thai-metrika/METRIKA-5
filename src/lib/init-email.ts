@@ -1,6 +1,7 @@
+import { AccountType } from '@prisma/client'
 import { db } from './db'
 
-export async function initializeEmailFolders(userId: string) {
+async function initializeEmailFolders(userId: string) {
   // Create default folders if they don't exist
   const defaultFolders = [
     { name: 'Входящие', slug: 'inbox' },
@@ -38,6 +39,7 @@ export async function initializeEmailUser(email: string, name?: string) {
     create: {
       email,
       name: name || email.split('@')[0],
+      accountType: AccountType.mailbox,
     },
   })
 
@@ -46,4 +48,3 @@ export async function initializeEmailUser(email: string, name?: string) {
 
   return user
 }
-

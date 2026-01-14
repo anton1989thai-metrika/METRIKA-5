@@ -17,6 +17,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Save } from 'lucide-react'
+import { fetchJson } from '@/lib/api-client'
 
 interface UserType {
   id: string
@@ -39,6 +40,8 @@ function mapRoleToUi(role: string): string {
   if (role === 'admin' || role === 'manager' || role === 'employee') return role
   return 'employee'
 }
+
+const JSON_HEADERS = { 'Content-Type': 'application/json' } as const
 
 export default function AddUserPage() {
   const router = useRouter()
@@ -96,11 +99,7 @@ export default function AddUserPage() {
 
     try {
       // Load current list and append (UserManagementPanel sync model)
-      const listResp = await fetch('/api/users')
-      if (!listResp.ok) {
-        throw new Error('Не удалось загрузить список пользователей')
-      }
-      const list = await listResp.json()
+      const list = await fetchJson<UserType[]>('/api/users')
 
       const userData: UserType = {
         id: Date.now().toString(),
@@ -120,22 +119,18 @@ export default function AddUserPage() {
       }
 
       const updated = Array.isArray(list) ? [...list, userData] : [userData]
-      const syncResp = await fetch('/api/users', {
+      await fetchJson('/api/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: JSON_HEADERS,
         body: JSON.stringify(updated),
       })
-      if (!syncResp.ok) {
-        const err = await syncResp.json().catch(() => ({}))
-        throw new Error(err?.message || 'Не удалось создать пользователя')
-      }
 
       // Back to admin users tab
       router.push('/admin?tab=users')
       
     } catch (error) {
-      console.error('Ошибка при создании пользователя:', error)
-      alert((error as any)?.message ?? 'Ошибка при создании пользователя')
+      const message = error instanceof Error ? error.message : 'Ошибка при создании пользователя'
+      alert(message)
     } finally {
       setLoading(false)
     }

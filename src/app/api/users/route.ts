@@ -1,44 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { AccountType, Prisma, UserRole } from '@prisma/client'
 import { db } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth/session'
 import { hashPassword } from '@/lib/auth/password'
 import { mailboxctl } from '@/lib/mailboxctl'
-
-type UiRole =
-  | 'site-user'
-  | 'client'
-  | 'foreign-employee'
-  | 'freelancer'
-  | 'employee'
-  | 'manager'
-  | 'admin'
+import { setMailPasswordByEmail } from '@/lib/mail-password'
+import { UiRole, prismaRoleToUiRole, toUiRole } from '@/lib/permissions-core'
 
 type UiStatus = 'active' | 'inactive' | 'pending'
 
-function prismaRoleToUi(role: string): UiRole {
-  if (role === 'site_user') return 'site-user'
-  if (role === 'foreign_employee') return 'foreign-employee'
-  return toUiRole(role)
-}
+type IncomingUser = Partial<{
+  id: string
+  email: string
+  login: string
+  name: string
+  role: string
+  password: string
+  status: string
+  detailedPermissions: unknown
+  dateOfBirth: string
+  phoneWork: string
+  phonePersonal: string
+  address: string
+  comments: string
+}>
 
-function uiRoleToPrisma(role: UiRole): any {
-  if (role === 'site-user') return 'site_user'
-  if (role === 'foreign-employee') return 'foreign_employee'
-  return role
-}
-
-function toUiRole(role: string): UiRole {
-  if (
-    role === 'admin' ||
-    role === 'manager' ||
-    role === 'employee' ||
-    role === 'site-user' ||
-    role === 'client' ||
-    role === 'foreign-employee' ||
-    role === 'freelancer'
-  )
-    return role
-  return 'site-user'
+function uiRoleToPrisma(role: UiRole): UserRole {
+  if (role === 'site-user') return UserRole.site_user
+  if (role === 'foreign-employee') return UserRole.foreign_employee
+  if (role === 'client') return UserRole.client
+  if (role === 'freelancer') return UserRole.freelancer
+  if (role === 'employee') return UserRole.employee
+  if (role === 'manager') return UserRole.manager
+  return UserRole.admin
 }
 
 function toDbRole(role: string): UiRole {
@@ -60,7 +54,7 @@ function defaultPermissions(role: UiRole) {
   }
 }
 
-function normalizeEmail(email: string) {
+function normalizeEmail(email?: string | null) {
   return String(email || '').trim().toLowerCase()
 }
 
@@ -76,6 +70,7 @@ export async function GET() {
     }
 
     const users = await db.user.findMany({
+      where: { accountType: AccountType.human },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
@@ -93,21 +88,21 @@ export async function GET() {
         address: true,
         comments: true,
         createdAt: true,
-      } as any,
+      },
     })
 
     // Shape compatible with old UI (UserManagementPanel)
     const payload = users.map((u) => {
-      const role = prismaRoleToUi(String(u.role))
+      const role = prismaRoleToUiRole(String(u.role))
       return {
         id: u.id,
         name: u.name || u.email.split('@')[0],
         email: u.email,
         login: u.login || u.email,
         role,
-        status: ((u.status as any) || 'active') as UiStatus,
+        status: (u.status || 'active') as UiStatus,
         permissions: defaultPermissions(role),
-        detailedPermissions: (u as any).detailedPermissions || null,
+        detailedPermissions: u.detailedPermissions || null,
         lastLogin: u.lastLogin ? u.lastLogin.toISOString() : null,
         createdAt: u.createdAt.toISOString(),
         needsPassword: !u.passwordHash,
@@ -140,13 +135,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 })
     }
 
-    const newUsers: any[] = await request.json()
-    if (!Array.isArray(newUsers)) {
+    const body = await request.json().catch(() => null)
+    if (!Array.isArray(body)) {
       return NextResponse.json(
         { message: 'Invalid data format. Expected an array of users.' },
         { status: 400 }
       )
     }
+    const newUsers = body as IncomingUser[]
 
     // Ensure we keep at least one admin and don't delete current admin
     const desired = newUsers
@@ -158,7 +154,7 @@ export async function POST(request: NextRequest) {
         role: toDbRole(String(u?.role || 'employee')) as UiRole,
         password: String(u?.password || ''),
         status: (String(u?.status || 'active') || 'active') as UiStatus,
-        detailedPermissions: (u as any)?.detailedPermissions ?? undefined,
+        detailedPermissions: u.detailedPermissions ?? undefined,
         dateOfBirth: String(u?.dateOfBirth || '').trim() || null,
         phoneWork: String(u?.phoneWork || '').trim() || null,
         phonePersonal: String(u?.phonePersonal || '').trim() || null,
@@ -197,12 +193,14 @@ export async function POST(request: NextRequest) {
         const secret = process.env.MAIL_ADMIN_SECRET || null
         try {
           await mailboxctl('passwd', [u.email, u.password], secret)
-        } catch (e: any) {
+        } catch (e) {
           // If mailbox doesn't exist yet, try create (sets password)
           try {
             await mailboxctl('create', [u.email, u.password], secret)
-          } catch (e2: any) {
-            const msg = e2?.message || e?.message || 'Failed to update mailbox password'
+          } catch (e2) {
+            const err1 = e as { message?: string }
+            const err2 = e2 as { message?: string }
+            const msg = err2.message || err1.message || 'Failed to update mailbox password'
             return NextResponse.json(
               { message: `Не удалось обновить пароль почты для ${u.email}. ${msg}` },
               { status: 500 }
@@ -221,7 +219,7 @@ export async function POST(request: NextRequest) {
           (u.id ? await tx.user.findUnique({ where: { id: u.id } }).catch(() => null) : null) ||
           (await tx.user.findUnique({ where: { email: u.email } }).catch(() => null))
         if (existing) {
-          const data: any = {
+          const data: Prisma.UserUpdateInput = {
             role: uiRoleToPrisma(u.role),
             status: u.status || 'active',
             dateOfBirth: u.dateOfBirth,
@@ -229,8 +227,11 @@ export async function POST(request: NextRequest) {
             phonePersonal: u.phonePersonal,
             address: u.address,
             comments: u.comments,
+            accountType: AccountType.human,
           }
-          if (u.detailedPermissions !== undefined) data.detailedPermissions = u.detailedPermissions
+          if (u.detailedPermissions !== undefined) {
+            data.detailedPermissions = u.detailedPermissions as Prisma.InputJsonValue
+          }
           if (u.name !== null) data.name = u.name
           if (u.login) data.login = u.login
           if (u.email && u.email !== existing.email) data.email = u.email
@@ -238,7 +239,7 @@ export async function POST(request: NextRequest) {
           if (u.password && u.password.length >= 6 && u.password !== '********') {
             data.passwordHash = preHashedByEmail.get(u.email) || (await hashPassword(u.password))
           }
-          await tx.user.update({ where: { id: existing.id }, data: data as any })
+          await tx.user.update({ where: { id: existing.id }, data })
         } else {
           if (!u.password || u.password.length < 6) {
             // Skip creation if no usable password was provided
@@ -252,19 +253,23 @@ export async function POST(request: NextRequest) {
               role: uiRoleToPrisma(u.role),
               passwordHash: preHashedByEmail.get(u.email) || (await hashPassword(u.password)),
               status: u.status || 'active',
-              detailedPermissions: u.detailedPermissions ?? null,
+              detailedPermissions: (u.detailedPermissions ?? undefined) as Prisma.InputJsonValue | undefined,
               dateOfBirth: u.dateOfBirth,
               phoneWork: u.phoneWork,
               phonePersonal: u.phonePersonal,
               address: u.address,
               comments: u.comments,
-            } as any,
+              accountType: AccountType.human,
+            },
           })
         }
       }
 
       // delete users not present (except current session user)
-      const dbUsers = await tx.user.findMany({ select: { id: true, email: true, role: true } })
+      const dbUsers = await tx.user.findMany({
+        where: { accountType: AccountType.human },
+        select: { id: true, email: true, role: true },
+      })
       const toDelete = dbUsers.filter((u) => {
         if (u.email === sessionUser.email) return false
         if (desiredIds.size > 0) return !desiredIds.has(u.id)
@@ -278,7 +283,7 @@ export async function POST(request: NextRequest) {
           if (desiredIds.size > 0) return desiredIds.has(u.id)
           return desiredEmails.has(u.email)
         })
-        .filter((u) => u.role === 'admin').length
+        .filter((u) => u.role === UserRole.admin).length
       if (remainingAdmins === 0) {
         throw new Error('No admin would remain')
       }
@@ -287,6 +292,15 @@ export async function POST(request: NextRequest) {
         await tx.user.deleteMany({ where: { id: { in: toDelete.map((u) => u.id) } } })
       }
     })
+
+    // Store mailbox password (encrypted) for human users that have mailbox sync enabled.
+    // Do this after the DB transaction to avoid upsert/create conflicts.
+    for (const u of desired) {
+      const isPasswordChange = u.password && u.password.length >= 6 && u.password !== '********'
+      if (!isPasswordChange) continue
+      if (!shouldSyncMailboxPassword(u.email)) continue
+      await setMailPasswordByEmail(u.email, u.password, AccountType.human).catch(() => null)
+    }
 
     return NextResponse.json({ message: 'Users updated successfully.' }, { status: 200 })
   } catch (error) {

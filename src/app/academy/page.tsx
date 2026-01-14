@@ -1,14 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import BurgerMenu from "@/components/BurgerMenu"
 import Header from "@/components/Header"
 import { 
   BookOpen, 
-  Play, 
   FileText, 
   Award, 
-  TrendingUp, 
   Users, 
   Clock, 
   Star,
@@ -19,23 +17,17 @@ import {
   Calendar,
   Target,
   CheckCircle,
-  AlertCircle,
   Trophy,
   GraduationCap,
   Video,
-  File,
   TestTube,
   BarChart3,
-  Settings,
   User,
   ChevronRight,
   ChevronDown,
   Eye,
   Bookmark,
-  Share2,
-  MessageCircle,
-  ThumbsUp,
-  ThumbsDown
+  Share2
 } from "lucide-react"
 import CourseModal from "@/components/CourseModal"
 import TestModal from "@/components/TestModal"
@@ -105,7 +97,7 @@ export default function AcademyPage() {
   const [showNotificationModal, setShowNotificationModal] = useState(false)
 
   // Mock data
-  const courses: Course[] = [
+  const courses = useMemo<Course[]>(() => [
     {
       id: 1,
       title: "Основы недвижимости",
@@ -193,9 +185,9 @@ export default function AcademyPage() {
       isRequired: false,
       tags: ["зарубеж", "визы", "налоги"]
     }
-  ]
+  ], [])
 
-  const tests: Test[] = [
+  const tests = useMemo<Test[]>(() => [
     {
       id: 1,
       title: "Тест по основам недвижимости",
@@ -237,9 +229,9 @@ export default function AcademyPage() {
       status: "not-taken",
       isRequired: true
     }
-  ]
+  ], [])
 
-  const achievements: Achievement[] = [
+  const achievements = useMemo<Achievement[]>(() => [
     {
       id: 1,
       title: "Первые шаги",
@@ -277,26 +269,32 @@ export default function AcademyPage() {
       progress: 25,
       requirement: "Уровень эксперт"
     }
-  ]
+  ], [])
 
-  const stats = {
-    totalCourses: courses.length,
-    completedCourses: courses.filter(c => c.status === 'completed').length,
-    inProgressCourses: courses.filter(c => c.status === 'in-progress').length,
-    totalTests: tests.length,
-    passedTests: tests.filter(t => t.status === 'passed').length,
-    averageScore: tests.filter(t => t.bestScore > 0).reduce((acc, t) => acc + t.bestScore, 0) / tests.filter(t => t.bestScore > 0).length,
-    studyTime: 45, // hours
-    level: "Продвинутый",
-    nextLevel: "Эксперт",
-    levelProgress: 75
-  }
+  const stats = useMemo(() => {
+    const scoredTests = tests.filter(t => t.bestScore > 0)
+    const averageScore = scoredTests.length
+      ? scoredTests.reduce((acc, t) => acc + t.bestScore, 0) / scoredTests.length
+      : 0
+    return {
+      totalCourses: courses.length,
+      completedCourses: courses.filter(c => c.status === 'completed').length,
+      inProgressCourses: courses.filter(c => c.status === 'in-progress').length,
+      totalTests: tests.length,
+      passedTests: tests.filter(t => t.status === 'passed').length,
+      averageScore,
+      studyTime: 45, // hours
+      level: "Продвинутый",
+      nextLevel: "Эксперт",
+      levelProgress: 75
+    }
+  }, [courses, tests])
 
-  const categories = ["all", "Основы", "Продажи", "Право", "Коммерция", "Зарубеж"]
-  const levels = ["all", "beginner", "intermediate", "advanced", "expert"]
-  const statuses = ["all", "not-started", "in-progress", "completed"]
+  const categories = useMemo(() => ["all", "Основы", "Продажи", "Право", "Коммерция", "Зарубеж"], [])
+  const levels = useMemo(() => ["all", "beginner", "intermediate", "advanced", "expert"], [])
+  const statuses = useMemo(() => ["all", "not-started", "in-progress", "completed"], [])
 
-  const filteredCourses = courses.filter(course => {
+  const filteredCourses = useMemo(() => courses.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          course.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -305,7 +303,17 @@ export default function AcademyPage() {
     const matchesStatus = selectedStatus === 'all' || course.status === selectedStatus
     
     return matchesSearch && matchesCategory && matchesLevel && matchesStatus
-  })
+  }), [courses, searchQuery, selectedCategory, selectedLevel, selectedStatus])
+
+  const inProgressCourses = useMemo(
+    () => courses.filter(c => c.status === 'in-progress'),
+    [courses]
+  )
+
+  const earnedAchievements = useMemo(
+    () => achievements.filter(a => a.earned),
+    [achievements]
+  )
 
   const handleCourseClick = (course: Course) => {
     setSelectedCourse(course)
@@ -362,7 +370,7 @@ export default function AcademyPage() {
       <Header />
       <BurgerMenu />
       
-      <main className="pt-20 px-4">
+      <main className="pt-32 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Заголовок */}
           <div className="mb-8 mt-8">
@@ -514,7 +522,7 @@ export default function AcademyPage() {
               <div>
                 <h2 className="text-xl font-semibold text-black mb-4">Курсы в процессе</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {courses.filter(c => c.status === 'in-progress').map(course => (
+                  {inProgressCourses.map(course => (
                     <div key={course.id} className="bg-white border border-gray-300 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all">
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="font-semibold text-black">{course.title}</h3>
@@ -560,7 +568,7 @@ export default function AcademyPage() {
               <div>
                 <h2 className="text-xl font-semibold text-black mb-4">Последние достижения</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {achievements.filter(a => a.earned).map(achievement => (
+                  {earnedAchievements.map(achievement => (
                     <div key={achievement.id} className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow-lg">
                       <div className="mb-2 flex justify-center">{achievement.icon}</div>
                       <h3 className="font-semibold text-black text-sm">{achievement.title}</h3>

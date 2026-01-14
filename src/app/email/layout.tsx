@@ -7,7 +7,6 @@ export default async function EmailLayout({ children }: { children: ReactNode })
   const user = await getSessionUser()
   if (!user) redirect('/auth/signin')
 
-  if (!hasSectionAccess(user as any, 'email')) redirect('/')
+  if (!hasSectionAccess(user, 'email')) redirect('/')
   return children
 }
-

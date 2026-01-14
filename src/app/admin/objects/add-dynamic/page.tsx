@@ -1,23 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { debugLog } from '@/lib/logger'
+
 import { useRouter } from 'next/navigation'
 import { Home, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { DynamicForm } from '@/components/DynamicForm'
-import { FormConfig } from '@/config/form-rules'
+import { FormConfig, FormData } from '@/config/form-rules'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import formRulesConfig from '@/config/form-rules.json'
 
 // Конвертируем JSON в типизированный объект
-const config: FormConfig = formRulesConfig as FormConfig
+const config = formRulesConfig as unknown as FormConfig
 
 export default function AddObjectDynamicPage() {
   const router = useRouter()
 
-  const handleSubmit = (formData: any) => {
-    console.log('Данные формы:', formData)
+  const handleSubmit = (formData: FormData) => {
+    debugLog('Данные формы:', formData)
     
     // Здесь можно добавить логику сохранения
     // Например, отправка на API
@@ -27,9 +28,9 @@ export default function AddObjectDynamicPage() {
     router.push('/admin/objects')
   }
 
-  const handleChange = (formData: any) => {
+  const handleChange = (formData: FormData) => {
     // Обработка изменений в реальном времени
-    console.log('Изменения:', formData)
+    debugLog('Изменения:', formData)
   }
 
   return (

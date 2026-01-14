@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
+import { formatFileSize } from "@/lib/utils"
 import {
   X,
   MessageSquare,
@@ -8,145 +9,14 @@ import {
   Edit,
   Trash2,
   Save,
-  Eye,
-  EyeOff,
   Lock,
-  Unlock,
   User,
-  Clock,
   AlertCircle,
   CheckCircle,
-  MoreVertical,
-  Reply,
   Pin,
-  Flag,
-  Star,
-  Heart,
-  Share2,
-  Copy,
-  Download,
   Upload,
-  RefreshCw,
-  Search,
-  Filter,
-  SortAsc,
-  SortDesc,
-  Grid,
-  List,
-  Settings,
-  Bell,
-  Database,
-  BarChart,
-  Cog,
-  Video,
-  Music,
-  Folder,
-  ChevronDown,
-  ChevronUp,
   Check,
-  AlertTriangle,
-  ExternalLink,
-  Link,
-  Target,
-  Layers,
-  Globe,
-  MapPin,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  DollarSign,
-  Calendar,
-  Phone,
-  Mail,
-  MessageCircle,
-  Calculator,
-  Play,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
-  Users,
-  UserPlus,
-  FileText,
-  Image,
-  Tag,
-  TrendingUp,
-  Archive,
-  MoreVertical as MoreIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-  Download as DownloadIcon,
-  Upload as UploadIcon,
-  Trash2 as TrashIcon,
-  Plus as PlusIcon,
-  ChevronDown as ChevronDownIcon,
-  ChevronUp as ChevronUpIcon,
-  Check as CheckIcon,
-  AlertTriangle as AlertTriangleIcon,
-  ExternalLink as ExternalLinkIcon,
-  Link as LinkIcon,
-  Target as TargetIcon,
-  Layers as LayersIcon,
-  Grid as GridIcon,
-  List as ListIcon,
-  SortAsc as SortAscIcon,
-  SortDesc as SortDescIcon,
-  Filter as FilterIcon,
-  Search as SearchIcon,
-  Eye as EyeIcon,
-  EyeOff as EyeOffIcon,
-  Lock as LockIcon,
-  Unlock as UnlockIcon,
-  User as UserIcon,
-  Clock as ClockIcon,
-  AlertCircle as AlertCircleIcon,
-  CheckCircle as CheckCircleIcon,
-  MoreVertical as MoreVerticalIcon,
-  Reply as ReplyIcon,
-  Pin as PinIcon,
-  Flag as FlagIcon,
-  Star as StarIcon,
-  Heart as HeartIcon,
-  Share2 as Share2Icon,
-  Copy as CopyIcon,
-  RefreshCw as RefreshCwIcon,
-  Settings as SettingsIcon,
-  Bell as BellIcon,
-  Database as DatabaseIcon,
-  BarChart as BarChartIcon,
-  Cog as CogIcon,
-  Video as VideoIcon,
-  Music as MusicIcon,
-  Folder as FolderIcon,
-  Globe as GlobeIcon,
-  MapPin as MapPinIcon,
-  Home as HomeIcon,
-  Building as BuildingIcon,
-  LandPlot as LandPlotIcon,
-  Store as StoreIcon,
-  Factory as FactoryIcon,
-  Share as ShareIcon,
-  DollarSign as DollarSignIcon,
-  Calendar as CalendarIcon,
-  Phone as PhoneIcon,
-  Mail as MailIcon,
-  MessageCircle as MessageCircleIcon,
-  Calculator as CalculatorIcon,
-  Play as PlayIcon,
-  QrCode as QrCodeIcon,
-  Info as InfoIcon,
-  Cloud as CloudIcon,
-  Zap as ZapIcon,
-  Users as UsersIcon,
-  UserPlus as UserPlusIcon,
-  FileText as FileTextIcon,
-  Image as ImageIcon,
-  Tag as TagIcon,
-  TrendingUp as TrendingUpIcon,
-  Archive as ArchiveIcon
+  FileText
 } from "lucide-react"
 
 interface Comment {
@@ -203,6 +73,7 @@ export default function CommentsModal({
   objectId,
   currentUser = { id: 'current-user', name: 'Текущий пользователь', role: 'manager' }
 }: CommentsModalProps) {
+  void objectId
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [newComment, setNewComment] = useState('')
   const [editingComment, setEditingComment] = useState<string | null>(null)
@@ -395,25 +266,13 @@ export default function CommentsModal({
   }
 
   // Форматирование размера файла
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
-
   // Авторизация отключена - все могут всё
-  const canEdit = (comment: Comment) => {
+  const canEdit = () => {
     return true; // Все могут редактировать
   }
 
-  const canDelete = (comment: Comment) => {
+  const canDelete = () => {
     return true; // Все могут удалять
-  }
-
-  const canView = (comment: Comment) => {
-    return true; // Все могут просматривать
   }
 
   // Сохранение
@@ -495,7 +354,9 @@ export default function CommentsModal({
                 </div>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) =>
+                    setSortBy(e.target.value as 'newest' | 'oldest' | 'priority')
+                  }
                   className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                 >
                   <option value="newest">Новые сначала</option>
@@ -653,7 +514,7 @@ export default function CommentsModal({
                       </button>
                     </div>
                     <div className="flex items-center space-x-1">
-                      {canEdit(comment) && (
+                      {canEdit() && (
                         <>
                           {editingComment === comment.id ? (
                             <>
@@ -697,7 +558,7 @@ export default function CommentsModal({
                       >
                         <CheckCircle className="w-4 h-4" />
                       </button>
-                      {canDelete(comment) && (
+                      {canDelete() && (
                         <button
                           onClick={() => deleteComment(comment.id)}
                           className="p-1 text-gray-600 hover:text-gray-800"
@@ -733,7 +594,9 @@ export default function CommentsModal({
                 <label className="block text-sm font-medium text-black mb-1">Приоритет</label>
                 <select
                   value={priority}
-                  onChange={(e) => setPriority(e.target.value as any)}
+                  onChange={(e) =>
+                    setPriority(e.target.value as 'low' | 'normal' | 'high' | 'urgent')
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                 >
                   <option value="low">Низкий</option>

@@ -1,112 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { debugLog } from "@/lib/logger"
+
+import { useState, useEffect, useCallback } from "react"
+import type { ObjectData } from "@/types/object-data"
 import {
-  X,
   Bell,
-  Clock,
-  Calendar,
-  AlertCircle,
   CheckCircle,
-  Settings,
-  Plus,
-  Edit,
-  Trash2,
-  Save,
+  Clock,
   Eye,
-  EyeOff,
-  Filter,
-  Search,
-  SortAsc,
-  SortDesc,
-  MoreVertical,
-  ChevronDown,
-  ChevronUp,
-  Check,
-  AlertTriangle,
-  User,
-  Users,
-  Home,
-  Building,
-  LandPlot,
-  Store,
-  Factory,
-  Share,
-  DollarSign,
-  Phone,
-  Mail,
   MessageCircle,
-  Calculator,
-  Play,
-  QrCode,
-  Info,
-  Cloud,
-  Zap,
   FileText,
-  Image,
-  Tag,
-  TrendingUp,
-  Archive,
-  Minus,
-  Copy,
-  Download,
-  Upload,
-  RefreshCw,
-  Grid,
-  List,
-  Target,
-  Layers,
-  MapPin,
-  Video,
-  Music,
-  Folder,
   Cog,
-  Shield,
-  ShieldCheck,
-  Link,
-  Link2,
-  Unlink,
-  Activity,
-  TrendingDown,
-  ArrowUp,
-  ArrowDown,
-  RotateCcw,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  SkipForward,
-  SkipBack,
-  Volume2,
-  VolumeX,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Laptop,
-  Server,
-  HardDrive,
-  Wifi,
-  WifiOff,
-  Signal,
-  SignalZero,
-  Battery,
-  BatteryLow,
-  Power,
-  PowerOff,
-  Sun,
-  Moon,
-  Star,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Frown,
-  Meh,
-  Angry,
-  Laugh
+  Plus,
+  Save,
+  Settings,
+  Trash2,
+  X
 } from "lucide-react"
 
 interface Notification {
@@ -137,7 +47,7 @@ interface Notification {
   recurringPattern?: 'daily' | 'weekly' | 'monthly' | 'yearly'
   recurringInterval?: number
   nextScheduled?: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, string | number | boolean | null>
 }
 
 interface NotificationRule {
@@ -176,7 +86,7 @@ interface NotificationsModalProps {
   onSave: (notifications: Notification[], rules: NotificationRule[]) => void
   initialNotifications?: Notification[]
   initialRules?: NotificationRule[]
-  objectData?: any
+  objectData?: ObjectData
 }
 
 export default function NotificationsModal({ 
@@ -190,12 +100,10 @@ export default function NotificationsModal({
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
   const [rules, setRules] = useState<NotificationRule[]>(initialRules)
   const [activeTab, setActiveTab] = useState('overview')
-  const [selectedNotification, setSelectedNotification] = useState<string | null>(null)
   const [isCreatingRule, setIsCreatingRule] = useState(false)
   const [isSendingNotification, setIsSendingNotification] = useState(false)
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterType, setFilterType] = useState<string>('all')
-  const [filterPriority, setFilterPriority] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'created' | 'scheduled' | 'priority'>('scheduled')
 
@@ -230,7 +138,6 @@ export default function NotificationsModal({
     .filter(notification => {
       if (filterStatus !== 'all' && notification.status !== filterStatus) return false
       if (filterType !== 'all' && notification.type !== filterType) return false
-      if (filterPriority !== 'all' && notification.priority !== filterPriority) return false
       if (searchQuery && !notification.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
           !notification.message.toLowerCase().includes(searchQuery.toLowerCase())) return false
       return true
@@ -248,7 +155,7 @@ export default function NotificationsModal({
     })
 
   // Создание уведомления
-  const createNotification = (type: Notification['type'], title: string, message: string, priority: Notification['priority'] = 'normal') => {
+  const createNotification = useCallback((type: Notification['type'], title: string, message: string, priority: Notification['priority'] = 'normal') => {
     const notification: Notification = {
       id: Date.now().toString(),
       type,
@@ -263,7 +170,7 @@ export default function NotificationsModal({
         name: 'Текущий пользователь',
         role: 'manager'
       },
-      objectId: objectData?.id,
+      objectId: objectData?.id ? String(objectData.id) : undefined,
       objectTitle: objectData?.title,
       channels: ['internal'],
       isRecurring: false,
@@ -271,7 +178,7 @@ export default function NotificationsModal({
     }
 
     setNotifications(prev => [notification, ...prev])
-  }
+  }, [objectData])
 
   // Отправка уведомления
   const sendNotification = async (notificationId: string) => {
@@ -291,7 +198,7 @@ export default function NotificationsModal({
           : notification
       ))
 
-      console.log('Уведомление отправлено:', notificationId)
+      debugLog('Уведомление отправлено:', notificationId)
     } catch (error) {
       console.error('Ошибка отправки уведомления:', error)
     } finally {
@@ -452,7 +359,7 @@ export default function NotificationsModal({
           name: 'Текущий пользователь',
           role: 'manager'
         },
-        objectId: objectData.id,
+        objectId: String(objectData.id),
         objectTitle: objectData.title,
         channels: ['internal', 'email'],
         isRecurring: true,
@@ -464,7 +371,7 @@ export default function NotificationsModal({
 
       setNotifications(prev => [updateNotification, ...prev])
     }
-  }, [objectData, isOpen])
+  }, [createNotification, isOpen, objectData])
 
   // Сохранение
   const handleSave = () => {
@@ -668,7 +575,9 @@ export default function NotificationsModal({
                 </select>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) =>
+                    setSortBy(e.target.value as 'created' | 'scheduled' | 'priority')
+                  }
                   className="px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                 >
                   <option value="scheduled">По дате отправки</option>
@@ -808,7 +717,10 @@ export default function NotificationsModal({
                         value={newRule.actions?.priority || 'normal'}
                         onChange={(e) => setNewRule(prev => ({
                           ...prev,
-                          actions: { ...prev.actions!, priority: e.target.value as any }
+                          actions: {
+                            ...prev.actions!,
+                            priority: e.target.value as NotificationRule['actions']['priority'],
+                          }
                         }))}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black bg-white"
                       >

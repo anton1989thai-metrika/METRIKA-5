@@ -8,7 +8,7 @@ VPS_PATH="/var/www/metrika5"
 LOCAL_BACKUP="/tmp/vps-backup-metrika5"
 
 echo "📥 Скачивание файлов с VPS..."
-echo "Введите пароль когда попросит: SikaAnt7Hostinger7+"
+echo "Введите пароль когда попросит (или настройте SSH-ключи)."
 
 mkdir -p "$LOCAL_BACKUP"
 
@@ -27,4 +27,3 @@ rsync -avz --progress \
   "$SERVER:$VPS_PATH/" "$LOCAL_BACKUP/"
 
 echo "✅ Файлы скачаны в $LOCAL_BACKUP"
-

@@ -31,13 +31,6 @@ export default function StepperStep({
       : "border-border text-muted-foreground",
   ].join(" ");
 
-  // Вычисляем ширину линии: базовая ширина (184px при 3 шагах) минус 10px за каждый дополнительный шаг
-  // Расстояние между краями кругов: 250px (между центрами) - 50px (диаметр) = 200px
-  // Отступы: 8px с каждой стороны = 16px
-  // Базовая ширина при 3 шагах: 200px - 16px = 184px
-  const baseWidth = 184; // при 3 шагах
-  const lineWidth = Math.max(0, baseWidth - (totalSteps - 3) * 10);
-
   return (
     <div className="relative flex flex-col items-center gap-3">
       <button
